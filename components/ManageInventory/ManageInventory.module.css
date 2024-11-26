@@ -1,0 +1,38 @@
+.list {
+  padding: 16px;
+
+  height: fit-content;
+}
+
+.tab {
+  width: 220px;
+  text-align: center;
+  padding: 12px;
+  font-size: 16px;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.tab:hover {
+  background-color: #a9cceb;
+  font-weight: bold;
+  color: #228be6;
+}
+
+.tab[data-active] {
+  background-color: #228be6;
+  color: #f9f9f9;
+}
+
+.panel {
+  padding: 16px 16px 16px 64px;
+  height: 100vh;
+}
+
+.rootGroup {
+    flex: auto;
+    width: 200px;
+    justify-content: space-between;
+    align-items: center;
+}
