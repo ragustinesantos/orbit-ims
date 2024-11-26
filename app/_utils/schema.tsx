@@ -1,4 +1,4 @@
-export interface item {
+export interface Item {
   itemId: string;
   supplierId: string;
   inventoryId: string;
@@ -12,7 +12,7 @@ export interface item {
   minPurchaseQty: number;
 }
 
-export interface itemToEdit {
+export interface ItemToEdit {
   supplierId: string;
   inventoryId: string;
   itemName: string;
@@ -26,7 +26,7 @@ export interface itemToEdit {
   [key: string]: any;
 }
 
-export interface supplier {
+export interface Supplier {
   supplierId: string;
   supplierName: string;
   contactNumber: string;
@@ -34,7 +34,7 @@ export interface supplier {
   address: string;
 }
 
-export interface supplierToEdit {
+export interface SupplierToEdit {
   supplierName: string;
   contactNumber: string;
   email: string;
@@ -42,7 +42,7 @@ export interface supplierToEdit {
   [key: string]: any;
 }
 
-export interface employee {
+export interface Employee {
   employeeId: string;
   employeeWorkId: string;
   firstName: string;
@@ -55,7 +55,7 @@ export interface employee {
   employeeLevel: string;
 }
 
-export interface employeeToEdit {
+export interface EmployeeToEdit {
   employeeWorkId: string;
   firstName: string;
   lastName: string;

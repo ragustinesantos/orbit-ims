@@ -10,14 +10,14 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import { db } from '../_utils/firebase';
-import { employee, employeeToEdit } from '../_utils/schema';
+import { Employee, EmployeeToEdit } from '../_utils/schema';
 
 export async function dbGetAllEmployees() {
   try {
     const allEmployeesReference = collection(db, 'employees');
     const allEmployeesQuery = query(allEmployeesReference);
     const querySnapshot = await getDocs(allEmployeesQuery);
-    const employeeList: employee[] = [];
+    const employeeList: Employee[] = [];
     querySnapshot.forEach((doc: any) => {
       const employee = {
         id: doc.id,
@@ -31,7 +31,7 @@ export async function dbGetAllEmployees() {
   }
 }
 
-export async function dbAddEmployee(employeeObj: employeeToEdit) {
+export async function dbAddEmployee(employeeObj: EmployeeToEdit) {
   try {
     const newEmployeeReference = collection(db, 'Employees');
     await addDoc(newEmployeeReference, employeeObj);

@@ -10,7 +10,7 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import { db } from '../_utils/firebase';
-import { item, itemToEdit } from '../_utils/schema';
+import { Item, ItemToEdit } from '../_utils/schema';
 
 export async function dbGetAllItems() {
   try {
@@ -20,7 +20,7 @@ export async function dbGetAllItems() {
 
     const querySnapshot = await getDocs(allItemsQuery);
 
-    const itemList: item[] = [];
+    const itemList: Item[] = [];
     querySnapshot.forEach((doc: any) => {
       const item = {
         id: doc.id,
@@ -37,7 +37,7 @@ export async function dbGetAllItems() {
   }
 }
 
-export async function dbAddItem(itemObj: itemToEdit) {
+export async function dbAddItem(itemObj: ItemToEdit) {
   try {
     const newItemReference = collection(db, 'items');
 
