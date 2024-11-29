@@ -5,7 +5,7 @@ import {
   dbUpdateEmployee,
 } from '@/app/_services/employees-service';
 
-export async function GET({ params }: { params: any }) {
+export async function GET(request: Request, { params }: { params: any }) {
   try {
     const { id } = await params;
 
@@ -71,7 +71,7 @@ export async function PATCH(request: Request, { params }: { params: any }) {
   }
 }
 
-export async function DELETE({ params }: { params: any }) {
+export async function DELETE(request: Request, { params }: { params: any }) {
   try {
     const { id } = await params;
 

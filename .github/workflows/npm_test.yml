@@ -21,6 +21,8 @@ jobs:
           cache-dependency-path: '**/yarn.lock'
       - name: Install dependencies
         run: yarn
+        env:
+          YARN_ENABLE_HARDENED_MODE: false
       - name: Run build
         run: npm run build
       - name: Run tests
