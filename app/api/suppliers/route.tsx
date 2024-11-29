@@ -1,9 +1,9 @@
 import { z } from 'zod';
-import { dbGetAllItems } from '@/app/_services/items-service';
+import { dbGetAllSuppliers } from '@/app/_services/suppliers-service';
 
 export async function GET() {
   try {
-    const itemList = await dbGetAllItems();
+    const itemList = await dbGetAllSuppliers();
     return new Response(JSON.stringify(itemList), { status: 200 });
   } catch (error) {
     return new Response(JSON.stringify({ error }), { status: 404 });

@@ -1,5 +1,5 @@
 export interface item {
-  itemId: string;
+  itemId?: string;
   supplierId: string;
   inventoryId: string;
   itemName: string;
@@ -10,6 +10,14 @@ export interface item {
   isCritical: boolean;
   isCriticalThreshold: number;
   minPurchaseQty: number;
+}
+
+export const defaultNewItem = {
+  inventoryId: '',
+  currentStockInStoreRoom: 0,
+  isCritical: false,
+  isCriticalThreshold: 0,
+  minPurchaseQty: 0,
 }
 
 export interface itemToEdit {
