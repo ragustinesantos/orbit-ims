@@ -71,7 +71,7 @@ export async function PATCH(request: Request, { params }: { params: any }) {
   }
 }
 
-export async function DELETE({ params }: { params: any }) {
+export async function DELETE(request: Request, { params }: { params: any }) {
   try {
     const { id } = await params;
 
