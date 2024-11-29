@@ -1,0 +1,17 @@
+
+.rootGroup {
+    align-items: baseline;
+    flex-direction: column;
+}
+
+
+.rootText {
+    font-size: 48px;
+    font-weight: bold;
+    text-decoration: underline;
+    text-underline-offset: 8px;
+}
+
+.selectRoot {
+    width: 500px
+}
