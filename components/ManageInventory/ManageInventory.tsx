@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { IconChevronRight } from '@tabler/icons-react';
 import { Group, Tabs, Text } from '@mantine/core';
 import AddItem from '../AddItem/AddItem';
@@ -5,8 +6,22 @@ import DeleteItem from '../DeleteItem/DeleteItem';
 import SearchItem from '../SearchItem/SearchItem';
 import UpdateItem from '../UpdateItem/UpdateItem';
 import classes from './ManageInventory.module.css';
+import { fetchCategories, fetchInventory, fetchSuppliers } from '@/app/_utils/utility';
+import { defaultItem, defaultSupplier, Item, Supplier } from '@/app/_utils/schema';
 
 export default function ManageInventory() {
+
+  const [inventory, setInventory] = useState<Item[]>([{ ...defaultItem }]);
+  const [categoryList, setCategoryList] = useState<string[]>([]);
+  const [supplierList, setSupplierList] = useState<Supplier[]>([{ ...defaultSupplier }]);
+
+  // Retrieve database and enum information on page load
+    useEffect(() => {
+      fetchInventory(setInventory);
+      fetchSuppliers(setSupplierList);
+      fetchCategories(setCategoryList);
+    }, []);
+
   return (
     <Tabs
       defaultValue="Search"
@@ -57,10 +72,10 @@ export default function ManageInventory() {
         <SearchItem />
       </Tabs.Panel>
       <Tabs.Panel value="addItem">
-        <AddItem />
+        <AddItem supplierList={supplierList} categoryList={categoryList} />
       </Tabs.Panel>
       <Tabs.Panel value="updateItem">
-        <UpdateItem />
+        <UpdateItem inventory={inventory} supplierList={supplierList} categoryList={categoryList} />
       </Tabs.Panel>
       <Tabs.Panel value="deleteItem">
         <DeleteItem />
