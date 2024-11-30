@@ -4,28 +4,30 @@
 import { useEffect, useState } from 'react';
 import { Button, Flex, Group, Modal, Select, SimpleGrid, Text, TextInput } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { defaultItem, defaultSupplier, Item, ItemToEdit, Supplier } from '@/app/_utils/schema';
-import {
-  fetchCategories,
-  fetchInventory,
-  fetchSupplier,
-  fetchSuppliers,
-  putItem,
-} from '@/app/_utils/utility';
+import { defaultItem, Item, ItemToEdit, Supplier } from '@/app/_utils/schema';
+import { fetchSupplier, putItem } from '@/app/_utils/utility';
+import CustomNotification from '../CustomNotification/CustomNotification';
 import classnames from './UpdateItem.module.css';
 
-export default function UpdateItem() {
-  // States for database and enums
-  const [inventory, setInventory] = useState<Item[]>([{ ...defaultItem }]);
-  const [categoryList, setCategoryList] = useState<string[]>([]);
-  const [supplierList, setSupplierList] = useState<Supplier[]>([{ ...defaultSupplier }]);
-
+export default function UpdateItem({
+  inventory,
+  supplierList,
+  categoryList,
+}: {
+  inventory: Item[];
+  supplierList: Supplier[];
+  categoryList: string[];
+}) {
   // Search and selected items from item search
   const [searchValue, setSearchValue] = useState<string | null>('');
   const [selectedItem, setSelectedItem] = useState<Item>({ ...defaultItem });
 
   // Confirmation Modal State
   const [opened, { close, open }] = useDisclosure(false);
+
+  // Notification State
+  const [showError, setShowError] = useState<boolean>(false);
+  const [showSuccess, setShowSuccess] = useState<boolean>(false);
 
   // States for Item object attributes
   const [itemName, setItemName] = useState<string>('');
@@ -67,14 +69,14 @@ export default function UpdateItem() {
 
     // Send updated item for PUT
     putItem(staticItemId, updatedItem);
-  };
 
-  // Retrieve database and enum information on page load
-  useEffect(() => {
-    fetchInventory(setInventory);
-    fetchSuppliers(setSupplierList);
-    fetchCategories(setCategoryList);
-  }, [selectedItem]);
+    // Show success notification
+    setShowSuccess(true);
+
+    setTimeout(() => {
+      setShowSuccess(false);
+    }, 3000);
+  };
 
   // Find item to search in inventory and set as selectedItem
   useEffect(() => {
@@ -278,7 +280,6 @@ export default function UpdateItem() {
           onChange={(event) => handleMinPurchaseQty(event.target.value)}
           placeholder="Enter minimum purchase quantity..."
           size="md"
-          type="number"
           withAsterisk
         />
         <TextInput
@@ -287,7 +288,6 @@ export default function UpdateItem() {
           onChange={(event) => handleMinStorageQty(event.target.value)}
           placeholder="Enter minimum storage quantity..."
           size="md"
-          type="number"
           withAsterisk
         />
         <Select
@@ -319,9 +319,38 @@ export default function UpdateItem() {
           withAsterisk
         />
       </SimpleGrid>
-      <Button variant="filled" color="#1B4965" size="md" mt="xl" onClick={open}>
+      <Button
+        variant="filled"
+        color="#1B4965"
+        size="md"
+        mt="xl"
+        onClick={async () => {
+          if (!itemName || !packageUnit || !supplyUnit || !category || !supplierId) {
+            setShowError(true);
+            setTimeout(() => {
+              setShowError(false);
+            }, 3000);
+          } else {
+            open();
+          }
+        }}
+      >
         Submit
       </Button>
+      {showError &&
+        CustomNotification(
+          'error',
+          'Incomplete Fields',
+          'Please fill up all required fields before submitting.',
+          setShowError
+        )}
+      {showSuccess &&
+        CustomNotification(
+          'success',
+          'Item Updated',
+          'The item has been successfully updated',
+          setShowSuccess
+        )}
     </Group>
   );
 }
