@@ -1,4 +1,5 @@
-export interface Item {
+
+export interface item {
   itemId: string;
   supplierId: string;
   inventoryId: string;
@@ -12,7 +13,7 @@ export interface Item {
   minPurchaseQty: number;
 }
 
-export interface ItemToEdit {
+export interface itemToEdit {
   supplierId: string;
   inventoryId: string;
   itemName: string;
