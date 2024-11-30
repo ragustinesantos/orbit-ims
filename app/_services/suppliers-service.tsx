@@ -20,7 +20,7 @@ export async function dbGetAllSuppliers() {
     const supplierList: Supplier[] = [];
     querySnapshot.forEach((doc: any) => {
       const supplier = {
-        id: doc.id,
+        supplierId: doc.id,
         ...doc.data(),
       };
       supplierList.push(supplier);
@@ -51,9 +51,11 @@ export async function dbGetSupplier(supplierId: string) {
       return null;
     }
 
+    const retrievedSupplierObject = { supplierId: documentSnapshot.id, ...documentSnapshot.data() };
+
     console.log('Supplier successfully retrieved');
 
-    return documentSnapshot.data();
+    return retrievedSupplierObject;
   } catch (error) {
     return console.log(`Error retrieving supplier: ${error}`);
   }

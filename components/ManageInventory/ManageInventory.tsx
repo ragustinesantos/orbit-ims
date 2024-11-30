@@ -40,7 +40,7 @@ export default function ManageInventory() {
             root: classes.rootGroup
           }}>
             <Text>Update Item</Text>
-            <IconChevronRight size={24} stroke={1} />
+            <IconChevronRight size={24} stroke={1.5} />
           </Group>
         </Tabs.Tab>
         <Tabs.Tab value="deleteItem">

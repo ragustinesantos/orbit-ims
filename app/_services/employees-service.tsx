@@ -20,7 +20,7 @@ export async function dbGetAllEmployees() {
     const employeeList: Employee[] = [];
     querySnapshot.forEach((doc: any) => {
       const employee = {
-        id: doc.id,
+        employeeId: doc.id,
         ...doc.data(),
       };
       employeeList.push(employee);
@@ -51,9 +51,11 @@ export async function dbGetEmployee(employeeId: string) {
       return null;
     }
 
+    const retrievedEmployeeObject = { employeeId: documentSnapshot.id, ...documentSnapshot.data() };
+
     console.log('Employee successfully retrieved');
 
-    return documentSnapshot.data();
+    return retrievedEmployeeObject;
   } catch (error) {
     return console.log(`Error retrieving employee: ${error}`);
   }

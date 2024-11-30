@@ -1,27 +1,65 @@
 /* eslint-disable no-console */
-import bcrypt from 'bcrypt';
+import { Item, ItemToEdit, Supplier } from './schema';
 
-// Encrypts inputted password and returns the hashed password
-export async function hashPassword(password: string) {
+// Fetch all inventory items
+export const fetchInventory = async (setInventory: (inventoryItems: Item[]) => void) => {
   try {
-    const hashRounds = 10;
+    const response = await fetch('/api/items');
 
-    const hashedPassword = await bcrypt.hash(password, hashRounds);
+    const data = await response.json();
 
-    return hashedPassword;
+    setInventory(data);
   } catch (error) {
-    console.log(`Password Error ${error}`);
+    console.log(error);
   }
-}
+};
 
-// Verifies if provided password matches with hashed password
-// returns true or false
-export async function verifyPassword(passwordInput: string, hashedPassword: string) {
+// Fetch all suppliers
+export const fetchSuppliers = async (setSupplier: (suppliers: Supplier[]) => void) => {
   try {
-    const isVerified = await bcrypt.compare(passwordInput, hashedPassword);
+    const response = await fetch('/api/suppliers');
 
-    return isVerified;
+    const data = await response.json();
+
+    setSupplier(data);
   } catch (error) {
-    console.log(`Password Error ${error}`);
+    console.log(error);
   }
-}
+};
+
+// TBD: Get/Fetch categories through api or enums?
+export const fetchCategories = async (setCategories: (categories: string[]) => void) => {
+  const categories = ['Medical Supplies', 'Food', 'Cleaning Supplies', 'Medicine'];
+  setCategories(categories);
+};
+
+// Fetch a supplier
+export const fetchSupplier = async (supplierId: string) => {
+  try {
+    const response = await fetch(`/api/suppliers/${supplierId}`);
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// Update item through PUT
+export const putItem = async (itemId: string, updatedItem: ItemToEdit) => {
+  try {
+    const request = {
+      method: 'PUT',
+      body: JSON.stringify(updatedItem),
+    };
+
+    const response = await fetch(`/api/items/${itemId}`, request);
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};

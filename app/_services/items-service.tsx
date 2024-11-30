@@ -23,7 +23,7 @@ export async function dbGetAllItems() {
     const itemList: Item[] = [];
     querySnapshot.forEach((doc: any) => {
       const item = {
-        id: doc.id,
+        itemId: doc.id,
         ...doc.data(),
       };
       itemList.push(item);
@@ -60,9 +60,11 @@ export async function dbGetItem(itemId: string) {
       return null;
     }
 
+    const retrievedItemObject = { itemId: documentSnapshot.id, ...documentSnapshot.data() };
+
     console.log('Item successfully retrieved');
 
-    return documentSnapshot.data();
+    return retrievedItemObject;
   } catch (error) {
     return console.log(`Error retrieving item: ${error}`);
   }

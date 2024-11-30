@@ -26,6 +26,20 @@ export interface ItemToEdit {
   [key: string]: any;
 }
 
+export const defaultItem: Item = {
+  itemId: '',
+  supplierId: '',
+  inventoryId: '',
+  itemName: '',
+  currentStockInStoreRoom: 0,
+  packageUnit: '',
+  supplyUnit: '',
+  category: '',
+  isCritical: false,
+  isCriticalThreshold: 0,
+  minPurchaseQty: 0,
+};
+
 export interface Supplier {
   supplierId: string;
   supplierName: string;
@@ -33,6 +47,14 @@ export interface Supplier {
   email: string;
   address: string;
 }
+
+export const defaultSupplier: Supplier = {
+  supplierId: '',
+  supplierName: '',
+  contactNumber: '',
+  email: '',
+  address: '',
+};
 
 export interface SupplierToEdit {
   supplierName: string;
