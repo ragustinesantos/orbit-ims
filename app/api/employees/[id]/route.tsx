@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { z } from 'zod';
 import {
   dbDeleteEmployee,
@@ -53,12 +54,12 @@ export async function PATCH(request: Request, { params }: { params: any }) {
         employeeWorkId: z.string().optional(),
         firstName: z.string().optional(),
         lastName: z.string().optional(),
-        email: z.string().email().optional(), // Optional email
-        phone: z.string().optional(), // Optional phone number
+        email: z.string().email().optional(),
+        phone: z.string().optional(),
         position: z.string().optional(),
-        department: z.string().optional(), // Optional department
+        department: z.string().optional(),
         password: z.string().optional(),
-        employeeLevel: z.string().optional(), // Optional employee level
+        employeeLevel: z.string().optional(),
       })
       .strict();
 

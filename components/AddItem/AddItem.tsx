@@ -159,6 +159,7 @@ export default function AddItem() {
           placeholder="pc / kg / pounds / bottle / etc."
           value={unitOfMeasurement}
           onChange={handleUnitOfMeasurementChange}
+          size='md'
         />
         <Select
           label="Supplier/Source"
@@ -168,6 +169,7 @@ export default function AddItem() {
             value: supplier.id,
             label: supplier.supplierName,
           }))}
+          size='md'
           allowDeselect
           value={supplier || null}
           onChange={setSupplier}
@@ -177,6 +179,7 @@ export default function AddItem() {
           withAsterisk
           placeholder="Select Category"
           data={['Food', 'Cleaning Supplies', 'Medicine', 'Office Supplies']}
+          size='md'
           allowDeselect
           value={category || null}
           onChange={setCategory}

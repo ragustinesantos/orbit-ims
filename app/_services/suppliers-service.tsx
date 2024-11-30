@@ -10,17 +10,17 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import { db } from '../_utils/firebase';
-import { supplier, supplierToEdit } from '../_utils/schema';
+import { Supplier, SupplierToEdit } from '../_utils/schema';
 
 export async function dbGetAllSuppliers() {
   try {
     const allSuppliersReference = collection(db, 'suppliers');
     const allSuppliersQuery = query(allSuppliersReference);
     const querySnapshot = await getDocs(allSuppliersQuery);
-    const supplierList: supplier[] = [];
+    const supplierList: Supplier[] = [];
     querySnapshot.forEach((doc: any) => {
       const supplier = {
-        id: doc.id,
+        supplierId: doc.id,
         ...doc.data(),
       };
       supplierList.push(supplier);
@@ -31,7 +31,7 @@ export async function dbGetAllSuppliers() {
   }
 }
 
-export async function dbAddSupplier(supplierObj: supplierToEdit) {
+export async function dbAddSupplier(supplierObj: SupplierToEdit) {
   try {
     const newSupplierReference = collection(db, 'suppliers');
     await addDoc(newSupplierReference, supplierObj);
@@ -51,9 +51,11 @@ export async function dbGetSupplier(supplierId: string) {
       return null;
     }
 
+    const retrievedSupplierObject = { supplierId: documentSnapshot.id, ...documentSnapshot.data() };
+
     console.log('Supplier successfully retrieved');
 
-    return documentSnapshot.data();
+    return retrievedSupplierObject;
   } catch (error) {
     return console.log(`Error retrieving supplier: ${error}`);
   }

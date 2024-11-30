@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { dbGetAllSuppliers } from '@/app/_services/suppliers-service';
+
+import { dbAddSupplier, dbGetAllSuppliers } from '@/app/_services/suppliers-service';
 
 export async function GET() {
   try {
@@ -22,6 +23,8 @@ export async function POST(request: Request) {
     });
 
     const validatedSupplier = supplierSchema.parse(newSupplier);
+
+    await dbAddSupplier(validatedSupplier);
 
     return new Response(JSON.stringify(validatedSupplier), { status: 201 });
   } catch (error) {
