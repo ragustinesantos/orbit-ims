@@ -13,10 +13,12 @@ export default function UpdateItem({
   inventory,
   supplierList,
   categoryList,
+  setRefresh,
 }: {
   inventory: Item[];
   supplierList: Supplier[];
   categoryList: string[];
+  setRefresh: (num: any) => void;
 }) {
   // Search and selected items from item search
   const [searchValue, setSearchValue] = useState<string | null>('');
@@ -35,9 +37,9 @@ export default function UpdateItem({
   const [packageUnit, setPackageUnit] = useState<string>('');
   const [supplyUnit, setSupplyUnit] = useState<string>('');
   const [supplierName, setSupplierName] = useState<string>('');
-  const [minPurchaseQty, setMinPurchaseQty] = useState<number>(0);
-  const [minStorageQty, setMinStorageQty] = useState<number>(0);
-  const [currentStockInStoreRoom, setCurrentStockInStoreRoom] = useState<number>(0);
+  const [minPurchaseQty, setMinPurchaseQty] = useState<string>('');
+  const [minStorageQty, setMinStorageQty] = useState<string>('');
+  const [currentStockInStoreRoom, setCurrentStockInStoreRoom] = useState<string>('');
 
   // Nullable states due to Select Mantine component handling
   const [category, setCategory] = useState<string | null>('');
@@ -47,10 +49,9 @@ export default function UpdateItem({
   const handleItemName = (newTxt: string) => setItemName(newTxt);
   const handlePackageUnit = (newTxt: string) => setPackageUnit(newTxt);
   const handleSupplyUnit = (newTxt: string) => setSupplyUnit(newTxt);
-  const handleMinPurchaseQty = (newTxt: string) => setMinPurchaseQty(Number(newTxt));
-  const handleMinStorageQty = (newTxt: string) => setMinStorageQty(Number(newTxt));
-  const handleCurrentStockInStoreRoom = (newTxt: string) =>
-    setCurrentStockInStoreRoom(Number(newTxt));
+  const handleMinPurchaseQty = (newTxt: string) => setMinPurchaseQty(newTxt);
+  const handleMinStorageQty = (newTxt: string) => setMinStorageQty(newTxt);
+  const handleCurrentStockInStoreRoom = (newTxt: string) => setCurrentStockInStoreRoom(newTxt);
 
   // Handle update submit
   const handleSubmit = () => {
@@ -58,13 +59,13 @@ export default function UpdateItem({
       supplierId: supplierId || '',
       inventoryId: '',
       itemName,
-      currentStockInStoreRoom,
+      currentStockInStoreRoom: Number(currentStockInStoreRoom),
       packageUnit,
       supplyUnit,
       category: category || '',
-      isCritical: minStorageQty >= currentStockInStoreRoom,
-      isCriticalThreshold: minStorageQty,
-      minPurchaseQty,
+      isCritical: Number(minStorageQty) >= Number(currentStockInStoreRoom),
+      isCriticalThreshold: Number(minStorageQty),
+      minPurchaseQty: Number(minPurchaseQty),
     };
 
     // Send updated item for PUT
@@ -82,6 +83,7 @@ export default function UpdateItem({
   useEffect(() => {
     const matchedItem = inventory.find((item) => item.itemName === searchValue);
     setSelectedItem(matchedItem || { ...defaultItem });
+    setRefresh((prev: number) => prev + 1);
   }, [searchValue]);
 
   // Retrieve supplier name for corresponding id
@@ -109,9 +111,9 @@ export default function UpdateItem({
       setPackageUnit(selectedItem.packageUnit || '');
       setSupplyUnit(selectedItem.supplyUnit || '');
       setCategory(selectedItem.category || '');
-      setMinPurchaseQty(selectedItem.minPurchaseQty || 0);
-      setMinStorageQty(selectedItem.isCriticalThreshold || 0);
-      setCurrentStockInStoreRoom(selectedItem?.currentStockInStoreRoom || 0);
+      setMinPurchaseQty(String(selectedItem.minPurchaseQty));
+      setMinStorageQty(String(selectedItem.isCriticalThreshold));
+      setCurrentStockInStoreRoom(String(selectedItem.currentStockInStoreRoom));
     };
 
     updateValues();
@@ -280,6 +282,7 @@ export default function UpdateItem({
           onChange={(event) => handleMinPurchaseQty(event.target.value)}
           placeholder="Enter minimum purchase quantity..."
           size="md"
+          type="number"
           withAsterisk
         />
         <TextInput
@@ -288,6 +291,7 @@ export default function UpdateItem({
           onChange={(event) => handleMinStorageQty(event.target.value)}
           placeholder="Enter minimum storage quantity..."
           size="md"
+          type="number"
           withAsterisk
         />
         <Select

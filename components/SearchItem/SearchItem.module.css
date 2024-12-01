@@ -13,5 +13,18 @@
 }
 
 .selectRoot {
-    width: 500px
+    width: 100%;
 }
+
+.thead {
+    background-color: transparent;
+}
+
+/* .td {
+    overflow-x: scroll;
+    max-width: 20px;
+}
+
+.td::-webkit-scrollbar {
+    display: none;
+} */
