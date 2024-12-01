@@ -10,17 +10,17 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import { db } from '../_utils/firebase';
-import { employee, employeeToEdit } from '../_utils/schema';
+import { Employee, EmployeeToEdit } from '../_utils/schema';
 
 export async function dbGetAllEmployees() {
   try {
     const allEmployeesReference = collection(db, 'employees');
     const allEmployeesQuery = query(allEmployeesReference);
     const querySnapshot = await getDocs(allEmployeesQuery);
-    const employeeList: employee[] = [];
+    const employeeList: Employee[] = [];
     querySnapshot.forEach((doc: any) => {
       const employee = {
-        id: doc.id,
+        employeeId: doc.id,
         ...doc.data(),
       };
       employeeList.push(employee);
@@ -31,7 +31,7 @@ export async function dbGetAllEmployees() {
   }
 }
 
-export async function dbAddEmployee(employeeObj: employeeToEdit) {
+export async function dbAddEmployee(employeeObj: EmployeeToEdit) {
   try {
     const newEmployeeReference = collection(db, 'Employees');
     await addDoc(newEmployeeReference, employeeObj);
@@ -51,9 +51,11 @@ export async function dbGetEmployee(employeeId: string) {
       return null;
     }
 
+    const retrievedEmployeeObject = { employeeId: documentSnapshot.id, ...documentSnapshot.data() };
+
     console.log('Employee successfully retrieved');
 
-    return documentSnapshot.data();
+    return retrievedEmployeeObject;
   } catch (error) {
     return console.log(`Error retrieving employee: ${error}`);
   }

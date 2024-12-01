@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { z } from 'zod';
 import {
   dbDeleteSupplier,
   dbGetSupplier,
   dbUpdateSupplier,
 } from '@/app/_services/suppliers-service';
+
 
 export async function GET(request: Request, { params }: { params: any }) {
   try {
