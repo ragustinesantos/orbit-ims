@@ -13,13 +13,13 @@ export default function ManageInventory() {
   const [inventory, setInventory] = useState<Item[]>([{ ...defaultItem }]);
   const [categoryList, setCategoryList] = useState<string[]>([]);
   const [supplierList, setSupplierList] = useState<Supplier[]>([{ ...defaultSupplier }]);
+  const [refresh, setRefresh] = useState<number>(0);
 
-  // Retrieve database and enum information on page load
   useEffect(() => {
     fetchInventory(setInventory);
     fetchSuppliers(setSupplierList);
     fetchCategories(setCategoryList);
-  }, []);
+  }, [refresh]);
 
   return (
     <Tabs
@@ -82,7 +82,12 @@ export default function ManageInventory() {
         <AddItem supplierList={supplierList} categoryList={categoryList} />
       </Tabs.Panel>
       <Tabs.Panel value="updateItem">
-        <UpdateItem inventory={inventory} supplierList={supplierList} categoryList={categoryList} />
+        <UpdateItem
+          inventory={inventory}
+          supplierList={supplierList}
+          categoryList={categoryList}
+          setRefresh={setRefresh}
+        />
       </Tabs.Panel>
       <Tabs.Panel value="deleteItem">
         <DeleteItem />

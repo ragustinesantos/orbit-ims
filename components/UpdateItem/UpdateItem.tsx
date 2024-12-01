@@ -13,10 +13,12 @@ export default function UpdateItem({
   inventory,
   supplierList,
   categoryList,
+  setRefresh,
 }: {
   inventory: Item[];
   supplierList: Supplier[];
   categoryList: string[];
+  setRefresh: (num: any) => void;
 }) {
   // Search and selected items from item search
   const [searchValue, setSearchValue] = useState<string | null>('');
@@ -49,8 +51,7 @@ export default function UpdateItem({
   const handleSupplyUnit = (newTxt: string) => setSupplyUnit(newTxt);
   const handleMinPurchaseQty = (newTxt: string) => setMinPurchaseQty(newTxt);
   const handleMinStorageQty = (newTxt: string) => setMinStorageQty(newTxt);
-  const handleCurrentStockInStoreRoom = (newTxt: string) =>
-    setCurrentStockInStoreRoom(newTxt);
+  const handleCurrentStockInStoreRoom = (newTxt: string) => setCurrentStockInStoreRoom(newTxt);
 
   // Handle update submit
   const handleSubmit = () => {
@@ -82,6 +83,7 @@ export default function UpdateItem({
   useEffect(() => {
     const matchedItem = inventory.find((item) => item.itemName === searchValue);
     setSelectedItem(matchedItem || { ...defaultItem });
+    setRefresh((prev: number) => prev + 1);
   }, [searchValue]);
 
   // Retrieve supplier name for corresponding id
