@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { z } from 'zod';
 import { dbDeleteItem, dbGetItem, dbUpdateItem } from '@/app/_services/items-service';
 
-export async function GET({ params }: { params: any }) {
+export async function GET(request: Request, { params }: { params: any }) {
   try {
     const { id } = await params;
     const item = await dbGetItem(id);
@@ -67,7 +68,7 @@ export async function PATCH(request: Request, { params }: { params: any }) {
   }
 }
 
-export async function DELETE({ params }: { params: any }) {
+export async function DELETE(request: Request, { params }: { params: any }) {
   try {
     const { id } = await params;
 

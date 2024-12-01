@@ -13,6 +13,11 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const newItem = await request.json();
+    newItem.currentStockInStoreRoom = Number(newItem.currentStockInStoreRoom);
+    newItem.isCritical = Boolean(newItem.isCritical);
+    newItem.isCriticalThreshold = Number(newItem.isCriticalThreshold);
+    newItem.minPurchaseQty = Number(newItem.minPurchaseQty);
+
 
     const itemSchema = z.object({
       supplierId: z.string(),
