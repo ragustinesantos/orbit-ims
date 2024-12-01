@@ -1,0 +1,68 @@
+.loginContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+}
+
+.loginBox {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.title {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 2rem;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.input {
+    width: 100%;
+}
+
+.loginButton {
+    background-color: #1c4966 !important;
+    color: white;
+    margin-bottom: 2rem;
+}
+
+.loginButton:hover {
+    background-color: #15374d !important;
+}
+
+.footer {
+    text-align: center;
+}
+
+.noAccount {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.contact {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.contact a {
+    color: #1c4966;
+    text-decoration: none;
+}
+
+.contact a:hover {
+    text-decoration: underline;
+}
