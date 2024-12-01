@@ -3,7 +3,7 @@
 import { Input, Button, Text } from '@mantine/core';
 import { useUserAuth } from "@/app/_utils/auth-context";
 import Image from 'next/image';
-import styles from './Login.module.css';
+import classes from './Login.module.css';
 import { useState } from 'react';
 
 export default function Login({
@@ -27,25 +27,25 @@ export default function Login({
       };
 
     return(
-        <div className={styles.loginContainer}>
-            <div className={styles.loginBox}>
+        <div className={classes.loginContainer}>
+            <div className={classes.loginBox}>
                 <Image 
                     src="/assets/logo/orbit_logo.png"
                     alt="Orbit Logo"
                     width={300}
                     height={150}
-                    className={styles.logo}
+                    className={classes.logo}
                 />
                 
-                <h1 className={styles.title}>Welcome Back!</h1>
+                <h1 className={classes.title}>Welcome Back!</h1>
                 
-                <div className={styles.inputGroup}>
+                <div className={classes.inputs}>
                     <Input
                         placeholder="Type Your Username"
                         size="md"
                         value={username}
                         onChange={(event) => handleUsername(event.target.value)}
-                        className={styles.input}
+                        className={classes.input}
                     />
                     
                     <Input
@@ -54,26 +54,26 @@ export default function Login({
                         size="md"
                         value={password}
                         onChange={(event) => handlePassword(event.target.value)}
-                        className={styles.input}
+                        className={classes.input}
                     />
 
-                    <Text className={styles.errorTxt}>
-                        {errors && 'Sorry, we could not find your account.'}
+                    <Text className={classes.errorTxt}>
+                        {errors && 'Account not found. Please try again.'}
                     </Text>
                 </div>
 
                 <Button 
                     fullWidth
                     size="md"
-                    className={styles.loginButton}
+                    className={classes.loginButton}
                     onClick={() => handleLogin(username, password, setErrors)}
                 >
                     Login
                 </Button>
 
-                <div className={styles.footer}>
-                    <p className={styles.noAccount}>Don't Have an Account yet?</p>
-                    <p className={styles.contact}>
+                <div className={classes.footer}>
+                    <p className={classes.noAccount}>Don't Have an Account yet?</p>
+                    <p className={classes.contact}>
                         Please Contact a System Admin at
                         <br />
                         <a href="mailto:sysadmin@Orbit.Wingkei.ca">sysadmin@Orbit.Wingkei.ca</a>
