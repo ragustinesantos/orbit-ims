@@ -280,6 +280,7 @@ export default function UpdateItem({
           onChange={(event) => handleMinPurchaseQty(event.target.value)}
           placeholder="Enter minimum purchase quantity..."
           size="md"
+          type="number"
           withAsterisk
         />
         <TextInput
@@ -288,6 +289,7 @@ export default function UpdateItem({
           onChange={(event) => handleMinStorageQty(event.target.value)}
           placeholder="Enter minimum storage quantity..."
           size="md"
+          type="number"
           withAsterisk
         />
         <Select
