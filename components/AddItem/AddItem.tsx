@@ -14,13 +14,16 @@ import {
 } from '@mantine/core';
 import { defaultItem, Item, Supplier } from '@/app/_utils/schema';
 import classnames from './AddItem.module.css';
+import CustomNotification from '../CustomNotification/CustomNotification';
 
 export default function AddItem({
   supplierList,
   categoryList,
+  setRefresh,
 }: {
   supplierList: Supplier[];
   categoryList: string[];
+  setRefresh: (num: any) => void;
 }) {
   const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
   const checkIcon = <IconCheck style={{ width: rem(20), height: rem(20) }} />;
@@ -49,15 +52,12 @@ export default function AddItem({
       category == ''
     ) {
       setNotificationMessage(
-        <Notification
-          withBorder
-          icon={xIcon}
-          color="red"
-          title="Fill Up Required Fields"
-          onClose={closeNotification}
-        >
-          Please fill up all required fields before submitting.
-        </Notification>
+        CustomNotification(
+          'error',
+          'Fill Up Required Fields',
+          'Please fill up all required fields before submitting.',
+          closeNotification
+        )
       );
     } else {
       const newItemObj: Item = {
@@ -79,17 +79,15 @@ export default function AddItem({
         if (response.ok) {
           console.log('Success');
           setNotificationMessage(
-            <Notification
-              withBorder
-              icon={checkIcon}
-              color="green"
-              title="Item Added!"
-              onClose={closeNotification}
-            >
-              Item {itemName} successfully added.
-            </Notification>
+            CustomNotification(
+              'success',
+              'Item Added!',
+              `Item ${itemName} successfully added.`,
+              closeNotification
+            )
           );
         }
+        setRefresh((prev: number) => prev + 1);
         setItemName('');
         setPackageUnit('');
         setUnitOfMeasurement('');
@@ -98,15 +96,12 @@ export default function AddItem({
       } catch (error) {
         console.log(error);
         setNotificationMessage(
-          <Notification
-            withBorder
-            icon={checkIcon}
-            color="red"
-            title="Error Encountered"
-            onClose={closeNotification}
-          >
-            Unexpected Error encountered. Please try again.
-          </Notification>
+          CustomNotification(
+            'error',
+            'Error Encountered',
+            'Unexpected Error encountered. Please try again.',
+            closeNotification
+          )
         );
       }
     }
@@ -187,7 +182,10 @@ export default function AddItem({
       <Button variant="filled" color="#1B4965" size="md" mt="xl" onClick={handleAddItem}>
         Submit
       </Button>
-      {showNotification && notificationMessage}
+      {
+        showNotification &&
+        notificationMessage
+      }
     </Group>
   );
 }

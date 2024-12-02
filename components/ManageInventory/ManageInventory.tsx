@@ -79,7 +79,11 @@ export default function ManageInventory() {
         <SearchItem inventory={inventory} />
       </Tabs.Panel>
       <Tabs.Panel value="addItem">
-        <AddItem supplierList={supplierList} categoryList={categoryList} />
+        <AddItem
+          supplierList={supplierList}
+          categoryList={categoryList}
+          setRefresh={setRefresh}
+        />
       </Tabs.Panel>
       <Tabs.Panel value="updateItem">
         <UpdateItem
@@ -90,7 +94,12 @@ export default function ManageInventory() {
         />
       </Tabs.Panel>
       <Tabs.Panel value="deleteItem">
-        <DeleteItem />
+        <DeleteItem
+          inventory={inventory}
+          supplierList={supplierList}
+          categoryList={categoryList}
+          setRefresh={setRefresh}
+        />
       </Tabs.Panel>
     </Tabs>
   );
