@@ -64,6 +64,7 @@ export default function SearchItem({ inventory }: { inventory: Item[] }) {
           td: classnames.td,
         }}
       >
+        
         <Table.Thead>
           <Table.Tr>
             <Table.Th>Item ID</Table.Th>

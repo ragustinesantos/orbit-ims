@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 'use client';
 
 import { HeaderTabs } from '@/components/HeaderTabs/HeaderTabs';
@@ -20,7 +21,7 @@ export default function HomePage() {
         const success = await signInWithEmail(username, pass);
         if (success) {
           // temporary route
-          router.push('/manage-inventory');
+          // router.push('/manage-inventory');
         } else {
           err(true);
         }
@@ -33,9 +34,9 @@ export default function HomePage() {
 
   return (
     <main className="h-screen">
-      <Login
+      {!user ? <Login
         handleLogin={handleLogin}
-      />
+      /> : <HeaderTabs />}
     </main>
   );
 }
