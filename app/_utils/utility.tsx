@@ -63,3 +63,14 @@ export const putItem = async (itemId: string, updatedItem: ItemToEdit) => {
     console.log(error);
   }
 };
+
+
+export const deleteItem = async (itemId: string) => {
+  const request = new Request(`http://localhost:3000/api/items/${itemId}`,
+    {
+      method: 'DELETE'
+    }
+  );
+
+  await fetch(request);
+}
