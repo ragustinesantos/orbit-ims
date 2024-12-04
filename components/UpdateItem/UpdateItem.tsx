@@ -30,6 +30,7 @@ export default function UpdateItem({
   // Notification State
   const [showError, setShowError] = useState<boolean>(false);
   const [showSuccess, setShowSuccess] = useState<boolean>(false);
+  const [showUpdateError, setShowUpdateError] = useState<boolean>(false);
 
   // States for Item object attributes
   const [itemName, setItemName] = useState<string>('');
@@ -55,28 +56,42 @@ export default function UpdateItem({
 
   // Handle update submit
   const handleSubmit = () => {
-    const updatedItem: ItemToEdit = {
-      supplierId: supplierId || '',
-      inventoryId: '',
-      itemName,
-      currentStockInStoreRoom: Number(currentStockInStoreRoom),
-      packageUnit,
-      supplyUnit,
-      category: category || '',
-      isCritical: Number(minStorageQty) >= Number(currentStockInStoreRoom),
-      isCriticalThreshold: Number(minStorageQty),
-      minPurchaseQty: Number(minPurchaseQty),
-    };
+    try {
+      // Create item to update
+      const updatedItem: ItemToEdit = {
+        supplierId: supplierId || '',
+        inventoryId: '',
+        itemName,
+        currentStockInStoreRoom: Number(currentStockInStoreRoom),
+        packageUnit,
+        supplyUnit,
+        category: category || '',
+        isCritical: Number(minStorageQty) >= Number(currentStockInStoreRoom),
+        isCriticalThreshold: Number(minStorageQty),
+        minPurchaseQty: Number(minPurchaseQty),
+      };
 
-    // Send updated item for PUT
-    putItem(staticItemId, updatedItem);
+      // Send updated item for PUT
+      putItem(staticItemId, updatedItem);
 
-    // Show success notification
-    setShowSuccess(true);
+      // Show success notification
+      setShowSuccess(true);
 
-    setTimeout(() => {
-      setShowSuccess(false);
-    }, 3000);
+      // Hide notification
+      setTimeout(() => {
+        setShowSuccess(false);
+      }, 3000);
+    } catch (error) {
+      console.log(error);
+
+      // Show error notification
+      setShowUpdateError(true);
+
+      // Hide notification
+      setTimeout(() => {
+        setShowUpdateError(false);
+      }, 3000);
+    }
   };
 
   // Find item to search in inventory and set as selectedItem
@@ -354,6 +369,13 @@ export default function UpdateItem({
           'Item Updated',
           'The item has been successfully updated',
           setShowSuccess
+        )}
+      {showUpdateError &&
+        CustomNotification(
+          'error',
+          'Item Update Failed',
+          'Item failed to update due to a server error',
+          setShowUpdateError
         )}
     </Group>
   );
