@@ -32,11 +32,17 @@ export default function HomePage() {
     }
   };
 
+  const handleLogout = async () => {
+    if (firebaseSignOut) {
+      await firebaseSignOut();
+    }
+  };
+
   return (
     <main className="h-screen">
       {!user ? <Login
         handleLogin={handleLogin}
-      /> : <HeaderTabs />}
+      /> : <HeaderTabs handleLogout={handleLogout}/>}
     </main>
   );
 }
