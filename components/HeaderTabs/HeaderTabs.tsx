@@ -32,7 +32,7 @@ const user = {
 
 const tabs = ['Inventory', 'System Admin'];
 
-export function HeaderTabs() {
+export function HeaderTabs({ handleLogout }: { handleLogout: () => void }) {
   const theme = useMantineTheme();
   const [opened, { toggle }] = useDisclosure(false);
   const [userMenuOpened, setUserMenuOpened] = useState(false);
@@ -78,7 +78,7 @@ export function HeaderTabs() {
               <Menu.Item leftSection={<IconSettings size={16} stroke={1.5} />}>
                 Account settings
               </Menu.Item>
-              <Menu.Item leftSection={<IconLogout size={16} stroke={1.5} />}>Logout</Menu.Item>
+              <Menu.Item onClick={handleLogout} leftSection={<IconLogout size={16} stroke={1.5} />}>Logout</Menu.Item>
             </Menu.Dropdown>
           </Menu>
         </Group>
