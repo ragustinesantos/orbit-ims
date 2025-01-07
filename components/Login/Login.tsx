@@ -1,7 +1,6 @@
 "use client";
 
 import { Input, Button, Text } from '@mantine/core';
-import { useUserAuth } from "@/app/_utils/auth-context";
 import Image from 'next/image';
 import classes from './Login.module.css';
 import { useState } from 'react';

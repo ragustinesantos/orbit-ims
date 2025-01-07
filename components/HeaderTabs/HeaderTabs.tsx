@@ -17,10 +17,8 @@ import {
   Tabs,
   Text,
   UnstyledButton,
-  useMantineTheme,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { MantineLogo } from '@mantinex/mantine-logo';
 import ManageInventory from '../ManageInventory/ManageInventory';
 import classes from './HeaderTabs.module.css';
 
@@ -33,7 +31,6 @@ const user = {
 const tabs = ['Inventory', 'System Admin'];
 
 export function HeaderTabs({ handleLogout }: { handleLogout: () => void }) {
-  const theme = useMantineTheme();
   const [opened, { toggle }] = useDisclosure(false);
   const [userMenuOpened, setUserMenuOpened] = useState(false);
 

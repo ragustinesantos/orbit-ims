@@ -1,21 +1,14 @@
 /* eslint-disable no-console */
 'use client';
 
-import { HeaderTabs } from '@/components/HeaderTabs/HeaderTabs';
-
 import Login from '@/components/Login/Login';
+import { NavbarNested } from '@/components/NavbarNested/NavbarNested';
 import { useUserAuth } from './_utils/auth-context';
-import { useRouter } from 'next/navigation';
 
 export default function HomePage() {
-  const { user, signInWithEmail, firebaseSignOut } = useUserAuth() || {};
-  const router = useRouter();
+  const { user, signInWithEmail } = useUserAuth() || {};
 
-  const handleLogin = async (
-    username: string,
-    pass: string,
-    err: (hasError: boolean) => void,
-  ) => {
+  const handleLogin = async (username: string, pass: string, err: (hasError: boolean) => void) => {
     if (signInWithEmail) {
       try {
         const success = await signInWithEmail(username, pass);
@@ -32,17 +25,9 @@ export default function HomePage() {
     }
   };
 
-  const handleLogout = async () => {
-    if (firebaseSignOut) {
-      await firebaseSignOut();
-    }
-  };
-
   return (
     <main className="h-screen">
-      {!user ? <Login
-        handleLogin={handleLogin}
-      /> : <HeaderTabs handleLogout={handleLogout}/>}
+      {!user ? <Login handleLogin={handleLogin} /> : <NavbarNested />}
     </main>
   );
 }
