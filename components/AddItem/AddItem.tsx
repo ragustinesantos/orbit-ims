@@ -1,41 +1,24 @@
+/* eslint-disable no-console */
 'use client';
 
 import { ChangeEvent, useEffect, useState } from 'react';
-import { IconCheck, IconX } from '@tabler/icons-react';
-import {
-  Button,
-  Group,
-  Notification,
-  rem,
-  Select,
-  SimpleGrid,
-  Text,
-  TextInput,
-} from '@mantine/core';
-import { defaultItem, Item, Supplier } from '@/app/_utils/schema';
-import CustomNotification from '../CustomNotification/CustomNotification';
-import { NavbarNested } from '../NavbarNested/NavbarNested';
+import { Button, Group, Select, SimpleGrid, Text, TextInput } from '@mantine/core';
+import { useInventory } from '@/app/_utils/inventory-context';
+import { defaultItem, Item } from '@/app/_utils/schema';
+import CustomNotification from '@/components/CustomNotification/CustomNotification';
 import classnames from './AddItem.module.css';
 
-export default function AddItem({
-  supplierList,
-  categoryList,
-  setRefresh,
-}: {
-  supplierList: Supplier[];
-  categoryList: string[];
-  setRefresh: (num: any) => void;
-}) {
-  const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
-  const checkIcon = <IconCheck style={{ width: rem(20), height: rem(20) }} />;
-
+export default function AddItem() {
   const [itemName, setItemName] = useState('');
   const [packageUnit, setPackageUnit] = useState('');
   const [unitOfMeasurement, setUnitOfMeasurement] = useState('');
   const [supplier, setSupplier] = useState<string | null>('');
   const [category, setCategory] = useState<string | null>('');
   const [showNotification, setShowNotification] = useState(false);
-  const [notificationMessage, setNotificationMessage] = useState(<div></div>);
+  const [notificationMessage, setNotificationMessage] = useState(<div />);
+
+  const { supplierList, categoryList, setRefresh, setCurrentPage, setCurrentSection } =
+    useInventory();
 
   const handleItemNameChange = (event: ChangeEvent<HTMLInputElement>) =>
     setItemName(event.target.value);
@@ -46,11 +29,11 @@ export default function AddItem({
 
   const handleAddItem = async () => {
     if (
-      itemName == '' ||
-      packageUnit == '' ||
-      unitOfMeasurement == '' ||
-      supplier == '' ||
-      category == ''
+      itemName === '' ||
+      packageUnit === '' ||
+      unitOfMeasurement === '' ||
+      supplier === '' ||
+      category === ''
     ) {
       setNotificationMessage(
         CustomNotification(
@@ -117,75 +100,100 @@ export default function AddItem({
     setShowNotification(false);
   };
 
+  useEffect(() => {
+    setCurrentPage('Add Item');
+    setCurrentSection('inventory');
+  }, []);
+
   return (
-    <div>
-      <Group
-        classNames={{
-          root: classnames.rootGroup,
+    <main>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '100%',
+          minWidth: '50vw',
+          height: '100vh',
+          padding: 10,
         }}
       >
-        <Text
+        <Group
           classNames={{
-            root: classnames.rootText,
+            root: classnames.rootGroup,
           }}
         >
-          Add
-        </Text>
-        <SimpleGrid cols={2} spacing="xl" verticalSpacing="xl">
-          <TextInput
-            label="Item Name"
-            withAsterisk
-            placeholder="Enter Item Name..."
-            value={itemName}
-            onChange={handleItemNameChange}
-          />
-          <TextInput label="Item ID" disabled />
-          <TextInput
-            label="Package Unit"
-            withAsterisk
-            placeholder="Enter Package Unit..."
-            value={packageUnit}
-            onChange={handlePackageUnitChange}
-          />
-          <TextInput
-            label="Unit of Measurement"
-            withAsterisk
-            placeholder="pc / kg / pounds / bottle / etc."
-            value={unitOfMeasurement}
-            onChange={handleUnitOfMeasurementChange}
-            size="md"
-          />
-          <Select
-            label="Supplier/Source"
-            withAsterisk
-            placeholder="Select Supplier"
-            data={supplierList.map((supplier) => ({
-              value: supplier.supplierId,
-              label: supplier.supplierName,
-            }))}
-            size="md"
-            allowDeselect
-            value={supplier || null}
-            onChange={setSupplier}
-          />
-          <Select
-            label="Category"
-            withAsterisk
-            placeholder="Select Category"
-            data={categoryList.map((category) => {
-              return category;
-            })}
-            size="md"
-            allowDeselect
-            value={category || null}
-            onChange={setCategory}
-          />
-        </SimpleGrid>
-        <Button variant="filled" color="#1B4965" size="md" mt="xl" onClick={handleAddItem}>
-          Submit
-        </Button>
-        {showNotification && notificationMessage}
-      </Group>
-    </div>
+          <Text
+            classNames={{
+              root: classnames.rootText,
+            }}
+          >
+            Add
+          </Text>
+          <SimpleGrid cols={2} spacing="xl" verticalSpacing="xl">
+            <TextInput
+              label="Item Name"
+              withAsterisk
+              placeholder="Enter Item Name..."
+              value={itemName}
+              onChange={handleItemNameChange}
+            />
+            <TextInput label="Item ID" disabled />
+            <TextInput
+              label="Package Unit"
+              withAsterisk
+              placeholder="Enter Package Unit..."
+              value={packageUnit}
+              onChange={handlePackageUnitChange}
+            />
+            <TextInput
+              label="Unit of Measurement"
+              withAsterisk
+              placeholder="pc / kg / pounds / bottle / etc."
+              value={unitOfMeasurement}
+              onChange={handleUnitOfMeasurementChange}
+              size="md"
+            />
+            <Select
+              label="Supplier/Source"
+              withAsterisk
+              placeholder="Select Supplier"
+              data={
+                supplierList
+                  ? supplierList.map((supplier) => ({
+                      value: supplier.supplierId,
+                      label: supplier.supplierName,
+                    }))
+                  : []
+              }
+              size="md"
+              allowDeselect
+              value={supplier || null}
+              onChange={setSupplier}
+            />
+            <Select
+              label="Category"
+              withAsterisk
+              placeholder="Select Category"
+              data={
+                categoryList
+                  ? categoryList.map((category) => {
+                      return category;
+                    })
+                  : []
+              }
+              size="md"
+              allowDeselect
+              value={category || null}
+              onChange={setCategory}
+            />
+          </SimpleGrid>
+          <Button variant="filled" color="#1B4965" size="md" mt="xl" onClick={handleAddItem}>
+            Submit
+          </Button>
+          {showNotification && notificationMessage}
+        </Group>
+      </div>
+    </main>
   );
 }

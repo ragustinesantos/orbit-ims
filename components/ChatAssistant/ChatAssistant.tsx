@@ -3,12 +3,11 @@
 
 import { useEffect, useState } from 'react';
 import { Button, TextInput } from '@mantine/core';
-import { NavbarNested } from '@/components/NavbarNested/NavbarNested';
-import { useInventory } from '../_utils/inventory-context';
-import { Chat, defaultMessage } from '../_utils/schema';
-import { addChats, fetchChats, queryAssistant } from '../_utils/utility';
+import { useInventory } from '../../app/_utils/inventory-context';
+import { Chat, defaultMessage } from '../../app/_utils/schema';
+import { addChats, fetchChats, queryAssistant } from '../../app/_utils/utility';
 
-export default function Assistant() {
+export default function ChatAssistant() {
   const [chat, setChat] = useState('');
   const [chatHistory, setChatHistory] = useState<Chat[]>([]);
   const [messageKey, setMessageKey] = useState(0);
@@ -48,6 +47,7 @@ export default function Assistant() {
           if (response) {
             await addChats(currentEmployee.employeeId, response, 'assistant');
             setAssistantResponse(response);
+            console.log(assistantResponse);
             setMessageKey((prev) => prev + 1);
             setAssistantResponse('');
           }
@@ -114,39 +114,28 @@ export default function Assistant() {
   });
 
   return (
-    <main style={{ display: 'flex', width: '100vw' }}>
-      <NavbarNested />
-      <div
+    <main>
+      <section
+        id="chat-container"
         style={{
+          flexDirection: 'column',
           width: '100%',
-          minWidth: '50vw',
-          height: '100vh',
-          padding: 10,
-          justifyContent: 'space-between',
+          height: '85vh',
+          marginBottom: 20,
+          overflowY: 'scroll',
         }}
       >
-        <section
-          id="chat-container"
-          style={{
-            flexDirection: 'column',
-            width: '100%',
-            height: '85vh',
-            marginBottom: 20,
-            overflowY: 'scroll',
-          }}
-        >
-          {mappedChats}
-        </section>
-        <section>
-          <TextInput
-            style={{ paddingBottom: 10 }}
-            placeholder="enter message"
-            value={chat}
-            onChange={(event) => handleChat(event.target.value)}
-          />
-          <Button onClick={handleSendMessage}>Send</Button>
-        </section>
-      </div>
+        {mappedChats}
+      </section>
+      <section>
+        <TextInput
+          style={{ paddingBottom: 10 }}
+          placeholder="enter message"
+          value={chat}
+          onChange={(event) => handleChat(event.target.value)}
+        />
+        <Button onClick={handleSendMessage}>Send</Button>
+      </section>
     </main>
   );
 }

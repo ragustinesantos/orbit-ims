@@ -11,7 +11,11 @@ interface InventoryContextType {
   categoryList: string[] | null;
   supplierList: Supplier[] | null;
   currentEmployee: Employee | null;
+  currentPage: string;
+  currentSection: string;
   setRefresh: (num: any) => void;
+  setCurrentPage: (page: string) => void;
+  setCurrentSection: (section: string) => void;
 }
 
 const InventoryContext = createContext<InventoryContextType | null>(null);
@@ -19,11 +23,13 @@ const InventoryContext = createContext<InventoryContextType | null>(null);
 export const InventoryContextProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useUserAuth() || {};
 
-  const [inventory, setInventory] = useState<Item[] | null>(null);
+  const [inventory, setInventory] = useState<Item[] | null>([]);
   const [currentEmployee, setCurrentEmployee] = useState<Employee | null>(null);
-  const [categoryList, setCategoryList] = useState<string[] | null>(null);
-  const [supplierList, setSupplierList] = useState<Supplier[] | null>(null);
+  const [categoryList, setCategoryList] = useState<string[] | null>([]);
+  const [supplierList, setSupplierList] = useState<Supplier[]>([]);
   const [refresh, setRefresh] = useState<number>(0);
+  const [currentSection, setCurrentSection] = useState<string>('');
+  const [currentPage, setCurrentPage] = useState<string>('');
 
   console.log(currentEmployee);
 
@@ -47,6 +53,8 @@ export const InventoryContextProvider = ({ children }: { children: ReactNode }) 
     fetchInventory(setInventory);
     fetchSuppliers(setSupplierList);
     fetchCategories(setCategoryList);
+
+    console.log(supplierList);
   }, [refresh]);
 
   return (
@@ -57,6 +65,10 @@ export const InventoryContextProvider = ({ children }: { children: ReactNode }) 
         supplierList,
         setRefresh,
         currentEmployee,
+        currentPage,
+        setCurrentPage,
+        currentSection,
+        setCurrentSection,
       }}
     >
       {children}
