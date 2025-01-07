@@ -53,13 +53,17 @@ export default function AddItem() {
         category: category ?? '',
       };
 
-      const request = new Request('http://localhost:3000/api/items/', {
+      // Create a new request
+      const request = new Request('/api/items/', {
         method: 'POST',
         body: JSON.stringify(newItemObj),
       });
 
       try {
+        // Fetch the request created
         const response = await fetch(request);
+
+        // If it is successful provide feedback
         if (response.ok) {
           console.log('Success');
           setNotificationMessage(
@@ -71,7 +75,11 @@ export default function AddItem() {
             )
           );
         }
+
+        // Trigger a refresh to retrieve updated inventory information
         setRefresh((prev: number) => prev + 1);
+
+        //Reset Fields
         setItemName('');
         setPackageUnit('');
         setUnitOfMeasurement('');

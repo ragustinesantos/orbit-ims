@@ -3,7 +3,7 @@
 import { NavbarNested } from '@/components/NavbarNested/NavbarNested';
 import AddItem from '../../../components/AddItem/AddItem';
 
-export default function itemAdd() {
+export default function AddItemPage() {
   return (
     <main style={{ display: 'flex', width: '100vw' }}>
       <NavbarNested />
