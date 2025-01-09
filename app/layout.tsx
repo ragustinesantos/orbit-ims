@@ -4,6 +4,7 @@ import React from 'react';
 import { ColorSchemeScript, MantineProvider } from '@mantine/core';
 import { theme } from '../theme';
 import { AuthContextProvider } from './_utils/auth-context';
+import { InventoryContextProvider } from './_utils/inventory-context';
 
 export const metadata = {
   title: 'Orbit IMS',
@@ -24,7 +25,7 @@ export default function RootLayout({ children }: { children: any }) {
       <body>
         <MantineProvider theme={theme}>
           <AuthContextProvider>
-            {children}
+            <InventoryContextProvider>{children}</InventoryContextProvider>
           </AuthContextProvider>
         </MantineProvider>
       </body>

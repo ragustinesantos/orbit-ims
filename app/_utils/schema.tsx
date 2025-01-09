@@ -1,4 +1,3 @@
-
 export interface Item {
   itemId: string;
   supplierId: string;
@@ -76,6 +75,7 @@ export interface Employee {
   department: string;
   password: string;
   employeeLevel: string;
+  chatId: string[];
 }
 
 export interface EmployeeToEdit {
@@ -88,5 +88,35 @@ export interface EmployeeToEdit {
   department: string;
   password: string;
   employeeLevel: string;
+  chatId: string[];
   [key: string]: any;
 }
+
+export interface Chat {
+  chatId: string;
+  type: string;
+  userId: string;
+  message: string;
+  timestamp: string;
+}
+
+export interface ChatToEdit {
+  type: string;
+  employeeId: string;
+  message: string;
+  timestamp: string;
+}
+
+export const defaultMessage: string = `You are an inventory management and purchasing assistant for Wingkei Nursing Home, 
+  a non-profit nursing home that has a focus on chinese language. 
+  More details can be found on their website, https://www.wingkeicarecentre.org/.
+  
+  Task: Your task is to provide an accurate response to the question provided related to the inventory and purchasing systems.
+  If the question does not pertain to these topics, you may respond kindly that the question being asked is beyond your knowledge
+  or scope as an assistant. Ensure that the response is human - approachable and professional.
+  
+  Context: Provided are the inventory objects from the database that includes attributes pertaining to the stock item. 
+  Use these as context for your responses.
+
+  Formatting guidelines: Format the response to remove Markdown/HTML elements and convert \n to actual linebreaks. 
+  `;

@@ -33,6 +33,7 @@ export async function PUT(request: Request, { params }: { params: any }) {
       department: z.string(),
       password: z.string(),
       employeeLevel: z.string(),
+      chatId:z.array(z.string())
     });
 
     const validatedEmployee = employeeSchema.parse(updatedEmployee);
@@ -60,6 +61,7 @@ export async function PATCH(request: Request, { params }: { params: any }) {
         department: z.string().optional(),
         password: z.string().optional(),
         employeeLevel: z.string().optional(),
+        chatId:z.array(z.string()).optional(),
       })
       .strict();
 
