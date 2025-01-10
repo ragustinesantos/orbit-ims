@@ -135,6 +135,18 @@ export default function UpdateItem({
   }, [selectedItem]);
 
   return (
+    <main>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '100%',
+          minWidth: '50vw',
+          height: '60vh',
+          padding: 10,
+        }}
+      />
     <Group
       classNames={{
         root: classnames.rootGroup,
@@ -220,7 +232,7 @@ export default function UpdateItem({
           </Group>
         </Flex>
       </Modal>
-      <Text
+            <Text
         classNames={{
           root: classnames.rootText,
         }}
@@ -378,5 +390,6 @@ export default function UpdateItem({
           setShowUpdateError
         )}
     </Group>
+    </main>
   );
 }

@@ -23,6 +23,18 @@ export default function SearchItem({ inventory }: { inventory: Item[] }) {
   });
 
   return (
+    <main>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '100%',
+          minWidth: '50vw',
+          height: '20vh',
+          padding: 10,
+        }}
+      />
     <Group
       classNames={{
         root: classnames.rootGroup,
@@ -77,5 +89,6 @@ export default function SearchItem({ inventory }: { inventory: Item[] }) {
         <Table.Tbody>{rows}</Table.Tbody>
       </Table>
     </Group>
+    </main>
   );
 }
