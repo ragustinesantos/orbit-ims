@@ -77,25 +77,24 @@ export function NavbarNested() {
       </ScrollArea>
 
       <div className={classes.footer}>
-        
         <Menu shadow="md" width={200}>
-      <Menu.Target>
-      <UserButton 
-      image="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-8.png"
-      name="Harriette Spoonlicker"
-      email="hspoonlicker@outlook.com"
-      />
-      </Menu.Target>
-      <Menu.Dropdown>
-      <Menu.Label>Settings</Menu.Label>
-      <Link style={{ textDecoration: 'none' }} href="/AccountSettings">
-              <Menu.Item leftSection={<IconSettings size={16} stroke={1.5} />}>
-                Account settings
-              </Menu.Item>
-              </Link>
-              <Menu.Item onClick={handleLogout} leftSection={<IconLogout size={16} stroke={1.5} />}>Logout</Menu.Item>
-      </Menu.Dropdown>
-    </Menu>
+        <Menu.Target>
+        <UserButton 
+        image="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-8.png"
+        name="Harriette Spoonlicker"
+        email="hspoonlicker@outlook.com"
+        />
+        </Menu.Target>
+          <Menu.Dropdown>
+            <Menu.Label>Settings</Menu.Label>
+            <Link style={{ textDecoration: 'none' }} href="/AccountSettings">
+            <Menu.Item leftSection={<IconSettings size={16} stroke={1.5} />}>
+              Account settings
+            </Menu.Item>
+            </Link>
+            <Menu.Item onClick={handleLogout} leftSection={<IconLogout size={16} stroke={1.5} />}>Logout</Menu.Item>
+          </Menu.Dropdown>
+        </Menu>
       </div>
       
     </nav>
