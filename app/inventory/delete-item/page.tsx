@@ -32,7 +32,7 @@ export default function DeleteItemPage() {
           padding: 10,
         }}
       >
-        <DeleteItem inventory={inventory} supplierList={supplierList} categoryList={categoryList} setRefresh={setRefresh} />
+        <DeleteItem />
       </div>
     </main>
   );

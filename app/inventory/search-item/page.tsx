@@ -2,17 +2,8 @@
 
 import { NavbarNested } from '@/components/NavbarNested/NavbarNested';
 import SearchItem from '../../../components/SearchItem/SearchItem';
-import { defaultItem, Item} from '@/app/_utils/schema';
-import { fetchInventory, fetchSuppliers } from '@/app/_utils/utility';
-import { useEffect, useState } from 'react';
 
 export default function SearchItemPage() {
-    const [inventory, setInventory] = useState<Item[]>([{ ...defaultItem }]);
-    const [refresh, setRefresh] = useState<number>(0);
-  
-    useEffect(() => {
-      fetchInventory(setInventory);
-    }, [refresh]);
   return (
     <main style={{ display: 'flex', width: '100vw' }}>
       <NavbarNested />
@@ -27,7 +18,7 @@ export default function SearchItemPage() {
           padding: 10,
         }}
       >
-        <SearchItem inventory={inventory} />
+        <SearchItem/>
       </div>
     </main>
   );
