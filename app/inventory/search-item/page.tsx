@@ -3,7 +3,7 @@
 import { NavbarNested } from '@/components/NavbarNested/NavbarNested';
 import SearchItem from '../../../components/SearchItem/SearchItem';
 import { defaultItem, Item} from '@/app/_utils/schema';
-import { fetchInventory} from '@/app/_utils/utility';
+import { fetchInventory, fetchSuppliers } from '@/app/_utils/utility';
 import { useEffect, useState } from 'react';
 
 export default function SearchItemPage() {
@@ -23,7 +23,7 @@ export default function SearchItemPage() {
           alignItems: 'center',
           width: '100%',
           minWidth: '50vw',
-          height: '100vh',
+          //height: '100vh',
           padding: 10,
         }}
       >

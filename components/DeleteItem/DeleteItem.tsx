@@ -118,17 +118,6 @@ export default function UpdateItem({
         root: classnames.rootGroup,
       }}
     >
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: '100%',
-          minWidth: '50vw',
-          height: '60vh',
-          padding: 10,
-        }}
-      />
       <Modal
         centered
         opened={opened}

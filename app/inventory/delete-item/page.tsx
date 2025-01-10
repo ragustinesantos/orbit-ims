@@ -28,7 +28,7 @@ export default function DeleteItemPage() {
           alignItems: 'center',
           width: '100%',
           minWidth: '50vw',
-          height: '100vh',
+          //height: '100vh',
           padding: 10,
         }}
       >
