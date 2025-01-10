@@ -1,10 +1,14 @@
 import Image from 'next/image';
 import { IconGauge, IconMessage, IconNotes, IconUsers } from '@tabler/icons-react';
-import { Button, Group, ScrollArea } from '@mantine/core';
 import { useUserAuth } from '@/app/_utils/auth-context';
 import { LinksGroup } from '../NavbarLinksGroup/NavbarLinksGroup';
-import { UserButton } from '../UserButton/UserButton';
+import  UserButton  from '../UserButton/UserButton';
 import classes from './NavbarNested.module.css';
+import { Menu, Button, Text, rem, Group, ScrollArea } from '@mantine/core';
+import {
+  IconSettings,
+  IconLogout
+} from '@tabler/icons-react';
 
 export function NavbarNested() {
   const { firebaseSignOut } = useUserAuth();
@@ -71,7 +75,24 @@ export function NavbarNested() {
       </ScrollArea>
 
       <div className={classes.footer}>
-        <UserButton />
+        
+        <Menu shadow="md" width={200}>
+      <Menu.Target>
+      <UserButton 
+      image="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-8.png"
+      name="Harriette Spoonlicker"
+      email="hspoonlicker@outlook.com"
+      />
+      </Menu.Target>
+      <Menu.Dropdown>
+      <Menu.Label>Settings</Menu.Label>
+              <Menu.Item leftSection={<IconSettings size={16} stroke={1.5} />}>
+                Account settings
+              </Menu.Item>
+              <Menu.Item onClick={handleLogout} leftSection={<IconLogout size={16} stroke={1.5} />}>Logout</Menu.Item>
+      </Menu.Dropdown>
+    </Menu>
+    
       </div>
     </nav>
   );
