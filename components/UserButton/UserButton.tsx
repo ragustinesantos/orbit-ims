@@ -16,7 +16,7 @@ const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(
     <UnstyledButton
       ref={ref}
       style={{
-        padding: 'var(--mantine-spacing-md)',
+        padding: 'var(--mantine-spacing-sm)',
         color: 'var(--mantine-color-text)',
         borderRadius: 'var(--mantine-radius-sm)',
       }}
@@ -35,8 +35,9 @@ const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(
           </Text>
         </div>
 
-        {icon || <IconChevronRight size="1rem" />}
+        {icon || <IconChevronRight size="1rem" style={{}} />}
       </Group>
+      
     </UnstyledButton>
   )
 );

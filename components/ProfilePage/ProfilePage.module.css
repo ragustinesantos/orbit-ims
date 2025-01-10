@@ -1,0 +1,51 @@
+.externalLayout{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /*border: 1px solid purple;*/
+    width: 75vw;
+    height: 83vh;
+}
+
+
+.internalLayoutGroup {
+    display: flex;
+    /*border: 1px solid blue;*/
+}
+
+.rootText {
+    font-size: 48px;
+    font-weight: bold;
+    text-decoration: underline;
+    text-underline-offset: 8px;
+}
+
+
+.titleAndPhoto {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 30px;
+    /*border: 6px solid red;*/
+}
+
+
+.simplegrid1 {
+    margin-left: 5vh;
+    margin-top: 7.5vh;
+    /*border: 6px solid red;*/
+}
+
+.button {
+    background-color: #228BE6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 150px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #1D7ED6;
+}

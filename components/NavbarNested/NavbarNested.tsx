@@ -9,6 +9,8 @@ import {
   IconSettings,
   IconLogout
 } from '@tabler/icons-react';
+import { useState } from 'react';
+import Link from "next/link";
 
 export function NavbarNested() {
   const { firebaseSignOut } = useUserAuth();
@@ -86,14 +88,16 @@ export function NavbarNested() {
       </Menu.Target>
       <Menu.Dropdown>
       <Menu.Label>Settings</Menu.Label>
+      <Link style={{ textDecoration: 'none' }} href="/AccountSettings">
               <Menu.Item leftSection={<IconSettings size={16} stroke={1.5} />}>
                 Account settings
               </Menu.Item>
+              </Link>
               <Menu.Item onClick={handleLogout} leftSection={<IconLogout size={16} stroke={1.5} />}>Logout</Menu.Item>
       </Menu.Dropdown>
     </Menu>
-    
       </div>
+      
     </nav>
   );
 }
