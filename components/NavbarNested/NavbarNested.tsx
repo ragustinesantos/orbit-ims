@@ -23,10 +23,10 @@ export function NavbarNested() {
       label: 'Manage Inventory',
       icon: IconNotes,
       links: [
-        { label: 'Search Item', link: '/' },
+        { label: 'Search Item', link: '/inventory/search-item' },
         { label: 'Add Item', link: '/inventory/add-item' },
-        { label: 'Update Item', link: '/' },
-        { label: 'Delete Item', link: '/' },
+        { label: 'Update Item', link: '/inventory/update-item' },
+        { label: 'Delete Item', link: '/inventory/delete-item' },
       ],
     },
     {

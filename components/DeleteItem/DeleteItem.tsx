@@ -8,18 +8,9 @@ import { defaultItem, Item, ItemToEdit, Supplier } from '@/app/_utils/schema';
 import { deleteItem, fetchSupplier, putItem } from '@/app/_utils/utility';
 import CustomNotification from '../CustomNotification/CustomNotification';
 import classnames from './DeleteItem.module.css';
+import { useInventory } from '@/app/_utils/inventory-context';
 
-export default function UpdateItem({
-  inventory,
-  supplierList,
-  categoryList,
-  setRefresh,
-}: {
-  inventory: Item[];
-  supplierList: Supplier[];
-  categoryList: string[];
-  setRefresh: (num: any) => void;
-}) {
+export default function UpdateItem() {
   // Search and selected items from item search
   const [searchValue, setSearchValue] = useState<string | null>('');
   const [selectedItem, setSelectedItem] = useState<Item>({ ...defaultItem });
@@ -48,6 +39,9 @@ export default function UpdateItem({
   // Nullable states due to Select Mantine component handling
   const [category, setCategory] = useState<string | null>('');
   const [supplierId, setSupplierId] = useState<string | null>('');
+
+  const { inventory, supplierList, categoryList, setRefresh, setCurrentPage, setCurrentSection } =
+      useInventory();
 
   // Handle delete submit
   const handleSubmit = async () => {
@@ -111,6 +105,12 @@ export default function UpdateItem({
 
     updateValues();
   }, [selectedItem]);
+
+
+  useEffect(() => {
+    setCurrentPage('Delete Item');
+    setCurrentSection('inventory');
+  }, []);
 
   return (
     <Group
