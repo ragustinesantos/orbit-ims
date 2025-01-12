@@ -115,93 +115,81 @@ export default function AddItem() {
 
   return (
     <main>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: '100%',
-          minWidth: '50vw',
-          height: '100vh',
-          padding: 10,
+      <Group
+        classNames={{
+          root: classnames.rootGroup,
         }}
       >
-        <Group
+        <Text
           classNames={{
-            root: classnames.rootGroup,
+            root: classnames.rootText,
           }}
         >
-          <Text
-            classNames={{
-              root: classnames.rootText,
-            }}
-          >
-            Add
-          </Text>
-          <SimpleGrid cols={2} spacing="xl" verticalSpacing="xl">
-            <TextInput
-              label="Item Name"
-              withAsterisk
-              placeholder="Enter Item Name..."
-              value={itemName}
-              onChange={handleItemNameChange}
-            />
-            <TextInput label="Item ID" disabled />
-            <TextInput
-              label="Package Unit"
-              withAsterisk
-              placeholder="Enter Package Unit..."
-              value={packageUnit}
-              onChange={handlePackageUnitChange}
-            />
-            <TextInput
-              label="Unit of Measurement"
-              withAsterisk
-              placeholder="pc / kg / pounds / bottle / etc."
-              value={unitOfMeasurement}
-              onChange={handleUnitOfMeasurementChange}
-              size="md"
-            />
-            <Select
-              label="Supplier/Source"
-              withAsterisk
-              placeholder="Select Supplier"
-              data={
-                supplierList
-                  ? supplierList.map((supplier) => ({
-                      value: supplier.supplierId,
-                      label: supplier.supplierName,
-                    }))
-                  : []
-              }
-              size="md"
-              allowDeselect
-              value={supplier || null}
-              onChange={setSupplier}
-            />
-            <Select
-              label="Category"
-              withAsterisk
-              placeholder="Select Category"
-              data={
-                categoryList
-                  ? categoryList.map((category) => {
-                      return category;
-                    })
-                  : []
-              }
-              size="md"
-              allowDeselect
-              value={category || null}
-              onChange={setCategory}
-            />
-          </SimpleGrid>
-          <Button variant="filled" color="#1B4965" size="md" mt="xl" onClick={handleAddItem}>
-            Submit
-          </Button>
-          {showNotification && notificationMessage}
-        </Group>
-      </div>
+          Add
+        </Text>
+        <SimpleGrid cols={2} spacing="xl" verticalSpacing="xl">
+          <TextInput
+            label="Item Name"
+            withAsterisk
+            placeholder="Enter Item Name..."
+            value={itemName}
+            onChange={handleItemNameChange}
+          />
+          <TextInput label="Item ID" disabled />
+          <TextInput
+            label="Package Unit"
+            withAsterisk
+            placeholder="Enter Package Unit..."
+            value={packageUnit}
+            onChange={handlePackageUnitChange}
+          />
+          <TextInput
+            label="Unit of Measurement"
+            withAsterisk
+            placeholder="pc / kg / pounds / bottle / etc."
+            value={unitOfMeasurement}
+            onChange={handleUnitOfMeasurementChange}
+            size="md"
+          />
+          <Select
+            label="Supplier/Source"
+            withAsterisk
+            placeholder="Select Supplier"
+            data={
+              supplierList
+                ? supplierList.map((supplier) => ({
+                    value: supplier.supplierId,
+                    label: supplier.supplierName,
+                  }))
+                : []
+            }
+            size="md"
+            allowDeselect
+            value={supplier || null}
+            onChange={setSupplier}
+          />
+          <Select
+            label="Category"
+            withAsterisk
+            placeholder="Select Category"
+            data={
+              categoryList
+                ? categoryList.map((category) => {
+                    return category;
+                  })
+                : []
+            }
+            size="md"
+            allowDeselect
+            value={category || null}
+            onChange={setCategory}
+          />
+        </SimpleGrid>
+        <Button variant="filled" color="#1B4965" size="md" mt="xl" onClick={handleAddItem}>
+          Submit
+        </Button>
+        {showNotification && notificationMessage}
+      </Group>
     </main>
   );
 }
