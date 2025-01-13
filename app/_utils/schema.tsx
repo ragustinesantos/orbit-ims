@@ -1,3 +1,5 @@
+import { IconGauge, IconMessage, IconNotes, IconUsers } from '@tabler/icons-react';
+
 export interface Item {
   itemId: string;
   supplierId: string;
@@ -177,6 +179,228 @@ export interface RecurringOrderTemplateToEdit {
   isTemplateApprovedE3: boolean;
   [key: string]: any;
 }
+
+export const NAV_ITEMS = {
+  E1: [
+    { label: 'Dashboard', icon: IconGauge },
+    {
+      label: 'Assistant',
+      icon: IconMessage,
+      links: [{ label: 'Chat', link: '/assistant/chat' }],
+    },
+    {
+      label: 'ROR',
+      icon: IconNotes,
+      links: [{ label: 'Create Recurring Order', link: '/' }],
+    },
+    {
+      label: 'ODOR',
+      icon: IconNotes,
+      links: [{ label: 'Create On-demand Order Requisition', link: '/' }],
+    },
+    {
+      label: 'Inventory',
+      icon: IconNotes,
+      links: [{ label: 'Search Item', link: '/' }],
+    },
+  ],
+  E2: [
+    { label: 'Dashboard', icon: IconGauge },
+    {
+      label: 'Assistant',
+      icon: IconMessage,
+      links: [{ label: 'Chat', link: '/assistant/chat' }],
+    },
+    {
+      label: 'ROR',
+      icon: IconNotes,
+      links: [{ label: 'Create Recurring Order', link: '/' }],
+    },
+    {
+      label: 'ODOR',
+      icon: IconNotes,
+      links: [{ label: 'Create On-demand Order Requisition', link: '/' }],
+    },
+    {
+      label: 'Inventory',
+      icon: IconNotes,
+      links: [{ label: 'Search Item', link: '/' }],
+    },
+    {
+      label: 'E2 Access',
+      icon: IconNotes,
+      links: [{ label: 'Access', link: '/' }],
+    },
+  ],
+  E3: [
+    { label: 'Dashboard', icon: IconGauge },
+    {
+      label: 'Assistant',
+      icon: IconMessage,
+      links: [{ label: 'Chat', link: '/assistant/chat' }],
+    },
+    {
+      label: 'ROR',
+      icon: IconNotes,
+      links: [{ label: 'Create Recurring Order', link: '/' }],
+    },
+    {
+      label: 'ODOR',
+      icon: IconNotes,
+      links: [{ label: 'Create On-demand Order Requisition', link: '/' }],
+    },
+    {
+      label: 'Inventory',
+      icon: IconNotes,
+      links: [{ label: 'Search Item', link: '/' }],
+    },
+    {
+      label: 'E3 Access',
+      icon: IconNotes,
+      links: [{ label: 'Access', link: '/' }],
+    },
+  ],
+  P1: [
+    { label: 'Dashboard', icon: IconGauge },
+    {
+      label: 'Assistant',
+      icon: IconMessage,
+      links: [
+        { label: 'Chat', link: '/assistant/chat' },
+        { label: 'Generate Report', link: '/' },
+      ],
+    },
+    {
+      label: 'ROR',
+      icon: IconNotes,
+      links: [{ label: 'Create Recurring Order', link: '/' }],
+    },
+    {
+      label: 'ODOR',
+      icon: IconNotes,
+      links: [{ label: 'Create On-demand Order Requisition', link: '/' }],
+    },
+    {
+      label: 'Manage Inventory',
+      icon: IconNotes,
+      links: [
+        { label: 'Search Item', link: '/inventory/search-item' },
+        { label: 'Add Item', link: '/inventory/add-item' },
+        { label: 'Update Item', link: '/inventory/update-item' },
+        { label: 'Delete Item', link: '/inventory/delete-item' },
+        { label: 'Stock In', link: '/' },
+        { label: 'Stock Out', link: '/' },
+      ],
+    },
+    {
+      label: 'P1 Access',
+      icon: IconNotes,
+      links: [{ label: 'Access', link: '/' }],
+    },
+  ],
+  P2: [
+    { label: 'Dashboard', icon: IconGauge },
+    {
+      label: 'Assistant',
+      icon: IconMessage,
+      links: [
+        { label: 'Chat', link: '/assistant/chat' },
+        { label: 'Generate Report', link: '/' },
+      ],
+    },
+    {
+      label: 'ROR',
+      icon: IconNotes,
+      links: [{ label: 'Create Recurring Order', link: '/' }],
+    },
+    {
+      label: 'ODOR',
+      icon: IconNotes,
+      links: [{ label: 'Create On-demand Order Requisition', link: '/' }],
+    },
+    {
+      label: 'Manage Inventory',
+      icon: IconNotes,
+      links: [
+        { label: 'Search Item', link: '/inventory/search-item' },
+        { label: 'Add Item', link: '/inventory/add-item' },
+        { label: 'Update Item', link: '/inventory/update-item' },
+        { label: 'Delete Item', link: '/inventory/delete-item' },
+        { label: 'Stock In', link: '/' },
+        { label: 'Stock Out', link: '/' },
+      ],
+    },
+    {
+      label: 'P2 Access',
+      icon: IconNotes,
+      links: [{ label: 'Access', link: '/' }],
+    },
+  ],
+  IA: [
+    { label: 'Dashboard', icon: IconGauge },
+    {
+      label: 'Assistant',
+      icon: IconMessage,
+      links: [
+        { label: 'Chat', link: '/assistant/chat' },
+        { label: 'Generate Report', link: '/' },
+      ],
+    },
+    {
+      label: 'Manage Inventory',
+      icon: IconNotes,
+      links: [
+        { label: 'Search Item', link: '/inventory/search-item' },
+        { label: 'Add Item', link: '/inventory/add-item' },
+        { label: 'Update Item', link: '/inventory/update-item' },
+        { label: 'Delete Item', link: '/inventory/delete-item' },
+        { label: 'Stock In', link: '/' },
+        { label: 'Stock Out', link: '/' },
+      ],
+    },
+    {
+      label: 'Manage Employees',
+      icon: IconUsers,
+      links: [
+        { label: 'Search Employee', link: '/' },
+        { label: 'Add Employee', link: '/' },
+        { label: 'Update Employee', link: '/' },
+        { label: 'Delete Employee', link: '/' },
+      ],
+    },
+  ],
+  SA: [
+    { label: 'Dashboard', icon: IconGauge },
+    {
+      label: 'Assistant',
+      icon: IconMessage,
+      links: [
+        { label: 'Chat', link: '/assistant/chat' },
+        { label: 'Generate Report', link: '/' },
+      ],
+    },
+    {
+      label: 'Manage Inventory',
+      icon: IconNotes,
+      links: [
+        { label: 'Search Item', link: '/inventory/search-item' },
+        { label: 'Add Item', link: '/inventory/add-item' },
+        { label: 'Update Item', link: '/inventory/update-item' },
+        { label: 'Delete Item', link: '/inventory/delete-item' },
+      ],
+    },
+    {
+      label: 'Manage Employees',
+      icon: IconUsers,
+      links: [
+        { label: 'Search Employee', link: '/' },
+        { label: 'Add Employee', link: '/' },
+        { label: 'Update Employee', link: '/' },
+        { label: 'Delete Employee', link: '/' },
+      ],
+    },
+  ],
+};
 
 export const defaultMessage: string = `You are an inventory management and purchasing assistant for Wingkei Nursing Home, 
   a non-profit nursing home that has a focus on chinese language. 
