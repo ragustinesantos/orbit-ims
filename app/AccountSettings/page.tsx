@@ -9,10 +9,15 @@ export default function AccountSettingsPage () {
             <main style={{ display: 'flex', width: '100vw' }}>
               <NavbarNested />
               <div
-                style={{
-                  
-                }}
-              >
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '100%',
+                minWidth: '50vw',
+                height: '100vh',
+              }}
+            >
                 <ProfilePage/>
               </div>
             </main>

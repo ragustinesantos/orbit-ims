@@ -14,34 +14,38 @@ const { currentEmployee } = useInventory();
 console.log(currentEmployee);
 
     return (
+        
         <div className={classnames.externalLayout}>
             <div className={classnames.internalLayoutGroup}>
                     <div className={classnames.titleAndPhoto}>
-                        <Text classNames={{root: classnames.rootText,}}>Profile</Text>
-                        <Avatar src={"https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-8.png"} radius="100" size={'200'} />
+                        <p className={classnames.rootText}>Profile</p>
+                        <img className={classnames.photo} src={"https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-8.png"}  />
                     </div>
                     <div className={classnames.simplegrid1}>
                         <SimpleGrid cols={2} verticalSpacing="xl">
-                            <div>First Name:</div>
+                            <div className={classnames.title}>First Name:</div>
                             <div>{currentEmployee?.firstName}</div>
-                            <div>Last Name:</div>
+                            <div className={classnames.title}>Last Name:</div>
                             <div>{currentEmployee?.lastName}</div>
-                            <div>Email:</div>
+                            <div className={classnames.title}>Email:</div>
                             <div>{currentEmployee?.email}</div>
-                            <div>Phone:</div>
+                            <div className={classnames.title}>Phone:</div>
                             <div>{currentEmployee?.phone}</div>
-                            <div>Position:</div>
+                            <div className={classnames.title}>Position:</div>
                             <div>{currentEmployee?.position}</div>
-                            <div>Department:</div>
+                            <div className={classnames.title}>Department:</div>
                             <div>{currentEmployee?.department}</div>
-                            <div>Access Level:</div>
+                            <div className={classnames.title}>Access Level:</div>
                             <div>{currentEmployee?.employeeLevel}</div>
-                            <Button variant="filled" classNames={{root:classnames.button}}>Change Password</Button>
-                            <Button variant="filled" classNames={{root:classnames.button}}>Logout</Button>
-                        </SimpleGrid>  
+                            
+                        </SimpleGrid>
+                        <div>
+                        <Button variant="filled" classNames={{root:classnames.button}}>Change Password</Button>
+                        <Button variant="filled" classNames={{root:classnames.button}}>Logout</Button>
+                        </div>  
                     </div>
             </div>
         </div>
-            
+        
     )
 }
