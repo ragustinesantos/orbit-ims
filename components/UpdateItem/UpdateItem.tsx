@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react';
 import { Button, Flex, Group, Modal, Select, SimpleGrid, Text, TextInput } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { defaultItem, Item, ItemToEdit, Supplier } from '@/app/_utils/schema';
+import { defaultItem, Item, ItemToEdit } from '@/app/_utils/schema';
 import { fetchSupplier, putItem } from '@/app/_utils/utility';
 import CustomNotification from '../CustomNotification/CustomNotification';
 import classnames from './UpdateItem.module.css';
@@ -90,7 +90,7 @@ export default function UpdateItem() {
 
   // Find item to search in inventory and set as selectedItem
   useEffect(() => {
-    const matchedItem = inventory.find((item) => item.itemName === searchValue);
+    const matchedItem = inventory?.find((item) => item.itemName === searchValue);
     setSelectedItem(matchedItem || { ...defaultItem });
     setRefresh((prev: number) => prev + 1);
   }, [searchValue]);
@@ -230,7 +230,7 @@ export default function UpdateItem() {
       <Select
         label="Search Item"
         placeholder="Select an item from the list..."
-        data={inventory.map((item) => ({
+        data={inventory?.map((item) => ({
           value: item.itemName,
           label: item.itemName,
         }))}
@@ -313,7 +313,7 @@ export default function UpdateItem() {
           label="Supplier/Source"
           placeholder="Select a supplier from the list..."
           searchable
-          data={supplierList.map((supplier) => ({
+          data={supplierList?.map((supplier) => ({
             value: supplier.supplierId,
             label: supplier.supplierName,
           }))}
@@ -327,7 +327,7 @@ export default function UpdateItem() {
           label="Category"
           searchable
           placeholder="Select a category from the list..."
-          data={categoryList.map((category) => ({
+          data={categoryList?.map((category) => ({
             value: category,
             label: category,
           }))}
