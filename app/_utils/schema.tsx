@@ -109,6 +109,77 @@ export interface ChatToEdit {
   timestamp: string;
 }
 
+export interface OrderRequisition {
+  requisitionId: string;
+  requisitionType: string;
+  requisitionDate: Date;
+  employeeId: string;
+  approvalE2: string;
+  approvalE3: string;
+  approvalP1: string;
+  isApprovedE2: boolean;
+  isApprovedE3: boolean;
+  isApprovedP1: boolean;
+  recipientName: string;
+  disposalPlan: string;
+  remarks: string;
+}
+
+export interface OrderRequisitionToEdit {
+  requisitionType: string;
+  requisitionDate: Date;
+  employeeId: string;
+  approvalE2: string;
+  approvalE3: string;
+  approvalP1: string;
+  isApprovedE2: boolean;
+  isApprovedE3: boolean;
+  isApprovedP1: boolean;
+  recipientName: string;
+  disposalPlan: string;
+  remarks: string;
+  [key: string]: any;
+}
+
+export interface ItemOrder {
+  itemId: string;
+  orderQty: number;
+  pendingQty: number;
+  servedQty: number;
+}
+
+export interface RecurringOrder {
+  rorId: string;
+  rorTemplateId: string;
+  requisitionId: string;
+  itemOrders: ItemOrder[];
+  orderTotal: number;
+}
+
+export interface RecurringOrderToEdit {
+  rorTemplateId: string;
+  requisitionId: string;
+  itemOrders: ItemOrder[];
+  orderTotal: number;
+  [key: string]: any;
+}
+
+export interface RecurringOrderTemplate {
+  rorTemplateId: string;
+  templateName: string;
+  itemList: string[];
+  isTemplateApprovedE2: boolean;
+  isTemplateApprovedE3: boolean;
+}
+
+export interface RecurringOrderTemplateToEdit {
+  templateName: string;
+  itemList: string[];
+  isTemplateApprovedE2: boolean;
+  isTemplateApprovedE3: boolean;
+  [key: string]: any;
+}
+
 export const NAV_ITEMS = {
   E1: [
     { label: 'Dashboard', icon: IconGauge },
@@ -213,10 +284,10 @@ export const NAV_ITEMS = {
       label: 'Manage Inventory',
       icon: IconNotes,
       links: [
-        { label: 'Search Item', link: '/' },
+        { label: 'Search Item', link: '/inventory/search-item' },
         { label: 'Add Item', link: '/inventory/add-item' },
-        { label: 'Update Item', link: '/' },
-        { label: 'Delete Item', link: '/' },
+        { label: 'Update Item', link: '/inventory/update-item' },
+        { label: 'Delete Item', link: '/inventory/delete-item' },
         { label: 'Stock In', link: '/' },
         { label: 'Stock Out', link: '/' },
       ],
@@ -251,10 +322,10 @@ export const NAV_ITEMS = {
       label: 'Manage Inventory',
       icon: IconNotes,
       links: [
-        { label: 'Search Item', link: '/' },
+        { label: 'Search Item', link: '/inventory/search-item' },
         { label: 'Add Item', link: '/inventory/add-item' },
-        { label: 'Update Item', link: '/' },
-        { label: 'Delete Item', link: '/' },
+        { label: 'Update Item', link: '/inventory/update-item' },
+        { label: 'Delete Item', link: '/inventory/delete-item' },
         { label: 'Stock In', link: '/' },
         { label: 'Stock Out', link: '/' },
       ],
@@ -279,10 +350,10 @@ export const NAV_ITEMS = {
       label: 'Manage Inventory',
       icon: IconNotes,
       links: [
-        { label: 'Search Item', link: '/' },
+        { label: 'Search Item', link: '/inventory/search-item' },
         { label: 'Add Item', link: '/inventory/add-item' },
-        { label: 'Update Item', link: '/' },
-        { label: 'Delete Item', link: '/' },
+        { label: 'Update Item', link: '/inventory/update-item' },
+        { label: 'Delete Item', link: '/inventory/delete-item' },
         { label: 'Stock In', link: '/' },
         { label: 'Stock Out', link: '/' },
       ],
@@ -312,10 +383,10 @@ export const NAV_ITEMS = {
       label: 'Manage Inventory',
       icon: IconNotes,
       links: [
-        { label: 'Search Item', link: '/' },
+        { label: 'Search Item', link: '/inventory/search-item' },
         { label: 'Add Item', link: '/inventory/add-item' },
-        { label: 'Update Item', link: '/' },
-        { label: 'Delete Item', link: '/' },
+        { label: 'Update Item', link: '/inventory/update-item' },
+        { label: 'Delete Item', link: '/inventory/delete-item' },
       ],
     },
     {

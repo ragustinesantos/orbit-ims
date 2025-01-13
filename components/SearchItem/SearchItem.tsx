@@ -1,12 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Group, Select, Table, Text } from '@mantine/core';
 import { Item } from '@/app/_utils/schema';
 import classnames from './SearchItem.module.css';
+import { useInventory } from '@/app/_utils/inventory-context';
 
-export default function SearchItem({ inventory }: { inventory: Item[] }) {
+export default function SearchItem() {
   const [searchValue, setSearchValue] = useState<string | null>('');
+  const { inventory, setCurrentPage, setCurrentSection } =
+    useInventory();
 
   const rows = inventory.map((item) => {
     return item.itemName.includes(searchValue || '') ? (
@@ -22,7 +25,13 @@ export default function SearchItem({ inventory }: { inventory: Item[] }) {
     ) : null;
   });
 
+  useEffect(() => {
+    setCurrentPage('Search Item');
+    setCurrentSection('inventory');
+  }, []);
+
   return (
+    <main>
     <Group
       classNames={{
         root: classnames.rootGroup,
@@ -77,5 +86,6 @@ export default function SearchItem({ inventory }: { inventory: Item[] }) {
         <Table.Tbody>{rows}</Table.Tbody>
       </Table>
     </Group>
+    </main>
   );
 }
