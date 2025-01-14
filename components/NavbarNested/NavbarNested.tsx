@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import { Button, Group, ScrollArea } from '@mantine/core';
 import { useUserAuth } from '@/app/_utils/auth-context';
 import { useInventory } from '@/app/_utils/inventory-context';
 import { NAV_ITEMS } from '@/app/_utils/schema';
