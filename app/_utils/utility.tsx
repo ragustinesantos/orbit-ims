@@ -74,7 +74,7 @@ export const deleteItem = async (itemId: string) => {
   await fetch(request);
 };
 
-// Fetch all inventory items
+// Fetch one or all employees
 export const fetchEmployees = async () => {
   try {
     const response = await fetch('/api/employees');
