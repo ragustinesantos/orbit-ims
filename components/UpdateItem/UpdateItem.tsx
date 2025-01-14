@@ -4,22 +4,13 @@
 import { useEffect, useState } from 'react';
 import { Button, Flex, Group, Modal, Select, SimpleGrid, Text, TextInput } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { defaultItem, Item, ItemToEdit, Supplier } from '@/app/_utils/schema';
+import { defaultItem, Item, ItemToEdit } from '@/app/_utils/schema';
 import { fetchSupplier, putItem } from '@/app/_utils/utility';
 import CustomNotification from '../CustomNotification/CustomNotification';
 import classnames from './UpdateItem.module.css';
+import { useInventory } from '@/app/_utils/inventory-context';
 
-export default function UpdateItem({
-  inventory,
-  supplierList,
-  categoryList,
-  setRefresh,
-}: {
-  inventory: Item[];
-  supplierList: Supplier[];
-  categoryList: string[];
-  setRefresh: (num: any) => void;
-}) {
+export default function UpdateItem() {
   // Search and selected items from item search
   const [searchValue, setSearchValue] = useState<string | null>('');
   const [selectedItem, setSelectedItem] = useState<Item>({ ...defaultItem });
@@ -45,6 +36,9 @@ export default function UpdateItem({
   // Nullable states due to Select Mantine component handling
   const [category, setCategory] = useState<string | null>('');
   const [supplierId, setSupplierId] = useState<string | null>('');
+
+   const { inventory, supplierList, categoryList, setRefresh, setCurrentPage, setCurrentSection } =
+      useInventory();
 
   // Handle state changes based on new values
   const handleItemName = (newTxt: string) => setItemName(newTxt);
@@ -96,7 +90,7 @@ export default function UpdateItem({
 
   // Find item to search in inventory and set as selectedItem
   useEffect(() => {
-    const matchedItem = inventory.find((item) => item.itemName === searchValue);
+    const matchedItem = inventory?.find((item) => item.itemName === searchValue);
     setSelectedItem(matchedItem || { ...defaultItem });
     setRefresh((prev: number) => prev + 1);
   }, [searchValue]);
@@ -134,7 +128,13 @@ export default function UpdateItem({
     updateValues();
   }, [selectedItem]);
 
+  useEffect(() => {
+    setCurrentPage('Update Item');
+    setCurrentSection('inventory');
+  }, []);
+
   return (
+    <main>
     <Group
       classNames={{
         root: classnames.rootGroup,
@@ -220,7 +220,7 @@ export default function UpdateItem({
           </Group>
         </Flex>
       </Modal>
-      <Text
+            <Text
         classNames={{
           root: classnames.rootText,
         }}
@@ -230,7 +230,7 @@ export default function UpdateItem({
       <Select
         label="Search Item"
         placeholder="Select an item from the list..."
-        data={inventory.map((item) => ({
+        data={inventory?.map((item) => ({
           value: item.itemName,
           label: item.itemName,
         }))}
@@ -313,7 +313,7 @@ export default function UpdateItem({
           label="Supplier/Source"
           placeholder="Select a supplier from the list..."
           searchable
-          data={supplierList.map((supplier) => ({
+          data={supplierList?.map((supplier) => ({
             value: supplier.supplierId,
             label: supplier.supplierName,
           }))}
@@ -327,7 +327,7 @@ export default function UpdateItem({
           label="Category"
           searchable
           placeholder="Select a category from the list..."
-          data={categoryList.map((category) => ({
+          data={categoryList?.map((category) => ({
             value: category,
             label: category,
           }))}
@@ -378,5 +378,6 @@ export default function UpdateItem({
           setShowUpdateError
         )}
     </Group>
+    </main>
   );
 }

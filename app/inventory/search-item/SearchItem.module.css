@@ -1,0 +1,30 @@
+
+.rootGroup {
+    align-items: baseline;
+    flex-direction: column;
+}
+
+
+.rootText {
+    font-size: 48px;
+    font-weight: bold;
+    text-decoration: underline;
+    text-underline-offset: 8px;
+}
+
+.selectRoot {
+    width: 100%;
+}
+
+.thead {
+    background-color: transparent;
+}
+
+/* .td {
+    overflow-x: scroll;
+    max-width: 20px;
+}
+
+.td::-webkit-scrollbar {
+    display: none;
+} */
