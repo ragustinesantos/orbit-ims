@@ -25,5 +25,9 @@ jobs:
           YARN_ENABLE_HARDENED_MODE: false
       - name: Run build
         run: npm run build
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       - name: Run tests
         run: npm test
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}

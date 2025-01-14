@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { Group, Select, Table, Text } from '@mantine/core';
-import { Item } from '@/app/_utils/schema';
 import classnames from './SearchItem.module.css';
 import { useInventory } from '@/app/_utils/inventory-context';
 
@@ -11,7 +10,7 @@ export default function SearchItem() {
   const { inventory, setCurrentPage, setCurrentSection } =
     useInventory();
 
-  const rows = inventory.map((item) => {
+  const rows = inventory?.map((item) => {
     return item.itemName.includes(searchValue || '') ? (
       <Table.Tr key={item.itemId}>
         <Table.Td style={{ maxWidth: '20px', overflowX: 'scroll', scrollbarWidth: 'none' }}>
@@ -48,7 +47,7 @@ export default function SearchItem() {
       <Select
         label="Search Item"
         placeholder="Select an item from the list..."
-        data={inventory.map((item) => ({
+        data={inventory?.map((item) => ({
           value: item.itemName,
           label: item.itemName,
         }))}
