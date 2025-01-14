@@ -393,9 +393,9 @@ export const NAV_ITEMS = {
       label: 'Manage Employees',
       icon: IconUsers,
       links: [
-        { label: 'Search Employee', link: '/' },
+        { label: 'Search Employee', link: '/employee/search-employee' },
         { label: 'Add Employee', link: '/' },
-        { label: 'Update Employee', link: '/' },
+        { label: 'Update Employee', link: '/employee/update-emp' },
         { label: 'Delete Employee', link: '/' },
       ],
     },

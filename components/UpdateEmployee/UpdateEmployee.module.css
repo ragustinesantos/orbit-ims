@@ -1,0 +1,15 @@
+.rootGroup {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .modalTitle {
+    font-weight: bold;
+    color: var(--mantine-color-blue-6);
+  }
+  
+  .simpleGridRoot {
+    width: 100%;
+    margin-bottom: 20px;
+  }
