@@ -34,7 +34,7 @@ export function NavbarNested() {
       icon: IconUsers,
       links: [
         { label: 'Search Employee', link: '/' },
-        { label: 'Add Employee', link: '/' },
+        { label: 'Add Employee', link: '/employee/add-employee' },
         { label: 'Update Employee', link: '/' },
         { label: 'Delete Employee', link: '/' },
       ],
