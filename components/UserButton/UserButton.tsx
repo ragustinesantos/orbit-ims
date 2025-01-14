@@ -1,28 +1,46 @@
 import { IconChevronRight } from '@tabler/icons-react';
-import { Avatar, Group, Text, UnstyledButton } from '@mantine/core';
+import { Group, Avatar, Text, Menu, UnstyledButton } from '@mantine/core';
 import classes from './UserButton.module.css';
+import { forwardRef } from 'react';
 
-export function UserButton() {
-  return (
-    <UnstyledButton className={classes.user}>
+interface UserButtonProps extends React.ComponentPropsWithoutRef<'button'> {
+  image: string;
+  name: string;
+  email: string;
+  icon?: React.ReactNode;
+}
+
+
+const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(
+  ({ image, name, email, icon, ...others }: UserButtonProps, ref) => (
+    <UnstyledButton
+      ref={ref}
+      style={{
+        padding: 'var(--mantine-spacing-sm)',
+        color: 'var(--mantine-color-text)',
+        borderRadius: 'var(--mantine-radius-sm)',
+      }}
+      {...others}
+    >
       <Group>
-        <Avatar
-          src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-8.png"
-          radius="xl"
-        />
+        <Avatar src={image} radius="xl" />
 
         <div style={{ flex: 1 }}>
           <Text size="sm" fw={500}>
-            Harriette Spoonlicker
+            {name}
           </Text>
 
           <Text c="dimmed" size="xs">
-            hspoonlicker@outlook.com
+            {email}
           </Text>
         </div>
 
-        <IconChevronRight size={14} stroke={1.5} />
+        {icon || <IconChevronRight size="1rem" style={{}} />}
       </Group>
+      
     </UnstyledButton>
-  );
-}
+  )
+);
+
+
+export default UserButton;
