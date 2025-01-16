@@ -2,6 +2,7 @@
 import { Button, Group, Select, SimpleGrid, Text, TextInput, Avatar, Flex } from '@mantine/core';
 import  classnames  from './ProfilePage.module.css';
 import { useInventory } from '@/app/_utils/inventory-context';
+import { useUserAuth } from '@/app/_utils/auth-context';
 
 
 
@@ -11,7 +12,15 @@ export default function ProfilePage () {
  
 // Use the useUserAuth hook to get the user object and the login and logout functions
 const { currentEmployee } = useInventory();
-console.log(currentEmployee);
+    console.log(currentEmployee);
+    const { firebaseSignOut } = useUserAuth();
+
+    const handleLogout = async () => {
+        if (firebaseSignOut) {
+        await firebaseSignOut();
+        }
+        window.location.replace("/")
+    };
 
     return (
         
@@ -41,7 +50,7 @@ console.log(currentEmployee);
                         </SimpleGrid>
                         <div>
                         <Button variant="filled" classNames={{root:classnames.button}}>Change Password</Button>
-                        <Button variant="filled" classNames={{root:classnames.button}}>Logout</Button>
+                        <Button variant="filled" onClick={handleLogout} classNames={{root:classnames.button}}>Logout</Button>
                         </div>  
                     </div>
             </div>
