@@ -1,0 +1,18 @@
+
+
+.heading{
+    font-weight: 900;
+    margin: 20px;
+    text-align: center;
+
+}
+
+.cardContainer{
+  justify-content: center;
+  align-content: center;
+}
+
+.cardText{
+  text-align: center;
+}
+

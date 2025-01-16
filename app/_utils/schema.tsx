@@ -376,7 +376,7 @@ export const NAV_ITEMS = {
       icon: IconMessage,
       links: [
         { label: 'Chat', link: '/assistant/chat' },
-        { label: 'Generate Report', link: '/' },
+        { label: 'Generate Report', link: '/dashboard' },
       ],
     },
     {
