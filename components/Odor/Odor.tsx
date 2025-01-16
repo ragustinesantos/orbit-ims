@@ -20,26 +20,24 @@ export interface ItemOrder1 {
 
 export default function OdorComponent() {
 
-    const [itemOrders, setitemOrders] = useState<ItemOrder1[]>([]);
-    const [newItem, setnewItem] = useState<ItemOrder1>();
+    const [itemOrders, setitemOrders] = useState<ItemOrder[]>([]);
+    const [newItem, setnewItem] = useState<ItemOrder>();
     const [searchValue, setSearchValue] = useState<string | null>('');
-    const { inventory, setCurrentPage, setCurrentSection } =
-      useInventory();
+    const { inventory, supplierList, setCurrentPage, setCurrentSection } = useInventory();
 
 
       //Get item object from inventory and assign it to itemOrders Array
       function handleAddItem () {
         console.log('handle add item pressed')
         console.log(searchValue)
-        const matchedItem = inventory.find((item) => item.itemId === searchValue);
+        const matchedItem = inventory?.find((item) => item.itemId === searchValue);
         console.log(matchedItem)
-        if (matchedItem == itemOrders.find((item)=>item.itemId === matchedItem?.itemId)) {
+        if (itemOrders.find((item)=>item.itemId === matchedItem?.itemId)) {
                 console.log('Item is already in array!')
-                }
+              }
         else {
-          const newItem: ItemOrder1 = {
-            itemId: matchedItem.itemId,
-            itemName: matchedItem.itemName,
+            const newItem: ItemOrder = {
+            itemId: (matchedItem) ? matchedItem.itemId : "",
             orderQty: 1,
             pendingQty: 1,
             servedQty: 0,
@@ -47,7 +45,7 @@ export default function OdorComponent() {
             setitemOrders(prevOrders => [...prevOrders, newItem]);
             }
 
-              }
+      }
         
     
 
@@ -62,67 +60,97 @@ export default function OdorComponent() {
 
 
       const rows = itemOrders.map((item) => {
+
+        const odorItem = inventory?.find((inv)=> inv.itemId === item.itemId)
+        const supplier = supplierList?.find((inv)=> inv.supplierId === odorItem?.supplierId)
+
         return (
-          <Table.Tr key={item.itemId}>
-            <Table.Td style={{ maxWidth: '30px', overflowX: 'scroll', scrollbarWidth: 'none' }}>
-              {item.itemId}
-            </Table.Td>
-            <Table.Td>{item.itemName}</Table.Td>
-            <Table.Td>{item.orderQty}</Table.Td>
+          <Table.Tr key={odorItem?.itemId}>
+            <Table.Td style={{ maxWidth: '30px', overflowX: 'scroll', scrollbarWidth: 'none' }}>{odorItem?.itemId}</Table.Td>
+            <Table.Td>{odorItem?.itemName}</Table.Td>
+            <Table.Td>{odorItem?.category}</Table.Td>
+            <Table.Td>{odorItem?.supplyUnit}</Table.Td>
+            <Table.Td>{odorItem?.packageUnit}</Table.Td>
+            <Table.Td>{supplier?.supplierName} </Table.Td>
+            <Table.Td>{item.orderQty} </Table.Td>
           </Table.Tr>
         ) 
       });
 
     return (
     <div  style={{ border: '1px solid red'}}>
+      <Text classNames={{root: classnames.odorText,}}>On Demand Order Requisition</Text>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '83vw',
+          height:'85vh',
+          minWidth: '50vw',
+          //height: '100vh',
+          border: '1px solid blue',
+        }}>
+          <div style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          border: '1px solid blue',
+        }}>
+              <Text classNames={{root: classnames.rootText,}}>Add Items</Text>
 
-        <Text classNames={{root: classnames.rootText,}}>Add Items</Text>
-        <div  style={{ display:'flex', border: '1px solid red', width: '50vw', justifyContent: 'space-evenly'}}>
-            <Select
-            label="Search Item"
-            placeholder="Select an item from the list..."
-            data={inventory.map((item) => ({
-            value: item.itemId,
-            label: item.itemName,
-            invenvtoryID: item.inventoryId,
-            }))}
-            allowDeselect
-            searchable
-            value={searchValue || null}
-            onChange={setSearchValue}
-            classNames={{
-            root: classnames.selectRoot,
-            }}
-            size="md"
-            withAsterisk
-            />
-            <Button variant="filled" color="#1B4965" size="md" mt="xl" onClick={handleAddItem}>
-                      Add
+              <div  style={{ display:'flex', border: '1px solid red', width: '50vw', justifyContent: 'space-evenly'}}>
+                    <Select
+                    label="Search Item"
+                    placeholder="Select an item from the list..."
+                    data={inventory?.map((item) => ({
+                    value: item.itemId,
+                    label: item.itemName,
+                    invenvtoryID: item.inventoryId,
+                    }))}
+                    allowDeselect
+                    searchable
+                    value={searchValue || null}
+                    onChange={setSearchValue}
+                    classNames={{
+                    root: classnames.selectRoot,
+                    }}
+                    size="md"
+                    withAsterisk
+                    />
+                    <Button variant="filled" color="#1B4965" size="md" mt="xl" onClick={handleAddItem}>
+                    Add
                     </Button>
-            </div> 
-            <div>
-            <Table
-        stickyHeader
-        stickyHeaderOffset={60}
-        horizontalSpacing="xl"
-        verticalSpacing="lg"
-        classNames={{
-          thead: classnames.thead,
-          td: classnames.td,
-        }}
-      >
-        
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>Item ID</Table.Th>
-            <Table.Th>Name</Table.Th>
-            <Table.Th>QTY</Table.Th>
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>{rows}</Table.Tbody>
-      </Table>
-              
-              </div>    
+              </div> 
+              <div>
+                  <Table
+                  stickyHeader
+                  stickyHeaderOffset={60}
+ 
+                  withColumnBorders= {true}
+                  striped={true}
+                  withTableBorder={true}
+                  classNames={{
+                  thead: classnames.thead,
+                  td: classnames.td,
+                  }}
+                  >
+                
+                  <Table.Thead>
+                    <Table.Tr>
+                      <Table.Th>Item ID</Table.Th>
+                      <Table.Th>Item</Table.Th>
+                      <Table.Th>Category</Table.Th>
+                      <Table.Th>Unit of Measurement</Table.Th>
+                      <Table.Th>Package Unit</Table.Th>
+                      <Table.Th>Supplier</Table.Th>
+                      <Table.Th>QTY</Table.Th>
+                    </Table.Tr>
+                  </Table.Thead>
+                  <Table.Tbody>{rows}</Table.Tbody>
+                </Table>
+              </div> 
+          </div>   
+        </div>
     </div>
     );
   }
