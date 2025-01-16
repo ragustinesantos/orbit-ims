@@ -23,9 +23,8 @@ export async function POST(request: Request) {
       phone: z.string(),
       position: z.string(),
       department: z.string(),
-      password: z.string(),
       employeeLevel: z.string(),
-      chatId: z.array(z.string())
+      isActive: z.boolean(),
     });
 
     const validatedEmployee = employeeSchema.parse(newEmployee);
