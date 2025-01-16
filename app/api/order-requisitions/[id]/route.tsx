@@ -36,6 +36,8 @@ export async function PUT(request: Request, { params }: { params: any }) {
       isApprovedP1: z.boolean(),
       recipientName: z.string(),
       disposalPlan: z.string(),
+      isActive: z.boolean(),
+      isComplete: z.boolean(),
       remarks: z.string(),
     });
 
@@ -53,21 +55,25 @@ export async function PATCH(request: Request, { params }: { params: any }) {
     const { id } = await params;
     const updatedOrderRequisition = await request.json();
 
-    const orderRequisitionSchema = z.object({
-      requisitionId: z.string().optional(),
-      requisitionType: z.string().optional(),
-      requisitionDate: z.date().optional(),
-      employeeId: z.string().optional(),
-      approvalE2: z.string().optional(),
-      approvalE3: z.string().optional(),
-      approvalP1: z.string().optional(),
-      isApprovedE2: z.boolean().optional(),
-      isApprovedE3: z.boolean().optional(),
-      isApprovedP1: z.boolean().optional(),
-      recipientName: z.string().optional(),
-      disposalPlan: z.string().optional(),
-      remarks: z.string().optional(),
-    });
+    const orderRequisitionSchema = z
+      .object({
+        requisitionId: z.string().optional(),
+        requisitionType: z.string().optional(),
+        requisitionDate: z.date().optional(),
+        employeeId: z.string().optional(),
+        approvalE2: z.string().optional(),
+        approvalE3: z.string().optional(),
+        approvalP1: z.string().optional(),
+        isApprovedE2: z.boolean().optional(),
+        isApprovedE3: z.boolean().optional(),
+        isApprovedP1: z.boolean().optional(),
+        recipientName: z.string().optional(),
+        disposalPlan: z.string().optional(),
+        isActive: z.boolean().optional(),
+        isComplete: z.boolean().optional(),
+        remarks: z.string().optional(),
+      })
+      .strict();
 
     const validatedOrderRequisition = orderRequisitionSchema.parse(updatedOrderRequisition);
 

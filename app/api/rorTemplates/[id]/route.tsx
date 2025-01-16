@@ -45,13 +45,15 @@ export async function PATCH(request: Request, { params }: { params: any }) {
     const { id } = await params;
     const updatedRorTemplate = await request.json();
 
-    const rorTemplateSchema = z.object({
-      rorTemplateId: z.string().optional(),
-      templateName: z.string().optional(),
-      itemList: z.array(z.string()).optional(),
-      isTemplateApprovedE2: z.boolean().optional(),
-      isTemplateApprovedE3: z.boolean().optional(),
-    });
+    const rorTemplateSchema = z
+      .object({
+        rorTemplateId: z.string().optional(),
+        templateName: z.string().optional(),
+        itemList: z.array(z.string()).optional(),
+        isTemplateApprovedE2: z.boolean().optional(),
+        isTemplateApprovedE3: z.boolean().optional(),
+      })
+      .strict();
 
     const validatedRorTemplate = rorTemplateSchema.parse(updatedRorTemplate);
 

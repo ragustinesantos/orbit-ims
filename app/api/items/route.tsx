@@ -18,7 +18,6 @@ export async function POST(request: Request) {
     newItem.isCriticalThreshold = Number(newItem.isCriticalThreshold);
     newItem.minPurchaseQty = Number(newItem.minPurchaseQty);
 
-
     const itemSchema = z.object({
       supplierId: z.string(),
       inventoryId: z.string(),
@@ -30,6 +29,7 @@ export async function POST(request: Request) {
       isCritical: z.boolean(),
       isCriticalThreshold: z.number(),
       minPurchaseQty: z.number(),
+      isActive: z.boolean()
     });
 
     const validatedItem = itemSchema.parse(newItem);
