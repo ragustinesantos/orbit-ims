@@ -2,8 +2,8 @@
 'use client';
 
 import Login from '@/components/Login/Login';
-import { NavbarNested } from '@/components/NavbarNested/NavbarNested';
 import { useUserAuth } from './_utils/auth-context';
+import DashBoard from './dashboard/page';
 
 export default function HomePage() {
   const { user, signInWithEmail } = useUserAuth() || {};
@@ -27,7 +27,9 @@ export default function HomePage() {
 
   return (
     <main className="h-screen">
-      {!user ? <Login handleLogin={handleLogin} /> : <NavbarNested />}
+      {!user ? (<Login handleLogin={handleLogin} /> ): (
+      <DashBoard/>
+      )}
     </main>
   );
 }
