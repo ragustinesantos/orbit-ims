@@ -20,7 +20,7 @@ export async function dbGetAllOnDemandOrders() {
     const onDemandOrderList: OnDemandOrder[] = [];
     querySnapshot.forEach((doc: any) => {
       const onDemandOrder = {
-        rorId: doc.id,
+        odorId: doc.id,
         ...doc.data(),
       };
       onDemandOrderList.push(onDemandOrder);
