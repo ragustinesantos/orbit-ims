@@ -1,15 +1,41 @@
 .rootGroup {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  
-  .modalTitle {
-    font-weight: bold;
-    color: var(--mantine-color-blue-6);
-  }
-  
-  .simpleGridRoot {
-    width: 100%;
-    margin-bottom: 20px;
-  }
+  align-items: baseline;
+  flex-direction: column;
+}
+
+.rootText {
+  font-size: 48px;
+  font-weight: bold;
+  text-decoration: underline;
+  text-underline-offset: 8px;
+}
+.button {
+  background-color: #1b4965;
+}
+
+.selectRoot {
+  width: 100%;
+}
+
+.simpleGridRoot {
+  width: 100%;
+}
+
+.modalTitle {
+  font-size: larger;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  color: #1B4965;
+}
+
+.checkboxContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.checkboxLabel {
+  font-weight: normal;
+  color: #000;
+}
