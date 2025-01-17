@@ -16,7 +16,6 @@ export async function POST(request: Request) {
     const newOnDemandOrder = await request.json();
 
     const onDemandOrderSchema = z.object({
-      odorId: z.string(),
       requisitionId: z.string(),
       itemOrders: z.array(
         z.object({
