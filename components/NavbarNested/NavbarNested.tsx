@@ -5,7 +5,7 @@ import { NAV_ITEMS } from '@/app/_utils/schema';
 import { LinksGroup } from '../NavbarLinksGroup/NavbarLinksGroup';
 import  UserButton  from '../UserButton/UserButton';
 import classes from './NavbarNested.module.css';
-import { Menu, Group, ScrollArea } from '@mantine/core';
+import { Menu, Button, Group, ScrollArea } from '@mantine/core';
 import {
   IconSettings,
   IconLogout
