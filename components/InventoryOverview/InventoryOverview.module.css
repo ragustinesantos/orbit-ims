@@ -1,0 +1,22 @@
+
+
+.heading{
+  font-weight: 700;
+  margin: 20px;
+  text-align: center;
+}
+
+.cardContainer{
+  justify-content: center;
+  align-content: center;
+}
+
+.cardText{
+  text-align: center;
+  font-weight: 600;
+}
+
+.cardNumber{
+  text-align: center;
+  font-weight: 900;
+}
