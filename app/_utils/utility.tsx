@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { marked } from 'marked';
-import { Chat, ChatToEdit, Item, ItemToEdit, Supplier } from './schema';
+import { Chat, ChatToEdit, EmployeeToEdit, Item, ItemToEdit, Supplier } from './schema';
 
 // Fetch all inventory items
 export const fetchInventory = async (setInventory: (inventoryItems: Item[]) => void) => {
@@ -78,6 +78,26 @@ export const deleteItem = async (itemId: string) => {
 export const fetchEmployees = async () => {
   try {
     const response = await fetch('/api/employees');
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const putEmployee = async (employeeId: string, updatedEmployee: EmployeeToEdit) => {
+  try {
+    const request = {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updatedEmployee),
+    };
+
+    const response = await fetch(`/api/employees/${employeeId}`, request);
 
     const data = await response.json();
 
