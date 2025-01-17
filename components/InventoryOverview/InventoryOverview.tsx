@@ -37,7 +37,8 @@ export default function InventoryOverview(){
 
     return(
 
-    <div style={{  margin:'10px', padding: '20px', backgroundColor: '#f5f7fa', borderRadius: '8px' }}>
+    <div>
+    <div style={{  margin:'20px', padding: '20px', backgroundColor: '#f5f7fa', borderRadius: '8px' }}>
 
       <Title order={5} classNames={{ root:classnames.heading }}>
         Inventory Overview
@@ -50,7 +51,7 @@ export default function InventoryOverview(){
               <Text size="md" classNames={{ root:classnames.cardText }}>
                 Total Item
               </Text>
-              <Text size="xl" c="gray" classNames={{ root:classnames.cardText }}>
+              <Text size="xl" c="gray" classNames={{ root:classnames.cardNumber }}>
                 {totalItem}
               </Text>
           </Card>
@@ -62,7 +63,7 @@ export default function InventoryOverview(){
               <Text size="md" classNames={{ root:classnames.cardText }}>
                 Low Stock
               </Text>
-              <Text size="xl"  c="gray" classNames={{ root:classnames.cardText }}>
+              <Text size="xl"  c="gray" classNames={{ root:classnames.cardNumber }}>
                 {lowStock}
               </Text>
 
@@ -70,10 +71,10 @@ export default function InventoryOverview(){
         </Grid.Col>
 
       </Grid>
+      </div>
 
-
-       {/** recent stock in/ stock out table*/}    
-
+      {/** recent stock in/ stock out table*/}   
+      <div style={{marginTop:'30px'}}>
        <Title order={5} classNames={{ root:classnames.heading }}>
         Recent Stock In/Out
       </Title>
@@ -97,12 +98,13 @@ export default function InventoryOverview(){
             <Table.Th>Item Name</Table.Th>
             <Table.Th>Quantity</Table.Th>
             <Table.Th>Unit</Table.Th>
-          </Table.Tr>
+          </Table.Tr> 
         </Table.Thead>
         <Table.Tbody>  </Table.Tbody>
       </Table>
 
     </div>
+  </div>
 
   );
 };

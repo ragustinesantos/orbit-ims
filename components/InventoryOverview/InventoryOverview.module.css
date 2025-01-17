@@ -13,5 +13,10 @@
 
 .cardText{
   text-align: center;
+  font-weight: 600;
 }
 
+.cardNumber{
+  text-align: center;
+  font-weight: 900;
+}

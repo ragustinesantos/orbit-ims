@@ -370,13 +370,13 @@ export const NAV_ITEMS = {
     },
   ],
   SA: [
-    { label: 'Dashboard', icon: IconGauge },
+    { label: 'Dashboard', icon: IconGauge, link:'/dashboard/' },
     {
       label: 'Assistant',
       icon: IconMessage,
       links: [
         { label: 'Chat', link: '/assistant/chat' },
-        { label: 'Generate Report', link: '/dashboard' },
+        { label: 'Generate Report', link: '/' },
       ],
     },
     {

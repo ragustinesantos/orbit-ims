@@ -1,13 +1,20 @@
 import { Group, Table, Title } from "@mantine/core";
 import classnames from "./RequisitionProcessTable.module.css";
+import { useInventory } from "@/app/_utils/inventory-context";
 
 export default function RequisitionProcessTable(){
 
-    return(
+  const { currentEmployee } = useInventory();
 
+  if (currentEmployee?.employeeLevel === "SA" || currentEmployee?.employeeLevel === "IA") {
+      return null;
+  };
+  
+  return(
+    
     <div style={{ margin:'10px', padding: '20px', backgroundColor: '#f5f7fa', borderRadius: '8px' }}>
         <Title order={5} classNames={{ root:classnames.heading }}>
-        Requisition Process
+        Your Requisition Process
       </Title>
         
         <Group>
@@ -65,5 +72,4 @@ export default function RequisitionProcessTable(){
 
     </div>
 
-    );
-}
+    )};
