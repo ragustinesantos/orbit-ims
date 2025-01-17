@@ -208,16 +208,6 @@ export interface NewItemOrder {
   itemSubtotal: number;
 }
 
-export interface NewItemOrderToEdit {
-  itemName: string;
-  itemDescription: string;
-  productCode: string;
-  purchaseQty: number;
-  unitPrice: number;
-  itemSubtotal: number;
-  [key: string]: any;
-}
-
 export interface OnDemandOrder {
   odorId: string;
   requisitionId: string;
@@ -232,7 +222,6 @@ export interface OnDemandOrder {
 }
 
 export interface OnDemandOrderToEdit {
-  odorId: string;
   requisitionId: string;
   itemOrders: ItemOrder[];
   newItemOrders: NewItemOrder[];
