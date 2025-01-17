@@ -9,13 +9,6 @@ import { useInventory } from '@/app/_utils/inventory-context';
 import { number } from 'zod';
 import { ItemOrder } from '@/app/_utils/schema';
 
-export interface ItemOrder1 {
-    itemId: string;
-    itemName: string;
-    orderQty: number;
-    pendingQty: number;
-    servedQty: number;
-  }
 
 
 export default function OdorComponent() {
@@ -55,15 +48,24 @@ export default function OdorComponent() {
       }, [itemOrders]);
 
 
+      function increment (id : string) {
+        setitemOrders((prevItems) =>
+          prevItems.map((item) =>
+              item.itemId === id ? { ...item, orderQty: item.orderQty + 1 } : item
+          )
+      );
+        
+        
+
+
+      }
 
 
 
 
-      const rows = itemOrders.map((item) => {
-
+        const rows = itemOrders.map((item) => {
         const odorItem = inventory?.find((inv)=> inv.itemId === item.itemId)
         const supplier = supplierList?.find((inv)=> inv.supplierId === odorItem?.supplierId)
-
         return (
           <Table.Tr key={odorItem?.itemId}>
             <Table.Td style={{ maxWidth: '30px', overflowX: 'scroll', scrollbarWidth: 'none' }}>{odorItem?.itemId}</Table.Td>
@@ -72,7 +74,11 @@ export default function OdorComponent() {
             <Table.Td>{odorItem?.supplyUnit}</Table.Td>
             <Table.Td>{odorItem?.packageUnit}</Table.Td>
             <Table.Td>{supplier?.supplierName} </Table.Td>
-            <Table.Td>{item.orderQty} </Table.Td>
+            <Table.Td>
+              <Button variant="filled" size="xs" radius="md" classNames={{root:classnames.buttonSub}}>-</Button>
+              {item.orderQty}
+              <Button onClick={()=>(increment(item.itemId))} variant="filled" size="xs" radius="md" classNames={{root:classnames.buttonAdd}}>+</Button>
+              </Table.Td>
           </Table.Tr>
         ) 
       });
