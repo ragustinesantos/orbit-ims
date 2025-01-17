@@ -42,7 +42,7 @@ export const defaultItem: Item = {
   isCritical: false,
   isCriticalThreshold: 0,
   minPurchaseQty: 0,
-  isActive: false,
+  isActive: true,
 };
 
 export interface Supplier {
