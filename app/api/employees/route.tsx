@@ -24,11 +24,15 @@ export async function POST(request: Request) {
       position: z.string(),
       department: z.string(),
       password: z.string(),
-      employeeLevel: z.string(),
+      employeeLevel: z.array(z.string()),
       chatId: z.array(z.string())
     });
 
     const validatedEmployee = employeeSchema.parse(newEmployee);
+
+    //TODO: Add code that would create the authentication
+
+
 
     await dbAddEmployee(validatedEmployee);
 

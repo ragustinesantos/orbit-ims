@@ -76,7 +76,7 @@ export interface Employee {
   position: string;
   department: string;
   password: string;
-  employeeLevel: string;
+  employeeLevel: string[];
   chatId: string[];
 }
 
@@ -89,7 +89,7 @@ export interface EmployeeToEdit {
   position: string;
   department: string;
   password: string;
-  employeeLevel: string;
+  employeeLevel: string[];
   chatId: string[];
   [key: string]: any;
 }
@@ -104,7 +104,7 @@ export const defaultEmployee: Employee = {
   position: '',
   department: '',
   password: '',
-  employeeLevel: '',
+  employeeLevel: [],
   chatId: [],
 };
 
@@ -196,7 +196,7 @@ export interface RecurringOrderTemplateToEdit {
 
 export const NAV_ITEMS = {
   E1: [
-    { label: 'Dashboard', icon: IconGauge, link:'/dashboard/'  },
+    { label: 'Dashboard', icon: IconGauge, link: '/dashboard/' },
     {
       label: 'Assistant',
       icon: IconMessage,
@@ -219,7 +219,7 @@ export const NAV_ITEMS = {
     },
   ],
   E2: [
-    { label: 'Dashboard', icon: IconGauge, link:'/dashboard/'  },
+    { label: 'Dashboard', icon: IconGauge, link: '/dashboard/' },
     {
       label: 'Assistant',
       icon: IconMessage,
@@ -247,7 +247,7 @@ export const NAV_ITEMS = {
     },
   ],
   E3: [
-    { label: 'Dashboard', icon: IconGauge, link:'/dashboard/'  },
+    { label: 'Dashboard', icon: IconGauge, link: '/dashboard/' },
     {
       label: 'Assistant',
       icon: IconMessage,
@@ -275,7 +275,7 @@ export const NAV_ITEMS = {
     },
   ],
   P1: [
-    { label: 'Dashboard', icon: IconGauge, link:'/dashboard/'  },
+    { label: 'Dashboard', icon: IconGauge, link: '/dashboard/' },
     {
       label: 'Assistant',
       icon: IconMessage,
@@ -313,7 +313,7 @@ export const NAV_ITEMS = {
     },
   ],
   P2: [
-    { label: 'Dashboard', icon: IconGauge, link:'/dashboard/'  },
+    { label: 'Dashboard', icon: IconGauge, link: '/dashboard/' },
     {
       label: 'Assistant',
       icon: IconMessage,
@@ -351,7 +351,7 @@ export const NAV_ITEMS = {
     },
   ],
   IA: [
-    { label: 'Dashboard', icon: IconGauge, link:'/dashboard/'  },
+    { label: 'Dashboard', icon: IconGauge, link: '/dashboard/' },
     {
       label: 'Assistant',
       icon: IconMessage,
@@ -384,7 +384,7 @@ export const NAV_ITEMS = {
     },
   ],
   SA: [
-    { label: 'Dashboard', icon: IconGauge, link:'/dashboard/' },
+    { label: 'Dashboard', icon: IconGauge, link: '/dashboard/' },
     {
       label: 'Assistant',
       icon: IconMessage,
