@@ -4,16 +4,25 @@
 import { useEffect, useState } from 'react';
 import { Group, Select, Table, Text, Button } from '@mantine/core';
 import { Item } from '@/app/_utils/schema';
-import classnames from './odor.module.css';
+import classnames from './odor1.module.css';
 import { useInventory } from '@/app/_utils/inventory-context';
 import { number } from 'zod';
 import { ItemOrder } from '@/app/_utils/schema';
 
 
+// Set the Prop Data type so a useState Set function
+interface setpropstype  {
+  itemOrders: ItemOrder[];
+  setitemOrders: React.Dispatch<React.SetStateAction<ItemOrder[]>>;
+}
 
-export default function OdorComponent() {
 
-    const [itemOrders, setitemOrders] = useState<ItemOrder[]>([]);
+export default function OdorComponent( {itemOrders, setitemOrders}: setpropstype) {
+
+  console.log('setitemOrders:', setitemOrders);
+
+    // Move the State to Parent Component so the Data can be persisted Between ODOR Pages.
+    //const [itemOrders, setitemOrders] = useState<ItemOrder[]>([]);
     const [newItem, setnewItem] = useState<ItemOrder>();
     const [searchValue, setSearchValue] = useState<string | null>('');
     const { inventory, supplierList, setCurrentPage, setCurrentSection } = useInventory();
@@ -34,7 +43,7 @@ export default function OdorComponent() {
           pendingQty: 1,
           servedQty: 0,
           };
-          setitemOrders(prevOrders => [...prevOrders, newItem]);
+          setitemOrders((prevOrders) => [...prevOrders, newItem]);
           }
     }
   

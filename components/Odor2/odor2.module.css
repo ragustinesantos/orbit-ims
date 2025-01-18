@@ -42,7 +42,7 @@
     align-items: center;
     justify-content: center;
     width: 83vw;
-    height: 85vh;
+    height: 80vh;
     min-width: 50vh;
     border: 1px solid blue;
 }
@@ -51,7 +51,6 @@
     align-items: center;
     justify-content: center;
     border: 1px solid blue;
-
 }
 
 .searchItemDiv {
