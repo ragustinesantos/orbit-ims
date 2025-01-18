@@ -28,6 +28,7 @@ export async function PUT(request: Request, { params }: { params: any }) {
       isCritical: z.boolean(),
       isCriticalThreshold: z.number(),
       minPurchaseQty: z.number(),
+      isActive: z.boolean(),
     });
 
     const validatedItem = itemSchema.parse(updatedItem);
@@ -56,6 +57,7 @@ export async function PATCH(request: Request, { params }: { params: any }) {
         isCritical: z.boolean().optional(),
         isCriticalThreshold: z.number().optional(),
         minPurchaseQty: z.number().optional(),
+        isActive: z.boolean().optional()
       })
       .strict();
 

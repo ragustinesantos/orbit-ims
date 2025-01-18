@@ -12,6 +12,7 @@ export interface Item {
   isCritical: boolean;
   isCriticalThreshold: number;
   minPurchaseQty: number;
+  isActive: boolean;
 }
 
 export interface ItemToEdit {
@@ -25,6 +26,7 @@ export interface ItemToEdit {
   isCritical: boolean;
   isCriticalThreshold: number;
   minPurchaseQty: number;
+  isActive: boolean;
   [key: string]: any;
 }
 
@@ -40,6 +42,7 @@ export const defaultItem: Item = {
   isCritical: false,
   isCriticalThreshold: 0,
   minPurchaseQty: 0,
+  isActive: true,
 };
 
 export interface Supplier {
@@ -75,9 +78,8 @@ export interface Employee {
   phone: string;
   position: string;
   department: string;
-  password: string;
   employeeLevel: string;
-  chatId: string[];
+  isActive: boolean;
 }
 
 export interface EmployeeToEdit {
@@ -88,16 +90,15 @@ export interface EmployeeToEdit {
   phone: string;
   position: string;
   department: string;
-  password: string;
   employeeLevel: string;
-  chatId: string[];
+  isActive: boolean;
   [key: string]: any;
 }
 
 export interface Chat {
   chatId: string;
   type: string;
-  userId: string;
+  employeeId: string;
   message: string;
   timestamp: string;
 }
@@ -122,6 +123,8 @@ export interface OrderRequisition {
   isApprovedP1: boolean;
   recipientName: string;
   disposalPlan: string;
+  isActive: boolean;
+  isComplete: boolean;
   remarks: string;
 }
 
@@ -137,6 +140,8 @@ export interface OrderRequisitionToEdit {
   isApprovedP1: boolean;
   recipientName: string;
   disposalPlan: string;
+  isActive: boolean;
+  isComplete: boolean;
   remarks: string;
   [key: string]: any;
 }
@@ -177,6 +182,41 @@ export interface RecurringOrderTemplateToEdit {
   itemList: string[];
   isTemplateApprovedE2: boolean;
   isTemplateApprovedE3: boolean;
+  [key: string]: any;
+}
+
+export interface NewItemOrder {
+  itemName: string;
+  itemDescription: string;
+  productCode: string;
+  purchaseQty: number;
+  unitPrice: number;
+  itemSubtotal: number;
+}
+
+export interface OnDemandOrder {
+  odorId: string;
+  requisitionId: string;
+  itemOrders: ItemOrder[];
+  newItemOrders: NewItemOrder[];
+  orderTotal: number;
+  recipientName: string;
+  recipientLocation: string;
+  disposalPlan: string;
+  purposeForPurchase: string;
+  remarks: string;
+}
+
+export interface OnDemandOrderToEdit {
+  requisitionId: string;
+  itemOrders: ItemOrder[];
+  newItemOrders: NewItemOrder[];
+  orderTotal: number;
+  recipientName: string;
+  recipientLocation: string;
+  disposalPlan: string;
+  purposeForPurchase: string;
+  remarks: string;
   [key: string]: any;
 }
 
