@@ -10,12 +10,11 @@ export default function CreateRorTemplatePage() {
       <div
         style={{
           display: 'flex',
-          justifyContent: 'center',
+          flex: 1,
+          justifyContent: 'flex-start',
           alignItems: 'center',
-          width: '100%',
-          minWidth: '50vw',
-          //height: '100vh',
-          padding: 10,
+          height: '100vh',
+          padding: 32,
         }}
       >
         <CreateRorTemplate />

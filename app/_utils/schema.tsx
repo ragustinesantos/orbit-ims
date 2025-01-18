@@ -104,9 +104,8 @@ export const defaultEmployee: Employee = {
   phone: '',
   position: '',
   department: '',
-  password: '',
   employeeLevel: '',
-  chatId: [],
+  isActive: true,
 };
 
 export interface Chat {
@@ -198,6 +197,13 @@ export interface RecurringOrderTemplateToEdit {
   isTemplateApprovedE3: boolean;
   [key: string]: any;
 }
+
+export const defaultRecurringOrderTemplate: RecurringOrderTemplateToEdit = {
+  templateName: '',
+  itemList: [],
+  isTemplateApprovedE2: false,
+  isTemplateApprovedE3: false,
+};
 
 export interface NewItemOrder {
   itemName: string;
