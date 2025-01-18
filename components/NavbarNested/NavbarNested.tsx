@@ -5,12 +5,11 @@ import { NAV_ITEMS } from '@/app/_utils/schema';
 import { LinksGroup } from '../NavbarLinksGroup/NavbarLinksGroup';
 import  UserButton  from '../UserButton/UserButton';
 import classes from './NavbarNested.module.css';
-import { Menu, Button, Text, rem, Group, ScrollArea } from '@mantine/core';
+import { Menu, Group, ScrollArea } from '@mantine/core';
 import {
   IconSettings,
   IconLogout
 } from '@tabler/icons-react';
-import { useState } from 'react';
 import Link from "next/link";
 
 export function NavbarNested() {
@@ -43,6 +42,7 @@ export function NavbarNested() {
   const handleLogout = async () => {
     if (firebaseSignOut) {
       await firebaseSignOut();
+      window.location.replace("/")
     }
   };
 
@@ -62,9 +62,6 @@ export function NavbarNested() {
 
       <ScrollArea className={classes.links}>
         <div className={classes.linksInner}>{links}</div>
-        <Button style={{ margin: 20 }} onClick={handleLogout}>
-          Logout
-        </Button>
       </ScrollArea>
 
       <div className={classes.footer}>
@@ -72,8 +69,8 @@ export function NavbarNested() {
         <Menu.Target>
         <UserButton 
         image="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-8.png"
-        name="Harriette Spoonlicker"
-        email="hspoonlicker@outlook.com"
+        name={(currentEmployee) ? currentEmployee.firstName + ' ' + currentEmployee.lastName : ""}
+        email={(currentEmployee) ? currentEmployee.email : "" }
         />
         </Menu.Target>
           <Menu.Dropdown>
@@ -87,7 +84,6 @@ export function NavbarNested() {
           </Menu.Dropdown>
         </Menu>
       </div>
-      
     </nav>
   );
 }
