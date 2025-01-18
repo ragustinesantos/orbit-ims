@@ -94,6 +94,20 @@ export interface EmployeeToEdit {
   [key: string]: any;
 }
 
+export const defaultEmployee: Employee = {
+  employeeId: '',
+  employeeWorkId: '',
+  firstName: '',
+  lastName: '',
+  email: '',
+  phone: '',
+  position: '',
+  department: '',
+  password: '',
+  employeeLevel: '',
+  chatId: [],
+};
+
 export interface Chat {
   chatId: string;
   type: string;
