@@ -31,6 +31,8 @@ export async function POST(request: Request) {
       isApprovedP1: z.boolean(),
       recipientName: z.string(),
       disposalPlan: z.string(),
+      isActive: z.boolean(),
+      isComplete: z.boolean(),
       remarks: z.string(),
     });
 
