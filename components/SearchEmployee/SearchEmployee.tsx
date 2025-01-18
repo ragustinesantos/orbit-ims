@@ -8,12 +8,17 @@ import { dbGetAllEmployees } from '@/app/_services/employees-service';
 import { Employee } from '@/app/_utils/schema';
 
 export default function SearchEmployee() {
+  // Search employees from employee search
   const [searchValue, setSearchValue] = useState<string | null>('');
   const { setCurrentPage, setCurrentSection } = useInventory();
+
+  // State for list of employees
   const [employees, setEmployees] = useState<Employee[]>([]);
 
+  // Filtering for searched employees
   const rows = employees?.map((employee) => {
     return (
+      // checks if inputted value matches employee names (case-insensitive)
       employee.firstName?.toLowerCase().includes(searchValue?.toLowerCase() || '') ||
       employee.lastName?.toLowerCase().includes(searchValue?.toLowerCase() || '')
     ) ? (
@@ -31,17 +36,21 @@ export default function SearchEmployee() {
     ) : null;
   });
 
+  // Fetch employees from db 
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const fetchedEmployees = await dbGetAllEmployees();
-        setEmployees(fetchedEmployees || []);
+        const foundEmployees = await dbGetAllEmployees();
+        setEmployees(foundEmployees || []);
       } catch (error) {
         console.error('Error fetching employees:', error);
       }
     };
 
     fetchEmployees();
+  }, []);
+
+  useEffect(() => {
     setCurrentPage('Search Employee');
     setCurrentSection('employees');
   }, []);
