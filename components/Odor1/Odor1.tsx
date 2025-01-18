@@ -11,6 +11,7 @@ import { ItemOrder } from '@/app/_utils/schema';
 
 
 // Set the Prop Data type so a useState Set function
+//Always Remeber that props are passed as one object only!
 interface setpropstype  {
   itemOrders: ItemOrder[];
   setitemOrders: React.Dispatch<React.SetStateAction<ItemOrder[]>>;
@@ -19,7 +20,6 @@ interface setpropstype  {
 
 export default function OdorComponent( {itemOrders, setitemOrders}: setpropstype) {
 
-  console.log('setitemOrders:', setitemOrders);
 
     // Move the State to Parent Component so the Data can be persisted Between ODOR Pages.
     //const [itemOrders, setitemOrders] = useState<ItemOrder[]>([]);
@@ -100,45 +100,24 @@ export default function OdorComponent( {itemOrders, setitemOrders}: setpropstype
       <Text classNames={{root: classnames.odorText,}}>On Demand Order Requisition</Text>
       <div className={classnames.exteriorDiv}>
           <div className={classnames.interiorDiv}>
-              <Text classNames={{root: classnames.rootText,}}>Add Items</Text>
-
+            <Text classNames={{root: classnames.rootText,}}>Add Items</Text>
               <div  className={classnames.searchItemDiv}>
-                    <Select
-                    label="Search Item"
-                    placeholder="Select an item from the list..."
-                    data={inventory?.map((item) => ({
-                    value: item.itemId,
-                    label: item.itemName,
-                    invenvtoryID: item.inventoryId,
-                    }))}
-                    allowDeselect
-                    searchable
-                    value={searchValue || null}
-                    onChange={setSearchValue}
-                    classNames={{
-                    root: classnames.selectRoot,
-                    }}
-                    size="md"
-                    withAsterisk
-                    />
-                    <Button variant="filled" color="#1B4965" size="md" mt="xl" onClick={handleAddItem}>
-                    Add
-                    </Button>
+                <Select onChange={setSearchValue} label="Search Item" classNames={{root: classnames.selectRoot,}}
+                placeholder="Select an item from the list..." allowDeselect searchable
+                value={searchValue || null} size="md" withAsterisk
+                data={inventory?.map((item) => ({
+                value: item.itemId,
+                label: item.itemName,
+                invenvtoryID: item.inventoryId,
+                }))}/>
+                <Button variant="filled" color="#1B4965" size="md" mt="xl" onClick={handleAddItem}>
+                Add
+                </Button>
               </div> 
               <div>
-                  <Table
-                  stickyHeader
-                  stickyHeaderOffset={60}
- 
-                  withColumnBorders= {true}
-                  striped={true}
-                  withTableBorder={true}
-                  classNames={{
-                  thead: classnames.thead,
-                  td: classnames.td,
-                  }}
-                  >
-                
+                  <Table classNames={{thead: classnames.thead, td: classnames.td,}}
+                  stickyHeader stickyHeaderOffset={60} withColumnBorders= {true}
+                  striped={true} withTableBorder={true}>
                   <Table.Thead>
                     <Table.Tr>
                       <Table.Th>Item ID</Table.Th>

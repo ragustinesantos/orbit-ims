@@ -20,11 +20,7 @@ export default function OdorComponent2() {
       <div className={classnames.exteriorDiv}>
           <div className={classnames.interiorDiv}>
               <Text classNames={{root: classnames.rootText,}}>Order Non Inventory Item</Text>
-
-              </div> 
-              <div>
-
-              </div> 
+          </div> 
           </div>   
         </div>
 
