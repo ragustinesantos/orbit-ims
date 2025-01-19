@@ -52,22 +52,24 @@ export async function PATCH(request: Request, { params }: { params: any }) {
     const { id } = await params;
     const updatedRecurringOrder = await request.json();
 
-    const recurringOrderSchema = z.object({
-      rorId: z.string().optional(),
-      rorTemplateId: z.string().optional(),
-      requisitionId: z.string().optional(),
-      itemOrders: z
-        .array(
-          z.object({
-            itemId: z.string(),
-            orderQty: z.number(),
-            pendingQty: z.number(),
-            servedQty: z.number(),
-          })
-        )
-        .optional(),
-      orderTotal: z.number().optional(),
-    });
+    const recurringOrderSchema = z
+      .object({
+        rorId: z.string().optional(),
+        rorTemplateId: z.string().optional(),
+        requisitionId: z.string().optional(),
+        itemOrders: z
+          .array(
+            z.object({
+              itemId: z.string(),
+              orderQty: z.number(),
+              pendingQty: z.number(),
+              servedQty: z.number(),
+            })
+          )
+          .optional(),
+        orderTotal: z.number().optional(),
+      })
+      .strict();
 
     const validatedRecurringOrder = recurringOrderSchema.parse(updatedRecurringOrder);
 
