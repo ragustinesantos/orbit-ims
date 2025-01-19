@@ -78,7 +78,7 @@ export default function DeleteEmployee() {
 
   // Find employee to search in employee list and set as selectedEmployee
   useEffect(() => {
-    const matchedEmployee = employees.find((employee) => employee.employeeWorkId === searchValue);
+    const matchedEmployee = employees.find((employee) => employee.employeeId === searchValue);
     setSelectedEmployee(matchedEmployee || { ...defaultEmployee });
     setRefresh((prev: number) => prev + 1);
   }, [searchValue]);
@@ -177,7 +177,7 @@ export default function DeleteEmployee() {
         label="Search Employee"
         placeholder="Select an employee from the list..."
         data={employees.map((employee) => ({
-          value: employee.employeeWorkId,
+          value: employee.employeeId,
           label: `${employee.firstName} ${employee.lastName}`,
         }))}
         allowDeselect
@@ -246,6 +246,7 @@ export default function DeleteEmployee() {
           value={position}
           placeholder="Enter Position..."
           classNames={{ input: classnames.disabledText }}
+          size='md'
           withAsterisk
           disabled
         />
