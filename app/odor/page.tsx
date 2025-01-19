@@ -7,15 +7,17 @@ import { Text } from '@mantine/core';
 import { useState } from 'react';
 import OdorComponent2 from '@/components/Odor2/Odor2';
 import { Button } from '@mantine/core';
-import { ItemOrder } from '../_utils/schema';
+import { ItemOrder, NewItemOrder } from '../_utils/schema';
 
 export default function OdorPage() {
 
   const [itemOrders, setitemOrders] = useState<ItemOrder[]>([]);
+  const [newItemOrders, setNewItemOrders] = useState<NewItemOrder[]>([]);
 
   const [pageNumber,setpageNumber] = useState<number>(0);
-  const nav_array = [<OdorComponent itemOrders={itemOrders} setitemOrders={setitemOrders} ></OdorComponent>,<OdorComponent2></OdorComponent2>
-  ]
+  const nav_array = [<OdorComponent itemOrders={itemOrders} setitemOrders={setitemOrders} ></OdorComponent>,
+                     <OdorComponent2 newItemOrders={newItemOrders} setNewItemOrders={setNewItemOrders}></OdorComponent2>
+                    ]
 
   function nextPage () {
     setpageNumber((prevpageNum)=>prevpageNum+1)
@@ -36,8 +38,10 @@ export default function OdorPage() {
         <div className={classnames.outerSpacerDiv}>
           <div className={classnames.spacerDiv}></div>
           <div className={classnames.navButtonsDiv}>
-            { pageNumber == 0 ? <></> : <Button onClick={previousPage} variant="filled" color="#1B4965" size="md" >Previous</Button>}
-            <Button onClick={nextPage} variant="filled" color="#1B4965" size="md" >Next</Button>
+          <div style={{width: '5vw'}}>
+            { pageNumber == 0 ? <div style={{width: '50px'}}></div> : <Button classNames={{root: classnames.navbutton,}} onClick={previousPage} variant="filled" color="#1B4965" size="md" radius="md" >Previous</Button>}
+            </div>
+            <Button classNames={{root: classnames.navbutton,}} onClick={nextPage} variant="filled" color="#1B4965" size="md" radius="md" >Next</Button>
           </div>
         </div>
       </div>

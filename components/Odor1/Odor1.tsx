@@ -35,7 +35,10 @@ export default function OdorComponent( {itemOrders, setitemOrders}: setpropstype
       console.log(matchedItem)
       if (itemOrders.find((item)=>item.itemId === matchedItem?.itemId)) {
               console.log('Item is already in array!')
-            }
+      }
+      else if (matchedItem === undefined) {
+              console.log('Please Select a item')
+      }
       else {
           const newItem: ItemOrder = {
           itemId: (matchedItem) ? matchedItem.itemId : "",
@@ -44,7 +47,7 @@ export default function OdorComponent( {itemOrders, setitemOrders}: setpropstype
           servedQty: 0,
           };
           setitemOrders((prevOrders) => [...prevOrders, newItem]);
-          }
+      }
     }
   
     // To log the item orders array to the console to see the updated state
@@ -88,7 +91,7 @@ export default function OdorComponent( {itemOrders, setitemOrders}: setpropstype
               {item.orderQty}
               <Button classNames={{root:`${classnames.buttonIncrement} ${classnames.button}`}} onClick={()=>(increment(item.itemId))} variant="filled" size="xs" radius="md" >+</Button>
             </Table.Td>
-            <Table.Td>
+            <Table.Td >
               <Button classNames={{root:`${classnames.buttonRemove}`}} onClick={()=>(handleRemoveItem(item))} variant="filled" size="xs" radius="md">Remove</Button>
             </Table.Td>
           </Table.Tr>
@@ -115,9 +118,8 @@ export default function OdorComponent( {itemOrders, setitemOrders}: setpropstype
                 </Button>
               </div> 
               <div>
-                  <Table classNames={{thead: classnames.thead, td: classnames.td,}}
-                  stickyHeader stickyHeaderOffset={60} withColumnBorders= {true}
-                  striped={true} withTableBorder={true}>
+                  <Table classNames={{thead: classnames.thead, td: classnames.td,}}stickyHeader stickyHeaderOffset={60} withColumnBorders= {true}
+                   striped={true} withTableBorder={true}>
                   <Table.Thead>
                     <Table.Tr>
                       <Table.Th>Item ID</Table.Th>
@@ -127,7 +129,7 @@ export default function OdorComponent( {itemOrders, setitemOrders}: setpropstype
                       <Table.Th>Package Unit</Table.Th>
                       <Table.Th>Supplier</Table.Th>
                       <Table.Th>QTY</Table.Th>
-                      <Table.Th></Table.Th>
+                      <Table.Th>Remove</Table.Th>
                     </Table.Tr>
                   </Table.Thead>
                   <Table.Tbody>{rows}</Table.Tbody>
