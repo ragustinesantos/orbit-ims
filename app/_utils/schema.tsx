@@ -104,9 +104,8 @@ export const defaultEmployee: Employee = {
   phone: '',
   position: '',
   department: '',
-  password: '',
   employeeLevel: '',
-  chatId: [],
+  isActive: true,
 };
 
 export interface Chat {
@@ -187,6 +186,8 @@ export interface RecurringOrderTemplate {
   rorTemplateId: string;
   templateName: string;
   itemList: string[];
+  approvalE2: string;
+  approvalE3: string;
   isTemplateApprovedE2: boolean;
   isTemplateApprovedE3: boolean;
 }
@@ -194,10 +195,21 @@ export interface RecurringOrderTemplate {
 export interface RecurringOrderTemplateToEdit {
   templateName: string;
   itemList: string[];
+  approvalE2: string;
+  approvalE3: string;
   isTemplateApprovedE2: boolean;
   isTemplateApprovedE3: boolean;
   [key: string]: any;
 }
+
+export const defaultRecurringOrderTemplate: RecurringOrderTemplateToEdit = {
+  templateName: '',
+  itemList: [],
+  approvalE2: '',
+  approvalE3: '',
+  isTemplateApprovedE2: false,
+  isTemplateApprovedE3: false,
+};
 
 export interface NewItemOrder {
   itemName: string;
@@ -236,7 +248,7 @@ export interface OnDemandOrderToEdit {
 
 export const NAV_ITEMS = {
   E1: [
-    { label: 'Dashboard', icon: IconGauge, link:'/dashboard/'  },
+    { label: 'Dashboard', icon: IconGauge, link: '/dashboard/' },
     {
       label: 'Assistant',
       icon: IconMessage,
@@ -259,7 +271,7 @@ export const NAV_ITEMS = {
     },
   ],
   E2: [
-    { label: 'Dashboard', icon: IconGauge, link:'/dashboard/'  },
+    { label: 'Dashboard', icon: IconGauge, link: '/dashboard/' },
     {
       label: 'Assistant',
       icon: IconMessage,
@@ -287,7 +299,7 @@ export const NAV_ITEMS = {
     },
   ],
   E3: [
-    { label: 'Dashboard', icon: IconGauge, link:'/dashboard/'  },
+    { label: 'Dashboard', icon: IconGauge, link: '/dashboard/' },
     {
       label: 'Assistant',
       icon: IconMessage,
@@ -315,7 +327,7 @@ export const NAV_ITEMS = {
     },
   ],
   P1: [
-    { label: 'Dashboard', icon: IconGauge, link:'/dashboard/'  },
+    { label: 'Dashboard', icon: IconGauge, link: '/dashboard/' },
     {
       label: 'Assistant',
       icon: IconMessage,
@@ -353,7 +365,7 @@ export const NAV_ITEMS = {
     },
   ],
   P2: [
-    { label: 'Dashboard', icon: IconGauge, link:'/dashboard/'  },
+    { label: 'Dashboard', icon: IconGauge, link: '/dashboard/' },
     {
       label: 'Assistant',
       icon: IconMessage,
@@ -391,7 +403,7 @@ export const NAV_ITEMS = {
     },
   ],
   IA: [
-    { label: 'Dashboard', icon: IconGauge, link:'/dashboard/'  },
+    { label: 'Dashboard', icon: IconGauge, link: '/dashboard/' },
     {
       label: 'Assistant',
       icon: IconMessage,
@@ -424,13 +436,21 @@ export const NAV_ITEMS = {
     },
   ],
   SA: [
-    { label: 'Dashboard', icon: IconGauge, link:'/dashboard/' },
+    { label: 'Dashboard', icon: IconGauge, link: '/dashboard/' },
     {
       label: 'Assistant',
       icon: IconMessage,
       links: [
         { label: 'Chat', link: '/assistant/chat' },
         { label: 'Generate Report', link: '/' },
+      ],
+    },
+    {
+      label: 'ROR',
+      icon: IconNotes,
+      links: [
+        { label: 'Create Recurring Order', link: '/' },
+        { label: 'Create ROR Template', link: '/ror/create-ror-template' },
       ],
     },
     {

@@ -3,13 +3,20 @@
 
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { useUserAuth } from './auth-context';
-import { Employee, Item, Supplier } from './schema';
-import { fetchCategories, fetchEmployees, fetchInventory, fetchSuppliers } from './utility';
+import { Employee, Item, RecurringOrderTemplate, Supplier } from './schema';
+import {
+  fetchCategories,
+  fetchEmployees,
+  fetchInventory,
+  fetchRorTemplates,
+  fetchSuppliers,
+} from './utility';
 
 interface InventoryContextType {
   inventory: Item[] | null;
   categoryList: string[] | null;
   supplierList: Supplier[] | null;
+  rorTemplates: RecurringOrderTemplate[] | null;
   currentEmployee: Employee | null;
   currentPage: string;
   currentSection: string;
@@ -30,6 +37,7 @@ export const InventoryContextProvider = ({ children }: { children: ReactNode }) 
   const [refresh, setRefresh] = useState<number>(0);
   const [currentSection, setCurrentSection] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<string>('');
+  const [rorTemplates, setRorTemplates] = useState<RecurringOrderTemplate[]>([]);
 
   console.log(currentEmployee);
 
@@ -53,7 +61,7 @@ export const InventoryContextProvider = ({ children }: { children: ReactNode }) 
     fetchInventory(setInventory);
     fetchSuppliers(setSupplierList);
     fetchCategories(setCategoryList);
-
+    fetchRorTemplates(setRorTemplates);
     console.log(supplierList);
   }, [refresh]);
 
@@ -63,6 +71,7 @@ export const InventoryContextProvider = ({ children }: { children: ReactNode }) 
         inventory,
         categoryList,
         supplierList,
+        rorTemplates,
         setRefresh,
         currentEmployee,
         currentPage,
