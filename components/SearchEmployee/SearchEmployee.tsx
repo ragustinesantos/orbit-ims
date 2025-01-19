@@ -17,6 +17,16 @@ export default function SearchEmployee() {
 
   // Filtering for searched employees
   const rows = employees?.map((employee) => {
+
+    let employeeLevelList = '';
+
+    for (let i = 0; i < employee.employeeLevel.length; i++) {
+      if (employeeLevelList) {
+        employeeLevelList += ', ';
+      }
+      employeeLevelList += employee.employeeLevel[i];
+    }
+
     return (
       // checks if inputted value matches employee names (case-insensitive)
       employee.firstName?.toLowerCase().includes(searchValue?.toLowerCase() || '') ||
@@ -31,7 +41,7 @@ export default function SearchEmployee() {
         <Table.Td>{employee.email}</Table.Td>
         <Table.Td>{employee.position}</Table.Td>
         <Table.Td>{employee.department}</Table.Td>
-        <Table.Td>{employee.employeeLevel}</Table.Td>
+        <Table.Td>{employeeLevelList}</Table.Td>
       </Table.Tr>
     ) : null;
   });
