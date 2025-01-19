@@ -120,7 +120,7 @@ export const fetchRorTemplates = async (
   setRorTemplates: (rorTemplates: RecurringOrderTemplate[]) => void
 ) => {
   try {
-    const response = await fetch('/api/rorTemplates');
+    const response = await fetch('/api/ror-templates');
 
     const data = await response.json();
 
