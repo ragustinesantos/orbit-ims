@@ -9,7 +9,7 @@ import CustomNotification from '../CustomNotification/CustomNotification';
 import classnames from './DeleteEmployee.module.css';
 import { useInventory } from '@/app/_utils/inventory-context';
 
-export default function DeleteEmployee(){
+export default function DeleteEmployee() {
   // Search and selected employees from employee search
   const [searchValue, setSearchValue] = useState<string | null>('');
   const [selectedEmployee, setSelectedEmployee] = useState<Employee>({ ...defaultEmployee });
@@ -197,8 +197,17 @@ export default function DeleteEmployee(){
         classNames={{ root: classnames.simpleGridRoot }}
       >
         <TextInput
-          label="Employee Name"
+          label="First Name"
           value={firstName}
+          placeholder="Enter Employee Name..."
+          classNames={{ input: classnames.disabledText }}
+          size="md"
+          withAsterisk
+          disabled
+        />
+        <TextInput
+          label="Last Name"
+          value={lastName}
           placeholder="Enter Employee Name..."
           classNames={{ input: classnames.disabledText }}
           size="md"

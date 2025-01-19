@@ -9,9 +9,11 @@ import { useUserAuth } from "@/app/_utils/auth-context";
 
 export default function AddEmployee() {
 
-    const [name, setName] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [employeeId, setEmployeeId] = useState('');
     const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
     const [department, setDepartment] = useState('');
     const [position, setPosition] = useState('');
     const [password, setPassword] = useState('');
@@ -26,12 +28,19 @@ export default function AddEmployee() {
     const [showNotification, setShowNotification] = useState(false);
     const [notificationMessage, setNotificationMessage] = useState(<div />);
 
-    const handleNameChange = (event: ChangeEvent<HTMLInputElement>) =>
-        setName(event.target.value);
+    const handleFirstNameChange = (event: ChangeEvent<HTMLInputElement>) =>
+        setFirstName(event.target.value);
+    const handleLastNameChange = (event: ChangeEvent<HTMLInputElement>) =>
+        setLastName(event.target.value);
     const handleEmployeeIdChange = (event: ChangeEvent<HTMLInputElement>) =>
         setEmployeeId(event.target.value);
     const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) =>
         setEmail(event.target.value);
+    const handlePhoneChange = (event: ChangeEvent<HTMLInputElement>) => {
+        if (event.target.value.length < 13) {
+            setPhone(event.target.value);
+        }
+    }
     const handleDepartmentChange = (event: ChangeEvent<HTMLInputElement>) =>
         setDepartment(event.target.value);
     const handlePositionChange = (event: ChangeEvent<HTMLInputElement>) =>
@@ -94,11 +103,11 @@ export default function AddEmployee() {
 
             const newEmployeeObj: Employee = {
                 ...defaultEmployee,
-                firstName: name.split(' ')[0] || '',
-                lastName: name.split(' ')[1] || '',
-                employeeId: employeeId,
+                firstName: firstName,
+                lastName: lastName,
                 employeeWorkId: employeeId,
                 email: email,
+                phone: phone,
                 position: position,
                 department: department,
                 employeeLevel: employeeLevels
@@ -122,16 +131,18 @@ export default function AddEmployee() {
                         CustomNotification(
                             'success',
                             'Employee Added!',
-                            `Item ${name} successfully added.`,
+                            `Item ${firstName} ${lastName} successfully added.`,
                             closeNotification
                         )
                     );
                 }
 
                 //Reset Fields
-                setName('');
+                setFirstName('');
+                setLastName('');
                 setEmployeeId('');
                 setEmail('');
+                setPhone('');
                 setDepartment('');
                 setPosition('');
                 setPassword('');
@@ -184,12 +195,20 @@ export default function AddEmployee() {
 
                     <SimpleGrid cols={2} spacing="xl" verticalSpacing="xl">
                         <TextInput
-                            label="Name"
+                            label="First Name"
                             withAsterisk
                             required
-                            placeholder="Full Name"
-                            value={name}
-                            onChange={handleNameChange}
+                            placeholder="First Name"
+                            value={firstName}
+                            onChange={handleFirstNameChange}
+                        />
+                        <TextInput
+                            label="Last Name"
+                            withAsterisk
+                            required
+                            placeholder="Last Name"
+                            value={lastName}
+                            onChange={handleLastNameChange}
                         />
                         <TextInput
                             label="Employee ID"
@@ -209,12 +228,29 @@ export default function AddEmployee() {
                             onChange={handleEmailChange}
                         />
                         <TextInput
+                            label="Phone"
+                            withAsterisk
+                            required
+                            placeholder="Phone"
+                            value={phone}
+                            onChange={handlePhoneChange}
+                            type="number"
+                        />
+                        <TextInput
                             label="Department"
                             withAsterisk
                             required
                             placeholder="Department"
                             value={department}
                             onChange={handleDepartmentChange}
+                        />
+                        <TextInput
+                            label="Position"
+                            withAsterisk
+                            required
+                            placeholder="Position"
+                            value={position}
+                            onChange={handlePositionChange}
                         />
                         <PasswordInput
                             label="Password"
@@ -232,14 +268,6 @@ export default function AddEmployee() {
                             visible={visible}
                             error={passwordConfirmError}
                             onVisibilityChange={toggle}
-                        />
-                        <TextInput
-                            label="Position"
-                            withAsterisk
-                            required
-                            placeholder="Position"
-                            value={position}
-                            onChange={handlePositionChange}
                         />
 
                     </SimpleGrid>

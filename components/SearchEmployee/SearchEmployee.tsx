@@ -116,7 +116,7 @@ export default function SearchEmployee() {
               <Table.Th>Email</Table.Th>
               <Table.Th>Position</Table.Th>
               <Table.Th>Department</Table.Th>
-              <Table.Th>Access Level</Table.Th>
+              <Table.Th>Access Levels</Table.Th>
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>{rows}</Table.Tbody>

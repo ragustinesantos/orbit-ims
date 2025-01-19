@@ -10,7 +10,7 @@ import { useInventory } from '@/app/_utils/inventory-context';
 import { putEmployee } from '@/app/_utils/utility';
 import { dbGetAllEmployees } from '@/app/_services/employees-service';
 
-export default function UpdateEmployee(){
+export default function UpdateEmployee() {
   // Search and selected employees from employee search
   const [searchValue, setSearchValue] = useState<string | null>('');
   const [selectedEmployee, setSelectedEmployee] = useState<Employee>({ ...defaultEmployee });
@@ -27,7 +27,8 @@ export default function UpdateEmployee(){
   const [showUpdateError, setShowUpdateError] = useState<boolean>(false);
 
   // States for Employee object attributes
-  const [fullName, setFullName] = useState<string>('');
+  const [firstName, setFirstName] = useState<string>('');
+  const [lastName, setLastName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
   const [position, setPosition] = useState<string>('');
@@ -39,7 +40,8 @@ export default function UpdateEmployee(){
   const { setRefresh, setCurrentPage, setCurrentSection } = useInventory();
 
   // Handle state changes based on new values
-  const handleFullName = (newTxt: string) => setFullName(newTxt);
+  const handleFirstName = (newTxt: string) => setFirstName(newTxt);
+  const handleLastName = (newTxt: string) => setLastName(newTxt);
   const handleEmail = (newTxt: string) => setEmail(newTxt);
   const handlePhone = (newTxt: string) => setPhone(newTxt);
   const handlePosition = (newTxt: string) => setPosition(newTxt);
@@ -52,8 +54,8 @@ export default function UpdateEmployee(){
     try {
       // Create employee to update
       const updatedEmployee: EmployeeToEdit = {
-        firstName: fullName.split(' ')[0] || '',
-        lastName: fullName.split(' ')[1] || '',
+        firstName: firstName,
+        lastName: lastName,
         email,
         phone,
         position,
@@ -112,7 +114,8 @@ export default function UpdateEmployee(){
   useEffect(() => {
     const updateValues = async () => {
       setStaticEmployeeId(selectedEmployee.employeeId || '');
-      setFullName(`${selectedEmployee.firstName || ''} ${selectedEmployee.lastName || ''}`);
+      setFirstName(selectedEmployee.firstName || '');
+      setLastName(selectedEmployee.lastName || '');
       setEmail(selectedEmployee.email || '');
       setPhone(selectedEmployee.phone || '');
       setPosition(selectedEmployee.position || '');
@@ -157,13 +160,13 @@ export default function UpdateEmployee(){
               <Text>
                 First Name:{' '}
                 <Text fw={700} td="underline" component="span" ml={5}>
-                  {fullName.split(' ')[0]}
+                  {firstName}
                 </Text>
               </Text>
               <Text>
                 Last Name:{' '}
                 <Text fw={700} td="underline" component="span" ml={5}>
-                  {fullName.split(' ')[1]}
+                  {lastName}
                 </Text>
               </Text>
               <Text>
@@ -241,10 +244,19 @@ export default function UpdateEmployee(){
           classNames={{ root: classnames.simpleGridRoot }}
         >
           <TextInput
-            label="Full Name"
-            value={fullName}
-            onChange={(event) => handleFullName(event.target.value)}
-            placeholder="Enter Full Name..."
+            label="First Name"
+            value={firstName}
+            onChange={(event) => handleFirstName(event.target.value)}
+            placeholder="Enter First Name..."
+            classNames={{ root: classnames.txtItemName }}
+            size="md"
+            withAsterisk
+          />
+          <TextInput
+            label="Last Name"
+            value={lastName}
+            onChange={(event) => handleLastName(event.target.value)}
+            placeholder="Enter Last Name..."
             classNames={{ root: classnames.txtItemName }}
             size="md"
             withAsterisk
@@ -310,7 +322,7 @@ export default function UpdateEmployee(){
           size="md"
           mt="xl"
           onClick={async () => {
-            if (!fullName || !email || !phone || !position || !department || !employeeLevel) {
+            if (!firstName || !lastName || !email || !phone || !position || !department || !employeeLevel) {
               setShowError(true);
               setTimeout(() => {
                 setShowError(false);
