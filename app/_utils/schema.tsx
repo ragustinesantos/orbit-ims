@@ -242,7 +242,7 @@ export interface OnDemandOrderToEdit {
 
 export const NAV_ITEMS = {
   E1: [
-    { label: 'Dashboard', icon: IconGauge, link: '/dashboard/' },
+    { label: 'Dashboard', icon: IconGauge, link:'/dashboard/'  },
     {
       label: 'Assistant',
       icon: IconMessage,
@@ -265,7 +265,7 @@ export const NAV_ITEMS = {
     },
   ],
   E2: [
-    { label: 'Dashboard', icon: IconGauge, link: '/dashboard/' },
+    { label: 'Dashboard', icon: IconGauge, link:'/dashboard/'  },
     {
       label: 'Assistant',
       icon: IconMessage,
@@ -293,7 +293,7 @@ export const NAV_ITEMS = {
     },
   ],
   E3: [
-    { label: 'Dashboard', icon: IconGauge, link: '/dashboard/' },
+    { label: 'Dashboard', icon: IconGauge, link:'/dashboard/'  },
     {
       label: 'Assistant',
       icon: IconMessage,
@@ -321,7 +321,7 @@ export const NAV_ITEMS = {
     },
   ],
   P1: [
-    { label: 'Dashboard', icon: IconGauge, link: '/dashboard/' },
+    { label: 'Dashboard', icon: IconGauge, link:'/dashboard/'  },
     {
       label: 'Assistant',
       icon: IconMessage,
@@ -359,7 +359,7 @@ export const NAV_ITEMS = {
     },
   ],
   P2: [
-    { label: 'Dashboard', icon: IconGauge, link: '/dashboard/' },
+    { label: 'Dashboard', icon: IconGauge, link:'/dashboard/'  },
     {
       label: 'Assistant',
       icon: IconMessage,
@@ -397,7 +397,7 @@ export const NAV_ITEMS = {
     },
   ],
   IA: [
-    { label: 'Dashboard', icon: IconGauge, link: '/dashboard/' },
+    { label: 'Dashboard', icon: IconGauge, link:'/dashboard/'  },
     {
       label: 'Assistant',
       icon: IconMessage,
@@ -430,7 +430,7 @@ export const NAV_ITEMS = {
     },
   ],
   SA: [
-    { label: 'Dashboard', icon: IconGauge, link: '/dashboard/' },
+    { label: 'Dashboard', icon: IconGauge, link:'/dashboard/' },
     {
       label: 'Assistant',
       icon: IconMessage,
