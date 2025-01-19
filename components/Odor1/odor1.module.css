@@ -1,0 +1,62 @@
+.selectRoot {
+    width: 50%;
+}
+
+.odorText {
+    font-size: 36px;
+    font-weight: bold;
+    margin-top: 3vh;
+}
+
+.rootText {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.button {
+    background-color: #228BE6;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #1D7ED6;
+}
+
+.buttonIncrement {
+    margin-left: 0.5vw;
+}
+
+.buttonDecrement {
+    margin-right: 0.5vw;
+}
+
+.buttonRemove:hover {
+    background-color: red;
+}
+
+.exteriorDiv {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 83vw;
+    height: 85vh;
+    min-width: 50vh;
+    border: 1px solid blue;
+}
+
+.interiorDiv {
+    align-items: center;
+    justify-content: center;
+    border: 1px solid blue;
+}
+
+.searchItemDiv {
+    display: flex;
+    justify-content: space-evenly;
+    border: 1px solid red;
+    width: 50vw;
+    margin-bottom: 10px;
+}
