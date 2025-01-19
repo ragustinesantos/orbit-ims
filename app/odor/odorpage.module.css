@@ -21,3 +21,8 @@
     display: flex;
     width: 100%;
 }
+
+
+.navbutton {
+    width: 120px;
+}
