@@ -64,6 +64,7 @@ export default function CreateRorTemplate() {
     setItemList((prev) => prev.filter((prevItem) => prevItem !== itemId));
   };
 
+  // Function to persist created template to the database
   const handleCreateTemplate = async () => {
     if (templateName === '' || itemList.length <= 0) {
       setNotificationMessage(
@@ -135,6 +136,7 @@ export default function CreateRorTemplate() {
     revealNotification();
   };
 
+  // Function to reveal any triggered notification
   const revealNotification = () => {
     setShowNotification(true);
     setTimeout(() => {
