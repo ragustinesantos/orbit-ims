@@ -91,7 +91,7 @@ export default function CreateRorTemplate() {
         itemList,
       };
 
-      // Create a request
+      // Create a request to add the newRorTemplate
       const request = new Request('/api/rorTemplates', {
         method: 'POST',
         body: JSON.stringify(newRorTemplate),

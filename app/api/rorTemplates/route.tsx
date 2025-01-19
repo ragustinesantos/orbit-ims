@@ -18,6 +18,8 @@ export async function POST(request: Request) {
     const rorTemplateSchema = z.object({
       templateName: z.string(),
       itemList: z.array(z.string()),
+      approvalE2: z.string(),
+      approvalE3: z.string(),
       isTemplateApprovedE2: z.boolean(),
       isTemplateApprovedE3: z.boolean(),
     });
