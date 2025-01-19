@@ -1,6 +1,14 @@
 /* eslint-disable no-console */
 import { marked } from 'marked';
-import { Chat, ChatToEdit, EmployeeToEdit, Item, ItemToEdit, Supplier } from './schema';
+import {
+  Chat,
+  ChatToEdit,
+  EmployeeToEdit,
+  Item,
+  ItemToEdit,
+  RecurringOrderTemplate,
+  Supplier,
+} from './schema';
 
 // Fetch all inventory items
 export const fetchInventory = async (setInventory: (inventoryItems: Item[]) => void) => {
@@ -107,6 +115,21 @@ export const putEmployee = async (employeeId: string, updatedEmployee: EmployeeT
   }
 };
 
+// Fetch all recurring order templates
+export const fetchRorTemplates = async (
+  setRorTemplates: (rorTemplates: RecurringOrderTemplate[]) => void
+) => {
+  try {
+    const response = await fetch('/api/rorTemplates');
+
+    const data = await response.json();
+
+    setRorTemplates(data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 // Fetch all employee chats
 export const fetchChats = async (
   employeeId: string | undefined,
@@ -153,7 +176,7 @@ export const queryAssistant = async (newChatRequest: object) => {
     const response = await fetch(request);
     const data = await response.text();
 
-    const formattedText = await markdownToPlainText(data)
+    const formattedText = await markdownToPlainText(data);
 
     return formattedText;
   } catch (error) {

@@ -1,45 +1,46 @@
+/* eslint-disable no-console */
 'use client';
 
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { Button, Group, Select, Table, TableData, Text, TextInput } from '@mantine/core';
 import { useInventory } from '@/app/_utils/inventory-context';
-import { defaultItem, Item } from '@/app/_utils/schema';
+import {
+  defaultItem,
+  defaultRecurringOrderTemplate,
+  Item,
+  RecurringOrderTemplateToEdit,
+} from '@/app/_utils/schema';
 import CustomNotification from '@/components/CustomNotification/CustomNotification';
 import TableDeleteBtn from '../TableDeleteBtn/TableDeleteBtn';
 import classnames from './CreateRorTemplate.module.css';
 
 export default function CreateRorTemplate() {
-  const { inventory, supplierList, setRefresh } = useInventory();
+  const { inventory, supplierList, setRefresh, rorTemplates } = useInventory();
 
   const [searchValue, setSearchValue] = useState<string | null>('');
+  const [templateName, setTemplateName] = useState<string>('');
   const [selectedItem, setSelectedItem] = useState<Item>({ ...defaultItem });
   const [itemList, setItemList] = useState<string[]>([]);
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState(<div />);
 
-  // Find item to search in inventory and set as selectedItem
-  useEffect(() => {
-    const matchedItem = inventory?.find((item) => item.itemId === searchValue);
-    setSelectedItem(matchedItem || { ...defaultItem });
-    setRefresh((prev: number) => prev + 1);
-  }, [searchValue]);
+  console.log(templateName, itemList);
 
-  const closeNotification = () => {
-    setShowNotification(false);
-  };
-
-  const revealNotification = () => {
-    setShowNotification(true);
-    setTimeout(() => {
-      setShowNotification(false);
-    }, 3000);
+  // Form Input Handling
+  const handleTemplateNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setTemplateName(event.target.value);
   };
 
   // Adding items to the template's item list
   const handleAddToItemList = () => {
     if (!selectedItem.itemId) {
       setNotificationMessage(
-        CustomNotification('error', 'Error Encountered', 'Item cannot be empty.', closeNotification)
+        CustomNotification(
+          'error',
+          'Error Encountered',
+          'Item cannot be empty.',
+          setShowNotification
+        )
       );
       revealNotification();
     } else if (itemList.includes(selectedItem.itemId)) {
@@ -48,7 +49,7 @@ export default function CreateRorTemplate() {
           'error',
           'Error Encountered',
           'Item has already been added to the template.',
-          closeNotification
+          setShowNotification
         )
       );
       revealNotification();
@@ -62,6 +63,91 @@ export default function CreateRorTemplate() {
   const handleDeleteFromItemList = (itemId: string) => {
     setItemList((prev) => prev.filter((prevItem) => prevItem !== itemId));
   };
+
+  const handleCreateTemplate = async () => {
+    if (templateName === '' || itemList.length <= 0) {
+      setNotificationMessage(
+        CustomNotification(
+          'error',
+          'Error Encountered',
+          'Please fill up all required fields before submitting.',
+          setShowNotification
+        )
+      );
+    } else if (rorTemplates?.some((template) => template.templateName === templateName)) {
+      setNotificationMessage(
+        CustomNotification(
+          'error',
+          'Error Encountered',
+          'Template name already exists',
+          setShowNotification
+        )
+      );
+    } else {
+      // Else proceed with preparing the newTemplate to add
+      const newRorTemplate: RecurringOrderTemplateToEdit = {
+        ...defaultRecurringOrderTemplate,
+        templateName,
+        itemList,
+      };
+
+      // Create a request
+      const request = new Request('/api/rorTemplates', {
+        method: 'POST',
+        body: JSON.stringify(newRorTemplate),
+      });
+
+      try {
+        // Fetch the request created
+        const response = await fetch(request);
+
+        // If it is successful provide feedback
+        if (response.ok) {
+          console.log('Success');
+          setNotificationMessage(
+            CustomNotification(
+              'success',
+              'ROR Template Submitted!',
+              `ROR Template ${templateName} successfully submitted for approval.`,
+              setShowNotification
+            )
+          );
+        }
+
+        // Trigger a refresh to retrieve updated inventory information
+        setRefresh((prev: number) => prev + 1);
+
+        // Reset fields
+        setTemplateName('');
+        setItemList([]);
+      } catch (error) {
+        console.log(error);
+        CustomNotification(
+          'error',
+          'Error Encountered',
+          'Unexpected Error encountered. Please try again.',
+          setShowNotification
+        );
+      }
+    }
+
+    // Display any notification that triggered
+    revealNotification();
+  };
+
+  const revealNotification = () => {
+    setShowNotification(true);
+    setTimeout(() => {
+      setShowNotification(false);
+    }, 3000);
+  };
+
+  // Find item to search in inventory and set as selectedItem
+  useEffect(() => {
+    const matchedItem = inventory?.find((item) => item.itemId === searchValue);
+    setSelectedItem(matchedItem || { ...defaultItem });
+    setRefresh((prev: number) => prev + 1);
+  }, [searchValue]);
 
   // Map through the list of item id's to retrieve data for the template table body
   const mappedItemList = itemList.map((itemId) => {
@@ -104,7 +190,13 @@ export default function CreateRorTemplate() {
           >
             Create ROR Template
           </Text>
-          <TextInput label="Template Name" withAsterisk placeholder="Enter Template Name..." />
+          <TextInput
+            label="Template Name"
+            withAsterisk
+            placeholder="Enter Template Name..."
+            value={templateName}
+            onChange={handleTemplateNameChange}
+          />
           <Group
             classNames={{
               root: classnames.searchGroup,
@@ -131,9 +223,17 @@ export default function CreateRorTemplate() {
               +
             </Button>
           </Group>
-          {itemList.length > 0 && <Table striped classNames={{table: classnames.rootTable}} data={tableData} />}
+          {itemList.length > 0 && (
+            <Table striped classNames={{ table: classnames.rootTable }} data={tableData} />
+          )}
         </Group>
-        <Button classNames={{root: classnames.submitButton}} variant="filled" color="#1B4965" size="md">
+        <Button
+          classNames={{ root: classnames.submitButton }}
+          variant="filled"
+          color="#1B4965"
+          size="md"
+          onClick={handleCreateTemplate}
+        >
           Create Template
         </Button>
       </Group>
