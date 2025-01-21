@@ -96,23 +96,22 @@ export const fetchEmployees = async () => {
 };
 
 export const putEmployee = async (employeeId: string, updatedEmployee: EmployeeToEdit) => {
-  try {
-    const request = {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(updatedEmployee),
-    };
 
-    const response = await fetch(`/api/employees/${employeeId}`, request);
+  const request = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(updatedEmployee),
+  };
 
-    const data = await response.json();
+  const response = await fetch(`/api/employees/${employeeId}`, request);
 
-    return data;
-  } catch (error) {
-    console.log(error);
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
   }
+
 };
 
 // Fetch all recurring order templates

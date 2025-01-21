@@ -78,7 +78,7 @@ export interface Employee {
   phone: string;
   position: string;
   department: string;
-  employeeLevel: string;
+  employeeLevel: string[];
   isActive: boolean;
 }
 
@@ -90,7 +90,7 @@ export interface EmployeeToEdit {
   phone: string;
   position: string;
   department: string;
-  employeeLevel: string;
+  employeeLevel: string[];
   isActive: boolean;
   [key: string]: any;
 }
@@ -104,7 +104,7 @@ export const defaultEmployee: Employee = {
   phone: '',
   position: '',
   department: '',
-  employeeLevel: '',
+  employeeLevel: [],
   isActive: true,
 };
 
@@ -246,7 +246,23 @@ export interface OnDemandOrderToEdit {
   [key: string]: any;
 }
 
-export const NAV_ITEMS = {
+export interface NavLink {
+  label: string;
+  link: string;
+}
+
+export interface NavFormat {
+  label: string;
+  icon: React.FC<any>;
+  link?: string;
+  links?: NavLink[];
+}
+
+interface navCollection {
+  [key: string]: NavFormat[];
+}
+
+export const NAV_ITEMS: navCollection = {
   E1: [
     { label: 'Dashboard', icon: IconGauge, link: '/dashboard/' },
     {
@@ -271,27 +287,6 @@ export const NAV_ITEMS = {
     },
   ],
   E2: [
-    { label: 'Dashboard', icon: IconGauge, link: '/dashboard/' },
-    {
-      label: 'Assistant',
-      icon: IconMessage,
-      links: [{ label: 'Chat', link: '/assistant/chat' }],
-    },
-    {
-      label: 'ROR',
-      icon: IconNotes,
-      links: [{ label: 'Create Recurring Order', link: '/' }],
-    },
-    {
-      label: 'ODOR',
-      icon: IconNotes,
-      links: [{ label: 'Create On-demand Order Requisition', link: '/' }],
-    },
-    {
-      label: 'Inventory',
-      icon: IconNotes,
-      links: [{ label: 'Search Item', link: '/' }],
-    },
     {
       label: 'E2 Access',
       icon: IconNotes,
@@ -299,53 +294,14 @@ export const NAV_ITEMS = {
     },
   ],
   E3: [
-    { label: 'Dashboard', icon: IconGauge, link: '/dashboard/' },
-    {
-      label: 'Assistant',
-      icon: IconMessage,
-      links: [{ label: 'Chat', link: '/assistant/chat' }],
-    },
-    {
-      label: 'ROR',
-      icon: IconNotes,
-      links: [{ label: 'Create Recurring Order', link: '/' }],
-    },
-    {
-      label: 'ODOR',
-      icon: IconNotes,
-      links: [{ label: 'Create On-demand Order Requisition', link: '/' }],
-    },
-    {
-      label: 'Inventory',
-      icon: IconNotes,
-      links: [{ label: 'Search Item', link: '/' }],
-    },
     {
       label: 'E3 Access',
       icon: IconNotes,
       links: [{ label: 'Access', link: '/' }],
     },
   ],
-  P1: [
-    { label: 'Dashboard', icon: IconGauge, link: '/dashboard/' },
-    {
-      label: 'Assistant',
-      icon: IconMessage,
-      links: [
-        { label: 'Chat', link: '/assistant/chat' },
-        { label: 'Generate Report', link: '/' },
-      ],
-    },
-    {
-      label: 'ROR',
-      icon: IconNotes,
-      links: [{ label: 'Create Recurring Order', link: '/' }],
-    },
-    {
-      label: 'ODOR',
-      icon: IconNotes,
-      links: [{ label: 'Create On-demand Order Requisition', link: '/' }],
-    },
+  // Manage Inventory is accessible to P1, P2, IA, and SA roles
+  MI: [
     {
       label: 'Manage Inventory',
       icon: IconNotes,
@@ -358,6 +314,8 @@ export const NAV_ITEMS = {
         { label: 'Stock Out', link: '/' },
       ],
     },
+  ],
+  P1: [
     {
       label: 'P1 Access',
       icon: IconNotes,
@@ -365,102 +323,20 @@ export const NAV_ITEMS = {
     },
   ],
   P2: [
-    { label: 'Dashboard', icon: IconGauge, link: '/dashboard/' },
-    {
-      label: 'Assistant',
-      icon: IconMessage,
-      links: [
-        { label: 'Chat', link: '/assistant/chat' },
-        { label: 'Generate Report', link: '/' },
-      ],
-    },
-    {
-      label: 'ROR',
-      icon: IconNotes,
-      links: [{ label: 'Create Recurring Order', link: '/' }],
-    },
-    {
-      label: 'ODOR',
-      icon: IconNotes,
-      links: [{ label: 'Create On-demand Order Requisition', link: '/' }],
-    },
-    {
-      label: 'Manage Inventory',
-      icon: IconNotes,
-      links: [
-        { label: 'Search Item', link: '/inventory/search-item' },
-        { label: 'Add Item', link: '/inventory/add-item' },
-        { label: 'Update Item', link: '/inventory/update-item' },
-        { label: 'Delete Item', link: '/inventory/delete-item' },
-        { label: 'Stock In', link: '/' },
-        { label: 'Stock Out', link: '/' },
-      ],
-    },
     {
       label: 'P2 Access',
       icon: IconNotes,
       links: [{ label: 'Access', link: '/' }],
     },
   ],
-  IA: [
-    { label: 'Dashboard', icon: IconGauge, link: '/dashboard/' },
+  // Inventory Admin and System Admin has the same Navigation items.
+  IA_SA: [
     {
       label: 'Assistant',
       icon: IconMessage,
       links: [
         { label: 'Chat', link: '/assistant/chat' },
         { label: 'Generate Report', link: '/' },
-      ],
-    },
-    {
-      label: 'Manage Inventory',
-      icon: IconNotes,
-      links: [
-        { label: 'Search Item', link: '/inventory/search-item' },
-        { label: 'Add Item', link: '/inventory/add-item' },
-        { label: 'Update Item', link: '/inventory/update-item' },
-        { label: 'Delete Item', link: '/inventory/delete-item' },
-        { label: 'Stock In', link: '/' },
-        { label: 'Stock Out', link: '/' },
-      ],
-    },
-    {
-      label: 'Manage Employees',
-      icon: IconUsers,
-      links: [
-        { label: 'Search Employee', link: '/employee/search-employee' },
-        { label: 'Add Employee', link: '/employee/add-employee' },
-        { label: 'Update Employee', link: '/employee/update-employee' },
-        { label: 'Delete Employee', link: '/employee/delete-employee' },
-      ],
-    },
-  ],
-  SA: [
-    { label: 'Dashboard', icon: IconGauge, link: '/dashboard/' },
-    {
-      label: 'Assistant',
-      icon: IconMessage,
-      links: [
-        { label: 'Chat', link: '/assistant/chat' },
-        { label: 'Generate Report', link: '/' },
-      ],
-    },
-    {
-      label: 'ROR',
-      icon: IconNotes,
-      links: [
-        { label: 'Create Recurring Order', link: '/' },
-        { label: 'Create ROR Template', link: '/ror/create-ror-template' },
-      ],
-    },
-    {
-      label: 'Manage Inventory',
-      icon: IconNotes,
-      links: [
-        { label: 'Search Item', link: '/inventory/search-item' },
-        { label: 'Add Item', link: '/inventory/add-item' },
-        { label: 'Update Item', link: '/inventory/update-item' },
-        { label: 'Delete Item', link: '/inventory/delete-item' },
       ],
     },
     {

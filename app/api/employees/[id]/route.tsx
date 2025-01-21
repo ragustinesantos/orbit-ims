@@ -31,7 +31,7 @@ export async function PUT(request: Request, { params }: { params: any }) {
       phone: z.string(),
       position: z.string(),
       department: z.string(),
-      employeeLevel: z.string(),
+      employeeLevel: z.array(z.string()),
       isActive: z.boolean(),
     });
 

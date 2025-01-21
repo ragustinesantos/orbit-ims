@@ -34,7 +34,7 @@ export async function dbGetAllEmployees() {
 
 export async function dbAddEmployee(employeeObj: EmployeeToEdit) {
   try {
-    const newEmployeeReference = collection(db, 'Employees');
+    const newEmployeeReference = collection(db, 'employees');
     await addDoc(newEmployeeReference, employeeObj);
   } catch (error) {
     return console.log(error);
