@@ -1,0 +1,12 @@
+.heading{
+    font-weight: 400;
+    text-align: center;
+    margin: "0 0 10px 0";
+  }
+
+.date{
+    font-weight: 400;
+    margin-top: 10px;
+    text-align: center;
+    font-style: italic;
+}
