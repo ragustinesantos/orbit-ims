@@ -1,8 +1,8 @@
 'useclient';
 
 
-import { useEffect, useState } from 'react';
-import { Group, Select, Table, Text, Button } from '@mantine/core';
+import { ChangeEvent,useEffect, useState } from 'react';
+import { Group, Select, Table, Text, Button , SimpleGrid, TextInput} from '@mantine/core';
 import { Item } from '@/app/_utils/schema';
 import classnames from './odor2.module.css';
 import { useInventory } from '@/app/_utils/inventory-context';
@@ -19,16 +19,42 @@ export default function OdorComponent2({newItemOrders,setNewItemOrders}: setprop
 
   const [showTemplate, setshowTemplate] = useState<boolean>(false)
 
+  // Move to Parent Component
+  const [newItemName, setNewItemName] = useState('');
+  const [newItemDescription, setNewItemDescription] = useState('');
 
   function handleShowTemplate () {
     setshowTemplate(true);
   }
 
 
+  const handleNewItemNameChange = (event: ChangeEvent<HTMLInputElement>) =>
+      setNewItemName(event.target.value);
+  const handleNewItemDescriptionChange = (event: ChangeEvent<HTMLInputElement>) =>
+    setNewItemDescription(event.target.value);
+
+
   const template = (
-
-          <div>well hello there!</div>
-
+          <div>
+          <div>Purchase Item</div>
+<SimpleGrid cols={1} spacing="xl" verticalSpacing="xs">
+          <TextInput
+            label="Item Name"
+            withAsterisk
+            placeholder="Enter Item Name..."
+            value={newItemName}
+            onChange={handleNewItemNameChange}
+          />
+          {/*<TextInput label="Item ID" disabled />*/}
+          <TextInput
+            label="Item Description or Source Link"
+            withAsterisk
+            placeholder="Description or URL"
+            value={newItemDescription}
+            onChange={handleNewItemDescriptionChange}
+          />
+          </SimpleGrid>
+            </div>
 
 
     );
@@ -43,12 +69,18 @@ export default function OdorComponent2({newItemOrders,setNewItemOrders}: setprop
     <div  style={{ border: '1px solid red'}}>
       <Text classNames={{root: classnames.odorText,}}>On Demand Order Requisition</Text>
       <div className={classnames.exteriorDiv}>
-          <div className={classnames.interiorDiv}>
+          {showTemplate ? template : 
+            <div className={classnames.interiorDiv}>
               <Text classNames={{root: classnames.rootText,}}>Order Non Inventory Item</Text>
               <Text>Would you like to order a item that is not in the Inventory?</Text>
-          </div>
-          {showTemplate ? template : <Button onClick={handleShowTemplate} >Yes</Button>} 
-      </div>   
+              <div>
+                <Button onClick={handleShowTemplate} >Yes</Button>
+              <Button onClick={handleShowTemplate} >No</Button> 
+              </div>   
+            </div>} 
+          
+           
+      </div>  
     </div>
 
     );
