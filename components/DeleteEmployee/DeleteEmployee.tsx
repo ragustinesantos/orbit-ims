@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Button, Flex, Group, Modal, Select, SimpleGrid, Text, TextInput } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { defaultEmployee, Employee } from '@/app/_utils/schema';
-import { dbDeleteEmployee, dbGetAllEmployees } from '@/app/_services/employees-service';
+import { dbDeleteEmployee, dbGetAllEmployees, dbUpdateEmployee } from '@/app/_services/employees-service';
 import CustomNotification from '../CustomNotification/CustomNotification';
 import classnames from './DeleteEmployee.module.css';
 import { useInventory } from '@/app/_utils/inventory-context';
@@ -43,7 +43,11 @@ export default function DeleteEmployee() {
   // Handle delete submit
   const handleSubmit = async () => {
     try {
-      await dbDeleteEmployee(staticEmployeeId);
+      // Set employee status to inactive rather than permanent deletion
+      const updatedEmployee = { 
+        isActive: false 
+      };
+      await dbUpdateEmployee(staticEmployeeId, updatedEmployee);
 
       setSuccessMessage(`The employee ${firstName} ${lastName} has been successfully deleted`);
       setSearchValue('');
@@ -67,7 +71,9 @@ export default function DeleteEmployee() {
     const fetchEmployees = async () => {
       try {
         const foundEmployees = await dbGetAllEmployees();
-        setEmployees(foundEmployees || []);
+        // Filter out inactive employees
+        const activeEmployees = foundEmployees.filter((employee) => employee.isActive === true);
+        setEmployees(activeEmployees || []);
       } catch (error) {
         console.error('Error fetching employees:', error);
       }

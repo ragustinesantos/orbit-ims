@@ -27,6 +27,8 @@ export async function PUT(request: Request, { params }: { params: any }) {
       rorTemplateId: z.string(),
       templateName: z.string(),
       itemList: z.array(z.string()),
+      approvalE2: z.string(),
+      approvalE3: z.string(),
       isTemplateApprovedE2: z.boolean(),
       isTemplateApprovedE3: z.boolean(),
     });
@@ -50,6 +52,8 @@ export async function PATCH(request: Request, { params }: { params: any }) {
         rorTemplateId: z.string().optional(),
         templateName: z.string().optional(),
         itemList: z.array(z.string()).optional(),
+        approvalE2: z.string().optional(),
+        approvalE3: z.string().optional(),
         isTemplateApprovedE2: z.boolean().optional(),
         isTemplateApprovedE3: z.boolean().optional(),
       })

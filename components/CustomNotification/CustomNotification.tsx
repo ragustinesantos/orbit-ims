@@ -1,5 +1,6 @@
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { Notification, rem } from '@mantine/core';
+import classnames from './CustomNotification.module.css';
 
 export default function CustomNotification(
   notificationType: string,
@@ -17,6 +18,7 @@ export default function CustomNotification(
       color={notificationType === 'success' ? 'green' : 'red'}
       title={notificationTitle}
       onClose={() => setShowNotification(false)}
+      className={classnames.notification}
     >
       {notificationMessage}
     </Notification>

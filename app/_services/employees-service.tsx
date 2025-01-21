@@ -27,7 +27,8 @@ export async function dbGetAllEmployees() {
     });
     return employeeList;
   } catch (error) {
-    return console.log(error);
+    console.log(error);
+    return [];
   }
 }
 

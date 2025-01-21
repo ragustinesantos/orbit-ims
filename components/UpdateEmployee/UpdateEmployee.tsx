@@ -124,7 +124,9 @@ export default function UpdateEmployee() {
     const fetchEmployees = async () => {
       try {
         const foundEmployees = await dbGetAllEmployees();
-        setEmployees(foundEmployees || []);
+        // Filter out inactive employees
+        const activeEmployees = foundEmployees.filter((employee) => employee.isActive === true);
+        setEmployees(activeEmployees || []);
       } catch (error) {
         console.error('Error fetching employees:', error);
       }

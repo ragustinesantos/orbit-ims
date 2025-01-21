@@ -50,8 +50,10 @@ export default function SearchEmployee() {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const foundEmployees = await dbGetAllEmployees();
-        setEmployees(foundEmployees || []);
+        const foundEmployees = await dbGetAllEmployees() || [];
+        // filter out inactive employees
+        const activeEmployees = foundEmployees.filter((employee) => employee.isActive === true);
+        setEmployees(activeEmployees);
       } catch (error) {
         console.error('Error fetching employees:', error);
       }
