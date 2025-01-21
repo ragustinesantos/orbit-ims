@@ -273,7 +273,10 @@ export const NAV_ITEMS: navCollection = {
     {
       label: 'ROR',
       icon: IconNotes,
-      links: [{ label: 'Create Recurring Order', link: '/' }],
+      links: [
+        { label: 'Create Recurring Order', link: '/' },
+        { label: 'Create Template', link: '/ror/create-ror-template' },
+      ],
     },
     {
       label: 'ODOR',
