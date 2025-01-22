@@ -118,7 +118,7 @@ export default function OdorComponent( {itemOrders, setitemOrders}: setpropstype
                 </Button>
               </div> 
               <div>
-                  <Table classNames={{thead: classnames.thead, td: classnames.td,}}stickyHeader stickyHeaderOffset={60} withColumnBorders= {true}
+                  <Table stickyHeader stickyHeaderOffset={60} withColumnBorders= {true}
                    striped={true} withTableBorder={true}>
                   <Table.Thead>
                     <Table.Tr>
