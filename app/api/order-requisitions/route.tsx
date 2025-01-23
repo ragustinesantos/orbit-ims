@@ -21,7 +21,8 @@ export async function POST(request: Request) {
     const orderRequisitionSchema = z.object({
       requisitionId: z.string(),
       requisitionType: z.string(),
-      requisitionDate: z.date(),
+      requisitionTypeId: z.string(),
+      requisitionDate: z.string(),
       employeeId: z.string(),
       approvalE2: z.string(),
       approvalE3: z.string(),
@@ -29,8 +30,6 @@ export async function POST(request: Request) {
       isApprovedE2: z.boolean(),
       isApprovedE3: z.boolean(),
       isApprovedP1: z.boolean(),
-      recipientName: z.string(),
-      disposalPlan: z.string(),
       isActive: z.boolean(),
       isComplete: z.boolean(),
       remarks: z.string(),

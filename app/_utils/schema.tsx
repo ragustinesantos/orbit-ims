@@ -126,7 +126,8 @@ export interface ChatToEdit {
 export interface OrderRequisition {
   requisitionId: string;
   requisitionType: string;
-  requisitionDate: Date;
+  requisitionTypeId: string;
+  requisitionDate: string;
   employeeId: string;
   approvalE2: string;
   approvalE3: string;
@@ -134,8 +135,6 @@ export interface OrderRequisition {
   isApprovedE2: boolean;
   isApprovedE3: boolean;
   isApprovedP1: boolean;
-  recipientName: string;
-  disposalPlan: string;
   isActive: boolean;
   isComplete: boolean;
   remarks: string;
@@ -143,7 +142,8 @@ export interface OrderRequisition {
 
 export interface OrderRequisitionToEdit {
   requisitionType: string;
-  requisitionDate: Date;
+  requisitionTypeId: string;
+  requisitionDate: string;
   employeeId: string;
   approvalE2: string;
   approvalE3: string;
@@ -151,13 +151,28 @@ export interface OrderRequisitionToEdit {
   isApprovedE2: boolean;
   isApprovedE3: boolean;
   isApprovedP1: boolean;
-  recipientName: string;
-  disposalPlan: string;
   isActive: boolean;
   isComplete: boolean;
   remarks: string;
   [key: string]: any;
 }
+
+export const defaultOrderRequisition: OrderRequisition = {
+  requisitionId: '',
+  requisitionType: '',
+  requisitionTypeId: '',
+  requisitionDate: '',
+  employeeId: '',
+  approvalE2: '',
+  approvalE3: '',
+  approvalP1: '',
+  isApprovedE2: false,
+  isApprovedE3: false,
+  isApprovedP1: false,
+  isActive: true,
+  isComplete: false,
+  remarks: '',
+};
 
 export interface ItemOrder {
   itemId: string;
@@ -182,6 +197,13 @@ export interface RecurringOrderToEdit {
   [key: string]: any;
 }
 
+export const defaultRecurringOrderToEdit: RecurringOrderToEdit = {
+  rorTemplateId: '',
+  requisitionId: '',
+  itemOrders: [],
+  orderTotal: 0,
+};
+
 export interface RecurringOrderTemplate {
   rorTemplateId: string;
   templateName: string;
@@ -202,7 +224,7 @@ export interface RecurringOrderTemplateToEdit {
   [key: string]: any;
 }
 
-export const defaultRecurringOrderTemplate: RecurringOrderTemplateToEdit = {
+export const defaultRecurringOrderTemplateToEdit: RecurringOrderTemplateToEdit = {
   templateName: '',
   itemList: [],
   approvalE2: '',
@@ -215,6 +237,8 @@ export interface NewItemOrder {
   itemName: string;
   itemDescription: string;
   productCode: string;
+  disposalPlan: string;
+  purposeForPurchase: string;
   purchaseQty: number;
   unitPrice: number;
   itemSubtotal: number;
@@ -228,8 +252,6 @@ export interface OnDemandOrder {
   orderTotal: number;
   recipientName: string;
   recipientLocation: string;
-  disposalPlan: string;
-  purposeForPurchase: string;
   remarks: string;
 }
 
@@ -240,8 +262,6 @@ export interface OnDemandOrderToEdit {
   orderTotal: number;
   recipientName: string;
   recipientLocation: string;
-  disposalPlan: string;
-  purposeForPurchase: string;
   remarks: string;
   [key: string]: any;
 }
