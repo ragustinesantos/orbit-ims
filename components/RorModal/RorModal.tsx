@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Text, Modal, SimpleGrid, Table, TableData, TextInput } from '@mantine/core';
+import { Text, Modal, SimpleGrid, Table, TableData, TextInput, Badge } from '@mantine/core';
 import { useInventory } from '@/app/_utils/inventory-context';
 import {
   defaultEmployee,
@@ -10,6 +10,7 @@ import {
 } from '@/app/_utils/schema';
 import { fetchEmployee, fetchOrderRequisition } from '@/app/_utils/utility';
 import classnames from './RorModal.module.css';
+import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
 
 interface rorModalProps {
   opened: boolean;
@@ -71,8 +72,8 @@ export default function RorModal({ opened, close, recurringOrder }: rorModalProp
 
   const approvalData: TableData = {
     head: [currentOr.approvalE2 ? `Approved By: ${currentOr.approvalE2}`:'E2 Approval', currentOr.approvalE3 ? `Approved By: ${currentOr.approvalE3}`:'E3 Approval', currentOr.approvalP1 ? `Approved By: ${currentOr.approvalP1}`:'P1 Approval'],
-    body: []
-  }
+    body: [[<ApprovalBadge isApproved={currentOr.isApprovedE2} />, <ApprovalBadge isApproved={currentOr.isApprovedE2} />, <ApprovalBadge isApproved={currentOr.isApprovedE2} />]]
+  };
 
   return (
     <Modal opened={opened} onClose={close} size="xl">
@@ -96,7 +97,7 @@ export default function RorModal({ opened, close, recurringOrder }: rorModalProp
         <TextInput disabled label="Requisition ID" value={currentOr.requisitionId} size="md" />
       </SimpleGrid>
       <Table striped classNames={{ table: classnames.rootTable }} data={tableData} />
-      <Table striped classNames={{ table: classnames.rootTable }} data={approvalData} />
+      <Table classNames={{ table: classnames.rootTable }} data={approvalData} />
     </Modal>
   );
 }
