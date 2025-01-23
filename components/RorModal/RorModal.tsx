@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Modal, SimpleGrid, Table, TableData, Text, TextInput } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import { useInventory } from '@/app/_utils/inventory-context';
 import {
   defaultEmployee,
@@ -13,12 +14,12 @@ import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
 import classnames from './RorModal.module.css';
 
 interface rorModalProps {
-  opened: boolean;
-  close: () => void;
   recurringOrder: RecurringOrder | null;
+  isOpened: boolean;
+  isClosed: () => void;
 }
 
-export default function RorModal({ opened, close, recurringOrder }: rorModalProps) {
+export default function RorModal({ recurringOrder, isOpened, isClosed }: rorModalProps) {
   const { inventory, supplierList } = useInventory();
 
   const [employee, setEmployee] = useState<Employee>({ ...defaultEmployee });
@@ -71,18 +72,12 @@ export default function RorModal({ opened, close, recurringOrder }: rorModalProp
   };
 
   const approvalData: TableData = {
-    head: [
-      currentOr.isApprovedP1 ? `Approved By: ${currentOr.approvalP1}` : 'P1 Approval',
-    ],
-    body: [
-      [
-        <ApprovalBadge isApproved={currentOr.isApprovedP1} />,
-      ],
-    ],
+    head: [currentOr.isApprovedP1 ? `Approved By: ${currentOr.approvalP1}` : 'P1 Approval'],
+    body: [[<ApprovalBadge isApproved={currentOr.isApprovedP1} />]],
   };
 
   return (
-    <Modal opened={opened} onClose={close} size="xl">
+    <Modal opened={isOpened} onClose={isClosed} size="xl">
       <Text
         classNames={{
           root: classnames.rootText,
@@ -93,7 +88,7 @@ export default function RorModal({ opened, close, recurringOrder }: rorModalProp
       <TextInput
         disabled
         label="Employee Name"
-        value={`${employee.firstName  } ${  employee.lastName}`}
+        value={`${employee.firstName} ${employee.lastName}`}
         size="md"
         classNames={{ root: classnames.rootSection }}
       />
