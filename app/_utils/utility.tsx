@@ -6,6 +6,8 @@ import {
   EmployeeToEdit,
   Item,
   ItemToEdit,
+  OrderRequisition,
+  RecurringOrder,
   RecurringOrderTemplate,
   Supplier,
 } from './schema';
@@ -95,8 +97,21 @@ export const fetchEmployees = async () => {
   }
 };
 
-export const putEmployee = async (employeeId: string, updatedEmployee: EmployeeToEdit) => {
+// Fetch a single order requisition based on the requisitionId parameter
+export const fetchEmployee = async (employeeId: string) => {
+  const response = await fetch(`/api/employees/${employeeId}`);
 
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+  }
+
+  const data = await response.json();
+
+  return data;
+};
+
+export const putEmployee = async (employeeId: string, updatedEmployee: EmployeeToEdit) => {
   const request = {
     method: 'PUT',
     headers: {
@@ -111,7 +126,6 @@ export const putEmployee = async (employeeId: string, updatedEmployee: EmployeeT
     const errorText = await response.text();
     throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
   }
-
 };
 
 // Fetch all recurring order templates
@@ -127,6 +141,65 @@ export const fetchRorTemplates = async (
   } catch (error) {
     console.log(error);
   }
+};
+
+// Fetch all order requisitions and set to the provided state parameter
+export const fetchOrderRequisitions = async (
+  setOrderRequisitions: (orderRequisitions: OrderRequisition[]) => void
+) => {
+  const response = await fetch(`/api/order-requisitions`);
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+  }
+
+  const data = await response.json();
+
+  setOrderRequisitions(data);
+};
+
+// Fetch a single order requisition based on the requisitionId parameter
+export const fetchOrderRequisition = async (requisitionId: string) => {
+  const response = await fetch(`/api/order-requisitions/${requisitionId}`);
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+  }
+
+  const data = await response.json();
+
+  return data;
+};
+
+export const fetchRecurringOrderRequisitions = async (
+  setRecurringOrders: (recurringOrders: RecurringOrder[]) => void
+) => {
+  const response = await fetch(`/api/order-requisitions`);
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+  }
+
+  const data = await response.json();
+
+  setRecurringOrders(data);
+};
+
+// Fetch a single order requisition based on the requisitionId parameter
+export const fetchRecurringOrderRequisition = async (rorId: string) => {
+  const response = await fetch(`/api/ror/${rorId}`);
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+  }
+
+  const data = await response.json();
+
+  return data;
 };
 
 // Fetch all employee chats

@@ -1,0 +1,21 @@
+.rootText {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 24px;
+}
+
+.rootTable {
+  width: 100%;
+  table-layout: auto;
+  margin-bottom: 36px;
+}
+
+.rootApprovalTable {
+  width: 25%;
+  table-layout: auto;
+  margin-bottom: 36px;
+}
+
+.rootSection {
+  margin-bottom: 36px;
+}
