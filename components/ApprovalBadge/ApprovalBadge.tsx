@@ -28,7 +28,7 @@ export default function ApprovalBadge({ isApproved }: { isApproved: boolean | nu
   }
 
   return (
-    <Badge variant="filled" color={badgeColor} size="xs" radius="xl">
+    <Badge variant="filled" color={badgeColor} size="sm" radius="xl">
       {badgeText}
     </Badge>
   );
