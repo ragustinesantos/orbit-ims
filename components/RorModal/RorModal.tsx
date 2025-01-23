@@ -71,7 +71,7 @@ export default function RorModal({ opened, close, recurringOrder }: rorModalProp
   };
 
   const approvalData: TableData = {
-    head: [currentOr.approvalE2 ? `Approved By: ${currentOr.approvalE2}`:'E2 Approval', currentOr.approvalE3 ? `Approved By: ${currentOr.approvalE3}`:'E3 Approval', currentOr.approvalP1 ? `Approved By: ${currentOr.approvalP1}`:'P1 Approval'],
+    head: [currentOr.isApprovedE2 ? `Approved By: ${currentOr.approvalE2}`:'E2 Approval', currentOr.isApprovedE3 ? `Approved By: ${currentOr.approvalE3}`:'E3 Approval', currentOr.isApprovedP1 ? `Approved By: ${currentOr.approvalP1}`:'P1 Approval'],
     body: [[<ApprovalBadge isApproved={currentOr.isApprovedE2} />, <ApprovalBadge isApproved={currentOr.isApprovedE3} />, <ApprovalBadge isApproved={currentOr.isApprovedP1} />]]
   };
 
