@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Modal, SimpleGrid, Table, TableData, Text, TextInput } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
 import { useInventory } from '@/app/_utils/inventory-context';
 import {
   defaultEmployee,
