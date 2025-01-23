@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Text, Modal, SimpleGrid, Table, TableData, TextInput, Badge } from '@mantine/core';
+import { Modal, SimpleGrid, Table, TableData, Text, TextInput } from '@mantine/core';
 import { useInventory } from '@/app/_utils/inventory-context';
 import {
   defaultEmployee,
@@ -9,8 +9,8 @@ import {
   RecurringOrder,
 } from '@/app/_utils/schema';
 import { fetchEmployee, fetchOrderRequisition } from '@/app/_utils/utility';
-import classnames from './RorModal.module.css';
 import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
+import classnames from './RorModal.module.css';
 
 interface rorModalProps {
   opened: boolean;
@@ -71,8 +71,18 @@ export default function RorModal({ opened, close, recurringOrder }: rorModalProp
   };
 
   const approvalData: TableData = {
-    head: [currentOr.isApprovedE2 ? `Approved By: ${currentOr.approvalE2}`:'E2 Approval', currentOr.isApprovedE3 ? `Approved By: ${currentOr.approvalE3}`:'E3 Approval', currentOr.isApprovedP1 ? `Approved By: ${currentOr.approvalP1}`:'P1 Approval'],
-    body: [[<ApprovalBadge isApproved={currentOr.isApprovedE2} />, <ApprovalBadge isApproved={currentOr.isApprovedE3} />, <ApprovalBadge isApproved={currentOr.isApprovedP1} />]]
+    head: [
+      currentOr.isApprovedE2 ? `Approved By: ${currentOr.approvalE2}` : 'E2 Approval',
+      currentOr.isApprovedE3 ? `Approved By: ${currentOr.approvalE3}` : 'E3 Approval',
+      currentOr.isApprovedP1 ? `Approved By: ${currentOr.approvalP1}` : 'P1 Approval',
+    ],
+    body: [
+      [
+        <ApprovalBadge isApproved={currentOr.isApprovedE2} />,
+        <ApprovalBadge isApproved={currentOr.isApprovedE3} />,
+        <ApprovalBadge isApproved={currentOr.isApprovedP1} />,
+      ],
+    ],
   };
 
   return (
