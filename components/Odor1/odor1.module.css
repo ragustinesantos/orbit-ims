@@ -40,7 +40,7 @@
 .exteriorDiv {
     display: flex;
     justify-content: center;
-    width: 83vw;
+    width: 80vw;
     min-height: 80vh;
     min-width: 50vh;
     border: 1px solid blue;
@@ -59,4 +59,18 @@
     justify-content: space-evenly;
     border: 1px solid red;
     margin-bottom: 10px;
+}
+
+
+.orderTotalLabel {
+    font-size: 15px;
+    font-weight: 600;
+    margin-top: 3vh;
+
+}
+
+.orderTotalText {
+    font-size: 12px;
+    margin-top: 5vh;
+
 }

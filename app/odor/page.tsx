@@ -13,13 +13,14 @@ export default function OdorPage() {
 
   const [itemOrders, setitemOrders] = useState<ItemOrder[]>([]);
   const [newItemOrders, setNewItemOrders] = useState<NewItemOrder[]>([]);
-  const [disposalPlan, setDisposalPlan] = useState('');
+  const [orderTotal, setOrderTotal] = useState<Number>(0);
+  const [showTemplate, setShowTemplate] = useState<boolean>(false)
 
   const [pageNumber,setpageNumber] = useState<number>(0);
   const nav_array = [<OdorComponent itemOrders={itemOrders} setitemOrders={setitemOrders}>
                      </OdorComponent>,
-                     <OdorComponent2 disposalPlan={disposalPlan} setDisposalPlan={setDisposalPlan} 
-                     newItemOrders={newItemOrders} setNewItemOrders={setNewItemOrders}>
+                     <OdorComponent2 orderTotal={orderTotal} setOrderTotal={setOrderTotal} 
+                     newItemOrders={newItemOrders} setNewItemOrders={setNewItemOrders} setShowTemplate={setShowTemplate} showTemplate={showTemplate}>
                      </OdorComponent2>
                     ]
 

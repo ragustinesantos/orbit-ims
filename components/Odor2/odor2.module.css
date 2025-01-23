@@ -60,6 +60,11 @@
     margin-bottom: 10px;
 }
 
+.templateTitleDiv {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
 .templateTitle {
     font-size: 32px;
@@ -89,14 +94,25 @@
     background-color: #1D7ED6;
 }
 
-.buttonIncrement {
-    margin-left: 0.5vw;
-}
-
-.buttonDecrement {
-    margin-right: 0.5vw;
-}
-
 .buttonRemove:hover {
+    background-color: rgb(232, 55, 55);
+}
+
+.buttonRemove{
     background-color: red;
+}
+
+
+
+.orderTotalLabel {
+    font-size: 14px;
+    font-weight:700;
+    margin-top: .8vh;
+
+}
+
+.orderTotalText {
+    font-size: 14px;
+    margin-top: .3vh;
+
 }
