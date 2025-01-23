@@ -72,14 +72,10 @@ export default function RorModal({ opened, close, recurringOrder }: rorModalProp
 
   const approvalData: TableData = {
     head: [
-      currentOr.isApprovedE2 ? `Approved By: ${currentOr.approvalE2}` : 'E2 Approval',
-      currentOr.isApprovedE3 ? `Approved By: ${currentOr.approvalE3}` : 'E3 Approval',
       currentOr.isApprovedP1 ? `Approved By: ${currentOr.approvalP1}` : 'P1 Approval',
     ],
     body: [
       [
-        <ApprovalBadge isApproved={currentOr.isApprovedE2} />,
-        <ApprovalBadge isApproved={currentOr.isApprovedE3} />,
         <ApprovalBadge isApproved={currentOr.isApprovedP1} />,
       ],
     ],
@@ -97,7 +93,7 @@ export default function RorModal({ opened, close, recurringOrder }: rorModalProp
       <TextInput
         disabled
         label="Employee Name"
-        value={employee.firstName + employee.lastName}
+        value={`${employee.firstName  } ${  employee.lastName}`}
         size="md"
         classNames={{ root: classnames.rootSection }}
       />
@@ -107,7 +103,7 @@ export default function RorModal({ opened, close, recurringOrder }: rorModalProp
         <TextInput disabled label="Requisition ID" value={currentOr.requisitionId} size="md" />
       </SimpleGrid>
       <Table striped classNames={{ table: classnames.rootTable }} data={tableData} />
-      <Table classNames={{ table: classnames.rootTable }} data={approvalData} />
+      <Table classNames={{ table: classnames.rootApprovalTable }} data={approvalData} />
     </Modal>
   );
 }

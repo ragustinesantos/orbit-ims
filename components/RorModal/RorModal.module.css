@@ -10,6 +10,12 @@
   margin-bottom: 36px;
 }
 
+.rootApprovalTable {
+  width: 25%;
+  table-layout: auto;
+  margin-bottom: 36px;
+}
+
 .rootSection {
   margin-bottom: 36px;
 }
