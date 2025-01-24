@@ -176,7 +176,7 @@ export const fetchOrderRequisition = async (requisitionId: string) => {
 export const fetchRecurringOrderRequisitions = async (
   setRecurringOrders: (recurringOrders: RecurringOrder[]) => void
 ) => {
-  const response = await fetch(`/api/order-requisitions`);
+  const response = await fetch(`/api/ror`);
 
   if (!response.ok) {
     const errorText = await response.text();
