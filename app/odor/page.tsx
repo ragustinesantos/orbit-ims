@@ -2,10 +2,12 @@
 
 import { NavbarNested } from '@/components/NavbarNested/NavbarNested';
 import OdorComponent from '@/components/Odor1/Odor1';
+import OdorComponent2 from '@/components/Odor2/Odor2';
+import OdorComponent3 from '@/components/Odor3/Odor3';
 import classnames from './odorpage.module.css';
 import { Text, Group } from '@mantine/core';
 import { useState } from 'react';
-import OdorComponent2 from '@/components/Odor2/Odor2';
+
 import { Button } from '@mantine/core';
 import { ItemOrder, NewItemOrder } from '../_utils/schema';
 
@@ -21,7 +23,9 @@ export default function OdorPage() {
                      </OdorComponent>,
                      <OdorComponent2 orderTotal={orderTotal} setOrderTotal={setOrderTotal} 
                      newItemOrders={newItemOrders} setNewItemOrders={setNewItemOrders} setShowTemplate={setShowTemplate} showTemplate={showTemplate}>
-                     </OdorComponent2>
+                     </OdorComponent2>,
+                     <OdorComponent3 itemOrders={itemOrders} newItemOrders={newItemOrders} orderTotal={orderTotal}>
+                     </OdorComponent3>
                     ]
 
   function nextPage () {
@@ -50,7 +54,8 @@ export default function OdorPage() {
       >
           {nav_array[pageNumber]}
           <Group justify="flex-end">
-            { pageNumber == 0 ? <div style={{width: '50px'}}></div> : <Button classNames={{root: classnames.navbutton,}} onClick={previousPage} variant="filled" color="#1B4965" size="md" radius="md" >Previous</Button>}
+            { pageNumber == 0 ? <div></div> : 
+            <Button classNames={{root: classnames.navbutton,}} onClick={previousPage} variant="filled" color="#1B4965" size="md" radius="md" >Previous</Button>}
             <Button classNames={{root: classnames.navbutton,}} onClick={nextPage} variant="filled" color="#1B4965" size="md" radius="md">Next</Button>
           </Group>
           </div>

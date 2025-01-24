@@ -135,7 +135,6 @@ export interface OrderRequisition {
   isApprovedE3: boolean;
   isApprovedP1: boolean;
   recipientName: string;
-  disposalPlan: string;
   isActive: boolean;
   isComplete: boolean;
   remarks: string;
@@ -152,7 +151,6 @@ export interface OrderRequisitionToEdit {
   isApprovedE3: boolean;
   isApprovedP1: boolean;
   recipientName: string;
-  disposalPlan: string;
   isActive: boolean;
   isComplete: boolean;
   remarks: string;
@@ -218,6 +216,7 @@ export interface NewItemOrder {
   purchaseQty: number;
   unitPrice: number;
   itemSubtotal: number;
+  disposalPlan: string;
 }
 
 export interface OnDemandOrder {
@@ -228,7 +227,6 @@ export interface OnDemandOrder {
   orderTotal: number;
   recipientName: string;
   recipientLocation: string;
-  disposalPlan: string;
   purposeForPurchase: string;
   remarks: string;
 }
@@ -240,7 +238,6 @@ export interface OnDemandOrderToEdit {
   orderTotal: number;
   recipientName: string;
   recipientLocation: string;
-  disposalPlan: string;
   purposeForPurchase: string;
   remarks: string;
   [key: string]: any;

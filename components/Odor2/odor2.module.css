@@ -68,11 +68,4 @@
 }
 
 
-.searchItemDiv {
-    display: flex;
-    justify-content: space-evenly;
-    border: 1px solid red;
-    width: 50vw;
-    margin-bottom: 10px;
-}
 

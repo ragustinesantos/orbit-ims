@@ -24,9 +24,9 @@ export default function OdorComponent( {itemOrders, setitemOrders}: setpropstype
 
     // Move the State to Parent Component so the Data can be persisted Between ODOR Pages.
     //const [itemOrders, setitemOrders] = useState<ItemOrder[]>([]);
+    const { inventory, supplierList, setCurrentPage, setCurrentSection } = useInventory();
     const [newItem, setnewItem] = useState<ItemOrder>();
     const [searchValue, setSearchValue] = useState<string | null>('');
-    const { inventory, supplierList, setCurrentPage, setCurrentSection } = useInventory();
     const [showNotification, setShowNotification] = useState(false);
     const [notificationMessage, setNotificationMessage] = useState(<div />);
 

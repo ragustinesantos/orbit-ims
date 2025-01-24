@@ -4,6 +4,7 @@ import { ChangeEvent,useEffect, useState } from 'react';
 import { Table, Text, Button , SimpleGrid, TextInput, NumberInput} from '@mantine/core';
 import classnames from './odor2.module.css';
 import { NewItemOrder } from '@/app/_utils/schema';
+import CustomNotification from '@/components/CustomNotification/CustomNotification';
 
 interface setpropstype  {
   newItemOrders: NewItemOrder[];
@@ -22,6 +23,8 @@ export default function OdorComponent2({showTemplate,setShowTemplate, orderTotal
   const [newItemPurchaseQTY, setNewItemPurchaseQTY] = useState<string | number>('');
   const [newItemUnitPrice, setNewItemUnitPrice] = useState<string | number>('');
   const [disposalPlan, setDisposalPlan] = useState('');
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState(<div />);
 
   function handleShowTemplate () {
     setShowTemplate(true);
@@ -50,9 +53,24 @@ export default function OdorComponent2({showTemplate,setShowTemplate, orderTotal
     function handleAddItem ( ) {
       console.log('handle add item pressed')
 
-      if(newItemName != '' ) {
-
+      if(newItemName == '' ||
+        newItemDescription == '' ||
+        newItemProductCode == '' ||
+        newItemPurchaseQTY == '' ||
+        newItemUnitPrice == '' ||
+        disposalPlan == ''
+      ) {
+        setNotificationMessage(
+                CustomNotification(
+                  'error',
+                  'Fill Up Required Fields',
+                  'Please fill up all required fields before submitting.',
+                  setShowNotification
+                )
+              );
+              revealNotification();
       }
+      else{
       const newItem: NewItemOrder = {
         itemName: newItemName,
         itemDescription: newItemDescription,
@@ -60,9 +78,25 @@ export default function OdorComponent2({showTemplate,setShowTemplate, orderTotal
         purchaseQty: Number(newItemPurchaseQTY),
         unitPrice: Number(newItemUnitPrice),
         itemSubtotal: Number(newItemPurchaseQTY) * Number(newItemUnitPrice),
+        disposalPlan: disposalPlan
         };
           setNewItemOrders((prevOrders) => [...prevOrders, newItem]);
+          setNewItemName('')
+          setNewItemDescription('')
+          setNewItemProductCode('')
+          setNewItemPurchaseQTY(0)
+          setNewItemUnitPrice(0)
+          setDisposalPlan('')
       }
+    }
+
+    // Function to reveal any triggered notification
+    const revealNotification = () => {
+      setShowNotification(true);
+      setTimeout(() => {
+        setShowNotification(false);
+      }, 3000);
+    };
 
 
       // Everytime NewItemOrders is modified re calculate the order total
@@ -81,7 +115,7 @@ export default function OdorComponent2({showTemplate,setShowTemplate, orderTotal
   const template = (
           <div>
               <div className={classnames.templateTitleDiv}>
-                <div className={classnames.templateTitle}>Purchase Item</div>
+                <div className={classnames.templateTitle}>Non-Inventory Item</div>
                 <Button onClick={()=>setShowTemplate(false)} color="red">Cancel</Button>
               </div>
               <SimpleGrid cols={4} spacing="xl" verticalSpacing="xs">
@@ -147,14 +181,19 @@ export default function OdorComponent2({showTemplate,setShowTemplate, orderTotal
           <Table.Td style={{maxWidth: '150px', overflowX: 'scroll', scrollbarWidth: 'none' }}>{item?.itemName}</Table.Td>
           <Table.Td style={{maxWidth: '150px', overflowX: 'scroll', scrollbarWidth: 'none' }}>{item?.itemDescription}</Table.Td>
           <Table.Td style={{maxWidth: '150px', overflowX: 'scroll', scrollbarWidth: 'none' }}>{item?.productCode}</Table.Td>
+          <Table.Td style={{maxWidth: '150px', overflowX: 'scroll', scrollbarWidth: 'none' }}>{item?.disposalPlan}</Table.Td>
           <Table.Td>{'$'+item?.unitPrice} </Table.Td>
           <Table.Td>{'$'+(Math.round(item?.unitPrice * item?.purchaseQty * 100) / 100)}</Table.Td>
           <Table.Td>
-            <Button classNames={{root:`${classnames.buttonDecrement} ${classnames.button}`}} onClick={()=>(decrement(newItemOrders.indexOf(item)))} variant="filled" size="xs" radius="md" >-</Button>
+            <Button classNames={{root:`${classnames.buttonDecrement} ${classnames.button}`}} 
+            onClick={()=>(decrement(newItemOrders.indexOf(item)))} variant="filled" size="xs" radius="md" 
+            >-</Button>
             <span style={{ width: '30px', textAlign: 'center', display: 'inline-block' }}>
             {item.purchaseQty}
             </span>
-            <Button classNames={{root:`${classnames.buttonIncrement} ${classnames.button}`}} onClick={()=>(increment(newItemOrders.indexOf(item)))} variant="filled" size="xs" radius="md" >+</Button>
+            <Button classNames={{root:`${classnames.buttonIncrement} ${classnames.button}`}} 
+            onClick={()=>(increment(newItemOrders.indexOf(item)))} variant="filled" size="xs" radius="md" 
+            >+</Button>
           </Table.Td>
           <Table.Td >
             <Button onClick={()=>(handleRemoveItem(item))} color='red' variant="filled" size="xs" radius="xl">Delete</Button>
@@ -204,6 +243,7 @@ export default function OdorComponent2({showTemplate,setShowTemplate, orderTotal
                         <Table.Th>Item Name</Table.Th>
                         <Table.Th>Item Description</Table.Th>
                         <Table.Th>Product Code</Table.Th>
+                        <Table.Th>Disposal Plan</Table.Th>
                         <Table.Th>Unit Price</Table.Th>
                         <Table.Th>Item Subtotal</Table.Th>
                         <Table.Th>Purchase Quantity</Table.Th>
@@ -214,7 +254,7 @@ export default function OdorComponent2({showTemplate,setShowTemplate, orderTotal
                 </Table>
                 : <></>}
         </div>
-
+        {showNotification && notificationMessage}
     </div>
 
     );
