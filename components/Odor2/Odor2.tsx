@@ -1,13 +1,8 @@
 'useclient';
 
-
 import { ChangeEvent,useEffect, useState } from 'react';
-import { Group, Select, Table, Text, Button , SimpleGrid, TextInput, NumberInput} from '@mantine/core';
-import { Item } from '@/app/_utils/schema';
+import { Table, Text, Button , SimpleGrid, TextInput, NumberInput} from '@mantine/core';
 import classnames from './odor2.module.css';
-import { useInventory } from '@/app/_utils/inventory-context';
-import { number } from 'zod';
-import { ItemOrder } from '@/app/_utils/schema';
 import { NewItemOrder } from '@/app/_utils/schema';
 
 interface setpropstype  {
@@ -21,9 +16,6 @@ interface setpropstype  {
 
 export default function OdorComponent2({showTemplate,setShowTemplate, orderTotal,setOrderTotal, newItemOrders,setNewItemOrders}: setpropstype) {
 
-  
-
-  
   const [newItemName, setNewItemName] = useState('');
   const [newItemDescription, setNewItemDescription] = useState('');
   const [newItemProductCode, setNewItemProductCode] = useState('');
@@ -90,9 +82,9 @@ export default function OdorComponent2({showTemplate,setShowTemplate, orderTotal
           <div>
               <div className={classnames.templateTitleDiv}>
                 <div className={classnames.templateTitle}>Purchase Item</div>
-                <Button onClick={()=>setShowTemplate(false)} classNames={{root: classnames.buttonRemove,}}>Cancel</Button>
+                <Button onClick={()=>setShowTemplate(false)} color="red">Cancel</Button>
               </div>
-              <SimpleGrid style={{ border: '1px solid red'}} cols={4} spacing="xl" verticalSpacing="xs">
+              <SimpleGrid cols={4} spacing="xl" verticalSpacing="xs">
                 <TextInput
                   label="Item Name"
                   withAsterisk
@@ -116,7 +108,7 @@ export default function OdorComponent2({showTemplate,setShowTemplate, orderTotal
                   onChange={handleNewItemProductCode}
                 />
                 <div className={classnames.buttonDiv}>
-                <Button onClick={handleAddItem} classNames={{root: classnames.addButton,}}>Add</Button>
+                <Button onClick={handleAddItem}>Add</Button>
                 </div>
                 <NumberInput
                   label="Purchase Quantity"
@@ -149,7 +141,6 @@ export default function OdorComponent2({showTemplate,setShowTemplate, orderTotal
           </div>
     );
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     const rows = newItemOrders.map((item) => {
       return (
         <Table.Tr key={newItemOrders.indexOf(item)}>
@@ -166,7 +157,7 @@ export default function OdorComponent2({showTemplate,setShowTemplate, orderTotal
             <Button classNames={{root:`${classnames.buttonIncrement} ${classnames.button}`}} onClick={()=>(increment(newItemOrders.indexOf(item)))} variant="filled" size="xs" radius="md" >+</Button>
           </Table.Td>
           <Table.Td >
-            <Button classNames={{root:`${classnames.buttonRemove}`}} onClick={()=>(handleRemoveItem(item))} variant="filled" size="xs" radius="md">Delete</Button>
+            <Button onClick={()=>(handleRemoveItem(item))} color='red' variant="filled" size="xs" radius="xl">Delete</Button>
           </Table.Td>
         </Table.Tr>
       ) 
@@ -194,21 +185,20 @@ export default function OdorComponent2({showTemplate,setShowTemplate, orderTotal
 
 
     return (
-    <div  style={{ border: '1px solid red'}}>
+    <div>
       <Text classNames={{root: classnames.odorText,}}>On Demand Order Requisition</Text>
-      <div className={classnames.exteriorDiv}>
           {showTemplate ? template : 
             <div className={classnames.interiorDiv}>
               <Text classNames={{root: classnames.rootText,}}>Order Non Inventory Item</Text>
               <Text>Would you like to order a item that is not in the Inventory?</Text>
               <div>
-                <Button onClick={handleShowTemplate} >Yes</Button>
-              <Button onClick={handleShowTemplate} >No</Button> 
-              </div>   
+              <Button style={{marginLeft: '0.5vw'}} onClick={handleShowTemplate}>Yes</Button>
+              <Button style={{marginLeft: '0.5vw'}} onClick={handleShowTemplate}>No</Button> 
+              </div>
             </div>} 
             <div>{showTemplate ? 
-                  <Table stickyHeader stickyHeaderOffset={60} withColumnBorders= {true}
-                  striped={true} withTableBorder={true}>
+                  newItemOrders.length > 0 && 
+                  <Table striped={true}>
                     <Table.Thead>
                       <Table.Tr>
                         <Table.Th>Item Name</Table.Th>
@@ -224,7 +214,6 @@ export default function OdorComponent2({showTemplate,setShowTemplate, orderTotal
                 </Table>
                 : <></>}
         </div>
-      </div>
 
     </div>
 

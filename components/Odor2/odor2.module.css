@@ -1,16 +1,17 @@
-.selectRoot {
-    width: 50%;
+.templateTitleDiv {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.odorText {
-    font-size: 36px;
+.templateTitle {
+    font-size: 32px;
     font-weight: bold;
-    margin-top: 3vh;
 }
 
-.rootText {
-    font-size: 30px;
-    font-weight: bold;
+.buttonDiv {
+    display: flex;
+    align-items:flex-end;
 }
 
 .button {
@@ -33,77 +34,6 @@
     margin-right: 0.5vw;
 }
 
-.buttonRemove:hover {
-    background-color: red;
-}
-
-.exteriorDiv {
-    width: 80vw;
-    height: 80vh;
-    min-width: 50vh;
-    border: 1px solid blue;
-}
-
-.interiorDiv {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid blue;
-}
-
-.searchItemDiv {
-    display: flex;
-    justify-content: space-evenly;
-    border: 1px solid red;
-    width: 50vw;
-    margin-bottom: 10px;
-}
-
-.templateTitleDiv {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.templateTitle {
-    font-size: 32px;
-    font-weight: bold;
-}
-
-.addButton {
-    margin: none;
-}
-
-.buttonDiv {
-    border: 1px solid red;
-    display: flex;
-    align-items:flex-end;
-}
-
-
-.button {
-    background-color: #228BE6;
-    color: white;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.button:hover {
-    background-color: #1D7ED6;
-}
-
-.buttonRemove:hover {
-    background-color: rgb(232, 55, 55);
-}
-
-.buttonRemove{
-    background-color: red;
-}
-
-
-
 .orderTotalLabel {
     font-size: 14px;
     font-weight:700;
@@ -116,3 +46,33 @@
     margin-top: .3vh;
 
 }
+
+
+.odorText {
+    font-size: 48px;
+    font-weight: bold;
+    text-decoration: underline;
+    text-underline-offset: 8px;
+}
+
+.interiorDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.rootText {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+
+.searchItemDiv {
+    display: flex;
+    justify-content: space-evenly;
+    border: 1px solid red;
+    width: 50vw;
+    margin-bottom: 10px;
+}
+

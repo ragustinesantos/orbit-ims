@@ -1,27 +1,18 @@
-.rootText {
-    font-size: 32px;
-    font-weight: bold;
-    margin-top: 5vh;
-}
-
-
-.navButtonsDiv {
-    display: flex;
-    justify-content: space-evenly;
-    width: 30vw;
-    padding-bottom: 1vh;
-}
-
-.spacerDiv {
-    flex-grow: 1;
-}
-
 
 .outerSpacerDiv {
     display: flex;
     width: 100%;
 }
 
+.navButtonsDiv {
+    display: flex;
+    justify-content: space-evenly;
+    width: 30vw;
+}
+
+.spacerDiv {
+    flex-grow: 1;
+}
 
 .navbutton {
     width: 120px;

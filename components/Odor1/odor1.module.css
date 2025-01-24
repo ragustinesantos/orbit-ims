@@ -1,11 +1,12 @@
-.selectRoot {
+.selectBar {
     width: 50%;
 }
 
 .odorText {
-    font-size: 36px;
+    font-size: 48px;
     font-weight: bold;
-    margin-top: 3vh;
+    text-decoration: underline;
+    text-underline-offset: 8px;
 }
 
 .rootText {
@@ -33,44 +34,17 @@
     margin-right: 0.5vw;
 }
 
-.buttonRemove:hover {
-    background-color: red;
-}
 
-.exteriorDiv {
+.rootOuterGroup {
+    height: 95vh;
     display: flex;
-    justify-content: center;
-    width: 80vw;
-    min-height: 80vh;
-    min-width: 50vh;
-    border: 1px solid blue;
-}
 
-.interiorDiv {
-    margin-top: 20px;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid cyan;
-    min-width: 58vw;
-}
+  }
 
-.searchItemDiv {
+.searchGroup {
     display: flex;
-    justify-content: space-evenly;
-    border: 1px solid red;
-    margin-bottom: 10px;
-}
+    align-items: end;
+    justify-content: flex-start;
+    width: 100%;
+  }
 
-
-.orderTotalLabel {
-    font-size: 15px;
-    font-weight: 600;
-    margin-top: 3vh;
-
-}
-
-.orderTotalText {
-    font-size: 12px;
-    margin-top: 5vh;
-
-}

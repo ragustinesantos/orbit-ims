@@ -281,7 +281,7 @@ export const NAV_ITEMS: navCollection = {
     {
       label: 'ODOR',
       icon: IconNotes,
-      links: [{ label: 'Create On-demand Order Requisition', link: '/' }],
+      links: [{ label: 'Create On-demand Order Requisition', link: '/odor' }],
     },
     {
       label: 'Inventory',
