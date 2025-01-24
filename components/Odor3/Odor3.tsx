@@ -1,6 +1,5 @@
 'useclient';
 
-
 import { useEffect, useState } from 'react';
 import { Group, Select, Table, Text, Button } from '@mantine/core';
 import { Item } from '@/app/_utils/schema';
@@ -16,12 +15,12 @@ import CustomNotification from '../CustomNotification/CustomNotification';
 interface setpropstype  {
     itemOrders: ItemOrder[];
     newItemOrders: NewItemOrder[];
-    orderTotal: Number;
+    totalCost: Number;
   }
 
 
 
-export default function OdorComponent3( {itemOrders, newItemOrders,orderTotal}: setpropstype) {
+export default function OdorComponent3( {itemOrders, newItemOrders,totalCost}: setpropstype) {
 
     const { inventory, supplierList, setCurrentPage, setCurrentSection } = useInventory();
 
@@ -51,6 +50,7 @@ export default function OdorComponent3( {itemOrders, newItemOrders,orderTotal}: 
             <Table.Td style={{maxWidth: '150px', overflowX: 'scroll', scrollbarWidth: 'none' }}>{item?.itemDescription}</Table.Td>
             <Table.Td style={{maxWidth: '150px', overflowX: 'scroll', scrollbarWidth: 'none' }}>{item?.productCode}</Table.Td>
             <Table.Td style={{maxWidth: '150px', overflowX: 'scroll', scrollbarWidth: 'none' }}>{item?.disposalPlan}</Table.Td>
+            <Table.Td style={{maxWidth: '150px', overflowX: 'scroll', scrollbarWidth: 'none' }}>{item?.purposeForPurchase}</Table.Td>
             <Table.Td>{'$'+item?.unitPrice} </Table.Td>
             <Table.Td>{'$'+(Math.round(item?.unitPrice * item?.purchaseQty * 100) / 100)}</Table.Td>
             <Table.Td>
@@ -65,45 +65,50 @@ export default function OdorComponent3( {itemOrders, newItemOrders,orderTotal}: 
     return(
         <div>
             <Text classNames={{root: classnames.odorText,}}>On Demand Order Requisition</Text>
-            <div className={classnames.templateTitle}>Inventory Items</div>
             <div>{itemOrders.length > 0 && 
-                  <Table striped={true}>
-                  <Table.Thead>
-                    <Table.Tr>
-                      <Table.Th>Item ID</Table.Th>
-                      <Table.Th>Item</Table.Th>
-                      <Table.Th>Category</Table.Th>
-                      <Table.Th>Unit of Measurement</Table.Th>
-                      <Table.Th>Package Unit</Table.Th>
-                      <Table.Th>Supplier</Table.Th>
-                      <Table.Th>QTY</Table.Th>
-                    </Table.Tr>
-                  </Table.Thead>
-                  <Table.Tbody>{itemrows}</Table.Tbody>
-                </Table>}
-              </div>
-
-            <div className={classnames.templateTitle}>Non-Inventory Items</div>
-            <div>{newItemOrders.length > 0 && 
-                  <Table striped={true}>
+                  <div>
+                  <Text className={classnames.templateTitle}>Inventory Items</Text>
+                    <Table striped={true}>
                     <Table.Thead>
                       <Table.Tr>
-                        <Table.Th>Item Name</Table.Th>
-                        <Table.Th>Item Description</Table.Th>
-                        <Table.Th>Product Code</Table.Th>
-                        <Table.Th>Disposal Plan</Table.Th>
-                        <Table.Th>Unit Price</Table.Th>
-                        <Table.Th>Item Subtotal</Table.Th>
-                        <Table.Th>Purchase Quantity</Table.Th>
+                        <Table.Th>Item ID</Table.Th>
+                        <Table.Th>Item</Table.Th>
+                        <Table.Th>Category</Table.Th>
+                        <Table.Th>Unit of Measurement</Table.Th>
+                        <Table.Th>Package Unit</Table.Th>
+                        <Table.Th>Supplier</Table.Th>
+                        <Table.Th>QTY</Table.Th>
                       </Table.Tr>
                     </Table.Thead>
-                    <Table.Tbody>{rows}</Table.Tbody>
-                </Table>}
+                    <Table.Tbody>{itemrows}</Table.Tbody>
+                    </Table>
+                  </div>}
             </div>
-            <div>
-                <Text classNames={{root: classnames.orderTotalLabel,}}>Order Total</Text>
-                <Text classNames={{root: classnames.orderTotalText,}}>{'$'+orderTotal}</Text>
+            <div>{newItemOrders.length > 0 &&
+                  <div> 
+                    <Text className={classnames.templateTitle}>Non-Inventory Items</Text>
+                    <Table striped={true}>
+                      <Table.Thead>
+                        <Table.Tr>
+                          <Table.Th>Item Name</Table.Th>
+                          <Table.Th>Item Description</Table.Th>
+                          <Table.Th>Product Code</Table.Th>
+                          <Table.Th>Disposal Plan</Table.Th>
+                          <Table.Th>Purpose for Purchase</Table.Th>
+                          <Table.Th>Unit Price</Table.Th>
+                          <Table.Th>Item Subtotal</Table.Th>
+                          <Table.Th>Purchase Quantity</Table.Th>
+                        </Table.Tr>
+                      </Table.Thead>
+                      <Table.Tbody>{rows}</Table.Tbody>
+                    </Table>
+                      <div>
+                      <Text classNames={{root: classnames.orderTotalLabel,}}>Total Cost</Text>
+                      <Text classNames={{root: classnames.orderTotalText,}}>{'$'+totalCost}</Text>
+                      </div>
+                  </div>}
             </div>
+            
         </div>
     )
 }

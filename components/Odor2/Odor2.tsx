@@ -9,13 +9,14 @@ import CustomNotification from '@/components/CustomNotification/CustomNotificati
 interface setpropstype  {
   newItemOrders: NewItemOrder[];
   setNewItemOrders: React.Dispatch<React.SetStateAction<NewItemOrder[]>>;
-  orderTotal: Number;
-  setOrderTotal: React.Dispatch<React.SetStateAction<Number>>;
+  totalCost: Number;
+  setTotalCost: React.Dispatch<React.SetStateAction<Number>>;
   showTemplate: boolean;
   setShowTemplate: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function OdorComponent2({showTemplate,setShowTemplate, orderTotal,setOrderTotal, newItemOrders,setNewItemOrders}: setpropstype) {
+export default function OdorComponent2({ newItemOrders,setNewItemOrders,totalCost,setTotalCost,
+                                         showTemplate,setShowTemplate,}: setpropstype) {
 
   const [newItemName, setNewItemName] = useState('');
   const [newItemDescription, setNewItemDescription] = useState('');
@@ -23,6 +24,7 @@ export default function OdorComponent2({showTemplate,setShowTemplate, orderTotal
   const [newItemPurchaseQTY, setNewItemPurchaseQTY] = useState<string | number>('');
   const [newItemUnitPrice, setNewItemUnitPrice] = useState<string | number>('');
   const [disposalPlan, setDisposalPlan] = useState('');
+  const [purposeForPurchase, setPurposeForPurchase] = useState('');
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState(<div />);
 
@@ -30,24 +32,25 @@ export default function OdorComponent2({showTemplate,setShowTemplate, orderTotal
     setShowTemplate(true);
   }
 
-
   const handleNewItemNameChange = (event: ChangeEvent<HTMLInputElement>) => {
       setNewItemName(event.target.value);
-      console.log(newItemName)}
+  }
 
   const handleNewItemDescriptionChange = (event: ChangeEvent<HTMLInputElement>) =>{
     setNewItemDescription(event.target.value);
-    console.log(newItemDescription)
   }
   const handleNewItemProductCode = (event: ChangeEvent<HTMLInputElement>) =>{
     setNewItemProductCode(event.target.value);
-    console.log(newItemDescription)
   }
 
   const handleSetDisposalPlan = (event: ChangeEvent<HTMLInputElement>) =>{
     setDisposalPlan(event.target.value);
-    console.log(disposalPlan)
   }
+
+  const handleSetPurposeForPurchase = (event: ChangeEvent<HTMLInputElement>) =>{
+    setPurposeForPurchase(event.target.value);
+  }
+
 
     // Create new Object and add to new Item orders Array, Calculate Subtotal
     function handleAddItem ( ) {
@@ -58,7 +61,8 @@ export default function OdorComponent2({showTemplate,setShowTemplate, orderTotal
         newItemProductCode == '' ||
         newItemPurchaseQTY == '' ||
         newItemUnitPrice == '' ||
-        disposalPlan == ''
+        disposalPlan == '' ||
+        purposeForPurchase == ''
       ) {
         setNotificationMessage(
                 CustomNotification(
@@ -77,8 +81,10 @@ export default function OdorComponent2({showTemplate,setShowTemplate, orderTotal
         productCode: newItemProductCode,
         purchaseQty: Number(newItemPurchaseQTY),
         unitPrice: Number(newItemUnitPrice),
+        disposalPlan: disposalPlan,
+        purposeForPurchase: purposeForPurchase,
         itemSubtotal: Number(newItemPurchaseQTY) * Number(newItemUnitPrice),
-        disposalPlan: disposalPlan
+        
         };
           setNewItemOrders((prevOrders) => [...prevOrders, newItem]);
           setNewItemName('')
@@ -87,6 +93,7 @@ export default function OdorComponent2({showTemplate,setShowTemplate, orderTotal
           setNewItemPurchaseQTY(0)
           setNewItemUnitPrice(0)
           setDisposalPlan('')
+          setPurposeForPurchase('')
       }
     }
 
@@ -99,14 +106,14 @@ export default function OdorComponent2({showTemplate,setShowTemplate, orderTotal
     };
 
 
-      // Everytime NewItemOrders is modified re calculate the order total
+      // Everytime NewItemOrders is modified re calculate the total Cost
       useEffect(() => {
         setTimeout(function(){
           let holder: number = 0;
           for (let item of newItemOrders) {
           holder = holder + (item.purchaseQty * item.unitPrice);    
         }
-        setOrderTotal(Math.round(holder * 100) / 100);
+        setTotalCost(Math.round(holder * 100) / 100);
         }, 200);
       },[newItemOrders]);
     
@@ -116,13 +123,14 @@ export default function OdorComponent2({showTemplate,setShowTemplate, orderTotal
           <div>
               <div className={classnames.templateTitleDiv}>
                 <div className={classnames.templateTitle}>Non-Inventory Item</div>
-                <Button onClick={()=>setShowTemplate(false)} color="red">Cancel</Button>
+                
               </div>
-              <SimpleGrid cols={4} spacing="xl" verticalSpacing="xs">
+              <SimpleGrid cols={4} spacing="xs" verticalSpacing="xs">
                 <TextInput
                   label="Item Name"
                   withAsterisk
                   placeholder="Enter Item Name..."
+                  size="xs"
                   value={newItemName}
                   onChange={handleNewItemNameChange}
                 />
@@ -131,6 +139,7 @@ export default function OdorComponent2({showTemplate,setShowTemplate, orderTotal
                   label="Item Description or Source Link"
                   withAsterisk
                   placeholder="Description or URL..."
+                  size="xs"
                   value={newItemDescription}
                   onChange={handleNewItemDescriptionChange}
                 />
@@ -138,16 +147,19 @@ export default function OdorComponent2({showTemplate,setShowTemplate, orderTotal
                   label="Product Code"
                   withAsterisk
                   placeholder="Enter ID# or SIN#..."
+                  size="xs"
                   value={newItemProductCode}
                   onChange={handleNewItemProductCode}
                 />
                 <div className={classnames.buttonDiv}>
                 <Button onClick={handleAddItem}>Add</Button>
+                <Button classNames={{root: classnames.cancel}} onClick={()=>setShowTemplate(false)} color="red">Cancel</Button>
                 </div>
                 <NumberInput
                   label="Purchase Quantity"
                   withAsterisk
                   placeholder="Enter Quantity of item..."
+                  size="xs"
                   value={newItemPurchaseQTY}
                   onChange={setNewItemPurchaseQTY}
                   allowDecimal={false}
@@ -156,6 +168,7 @@ export default function OdorComponent2({showTemplate,setShowTemplate, orderTotal
                   label="Unit Price"
                   withAsterisk
                   placeholder="Enter Cost of one item..."
+                  size="xs"
                   value={newItemUnitPrice}
                   onChange={setNewItemUnitPrice}
                   min={0}
@@ -164,13 +177,22 @@ export default function OdorComponent2({showTemplate,setShowTemplate, orderTotal
                   label="Disposal Plan"
                   withAsterisk
                   placeholder="Recyclable..."
+                  size="xs"
                   value={disposalPlan}
                   onChange={handleSetDisposalPlan}
                 />
                 <div>
-                  <Text classNames={{root: classnames.orderTotalLabel,}}>Order Total</Text>
-                  <Text classNames={{root: classnames.orderTotalText,}}>{'$'+orderTotal}</Text>
+                  <Text classNames={{root: classnames.orderTotalLabel,}}>Total Cost</Text>
+                  <Text classNames={{root: classnames.orderTotalText,}}>{'$'+totalCost}</Text>
                 </div>
+                <TextInput
+                  label="Purpose For Purchase"
+                  withAsterisk
+                  placeholder="Please explain why we need this item..."
+                  size="xs"
+                  value={purposeForPurchase}
+                  onChange={handleSetPurposeForPurchase}
+                />
               </SimpleGrid>
           </div>
     );
@@ -178,10 +200,11 @@ export default function OdorComponent2({showTemplate,setShowTemplate, orderTotal
     const rows = newItemOrders.map((item) => {
       return (
         <Table.Tr key={newItemOrders.indexOf(item)}>
-          <Table.Td style={{maxWidth: '150px', overflowX: 'scroll', scrollbarWidth: 'none' }}>{item?.itemName}</Table.Td>
-          <Table.Td style={{maxWidth: '150px', overflowX: 'scroll', scrollbarWidth: 'none' }}>{item?.itemDescription}</Table.Td>
-          <Table.Td style={{maxWidth: '150px', overflowX: 'scroll', scrollbarWidth: 'none' }}>{item?.productCode}</Table.Td>
-          <Table.Td style={{maxWidth: '150px', overflowX: 'scroll', scrollbarWidth: 'none' }}>{item?.disposalPlan}</Table.Td>
+          <Table.Td style={{maxWidth: '100px', overflowX: 'scroll', scrollbarWidth: 'none', whiteSpace: 'nowrap', }}>{item?.itemName}</Table.Td>
+          <Table.Td style={{maxWidth: '100px', overflowX: 'scroll', scrollbarWidth: 'none', whiteSpace: 'nowrap', }}>{item?.itemDescription}</Table.Td>
+          <Table.Td style={{maxWidth: '100px', overflowX: 'scroll', scrollbarWidth: 'none', whiteSpace: 'nowrap', }}>{item?.productCode}</Table.Td>
+          <Table.Td style={{maxWidth: '100px', overflowX: 'scroll', scrollbarWidth: 'none', whiteSpace: 'nowrap', }}>{item?.disposalPlan}</Table.Td>
+          <Table.Td style={{maxWidth: '100px', overflowX: 'scroll', scrollbarWidth: 'none', whiteSpace: 'nowrap',}}>{item?.purposeForPurchase}</Table.Td>
           <Table.Td>{'$'+item?.unitPrice} </Table.Td>
           <Table.Td>{'$'+(Math.round(item?.unitPrice * item?.purchaseQty * 100) / 100)}</Table.Td>
           <Table.Td>
@@ -202,26 +225,24 @@ export default function OdorComponent2({showTemplate,setShowTemplate, orderTotal
       ) 
     });
 
-    // need to redo the math for the subtotal each time.
+
     function increment (index : number) {
       setNewItemOrders((prevItems) =>
         prevItems.map((item) => newItemOrders.indexOf(item) === index ? 
         { ...item, purchaseQty: item.purchaseQty + 1, itemSubtotal: item.purchaseQty * item.unitPrice } : item));
     }
-    // need to redo the math for the subtotal each time.
+
     function decrement (index : number) {
       setNewItemOrders((prevItems) =>
         prevItems.map((item) => newItemOrders.indexOf(item) === index && item.purchaseQty > 1 ? 
         { ...item, purchaseQty: item.purchaseQty - 1, itemSubtotal: item.purchaseQty * item.unitPrice } : item));
     }
-    // need to redo the math for the subtotal each time.
+
     function handleRemoveItem (item : NewItemOrder) {
       let position = newItemOrders.indexOf(item);
       newItemOrders.splice(position,1);
       setNewItemOrders([...newItemOrders]);
     }
-
-
 
     return (
     <div>
@@ -244,6 +265,7 @@ export default function OdorComponent2({showTemplate,setShowTemplate, orderTotal
                         <Table.Th>Item Description</Table.Th>
                         <Table.Th>Product Code</Table.Th>
                         <Table.Th>Disposal Plan</Table.Th>
+                        <Table.Th>Purpose for Purchase</Table.Th>
                         <Table.Th>Unit Price</Table.Th>
                         <Table.Th>Item Subtotal</Table.Th>
                         <Table.Th>Purchase Quantity</Table.Th>

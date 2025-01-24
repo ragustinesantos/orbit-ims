@@ -3,10 +3,8 @@
 
 import { useEffect, useState } from 'react';
 import { Group, Select, Table, Text, Button } from '@mantine/core';
-import { Item } from '@/app/_utils/schema';
 import classnames from './odor1.module.css';
 import { useInventory } from '@/app/_utils/inventory-context';
-import { number } from 'zod';
 import { ItemOrder } from '@/app/_utils/schema';
 import CustomNotification from '../CustomNotification/CustomNotification';
 
@@ -21,11 +19,7 @@ interface setpropstype  {
 
 export default function OdorComponent( {itemOrders, setitemOrders}: setpropstype) {
 
-
-    // Move the State to Parent Component so the Data can be persisted Between ODOR Pages.
-    //const [itemOrders, setitemOrders] = useState<ItemOrder[]>([]);
-    const { inventory, supplierList, setCurrentPage, setCurrentSection } = useInventory();
-    const [newItem, setnewItem] = useState<ItemOrder>();
+    const { inventory, supplierList,} = useInventory();
     const [searchValue, setSearchValue] = useState<string | null>('');
     const [showNotification, setShowNotification] = useState(false);
     const [notificationMessage, setNotificationMessage] = useState(<div />);
@@ -85,13 +79,13 @@ export default function OdorComponent( {itemOrders, setitemOrders}: setpropstype
     function increment (id : string) {
       setitemOrders((prevItems) =>
         prevItems.map((item) => item.itemId === id ? 
-        { ...item, orderQty: item.orderQty + 1 } : item));
+        { ...item, orderQty: item.orderQty + 1, pendingQty: item.pendingQty + 1 } : item));
     }
 
     function decrement (id : string) {
       setitemOrders((prevItems) =>
         prevItems.map((item) => item.itemId === id && item.orderQty > 1 ? 
-        { ...item, orderQty: item.orderQty - 1 } : item));
+        { ...item, orderQty: item.orderQty - 1, pendingQty: item.pendingQty - 1 } : item));
     }
 
     function handleRemoveItem (item : ItemOrder) {
@@ -125,53 +119,53 @@ export default function OdorComponent( {itemOrders, setitemOrders}: setpropstype
       });
 
     return (
-<div>
-      <Text classNames={{root: classnames.odorText,}}>On Demand Order Requisition</Text>
-                <Group
-                  classNames={{
-                    root: classnames.searchGroup,
-                  }}
-                >
-                  <Select
-                  label="Add an item"
-                  placeholder="Select an item from the list..."
-                  data={inventory?.map((item) => ({
-                    value: item.itemId,
-                    label: item.itemName,
-                    invenvtoryID: item.inventoryId,
-                    }))}
-                    allowDeselect 
-                    searchable
-                    value={searchValue || null}
-                    onChange={setSearchValue}  
-                    classNames={{root: classnames.selectBar,}}
-                  size="sm" 
-                  withAsterisk
-                  />
-                  <Button style={{ marginLeft: '1vw'}} variant="filled" color="#1B4965" size="sm" mt="xl" onClick={handleAddItem}>
-                  +
-                  </Button>
-                </Group> 
-              <div>
-                  {itemOrders.length > 0 && 
-                  <Table striped={true}>
-                  <Table.Thead>
-                    <Table.Tr>
-                      <Table.Th>Item ID</Table.Th>
-                      <Table.Th>Item</Table.Th>
-                      <Table.Th>Category</Table.Th>
-                      <Table.Th>Unit of Measurement</Table.Th>
-                      <Table.Th>Package Unit</Table.Th>
-                      <Table.Th>Supplier</Table.Th>
-                      <Table.Th>QTY</Table.Th>
-                      <Table.Th>Delete</Table.Th>
-                    </Table.Tr>
-                  </Table.Thead>
-                  <Table.Tbody>{rows}</Table.Tbody>
-                </Table>}
-              </div> 
-        {showNotification && notificationMessage}
-        </div>
+      <div>
+        <Text classNames={{root: classnames.odorText,}}>On Demand Order Requisition</Text>
+              <Group
+                classNames={{
+                  root: classnames.searchGroup,
+                }}
+              >
+                <Select
+                label="Add an item"
+                placeholder="Select an item from the list..."
+                data={inventory?.map((item) => ({
+                  value: item.itemId,
+                  label: item.itemName,
+                  invenvtoryID: item.inventoryId,
+                  }))}
+                  allowDeselect 
+                  searchable
+                  value={searchValue || null}
+                  onChange={setSearchValue}  
+                  classNames={{root: classnames.selectBar,}}
+                size="sm" 
+                withAsterisk
+                />
+                <Button style={{ marginLeft: '1vw'}} variant="filled" color="#1B4965" size="sm" mt="xl" onClick={handleAddItem}>
+                +
+                </Button>
+              </Group> 
+            <div>
+                {itemOrders.length > 0 && 
+                <Table striped={true}>
+                <Table.Thead>
+                  <Table.Tr>
+                    <Table.Th>Item ID</Table.Th>
+                    <Table.Th>Item</Table.Th>
+                    <Table.Th>Category</Table.Th>
+                    <Table.Th>Unit of Measurement</Table.Th>
+                    <Table.Th>Package Unit</Table.Th>
+                    <Table.Th>Supplier</Table.Th>
+                    <Table.Th>QTY</Table.Th>
+                    <Table.Th>Delete</Table.Th>
+                  </Table.Tr>
+                </Table.Thead>
+                <Table.Tbody>{rows}</Table.Tbody>
+              </Table>}
+            </div> 
+          {showNotification && notificationMessage}
+      </div>
     );
   }
   

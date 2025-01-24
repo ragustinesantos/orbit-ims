@@ -213,10 +213,11 @@ export interface NewItemOrder {
   itemName: string;
   itemDescription: string;
   productCode: string;
+  disposalPlan: string;
+  purposeForPurchase: string;
   purchaseQty: number;
   unitPrice: number;
   itemSubtotal: number;
-  disposalPlan: string;
 }
 
 export interface OnDemandOrder {
@@ -227,7 +228,6 @@ export interface OnDemandOrder {
   orderTotal: number;
   recipientName: string;
   recipientLocation: string;
-  purposeForPurchase: string;
   remarks: string;
 }
 
@@ -238,7 +238,6 @@ export interface OnDemandOrderToEdit {
   orderTotal: number;
   recipientName: string;
   recipientLocation: string;
-  purposeForPurchase: string;
   remarks: string;
   [key: string]: any;
 }

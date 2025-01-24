@@ -38,15 +38,21 @@
     font-size: 14px;
     font-weight:700;
     margin-top: .8vh;
-
+}
+.cancel {
+    margin-left: 1vw;
 }
 
 .orderTotalText {
     font-size: 14px;
     margin-top: .3vh;
-
 }
 
+.rowStyleOverFlow {
+    max-width: 150px;
+    overflow-x: scroll;
+    scrollbar-width: 'none';
+}
 
 .odorText {
     font-size: 48px;
