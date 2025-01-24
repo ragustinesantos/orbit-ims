@@ -124,7 +124,6 @@ export interface ChatToEdit {
 }
 
 export interface OrderRequisition {
-  currentOr: any;
   requisitionId: string;
   requisitionType: string;
   requisitionTypeId: string;
