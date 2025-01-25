@@ -1,3 +1,4 @@
+"use client"
 import { Group, Table, TableData, Title, Text } from "@mantine/core";
 import classnames from "./RequisitionProcessTable.module.css";
 import { useInventory } from "@/app/_utils/inventory-context";
