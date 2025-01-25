@@ -6,6 +6,7 @@ import {
   EmployeeToEdit,
   Item,
   ItemToEdit,
+  OnDemandOrder,
   OrderRequisition,
   RecurringOrder,
   RecurringOrderTemplate,
@@ -201,6 +202,44 @@ export const fetchRecurringOrderRequisition = async (rorId: string) => {
 
   return data;
 };
+
+export const fetchOnDemandOrderRequisitions = async (
+  setOnDemandOrders: (onDemandOrders: OnDemandOrder[]) => void
+) => {
+  try {
+    const response = await fetch(`/api/odor`);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+    }
+
+    const data = await response.json();
+
+    setOnDemandOrders(data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// Fetch a single on-demand order requisition based on the odorId parameter
+export const fetchOnDemandOrderRequisition = async (odorId: string) => {
+  try {
+    const response = await fetch(`/api/odor/${odorId}`);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 
 // Fetch all employee chats
 export const fetchChats = async (
