@@ -125,7 +125,7 @@ export default function RorModal({ recurringOrder, isOpened, isClosed }: rorModa
         classNames={{ table: classnames.rootApprovalTable, td: classnames.tableTd }}
         data={approvalData}
       />
-      {currentEmployee?.employeeLevel.includes('SA') && currentOr.isApprovedP1 == null && (
+      {currentEmployee?.employeeLevel.includes('P1') && currentOr.isApprovedP1 == null && (
         <Group classNames={{ root: classnames.rootBtnArea }}>
           <Button classNames={{ root: classnames.rootBtn }} onClick={() => handleApproval(true)}>
             Approve
