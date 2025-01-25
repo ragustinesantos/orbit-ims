@@ -7,8 +7,8 @@ import { useState } from "react";
 
 export default function CreateRORPage() {
 
-    const [currentStep, setCurrentStep] = useState(2);
-    const steps: String[] = ['Template', 'Order', 'Confirmation', 'Summary'];
+    const [currentStep, setCurrentStep] = useState(3);
+    const steps: String[] = ['Template', 'Order', 'Confirmation', 'Summary', 'Extra'];
 
     return (
         <main style={{ display: 'flex', width: '100vw' }}>

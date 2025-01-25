@@ -59,7 +59,6 @@
 }
 
 .barContainer {
-    width: 180px;
     height: 60px;
     display: flex;
     align-items: center;

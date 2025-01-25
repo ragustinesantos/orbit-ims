@@ -11,18 +11,23 @@ export default function WizardProgress(props: WizardProgressProps) {
     const [progressBar, setProgressBar] = useState(<div />);
     const stepList = props.stepList;
     const currentStep = props.currentStep;
+    // Adjust spacing based on number of steps
+    const progressBarWidth = {
+        "width": 720 / stepList.length + "px",
+    }
 
+    // This would return the type of bar in between the steps
     const progressBarType = (rendered: boolean) => {
         if (rendered) {
             return (
-                <div className={classes.barContainer}>
+                <div style={progressBarWidth} className={classes.barContainer}>
                     <div className={classes.progressBar}></div>
                 </div>
             );
         }
         else {
             return (
-                <div className={classes.barContainer}>
+                <div style={progressBarWidth} className={classes.barContainer}>
                     <div className={classes.awaitingBar}>
                         ||||||||||||||||||||
                     </div>
@@ -31,6 +36,7 @@ export default function WizardProgress(props: WizardProgressProps) {
         }
     }
 
+    // This would determine if the step number if filled or empty
     const stepType = (rendered: boolean, stepName: String, index: number) => {
         if (rendered) {
             return (
