@@ -202,6 +202,31 @@ export const fetchRecurringOrderRequisition = async (rorId: string) => {
   return data;
 };
 
+// Fetch a single order requisition based on the requisitionId parameter
+export const patchRorApproval = async (requisitionId: string, isApproved: boolean) => {
+
+  console.log(isApproved)
+
+  const request = {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({isApprovedP1: isApproved}),
+  };
+
+  const response = await fetch(`/api/order-requisitions/${requisitionId}`, request);
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+  }
+
+  const data = await response.json();
+
+  return data;
+};
+
 // Fetch all employee chats
 export const fetchChats = async (
   employeeId: string | undefined,

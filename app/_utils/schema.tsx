@@ -132,9 +132,9 @@ export interface OrderRequisition {
   approvalE2: string;
   approvalE3: string;
   approvalP1: string;
-  isApprovedE2: boolean;
-  isApprovedE3: boolean;
-  isApprovedP1: boolean;
+  isApprovedE2: boolean | null;
+  isApprovedE3: boolean | null;
+  isApprovedP1: boolean | null;
   isActive: boolean;
   isComplete: boolean;
   remarks: string;
@@ -148,9 +148,9 @@ export interface OrderRequisitionToEdit {
   approvalE2: string;
   approvalE3: string;
   approvalP1: string;
-  isApprovedE2: boolean;
-  isApprovedE3: boolean;
-  isApprovedP1: boolean;
+  isApprovedE2: boolean | null;
+  isApprovedE3: boolean | null;
+  isApprovedP1: boolean | null;
   isActive: boolean;
   isComplete: boolean;
   remarks: string;
@@ -166,9 +166,9 @@ export const defaultOrderRequisition: OrderRequisition = {
   approvalE2: '',
   approvalE3: '',
   approvalP1: '',
-  isApprovedE2: false,
-  isApprovedE3: false,
-  isApprovedP1: false,
+  isApprovedE2: null,
+  isApprovedE3: null,
+  isApprovedP1: null,
   isActive: true,
   isComplete: false,
   remarks: '',
