@@ -24,6 +24,7 @@ export default function RorModal({ recurringOrder, isOpened, isClosed }: rorModa
 
   const [employee, setEmployee] = useState<Employee>({ ...defaultEmployee });
   const [currentOr, setCurrentOr] = useState<OrderRequisition>({ ...defaultOrderRequisition });
+  const [p1Approver, setP1Approver] = useState<Employee>({ ...defaultEmployee });
   const [orDate, setOrDate] = useState<string>('');
   const [approval, setApproval] = useState<boolean>(false);
 
@@ -49,13 +50,22 @@ export default function RorModal({ recurringOrder, isOpened, isClosed }: rorModa
     setOrDate(date.toLocaleString('en-us'));
   }, [currentOr]);
 
+  // Retrieve P1 approver information from
+  useEffect(() => {
+    const retrieveApproverP1ById = async () => {
+      currentOr && setP1Approver(await fetchEmployee(currentOr?.approvalP1));
+    };
+    retrieveApproverP1ById();
+  }, [currentOr]);
+
   const handleApproval = async (isApproved: boolean) => {
     // Set approval value to trigger order requisition retrieval useEffect
-    setApproval(true)
+    setApproval(true);
 
     // Send a request for approval update
     try {
-      await patchRorApproval(currentOr.requisitionId, isApproved);
+      currentEmployee &&
+        (await patchRorApproval(currentOr.requisitionId, isApproved, currentEmployee.employeeId));
     } catch (error) {
       console.log(error);
     }
@@ -90,7 +100,7 @@ export default function RorModal({ recurringOrder, isOpened, isClosed }: rorModa
   const approvalData: TableData = {
     head: [
       currentOr.isApprovedP1 !== null
-        ? `${currentOr.isApprovedP1 ? 'Approved' : 'Rejected'} By: ${currentOr.approvalP1}`
+        ? `${currentOr.isApprovedP1 ? 'Approved' : 'Rejected'} By: ${p1Approver?.firstName} ${p1Approver?.lastName}`
         : 'P1 Approval',
     ],
     body: [[<ApprovalBadge isApproved={currentOr.isApprovedP1} />]],
@@ -118,7 +128,7 @@ export default function RorModal({ recurringOrder, isOpened, isClosed }: rorModa
         <TextInput disabled label="Requisition ID" value={currentOr.requisitionId} size="md" />
       </SimpleGrid>
       <Table striped classNames={{ table: classnames.rootTable }} data={tableData} />
-      <Text classNames={{root: classnames.rootHeaderTxt}}>Approvals:</Text>
+      <Text classNames={{ root: classnames.rootHeaderTxt }}>Approvals:</Text>
       <Table
         withTableBorder
         withColumnBorders
@@ -126,12 +136,16 @@ export default function RorModal({ recurringOrder, isOpened, isClosed }: rorModa
         classNames={{ table: classnames.rootApprovalTable, td: classnames.tableTd }}
         data={approvalData}
       />
-      {currentEmployee?.employeeLevel.includes('P1') && currentOr.isApprovedP1 == null && (
+      {currentEmployee?.employeeLevel.includes('SA') && currentOr.isApprovedP1 == null && (
         <Group classNames={{ root: classnames.rootBtnArea }}>
           <Button classNames={{ root: classnames.rootBtn }} onClick={() => handleApproval(true)}>
             Approve
           </Button>
-          <Button classNames={{ root: classnames.rootBtn }} onClick={() => handleApproval(false)} color='red'>
+          <Button
+            classNames={{ root: classnames.rootBtn }}
+            onClick={() => handleApproval(false)}
+            color="red"
+          >
             Reject
           </Button>
         </Group>

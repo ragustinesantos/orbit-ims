@@ -203,7 +203,7 @@ export const fetchRecurringOrderRequisition = async (rorId: string) => {
 };
 
 // Fetch a single order requisition based on the requisitionId parameter
-export const patchRorApproval = async (requisitionId: string, isApproved: boolean) => {
+export const patchRorApproval = async (requisitionId: string, isApproved: boolean, approverId: string) => {
 
   console.log(isApproved)
 
@@ -212,7 +212,7 @@ export const patchRorApproval = async (requisitionId: string, isApproved: boolea
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({isApprovedP1: isApproved}),
+    body: JSON.stringify({isApprovedP1: isApproved, approvalP1: approverId}),
   };
 
   const response = await fetch(`/api/order-requisitions/${requisitionId}`, request);
@@ -221,10 +221,6 @@ export const patchRorApproval = async (requisitionId: string, isApproved: boolea
     const errorText = await response.text();
     throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
   }
-
-  const data = await response.json();
-
-  return data;
 };
 
 // Fetch all employee chats
