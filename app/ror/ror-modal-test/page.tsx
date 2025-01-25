@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { Table, TableData, Text } from '@mantine/core';
 import { OrderRequisition, RecurringOrder } from '@/app/_utils/schema';
 import { fetchOrderRequisitions, fetchRecurringOrderRequisitions } from '@/app/_utils/utility';
+import CustomNotification from '@/components/CustomNotification/CustomNotification';
 import { NavbarNested } from '@/components/NavbarNested/NavbarNested';
 import RorModal from '@/components/RorModal/RorModal';
 
@@ -15,6 +16,10 @@ export default function RorModalTestPage() {
   // Sample states to store sample data to generate modals from
   const [allOrs, setAllOrs] = useState<OrderRequisition[] | null>(null);
   const [allRor, setAllRor] = useState<RecurringOrder[] | null>(null);
+
+  // Show notification state
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState(<div />);
 
   // Sample use effect to store order requisitions and ror's for mapping
   useEffect(() => {
@@ -35,6 +40,38 @@ export default function RorModalTestPage() {
     setModalStateTracker((prev) => ({ ...prev, [rorId]: !prev[rorId] }));
   };
 
+  // Function that should be passed to the modal to trigger the notification on the page it will be implemented on
+  const handleApprovalActivity = (message: string, rorId: string, status: string) => {
+    if (message === 'success') {
+      setNotificationMessage(
+        CustomNotification(
+          'success',
+          'ROR Approval',
+          `ROR ID ${rorId} was ${status}.`,
+          setShowNotification
+        )
+      );
+    } else if (message === 'error') {
+      setNotificationMessage(
+        CustomNotification(
+          'error',
+          'Error Encountered',
+          `Unexpected Error encountered. ROR ID ${rorId} was not ${status}. Please try again.`,
+          setShowNotification
+        )
+      );
+    }
+    revealNotification();
+  };
+
+  // Function to reveal any triggered notification
+  const revealNotification = () => {
+    setShowNotification(true);
+    setTimeout(() => {
+      setShowNotification(false);
+    }, 3000);
+  };
+
   // Map through the desired list and return components only for active requisitions
   const mappedRor = allRor?.map((ror) => {
     // Cross-reference and retrieve a matching order requisition based on the requisitionId stored in the ror
@@ -46,11 +83,13 @@ export default function RorModalTestPage() {
         <>
           {/* The modal accepts the current ror in the iteration for the details, 
           isOpened that sets the visibility of the modal and defaults as false, 
-          isClosed to toggle the visibility back to false */}
+          isClosed to toggle the visibility back to false, 
+          handleApprovalActivity to trigger the appropriate notification on the page */}
           <RorModal
             recurringOrder={ror}
             isOpened={!!modalStateTracker[ror.rorId]}
             isClosed={() => setModalStateTracker((prev) => ({ ...prev, [ror.rorId]: false }))}
+            handleApprovalActivity={handleApprovalActivity}
           />
           {/* When the ID text is clicked, this will toggle the state of the modal visibility. 
           The first time this is clicked for the said ror.rorId, 
@@ -87,6 +126,7 @@ export default function RorModalTestPage() {
       >
         <Table striped data={tableData} />
       </div>
+      {showNotification && notificationMessage}
     </main>
   );
 }

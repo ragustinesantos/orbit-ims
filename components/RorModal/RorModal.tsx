@@ -1,6 +1,18 @@
 /* eslint-disable no-console */
+'use client';
+
 import { useEffect, useState } from 'react';
-import { Button, Group, Modal, ScrollArea, SimpleGrid, Table, TableData, Text, TextInput } from '@mantine/core';
+import {
+  Button,
+  Group,
+  Modal,
+  ScrollArea,
+  SimpleGrid,
+  Table,
+  TableData,
+  Text,
+  TextInput,
+} from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useInventory } from '@/app/_utils/inventory-context';
 import {
@@ -8,19 +20,18 @@ import {
   defaultOrderRequisition,
   Employee,
   OrderRequisition,
-  RecurringOrder,
+  rorModalProps,
 } from '@/app/_utils/schema';
 import { fetchEmployee, fetchOrderRequisition, patchRorApproval } from '@/app/_utils/utility';
 import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
 import classnames from './RorModal.module.css';
 
-interface rorModalProps {
-  recurringOrder: RecurringOrder | null;
-  isOpened: boolean;
-  isClosed: () => void;
-}
-
-export default function RorModal({ recurringOrder, isOpened, isClosed }: rorModalProps) {
+export default function RorModal({
+  recurringOrder,
+  isOpened,
+  isClosed,
+  handleApprovalActivity,
+}: rorModalProps) {
   const { currentEmployee, inventory, supplierList } = useInventory();
 
   const [opened, { open, close }] = useDisclosure(false);
@@ -65,12 +76,22 @@ export default function RorModal({ recurringOrder, isOpened, isClosed }: rorModa
     // Set approval value to trigger order requisition retrieval useEffect
     setApproval((prev) => !prev);
 
-    // Send a request for approval update
+    // Send a request for approval update and provide feedback based on try-catch result
     try {
       currentEmployee &&
         (await patchRorApproval(currentOr.requisitionId, isApproved, currentEmployee.employeeId));
+      handleApprovalActivity(
+        'success',
+        currentOr.requisitionTypeId,
+        isApproved ? 'APPROVED' : 'REJECTED'
+      );
     } catch (error) {
       console.log(error);
+      handleApprovalActivity(
+        'error',
+        currentOr.requisitionTypeId,
+        isApproved ? 'APPROVED' : 'REJECTED'
+      );
     }
 
     // Close the main modal
@@ -116,7 +137,13 @@ export default function RorModal({ recurringOrder, isOpened, isClosed }: rorModa
   };
 
   return (
-    <Modal centered opened={isOpened} onClose={isClosed} size="xl" scrollAreaComponent={ScrollArea.Autosize}>
+    <Modal
+      centered
+      opened={isOpened}
+      onClose={isClosed}
+      size="xl"
+      scrollAreaComponent={ScrollArea.Autosize}
+    >
       <Modal opened={opened} onClose={close} title="Confirmation" centered>
         <Text
           classNames={{
