@@ -1,12 +1,16 @@
 import { useEffect, useState } from 'react';
 import classes from './WizardProgress.module.css';
 
+interface WizardProgressProps {
+    stepList: String[],
+    currentStep: number
+}
 
-export default function WizardProgress() {
+export default function WizardProgress(props: WizardProgressProps) {
 
     const [progressBar, setProgressBar] = useState(<div />);
-    const steps: String[] = ['Template', 'Order', 'Confirmation', 'Summary'];
-    const currentStep = 2;
+    const stepList = props.stepList;
+    const currentStep = props.currentStep;
 
     const progressBarType = (rendered: boolean) => {
         if (rendered) {
@@ -58,7 +62,7 @@ export default function WizardProgress() {
         setProgressBar(
             <>
                 {
-                    steps.map((step, index) => {
+                    stepList.map((step, index) => {
                         let currentStepDisplay = [];
                         if (index > 0) {
                             currentStepDisplay.push(progressBarType(index < currentStep));

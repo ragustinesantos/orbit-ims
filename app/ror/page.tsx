@@ -1,11 +1,15 @@
 /* eslint-disable no-console */
 'use client';
 
-import AddEmployee from "@/components/AddEmployee/AddEmployee";
 import { NavbarNested } from "@/components/NavbarNested/NavbarNested";
 import WizardProgress from "@/components/WizardProgress/WizardProgress";
+import { useState } from "react";
 
-export default function AddEmployeePage() {
+export default function CreateRORPage() {
+
+    const [currentStep, setCurrentStep] = useState(2);
+    const steps: String[] = ['Template', 'Order', 'Confirmation', 'Summary'];
+
     return (
         <main style={{ display: 'flex', width: '100vw' }}>
             <NavbarNested />
@@ -20,7 +24,10 @@ export default function AddEmployeePage() {
                     padding: 10,
                 }}
             >
-                <WizardProgress />
+                <WizardProgress
+                    stepList={steps}
+                    currentStep={currentStep}
+                />
             </div>
         </main>
     );
