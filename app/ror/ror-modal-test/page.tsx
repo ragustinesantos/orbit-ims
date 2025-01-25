@@ -84,7 +84,8 @@ export default function RorModalTestPage() {
           {/* The modal accepts the current ror in the iteration for the details, 
           isOpened that sets the visibility of the modal and defaults as false, 
           isClosed to toggle the visibility back to false, 
-          handleApprovalActivity to trigger the appropriate notification on the page */}
+          handleApprovalActivity to trigger the appropriate notification on the page, 
+          this is an optional prop. only pass the function to it if in the appropriate employee level */}
           <RorModal
             recurringOrder={ror}
             isOpened={!!modalStateTracker[ror.rorId]}

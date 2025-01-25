@@ -77,21 +77,22 @@ export default function RorModal({
     setApproval((prev) => !prev);
 
     // Send a request for approval update and provide feedback based on try-catch result
-    try {
-      currentEmployee &&
-        (await patchRorApproval(currentOr.requisitionId, isApproved, currentEmployee.employeeId));
-      handleApprovalActivity(
-        'success',
-        currentOr.requisitionTypeId,
-        isApproved ? 'APPROVED' : 'REJECTED'
-      );
-    } catch (error) {
-      console.log(error);
-      handleApprovalActivity(
-        'error',
-        currentOr.requisitionTypeId,
-        isApproved ? 'APPROVED' : 'REJECTED'
-      );
+    if (currentEmployee && handleApprovalActivity) {
+      try {
+        await patchRorApproval(currentOr.requisitionId, isApproved, currentEmployee.employeeId);
+        handleApprovalActivity(
+          'success',
+          currentOr.requisitionTypeId,
+          isApproved ? 'APPROVED' : 'REJECTED'
+        );
+      } catch (error) {
+        console.log(error);
+        handleApprovalActivity(
+          'error',
+          currentOr.requisitionTypeId,
+          isApproved ? 'APPROVED' : 'REJECTED'
+        );
+      }
     }
 
     // Close the main modal

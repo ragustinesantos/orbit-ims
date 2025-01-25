@@ -270,7 +270,7 @@ export interface rorModalProps {
   recurringOrder: RecurringOrder | null;
   isOpened: boolean;
   isClosed: () => void;
-  handleApprovalActivity: (message: string, rorId: string, status: string) => void;
+  handleApprovalActivity?: (message: string, rorId: string, status: string) => void;
 }
 
 export interface NavLink {
