@@ -3,6 +3,19 @@
     flex-direction: row;
 }
 
+.stepContainer {
+    width: 60px;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stepTitle {
+    font-weight: 600;
+    margin-top: 5px;
+}
+
 .progressCircle {
     background-color: #1B4965;
     color: white;
