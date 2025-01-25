@@ -122,7 +122,7 @@ export default function OdorComponent3( {itemOrders,newItemOrders,totalCost,orde
                       <Text classNames={{root: classnames.orderTotalText,}}>{'$'+totalCost}</Text>
                       </div>}
                   </Group>
-                  <Group align='flex-start'>
+                  <Group>
                     <TextInput
                       label="Recipient Name"
                       withAsterisk
@@ -138,8 +138,9 @@ export default function OdorComponent3( {itemOrders,newItemOrders,totalCost,orde
                       size="xs"
                       value={recipientLocation}
                       onChange={(event)=>setRecipientLocation(event.target.value)}
-                    />
-                    <Textarea
+                    /> 
+                  </Group>
+                  <Textarea
                     classNames={{root: classnames.TextAreaStyle,}}
                       label="Remarks"
                       placeholder="Add any additional Comments..."
@@ -148,7 +149,6 @@ export default function OdorComponent3( {itemOrders,newItemOrders,totalCost,orde
                       size="xs"
                       resize="both"
                     />
-                  </Group>
             
         </div>
     )
