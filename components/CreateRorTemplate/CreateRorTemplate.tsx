@@ -6,7 +6,7 @@ import { Button, Group, Select, Table, TableData, Text, TextInput } from '@manti
 import { useInventory } from '@/app/_utils/inventory-context';
 import {
   defaultItem,
-  defaultRecurringOrderTemplate,
+  defaultRecurringOrderTemplateToEdit,
   Item,
   RecurringOrderTemplateToEdit,
 } from '@/app/_utils/schema';
@@ -87,7 +87,7 @@ export default function CreateRorTemplate() {
     } else {
       // Else proceed with preparing the newTemplate to add
       const newRorTemplate: RecurringOrderTemplateToEdit = {
-        ...defaultRecurringOrderTemplate,
+        ...defaultRecurringOrderTemplateToEdit,
         templateName,
         itemList,
       };

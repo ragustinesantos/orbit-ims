@@ -1,0 +1,155 @@
+/* eslint-disable no-console */
+import { useEffect, useState } from 'react';
+import { Button, Group, Modal, SimpleGrid, Table, TableData, Text, TextInput } from '@mantine/core';
+import { useInventory } from '@/app/_utils/inventory-context';
+import {
+  defaultEmployee,
+  defaultOrderRequisition,
+  Employee,
+  OrderRequisition,
+  RecurringOrder,
+} from '@/app/_utils/schema';
+import { fetchEmployee, fetchOrderRequisition, patchRorApproval } from '@/app/_utils/utility';
+import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
+import classnames from './RorModal.module.css';
+
+interface rorModalProps {
+  recurringOrder: RecurringOrder | null;
+  isOpened: boolean;
+  isClosed: () => void;
+}
+
+export default function RorModal({ recurringOrder, isOpened, isClosed }: rorModalProps) {
+  const { currentEmployee, inventory, supplierList } = useInventory();
+
+  const [employee, setEmployee] = useState<Employee>({ ...defaultEmployee });
+  const [currentOr, setCurrentOr] = useState<OrderRequisition>({ ...defaultOrderRequisition });
+  const [p1Approver, setP1Approver] = useState<Employee>({ ...defaultEmployee });
+  const [orDate, setOrDate] = useState<string>('');
+  const [approval, setApproval] = useState<boolean>(false);
+
+  // Retrieve the matching order requisition every time a new ROR is passed
+  useEffect(() => {
+    const retrieveOrderRequisitionById = async () => {
+      recurringOrder && setCurrentOr(await fetchOrderRequisition(recurringOrder.requisitionId));
+    };
+    retrieveOrderRequisitionById();
+  }, [recurringOrder, approval]);
+
+  // Retrieve the employee from the matching order requisition
+  useEffect(() => {
+    const retrieveEmployeeById = async () => {
+      currentOr && setEmployee(await fetchEmployee(currentOr?.employeeId));
+    };
+    retrieveEmployeeById();
+  }, [currentOr]);
+
+  // Format date retrieved from matching order requisition
+  useEffect(() => {
+    const date = new Date(currentOr.requisitionDate);
+    setOrDate(date.toLocaleString('en-us'));
+  }, [currentOr]);
+
+  // Retrieve P1 approver information from
+  useEffect(() => {
+    const retrieveApproverP1ById = async () => {
+      currentOr && setP1Approver(await fetchEmployee(currentOr?.approvalP1));
+    };
+    retrieveApproverP1ById();
+  }, [currentOr]);
+
+  const handleApproval = async (isApproved: boolean) => {
+    // Set approval value to trigger order requisition retrieval useEffect
+    setApproval(true);
+
+    // Send a request for approval update
+    try {
+      currentEmployee &&
+        (await patchRorApproval(currentOr.requisitionId, isApproved, currentEmployee.employeeId));
+    } catch (error) {
+      console.log(error);
+    }
+
+    // Close the modal
+    isClosed();
+  };
+
+  // Map through the list of item id's to retrieve data for the template table body
+  const mappedItemList = recurringOrder?.itemOrders.map((item) => {
+    const currentItem = inventory?.find((invItem) => invItem.itemId === item.itemId);
+    const currentSupplier = supplierList?.find(
+      (supplier) => supplier.supplierId === currentItem?.supplierId
+    );
+    return [
+      currentItem?.itemName,
+      currentItem?.category,
+      currentItem?.supplyUnit,
+      currentItem?.packageUnit,
+      currentSupplier?.supplierName,
+      item.orderQty,
+    ];
+  });
+
+  // Table information (keys are caption, head and body)
+  const tableData: TableData = {
+    caption: 'End of Order List',
+    head: ['Item', 'Category', 'Unit of Measurement', 'Package Unit', 'Supplier', 'Quantity'],
+    body: mappedItemList,
+  };
+
+  const approvalData: TableData = {
+    head: [
+      currentOr.isApprovedP1 !== null
+        ? `${currentOr.isApprovedP1 ? 'Approved' : 'Rejected'} By: ${p1Approver?.firstName} ${p1Approver?.lastName}`
+        : 'P1 Approval',
+    ],
+    body: [[<ApprovalBadge isApproved={currentOr.isApprovedP1} />]],
+  };
+
+  return (
+    <Modal opened={isOpened} onClose={isClosed} size="xl">
+      <Text
+        classNames={{
+          root: classnames.rootText,
+        }}
+      >
+        Recurring Order Requisition
+      </Text>
+      <TextInput
+        disabled
+        label="Employee Name"
+        value={`${employee.firstName} ${employee.lastName}`}
+        size="md"
+        classNames={{ root: classnames.rootSection }}
+      />
+      <SimpleGrid cols={3} classNames={{ root: classnames.rootSection }}>
+        <TextInput disabled label="Employee ID" value={employee.employeeId} size="md" />
+        <TextInput disabled label="Date" value={orDate} size="md" />
+        <TextInput disabled label="Requisition ID" value={currentOr.requisitionId} size="md" />
+      </SimpleGrid>
+      <Table striped classNames={{ table: classnames.rootTable }} data={tableData} />
+      <Text classNames={{ root: classnames.rootHeaderTxt }}>Approvals:</Text>
+      <Table
+        withTableBorder
+        withColumnBorders
+        withRowBorders
+        classNames={{ table: classnames.rootApprovalTable, td: classnames.tableTd }}
+        data={approvalData}
+      />
+      {currentEmployee?.employeeLevel.includes('SA') && currentOr.isApprovedP1 == null && (
+        <Group classNames={{ root: classnames.rootBtnArea }}>
+          <Button classNames={{ root: classnames.rootBtn }} onClick={() => handleApproval(true)}>
+            Approve
+          </Button>
+          <Button
+            classNames={{ root: classnames.rootBtn }}
+            onClick={() => handleApproval(false)}
+            color="red"
+          >
+            Reject
+          </Button>
+        </Group>
+      )}
+    </Modal>
+  );
+}

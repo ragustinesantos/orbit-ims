@@ -38,6 +38,8 @@ export async function PUT(request: Request, { params }: { params: any }) {
           itemName: z.string(),
           itemDescription: z.string(),
           productCode: z.string(),
+          disposalPlan: z.string(),
+          purposeForPurchase: z.string(),
           purchaseQty: z.number(),
           unitPrice: z.number(),
           itemSubtotal: z.number(),
@@ -46,8 +48,6 @@ export async function PUT(request: Request, { params }: { params: any }) {
       orderTotal: z.number(),
       recipientName: z.string(),
       recipientLocation: z.string(),
-      disposalPlan: z.string(),
-      purposeForPurchase: z.string(),
       remarks: z.string(),
     });
 
@@ -84,6 +84,8 @@ export async function PATCH(request: Request, { params }: { params: any }) {
               itemName: z.string(),
               itemDescription: z.string(),
               productCode: z.string(),
+              disposalPlan: z.string().optional(),
+              purposeForPurchase: z.string().optional(),
               purchaseQty: z.number(),
               unitPrice: z.number(),
               itemSubtotal: z.number(),
@@ -93,8 +95,6 @@ export async function PATCH(request: Request, { params }: { params: any }) {
         orderTotal: z.number().optional(),
         recipientName: z.string().optional(),
         recipientLocation: z.string().optional(),
-        disposalPlan: z.string().optional(),
-        purposeForPurchase: z.string().optional(),
         remarks: z.string().optional(),
       })
       .strict();
