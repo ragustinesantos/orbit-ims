@@ -1,7 +1,7 @@
 'useclient';
 
 import { useEffect, useState } from 'react';
-import { Group, Select, Table, Text, Button } from '@mantine/core';
+import { Group,Table, Text,Textarea, TextInput} from '@mantine/core';
 import { Item } from '@/app/_utils/schema';
 import classnames from './odor3.module.css';
 import { useInventory } from '@/app/_utils/inventory-context';
@@ -16,20 +16,27 @@ interface setpropstype  {
     itemOrders: ItemOrder[];
     newItemOrders: NewItemOrder[];
     totalCost: Number;
+    orderTotal: Number;
+    remarks: string;
+    setRemarks: React.Dispatch<React.SetStateAction<string>>;
+    recipientName: string;
+    setRecipientName: React.Dispatch<React.SetStateAction<string>>;
+    recipientLocation: string;
+    setRecipientLocation: React.Dispatch<React.SetStateAction<string>>;
   }
 
 
 
-export default function OdorComponent3( {itemOrders, newItemOrders,totalCost}: setpropstype) {
+export default function OdorComponent3( {itemOrders,newItemOrders,totalCost,orderTotal,remarks,setRemarks,recipientName,setRecipientName,recipientLocation,setRecipientLocation}: setpropstype) {
 
-    const { inventory, supplierList, setCurrentPage, setCurrentSection } = useInventory();
+    const { inventory, supplierList,} = useInventory();
 
     const itemrows = itemOrders.map((item) => {
         const odorItem = inventory?.find((inv)=> inv.itemId === item.itemId)
         const supplier = supplierList?.find((inv)=> inv.supplierId === odorItem?.supplierId)
         return (
           <Table.Tr key={odorItem?.itemId}>
-            <Table.Td style={{maxWidth: '100px', overflowX: 'scroll', scrollbarWidth: 'none' }}>{odorItem?.itemId}</Table.Td>
+            <Table.Td style={{maxWidth: '100px', overflowX: 'scroll', scrollbarWidth: 'none',whiteSpace: 'nowrap', }}>{odorItem?.itemId}</Table.Td>
             <Table.Td>{odorItem?.itemName}</Table.Td>
             <Table.Td>{odorItem?.category}</Table.Td>
             <Table.Td>{odorItem?.supplyUnit}</Table.Td>
@@ -46,11 +53,11 @@ export default function OdorComponent3( {itemOrders, newItemOrders,totalCost}: s
     const rows = newItemOrders.map((item) => {
         return (
           <Table.Tr key={newItemOrders.indexOf(item)}>
-            <Table.Td style={{maxWidth: '150px', overflowX: 'scroll', scrollbarWidth: 'none' }}>{item?.itemName}</Table.Td>
-            <Table.Td style={{maxWidth: '150px', overflowX: 'scroll', scrollbarWidth: 'none' }}>{item?.itemDescription}</Table.Td>
-            <Table.Td style={{maxWidth: '150px', overflowX: 'scroll', scrollbarWidth: 'none' }}>{item?.productCode}</Table.Td>
-            <Table.Td style={{maxWidth: '150px', overflowX: 'scroll', scrollbarWidth: 'none' }}>{item?.disposalPlan}</Table.Td>
-            <Table.Td style={{maxWidth: '150px', overflowX: 'scroll', scrollbarWidth: 'none' }}>{item?.purposeForPurchase}</Table.Td>
+            <Table.Td style={{maxWidth: '150px', overflowX: 'scroll', scrollbarWidth: 'none',whiteSpace: 'nowrap',}}>{item?.itemName}</Table.Td>
+            <Table.Td style={{maxWidth: '150px', overflowX: 'scroll', scrollbarWidth: 'none',whiteSpace: 'nowrap',}}>{item?.itemDescription}</Table.Td>
+            <Table.Td style={{maxWidth: '150px', overflowX: 'scroll', scrollbarWidth: 'none',whiteSpace: 'nowrap',}}>{item?.productCode}</Table.Td>
+            <Table.Td style={{maxWidth: '150px', overflowX: 'scroll', scrollbarWidth: 'none',whiteSpace: 'nowrap',}}>{item?.disposalPlan}</Table.Td>
+            <Table.Td style={{maxWidth: '150px', overflowX: 'scroll', scrollbarWidth: 'none',whiteSpace: 'nowrap',}}>{item?.purposeForPurchase}</Table.Td>
             <Table.Td>{'$'+item?.unitPrice} </Table.Td>
             <Table.Td>{'$'+(Math.round(item?.unitPrice * item?.purchaseQty * 100) / 100)}</Table.Td>
             <Table.Td>
@@ -65,9 +72,10 @@ export default function OdorComponent3( {itemOrders, newItemOrders,totalCost}: s
     return(
         <div>
             <Text classNames={{root: classnames.odorText,}}>On Demand Order Requisition</Text>
-            <div>{itemOrders.length > 0 && 
+            <Text classNames={{root: classnames.templateTitle,}}>Please review your order</Text>
+              {itemOrders.length > 0 && 
                   <div>
-                  <Text className={classnames.templateTitle}>Inventory Items</Text>
+                  <Text className={classnames.templateHeading}>Inventory Items</Text>
                     <Table striped={true}>
                     <Table.Thead>
                       <Table.Tr>
@@ -83,10 +91,9 @@ export default function OdorComponent3( {itemOrders, newItemOrders,totalCost}: s
                     <Table.Tbody>{itemrows}</Table.Tbody>
                     </Table>
                   </div>}
-            </div>
-            <div>{newItemOrders.length > 0 &&
+                {newItemOrders.length > 0 &&
                   <div> 
-                    <Text className={classnames.templateTitle}>Non-Inventory Items</Text>
+                    <Text className={classnames.templateHeading}>Non-Inventory Items</Text>
                     <Table striped={true}>
                       <Table.Thead>
                         <Table.Tr>
@@ -102,12 +109,46 @@ export default function OdorComponent3( {itemOrders, newItemOrders,totalCost}: s
                       </Table.Thead>
                       <Table.Tbody>{rows}</Table.Tbody>
                     </Table>
+                  </div>}
+                  <Text className={classnames.templateHeading}>Order Summary</Text>
+                  <Group>
+                      <div>
+                      <Text classNames={{root: classnames.orderTotalLabel,}}>Total Items</Text>
+                      <Text classNames={{root: classnames.orderTotalText,}}>{String(orderTotal)}</Text>
+                      </div>
+                      {newItemOrders.length > 0 &&
                       <div>
                       <Text classNames={{root: classnames.orderTotalLabel,}}>Total Cost</Text>
                       <Text classNames={{root: classnames.orderTotalText,}}>{'$'+totalCost}</Text>
-                      </div>
-                  </div>}
-            </div>
+                      </div>}
+                  </Group>
+                  <Group align='flex-start'>
+                    <TextInput
+                      label="Recipient Name"
+                      withAsterisk
+                      placeholder="Recipient that will receive the order....."
+                      size="xs"
+                      value={recipientName}
+                      onChange={(event)=>setRecipientName(event.target.value)}
+                    />
+                    <TextInput
+                      label="Recipient Location"
+                      withAsterisk
+                      placeholder="Location to deliver the order...."
+                      size="xs"
+                      value={recipientLocation}
+                      onChange={(event)=>setRecipientLocation(event.target.value)}
+                    />
+                    <Textarea
+                    classNames={{root: classnames.TextAreaStyle,}}
+                      label="Remarks"
+                      placeholder="Add any additional Comments..."
+                      value={remarks}
+                      onChange={(event)=>setRemarks(event.target.value)}
+                      size="xs"
+                      resize="both"
+                    />
+                  </Group>
             
         </div>
     )

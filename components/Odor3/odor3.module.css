@@ -21,4 +21,15 @@
 .templateTitle {
     font-size: 32px;
     font-weight: bold;
+    text-align: center;
+}
+
+.templateHeading {
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: 3vh;
+}
+
+.TextAreaStyle {
+    width: 40%;
 }

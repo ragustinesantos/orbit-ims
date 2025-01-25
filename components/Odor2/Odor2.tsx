@@ -79,10 +79,10 @@ export default function OdorComponent2({ newItemOrders,setNewItemOrders,totalCos
         itemName: newItemName,
         itemDescription: newItemDescription,
         productCode: newItemProductCode,
-        purchaseQty: Number(newItemPurchaseQTY),
-        unitPrice: Number(newItemUnitPrice),
         disposalPlan: disposalPlan,
         purposeForPurchase: purposeForPurchase,
+        purchaseQty: Number(newItemPurchaseQTY),
+        unitPrice: Number(newItemUnitPrice),
         itemSubtotal: Number(newItemPurchaseQTY) * Number(newItemUnitPrice),
         
         };
@@ -121,10 +121,7 @@ export default function OdorComponent2({ newItemOrders,setNewItemOrders,totalCos
 
   const template = (
           <div>
-              <div className={classnames.templateTitleDiv}>
                 <div className={classnames.templateTitle}>Non-Inventory Item</div>
-                
-              </div>
               <SimpleGrid cols={4} spacing="xs" verticalSpacing="xs">
                 <TextInput
                   label="Item Name"
