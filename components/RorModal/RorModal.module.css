@@ -13,11 +13,16 @@
 .rootApprovalTable {
   width: 25%;
   table-layout: auto;
-  margin-bottom: 36px;
+  margin-bottom: 18px;
 }
 
 .rootSection {
   margin-bottom: 36px;
+}
+
+.rootHeaderTxt {
+  margin-bottom: 18px;
+  font-weight: 800;
 }
 
 .rootBtnArea {

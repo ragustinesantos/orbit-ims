@@ -118,6 +118,7 @@ export default function RorModal({ recurringOrder, isOpened, isClosed }: rorModa
         <TextInput disabled label="Requisition ID" value={currentOr.requisitionId} size="md" />
       </SimpleGrid>
       <Table striped classNames={{ table: classnames.rootTable }} data={tableData} />
+      <Text classNames={{root: classnames.rootHeaderTxt}}>Approvals:</Text>
       <Table
         withTableBorder
         withColumnBorders
