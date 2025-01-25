@@ -38,7 +38,7 @@ export default function RequisitionProcessTable(){
 
     const formatDate = (dateString:any) => {
       const date = new Date(dateString);
-      return date.toISOString().split('T')[0]; 
+      return date.toLocaleString('en-us'); 
     };
 
     // Every time an ID is clicked this should run and set the state of modal visibility to the opposite of its previous value
