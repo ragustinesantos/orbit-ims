@@ -8,3 +8,7 @@
 .thead {
     background-color: transparent;
 }
+
+.tableID:hover{
+    text-decoration: underline;
+}
