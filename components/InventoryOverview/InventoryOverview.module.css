@@ -16,6 +16,12 @@
   font-weight: 600;
 }
 
+.cardText:hover{
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+
 .cardNumber{
   text-align: center;
   font-weight: 900;
