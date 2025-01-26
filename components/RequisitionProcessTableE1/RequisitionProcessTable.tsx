@@ -121,12 +121,12 @@ export default function RequisitionProcessTable(){
         
       <Group>
         {/** ROR process table for E1*/}    
-        <Table striped data={RORTableData} />
+        <Table className={classnames.table} striped data={RORTableData} />
       </Group>
 
       <Group>
         {/** ODOR process table for E1*/}    
-        <Table striped data={ODORTableData} />
+        <Table className={classnames.table} striped data={ODORTableData} />
       </Group>
 
     </div>
