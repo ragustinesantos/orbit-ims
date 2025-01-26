@@ -71,7 +71,6 @@ export default function OdorComponent3( {itemOrders,newItemOrders,totalCost,orde
 
     return(
         <div>
-            <Text classNames={{root: classnames.odorText,}}>On Demand Order Requisition</Text>
             <Text classNames={{root: classnames.templateTitle,}}>Please review your order</Text>
               {itemOrders.length > 0 && 
                   <div>

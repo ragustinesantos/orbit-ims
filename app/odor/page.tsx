@@ -8,6 +8,7 @@ import classnames from './odorpage.module.css';
 import { Text, Group,  } from '@mantine/core';
 import { useState,useEffect } from 'react';
 import CustomNotification from '@/components/CustomNotification/CustomNotification';
+import WizardProgress from '@/components/WizardProgress/WizardProgress';
 
 import { Button } from '@mantine/core';
 import { ItemOrder, NewItemOrder } from '../_utils/schema';
@@ -25,6 +26,8 @@ export default function OdorPage() {
   const [recipientName, setRecipientName ] = useState('')
   const [recipientLocation, setRecipientLocation] = useState ('')
   const [remarks,setRemarks] = useState('');
+
+  const stepList = ["Inventory Items","Non-Inventory Items", "Order Review"];
 
 
     useEffect(() => {
@@ -95,7 +98,11 @@ export default function OdorPage() {
         padding: 32,
       }}
       >
+        <div>
+        <Text classNames={{root: classnames.odorText,}}>On Demand Order Requisition</Text>
+        <WizardProgress stepList={stepList} currentStep={pageNumber}></WizardProgress>
           {nav_array[pageNumber]}
+        </div>
           <Group justify="flex-end">
             { pageNumber == 0 ? <></> : 
             <Button classNames={{root: classnames.navbutton,}} onClick={previousPage} 
