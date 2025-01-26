@@ -10,7 +10,7 @@ export default function ApprovalBadge({ isApproved }: { isApproved: boolean | nu
       badgeColor = 'red';
       break;
     case null:
-      badgeColor = 'blue';
+      badgeColor = '#54D0ED';
       break;
   }
 
@@ -28,7 +28,7 @@ export default function ApprovalBadge({ isApproved }: { isApproved: boolean | nu
   }
 
   return (
-    <Badge variant="filled" color={badgeColor} size="sm" radius="xl">
+    <Badge variant="filled" color={badgeColor} size="md" radius="xl">
       {badgeText}
     </Badge>
   );

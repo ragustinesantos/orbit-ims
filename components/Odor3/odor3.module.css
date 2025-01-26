@@ -1,0 +1,35 @@
+.odorText {
+    font-size: 48px;
+    font-weight: bold;
+    text-decoration: underline;
+    text-underline-offset: 8px;
+}
+
+.orderTotalLabel {
+    font-size: 14px;
+    font-weight:700;
+    margin-top: .8vh;
+
+}
+
+.orderTotalText {
+    font-size: 14px;
+    margin-top: .3vh;
+
+}
+
+.templateTitle {
+    font-size: 32px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.templateHeading {
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: 3vh;
+}
+
+.TextAreaStyle {
+    width: 28.5%;
+}
