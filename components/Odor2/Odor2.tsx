@@ -243,7 +243,7 @@ export default function OdorComponent2({ newItemOrders,setNewItemOrders,totalCos
 
     return (
     <div>
-      <Text classNames={{root: classnames.odorText,}}>On Demand Order Requisition</Text>
+
           {showTemplate ? template : 
             <div className={classnames.interiorDiv}>
               <Text classNames={{root: classnames.rootText,}}>Order Non Inventory Item</Text>

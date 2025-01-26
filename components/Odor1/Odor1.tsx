@@ -120,7 +120,6 @@ export default function OdorComponent( {itemOrders, setitemOrders}: setpropstype
 
     return (
       <div>
-        <Text classNames={{root: classnames.odorText,}}>On Demand Order Requisition</Text>
                 <div className={classnames.templateTitle}>Inventory Item</div>
               <Group
                 classNames={{
