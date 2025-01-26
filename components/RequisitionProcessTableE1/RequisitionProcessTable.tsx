@@ -102,12 +102,12 @@ export default function RequisitionProcessTable(){
   
     // Sample table to contain line items that can generate the modal
     const RORTableData: TableData = {
-      head: ['ROR ID', 'Submitter', 'Date Submit', 'Status'],
+      head: ['ROR ID', 'Submitter', 'Date Submitted', 'Status'],
       body: mappedRor,
     };
 
     const ODORTableData: TableData = {
-      head: ['ODOR ID', 'Submitter', 'Date Submit', 'Status'],
+      head: ['ODOR ID', 'Submitter', 'Date Submitted', 'Status'],
       body: mappedOdor,
     };
 
