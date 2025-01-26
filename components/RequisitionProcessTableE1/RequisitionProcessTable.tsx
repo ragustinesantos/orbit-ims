@@ -2,8 +2,8 @@
 import { Group, Table, TableData, Title, Text } from "@mantine/core";
 import classnames from "./RequisitionProcessTable.module.css";
 import { useInventory } from "@/app/_utils/inventory-context";
-import { OrderRequisition, RecurringOrder } from '@/app/_utils/schema';
-import { fetchOrderRequisitions, fetchRecurringOrderRequisitions } from '@/app/_utils/utility';
+import { OnDemandOrder, OrderRequisition, RecurringOrder } from '@/app/_utils/schema';
+import { fetchOnDemandOrderRequisitions, fetchOrderRequisitions, fetchRecurringOrderRequisitions } from '@/app/_utils/utility';
 import RorModal from '@/components/RorModal/RorModal';
 import { useEffect, useState } from "react";
 import ApprovalBadge from "../ApprovalBadge/ApprovalBadge";
@@ -21,6 +21,7 @@ export default function RequisitionProcessTable(){
     // Sample states to store sample data to generate modals from
     const [allOrs, setAllOrs] = useState<OrderRequisition[] | null>(null);
     const [allRor, setAllRor] = useState<RecurringOrder[] | null>(null);
+    const [allOdor, setAllOdor] = useState<OnDemandOrder[] | null>(null);
   
     // Sample use effect to store order requisitions and ror's for mapping
     useEffect(() => {
@@ -28,6 +29,7 @@ export default function RequisitionProcessTable(){
         try {
           await fetchOrderRequisitions(setAllOrs);
           await fetchRecurringOrderRequisitions(setAllRor);
+          await fetchOnDemandOrderRequisitions(setAllOdor);
         } catch (error) {
           console.log(error);
         }
@@ -79,11 +81,34 @@ export default function RequisitionProcessTable(){
       // Else return an empty line (array)
       return [];
     });
+
+    // Map through the desired list and return components only for active order requisitions
+    const mappedOdor = allOdor?.map((odor) => {
+      const matchingOr = allOrs?.find((or) => or.requisitionTypeId === odor.odorId);
+      // If the order requisition is active, generate a table line
+      if (matchingOr?.isActive) {
+        // No modal implementation yet
+        return [
+          <Text>{odor.odorId}</Text>,
+          <Text>{currentEmployee?.firstName} {currentEmployee?.lastName}</Text>,
+          <Text>{formatDate(matchingOr.requisitionDate)}</Text>,
+          <ApprovalBadge isApproved={matchingOr.isApprovedP1} />
+        ];
+      }
+    
+      // Else return an empty line (array)
+      return [];
+    });
   
     // Sample table to contain line items that can generate the modal
     const RORTableData: TableData = {
       head: ['ROR ID', 'Submitter', 'Date Submit', 'Status'],
       body: mappedRor,
+    };
+
+    const ODORTableData: TableData = {
+      head: ['ODOR ID', 'Submitter', 'Date Submit', 'Status'],
+      body: mappedOdor,
     };
 
 
@@ -94,37 +119,15 @@ export default function RequisitionProcessTable(){
         Your Requisition Process
       </Title>
         
-        <Group>
+      <Group>
         {/** ROR process table for E1*/}    
         <Table striped data={RORTableData} />
       </Group>
 
-
-
-
       <Group>
-     {/** ODOR process table for E1*/}    
-      <Table
-        stickyHeader
-        stickyHeaderOffset={60}
-        horizontalSpacing="xl"
-        verticalSpacing="lg"
-        classNames={{
-          thead: classnames.thead,
-          td: classnames.td,
-        }}
-      >
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>ODORID</Table.Th>
-            <Table.Th>Submitter</Table.Th>
-            <Table.Th>Date Submit</Table.Th>
-            <Table.Th>Status</Table.Th>
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody> </Table.Tbody>
-      </Table>
-        </Group>
+        {/** ODOR process table for E1*/}    
+        <Table striped data={ODORTableData} />
+      </Group>
 
     </div>
   
