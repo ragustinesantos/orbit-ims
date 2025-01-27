@@ -1,30 +1,44 @@
 /* eslint-disable no-console */
+'use client';
+
 import { useEffect, useState } from 'react';
-import { Button, Group, Modal, SimpleGrid, Table, TableData, Text, TextInput } from '@mantine/core';
+import {
+  Button,
+  Group,
+  Modal,
+  ScrollArea,
+  SimpleGrid,
+  Table,
+  TableData,
+  Text,
+  TextInput,
+} from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import { useInventory } from '@/app/_utils/inventory-context';
 import {
   defaultEmployee,
   defaultOrderRequisition,
   Employee,
   OrderRequisition,
-  RecurringOrder,
+  rorModalProps,
 } from '@/app/_utils/schema';
 import { fetchEmployee, fetchOrderRequisition, patchRorApproval } from '@/app/_utils/utility';
 import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
 import classnames from './RorModal.module.css';
 
-interface rorModalProps {
-  recurringOrder: RecurringOrder | null;
-  isOpened: boolean;
-  isClosed: () => void;
-}
-
-export default function RorModal({ recurringOrder, isOpened, isClosed }: rorModalProps) {
+export default function RorModal({
+  recurringOrder,
+  isOpened,
+  isClosed,
+  handleApprovalActivity,
+}: rorModalProps) {
   const { currentEmployee, inventory, supplierList } = useInventory();
 
+  const [opened, { open, close }] = useDisclosure(false);
   const [employee, setEmployee] = useState<Employee>({ ...defaultEmployee });
   const [currentOr, setCurrentOr] = useState<OrderRequisition>({ ...defaultOrderRequisition });
   const [p1Approver, setP1Approver] = useState<Employee>({ ...defaultEmployee });
+  const [confirmation, setConfirmation] = useState<boolean>(false);
   const [orDate, setOrDate] = useState<string>('');
   const [approval, setApproval] = useState<boolean>(false);
 
@@ -60,18 +74,35 @@ export default function RorModal({ recurringOrder, isOpened, isClosed }: rorModa
 
   const handleApproval = async (isApproved: boolean) => {
     // Set approval value to trigger order requisition retrieval useEffect
-    setApproval(true);
+    setApproval((prev) => !prev);
 
-    // Send a request for approval update
-    try {
-      currentEmployee &&
-        (await patchRorApproval(currentOr.requisitionId, isApproved, currentEmployee.employeeId));
-    } catch (error) {
-      console.log(error);
+    // Send a request for approval update and provide feedback based on try-catch result
+    if (currentEmployee && handleApprovalActivity) {
+      try {
+        await patchRorApproval(currentOr.requisitionId, isApproved, currentEmployee.employeeId);
+        handleApprovalActivity(
+          'success',
+          currentOr.requisitionTypeId,
+          isApproved ? 'APPROVED' : 'REJECTED'
+        );
+      } catch (error) {
+        console.log(error);
+        handleApprovalActivity(
+          'error',
+          currentOr.requisitionTypeId,
+          isApproved ? 'APPROVED' : 'REJECTED'
+        );
+      }
     }
 
-    // Close the modal
+    // Close the main modal
     isClosed();
+
+    //Close the confirmation modal
+    close();
+
+    // Return confirmation value to default
+    setConfirmation(false);
   };
 
   // Map through the list of item id's to retrieve data for the template table body
@@ -107,7 +138,34 @@ export default function RorModal({ recurringOrder, isOpened, isClosed }: rorModa
   };
 
   return (
-    <Modal opened={isOpened} onClose={isClosed} size="xl">
+    <Modal
+      centered
+      opened={isOpened}
+      onClose={isClosed}
+      size="xl"
+      scrollAreaComponent={ScrollArea.Autosize}
+    >
+      <Modal opened={opened} onClose={close} title="Confirmation" centered>
+        <Text
+          classNames={{
+            root: classnames.rootConfirmationText,
+          }}
+        >
+          Do you want to proceed with the {confirmation ? 'approval' : 'rejection'} of the ROR?
+        </Text>
+        <Group classNames={{ root: classnames.rootBtnArea }}>
+          <Button
+            classNames={{ root: classnames.rootBtn }}
+            onClick={() => handleApproval(confirmation)}
+            color="#1B4965"
+          >
+            Proceed
+          </Button>
+          <Button classNames={{ root: classnames.rootBtn }} onClick={() => close()} color="red">
+            Cancel
+          </Button>
+        </Group>
+      </Modal>
       <Text
         classNames={{
           root: classnames.rootText,
@@ -136,14 +194,24 @@ export default function RorModal({ recurringOrder, isOpened, isClosed }: rorModa
         classNames={{ table: classnames.rootApprovalTable, td: classnames.tableTd }}
         data={approvalData}
       />
-      {currentEmployee?.employeeLevel.includes('SA') && currentOr.isApprovedP1 == null && (
+      {currentEmployee?.employeeLevel.includes('P1') && currentOr.isApprovedP1 == null && (
         <Group classNames={{ root: classnames.rootBtnArea }}>
-          <Button classNames={{ root: classnames.rootBtn }} onClick={() => handleApproval(true)}>
+          <Button
+            classNames={{ root: classnames.rootBtn }}
+            onClick={() => {
+              setConfirmation(true);
+              open();
+            }}
+            color="#1B4965"
+          >
             Approve
           </Button>
           <Button
             classNames={{ root: classnames.rootBtn }}
-            onClick={() => handleApproval(false)}
+            onClick={() => {
+              setConfirmation(false);
+              open();
+            }}
             color="red"
           >
             Reject
