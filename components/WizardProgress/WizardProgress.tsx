@@ -29,7 +29,7 @@ export default function WizardProgress(props: WizardProgressProps) {
             return (
                 <div style={progressBarWidth} className={classes.barContainer}>
                     <div className={classes.awaitingBar}>
-                        ||||||||||||||||||||
+                        |||||||||||||||||||||||||||||||||||||||
                     </div>
                 </div>
             )
