@@ -1,0 +1,70 @@
+.header {
+    display: flex;
+    flex-direction: row;
+}
+
+.stepContainer {
+    width: 60px;
+    overflow: visible;
+    white-space: pre;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stepTitle {
+    font-weight: 600;
+    margin-top: 5px;
+}
+
+.progressCircle {
+    background-color: #1B4965;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    width: 60px;
+    font-size: xx-large;
+    font-weight: 600;
+    border-radius: 50%;
+}
+
+.awaitingCircle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    width: 60px;
+    font-size: xx-large;
+    font-weight: 600;
+    border-radius: 50%;
+    border: 5px solid #54D0ED;
+}
+
+.awaitingBar {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    font-weight: 900;
+    font-size: large;
+    transform: scale(2, 1);
+    color: #54D0ED;
+}
+
+.progressBar {
+    width: 120%;
+    height: 20px;
+    background-color: #1B4965;
+}
+
+.barContainer {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-left: 5px;
+    margin-right: 5px;
+}

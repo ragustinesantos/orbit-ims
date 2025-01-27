@@ -8,3 +8,17 @@
 .thead {
     background-color: transparent;
 }
+
+.tableID:hover{
+    text-decoration: underline;
+    cursor:pointer;
+}
+
+.table {
+    width: 100%;
+}
+
+.table th, .table td {
+    width: 29%;
+    text-align: left;
+}

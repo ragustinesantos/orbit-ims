@@ -33,13 +33,13 @@ export async function POST(request: Request) {
           purchaseQty: z.number(),
           unitPrice: z.number(),
           itemSubtotal: z.number(),
+          disposalPlan: z.string(),
+          purposeForPurchase: z.string(),
         })
       ),
       orderTotal: z.number(),
       recipientName: z.string(),
       recipientLocation: z.string(),
-      disposalPlan: z.string(),
-      purposeForPurchase: z.string(),
       remarks: z.string(),
     });
 
