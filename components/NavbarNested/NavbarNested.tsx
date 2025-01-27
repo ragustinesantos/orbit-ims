@@ -18,6 +18,22 @@ export function NavbarNested() {
 
   const navMenu = () => {
 
+    // Remove default E1 inventory nav before adding manage inventory 
+    const manageInventoryNavigation = (navItems: NavFormat[]) => {
+      // Check if it already has manage inventory added from other roles
+      if (!navItems.some(e => e.label === 'Manage Inventory')) {
+        // Manage employees would change the index of Assistant and in turn change the inventory index
+        if (!navItems.some(e => e.label === 'Manage Employees')) {
+          navItems.splice(4, 1);
+        }
+        else {
+          navItems.splice(3, 1);
+        }
+        navItems = navItems.concat(NAV_ITEMS.MI);
+      }
+      return navItems;
+    }
+
     let navItems: NavFormat[] = [];
 
     if (currentEmployee?.employeeLevel) {
@@ -34,25 +50,21 @@ export function NavbarNested() {
             break;
           case 'P1':
             navItems = navItems.concat(NAV_ITEMS.P1);
-            if (!navItems.some(e => e.label === 'Manage Inventory')) {
-              navItems = navItems.concat(NAV_ITEMS.MI);
-            }
+            navItems = manageInventoryNavigation(navItems);
             break;
           case 'P2':
             navItems = navItems.concat(NAV_ITEMS.P2);
-            if (!navItems.some(e => e.label === 'Manage Inventory')) {
-              navItems = navItems.concat(NAV_ITEMS.MI);
-            }
+            navItems = manageInventoryNavigation(navItems);
             break;
           case 'IA':
           case 'SA':
+            // Check if manage employee has been added by another role (IA/SA)
             if (!navItems.some(e => e.label === 'Manage Employees')) {
+              // Assistant nav would be replaced with more access
               navItems.splice(1, 1);
               navItems = navItems.concat(NAV_ITEMS.IA_SA);
             }
-            if (!navItems.some(e => e.label === 'Manage Inventory')) {
-              navItems = navItems.concat(NAV_ITEMS.MI);
-            }
+            navItems = manageInventoryNavigation(navItems);
             break;
         }
       }
