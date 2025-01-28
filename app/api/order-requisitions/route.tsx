@@ -19,7 +19,6 @@ export async function POST(request: Request) {
     const newOrderRequisition = await request.json();
 
     const orderRequisitionSchema = z.object({
-      requisitionId: z.string(),
       requisitionType: z.string(),
       requisitionTypeId: z.string(),
       requisitionDate: z.string(),
