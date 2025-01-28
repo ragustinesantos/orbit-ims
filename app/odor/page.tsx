@@ -100,7 +100,7 @@ export default function OdorPage() {
       >
         <div>
         <Text classNames={{root: classnames.odorText,}}>On Demand Order Requisition</Text>
-        <WizardProgress stepList={stepList} currentStep={pageNumber}></WizardProgress>
+        <WizardProgress stepList={stepList} currentStep={pageNumber+1}></WizardProgress>
           {nav_array[pageNumber]}
         </div>
           <Group justify="flex-end">
