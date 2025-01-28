@@ -1,7 +1,11 @@
-import {Card, Grid, Table, Text, Title } from "@mantine/core";
+"use client";
+
+import {Card, Grid, Text, Title } from "@mantine/core";
 import classnames from "./InventoryOverview.module.css";
 import { useEffect, useState } from "react";
 import { useInventory } from "@/app/_utils/inventory-context";
+import LowStockModal from "../LowStockModal/LowStockModal";
+import { useDisclosure } from "@mantine/hooks";
 
 
 export default function InventoryOverview(){
@@ -11,6 +15,8 @@ export default function InventoryOverview(){
     const [lowStock, setLowStock] = useState <number>(0);
 
     const {inventory, setCurrentSection} = useInventory();
+    const[opened,{open,close}] = useDisclosure(false);
+
 
     //total item 
     useEffect(() => {
@@ -33,12 +39,12 @@ export default function InventoryOverview(){
     useEffect(() => {
         setCurrentSection('Dashboard');
     }, []);
-    
 
+    
     return(
 
-    <div>
-    <div style={{  margin:'20px', padding: '20px', backgroundColor: '#f5f7fa', borderRadius: '8px' }}>
+ 
+    <div style={{  margin:'20px', padding: '20px', backgroundColor: '#f5f7fa', borderRadius: '8px', justifyItems:'center'}}>
 
       <Title order={5} classNames={{ root:classnames.heading }}>
         Inventory Overview
@@ -60,9 +66,11 @@ export default function InventoryOverview(){
         <Grid.Col span={6} >
           <Card shadow="sm" radius="md" withBorder h={100} w={300} classNames={{ root:classnames.cardContainer }}>
 
-              <Text size="md" classNames={{ root:classnames.cardText }}>
+              <Text size="md" classNames={{ root:classnames.cardText }} onClick={open}>
                 Low Stock
               </Text>
+              <LowStockModal opened = {opened} close={close}/>
+
               <Text size="xl"  c="gray" classNames={{ root:classnames.cardNumber }}>
                 {lowStock}
               </Text>
@@ -73,38 +81,8 @@ export default function InventoryOverview(){
       </Grid>
       </div>
 
-      {/** recent stock in/ stock out table*/}   
-      <div style={{marginTop:'30px'}}>
-       <Title order={5} classNames={{ root:classnames.heading }}>
-        Recent Stock In/Out
-      </Title>
+    
 
-       <Table
-        stickyHeader
-        stickyHeaderOffset={60}
-        horizontalSpacing="xl"
-        verticalSpacing="lg"
-        classNames={{
-          thead: classnames.thead,
-          td: classnames.td,
-        }}
-      >
-      
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>ID</Table.Th>
-            <Table.Th>RequisitionID</Table.Th>
-            <Table.Th>Date</Table.Th>
-            <Table.Th>Item Name</Table.Th>
-            <Table.Th>Quantity</Table.Th>
-            <Table.Th>Unit</Table.Th>
-          </Table.Tr> 
-        </Table.Thead>
-        <Table.Tbody>  </Table.Tbody>
-      </Table>
-
-    </div>
-  </div>
 
   );
 };

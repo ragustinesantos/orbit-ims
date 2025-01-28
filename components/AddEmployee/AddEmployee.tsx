@@ -72,6 +72,7 @@ export default function AddEmployee() {
     const handleSubmit = async (event: FormEvent) => {
         event.preventDefault();
 
+        // TODO: Add confirm modal
         // If form is submitted even if password mismatch
         if (passwordConfirmError) {
             setNotificationMessage(
@@ -199,6 +200,7 @@ export default function AddEmployee() {
                             withAsterisk
                             required
                             placeholder="First Name"
+                            size="md"
                             value={firstName}
                             onChange={handleFirstNameChange}
                         />
@@ -207,6 +209,7 @@ export default function AddEmployee() {
                             withAsterisk
                             required
                             placeholder="Last Name"
+                            size="md"
                             value={lastName}
                             onChange={handleLastNameChange}
                         />
@@ -215,6 +218,7 @@ export default function AddEmployee() {
                             withAsterisk
                             required
                             placeholder="Employee ID"
+                            size="md"
                             value={employeeId}
                             onChange={handleEmployeeIdChange}
                         />
@@ -224,6 +228,7 @@ export default function AddEmployee() {
                             required
                             placeholder="Email"
                             type="email"
+                            size="md"
                             value={email}
                             onChange={handleEmailChange}
                         />
@@ -232,6 +237,7 @@ export default function AddEmployee() {
                             withAsterisk
                             required
                             placeholder="Phone"
+                            size="md"
                             value={phone}
                             onChange={handlePhoneChange}
                             type="number"
@@ -241,6 +247,7 @@ export default function AddEmployee() {
                             withAsterisk
                             required
                             placeholder="Department"
+                            size="md"
                             value={department}
                             onChange={handleDepartmentChange}
                         />
@@ -249,12 +256,14 @@ export default function AddEmployee() {
                             withAsterisk
                             required
                             placeholder="Position"
+                            size="md"
                             value={position}
                             onChange={handlePositionChange}
                         />
                         <PasswordInput
                             label="Password"
                             required
+                            size="md"
                             value={password}
                             onChange={handlePasswordChange}
                             visible={visible}
@@ -263,6 +272,7 @@ export default function AddEmployee() {
                         <PasswordInput
                             label="Confirm Password"
                             required
+                            size="md"
                             value={confirmPassword}
                             onChange={handleConfirmPasswordChange}
                             visible={visible}

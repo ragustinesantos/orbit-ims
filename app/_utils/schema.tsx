@@ -132,9 +132,9 @@ export interface OrderRequisition {
   approvalE2: string;
   approvalE3: string;
   approvalP1: string;
-  isApprovedE2: boolean;
-  isApprovedE3: boolean;
-  isApprovedP1: boolean;
+  isApprovedE2: boolean | null;
+  isApprovedE3: boolean | null;
+  isApprovedP1: boolean | null;
   isActive: boolean;
   isComplete: boolean;
   remarks: string;
@@ -148,9 +148,9 @@ export interface OrderRequisitionToEdit {
   approvalE2: string;
   approvalE3: string;
   approvalP1: string;
-  isApprovedE2: boolean;
-  isApprovedE3: boolean;
-  isApprovedP1: boolean;
+  isApprovedE2: boolean | null;
+  isApprovedE3: boolean | null;
+  isApprovedP1: boolean | null;
   isActive: boolean;
   isComplete: boolean;
   remarks: string;
@@ -166,9 +166,9 @@ export const defaultOrderRequisition: OrderRequisition = {
   approvalE2: '',
   approvalE3: '',
   approvalP1: '',
-  isApprovedE2: false,
-  isApprovedE3: false,
-  isApprovedP1: false,
+  isApprovedE2: null,
+  isApprovedE3: null,
+  isApprovedP1: null,
   isActive: true,
   isComplete: false,
   remarks: '',
@@ -271,6 +271,13 @@ export interface WizardProgressProps {
   currentStep: number
 }
 
+export interface rorModalProps {
+  recurringOrder: RecurringOrder | null;
+  isOpened: boolean;
+  isClosed: () => void;
+  handleApprovalActivity?: (message: string, rorId: string, status: string) => void;
+}
+
 export interface NavLink {
   label: string;
   link: string;
@@ -306,7 +313,7 @@ export const NAV_ITEMS: navCollection = {
     {
       label: 'ODOR',
       icon: IconNotes,
-      links: [{ label: 'Create On-demand Order Requisition', link: '/' }],
+      links: [{ label: 'Create On-demand Order Requisition', link: '/odor' }],
     },
     {
       label: 'Inventory',
