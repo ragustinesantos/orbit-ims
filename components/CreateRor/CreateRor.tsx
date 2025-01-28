@@ -70,15 +70,18 @@ export default function CreateRor() {
                         Back
                     </Button>
                 }
-                <Button
-                    variant="filled"
-                    color="#1B4965"
-                    onClick={() => {
-                        setCurrentStep(currentStep + 1);
-                    }}
-                >
-                    Next
-                </Button>
+                {
+                    currentStep + 1 < stepContent.length &&
+                    <Button
+                        variant="filled"
+                        color="#1B4965"
+                        onClick={() => {
+                            setCurrentStep(currentStep + 1);
+                        }}
+                    >
+                        Next
+                    </Button>
+                }
             </div>
         </div>
     );
