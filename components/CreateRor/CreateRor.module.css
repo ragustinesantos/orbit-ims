@@ -23,3 +23,11 @@
     font-weight: bold;
     margin-left: 80px;
 }
+
+.navButtonContainer {
+    margin-top: 50px;
+    margin-right: 15%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 40px;
+}
