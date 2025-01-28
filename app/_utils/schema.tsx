@@ -310,6 +310,10 @@ export interface PurchaseOrderToEdit {
   isDelivered: boolean;
   isActive: boolean;
   [key: string]: any;
+
+export interface WizardProgressProps {
+  stepList: String[],
+  currentStep: number
 }
 
 export interface rorModalProps {
@@ -347,7 +351,7 @@ export const NAV_ITEMS: navCollection = {
       label: 'ROR',
       icon: IconNotes,
       links: [
-        { label: 'Create Recurring Order', link: '/' },
+        { label: 'Create Recurring Order', link: '/ror' },
         { label: 'Create Template', link: '/ror/create-ror-template' },
       ],
     },
