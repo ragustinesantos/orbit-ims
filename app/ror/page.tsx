@@ -1,14 +1,14 @@
 /* eslint-disable no-console */
 'use client';
 
+import CreateRor from "@/components/CreateRor/CreateRor";
 import { NavbarNested } from "@/components/NavbarNested/NavbarNested";
 import WizardProgress from "@/components/WizardProgress/WizardProgress";
 import { useState } from "react";
 
 export default function CreateRORPage() {
 
-    const [currentStep, setCurrentStep] = useState(3);
-    const steps: String[] = ['Template', 'Order', 'Confirmation', 'Summary', 'Extra'];
+
 
     return (
         <main style={{ display: 'flex', width: '100vw' }}>
@@ -16,17 +16,15 @@ export default function CreateRORPage() {
             <div
                 style={{
                     display: 'flex',
-                    justifyContent: 'center',
+                    flex: 1,
+                    justifyContent: 'flex-start',
                     alignItems: 'center',
-                    width: '100%',
-                    minWidth: '50vw',
                     height: '100vh',
-                    padding: 10,
+                    padding: 32,
                 }}
             >
-                <WizardProgress
-                    stepList={steps}
-                    currentStep={currentStep}
+                <CreateRor
+
                 />
             </div>
         </main>
