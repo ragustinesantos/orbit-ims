@@ -29,6 +29,7 @@ export async function POST(request: Request) {
       isCritical: z.boolean(),
       isCriticalThreshold: z.number(),
       minPurchaseQty: z.number(),
+      price: z.number(),
       isActive: z.boolean()
     });
 

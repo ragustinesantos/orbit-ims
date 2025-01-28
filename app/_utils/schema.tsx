@@ -12,6 +12,7 @@ export interface Item {
   isCritical: boolean;
   isCriticalThreshold: number;
   minPurchaseQty: number;
+  price: number;
   isActive: boolean;
 }
 
@@ -26,6 +27,7 @@ export interface ItemToEdit {
   isCritical: boolean;
   isCriticalThreshold: number;
   minPurchaseQty: number;
+  price: number;
   isActive: boolean;
   [key: string]: any;
 }
@@ -42,6 +44,7 @@ export const defaultItem: Item = {
   isCritical: false,
   isCriticalThreshold: 0,
   minPurchaseQty: 0,
+  price: 0,
   isActive: true,
 };
 
@@ -263,6 +266,49 @@ export interface OnDemandOrderToEdit {
   recipientName: string;
   recipientLocation: string;
   remarks: string;
+  [key: string]: any;
+}
+
+export interface PurchaseOrderItem {
+  itemId: string;
+  quantity: number;
+}
+
+export interface PurchaseOrder {
+  purchaseOrderId: string;
+  requisitionId: string;
+  supplierId: string;
+  orderList: PurchaseOrderItem[];
+  recipientCompanyName: string;
+  recipientCompanyAddress: string;
+  purchaseOrderDate: string;
+  purchaseOrderDeliveryDate: string;
+  subTotal: number;
+  taxRate: number;
+  tax: number;
+  totalOrderCost: string;
+  approvalP2: string;
+  isApproved: boolean;
+  isDelivered: boolean;
+  isActive: boolean;
+}
+
+export interface PurchaseOrderToEdit {
+  requisitionId: string;
+  supplierId: string;
+  orderList: PurchaseOrderItem[];
+  recipientCompanyName: string;
+  recipientCompanyAddress: string;
+  purchaseOrderDate: string;
+  purchaseOrderDeliveryDate: string;
+  subTotal: number;
+  taxRate: number;
+  tax: number;
+  totalOrderCost: string;
+  approvalP2: string;
+  isApproved: boolean;
+  isDelivered: boolean;
+  isActive: boolean;
   [key: string]: any;
 }
 
