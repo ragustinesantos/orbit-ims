@@ -310,9 +310,10 @@ export interface PurchaseOrderToEdit {
   isDelivered: boolean;
   isActive: boolean;
   [key: string]: any;
+}
 
 export interface WizardProgressProps {
-  stepList: String[],
+  stepList: string[],
   currentStep: number
 }
 

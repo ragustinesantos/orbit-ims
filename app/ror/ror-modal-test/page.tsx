@@ -88,7 +88,9 @@ export default function RorModalTestPage() {
           this is an optional prop. only pass the function to it if in the appropriate employee level */}
           <RorModal
             recurringOrder={ror}
+            // Source: ChatGPT
             isOpened={!!modalStateTracker[ror.rorId]}
+            // ---
             isClosed={() => setModalStateTracker((prev) => ({ ...prev, [ror.rorId]: false }))}
             handleApprovalActivity={handleApprovalActivity}
           />
