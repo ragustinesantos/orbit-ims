@@ -1,7 +1,7 @@
-import { Text } from "@mantine/core";
+import { Button, Text } from "@mantine/core";
 import classnames from './CreateRor.module.css';
 import WizardProgress from "../WizardProgress/WizardProgress";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SelectRorTemplate from "../SelectRorTemplate/SelectRorTemplate";
 
 
@@ -9,13 +9,24 @@ import SelectRorTemplate from "../SelectRorTemplate/SelectRorTemplate";
 export default function CreateRor() {
 
     const [currentStep, setCurrentStep] = useState(0);
+    const [currentContent, setCurrentContent] = useState(<div />);
     const steps: String[] = ['Template', 'Order', 'Confirmation', 'Summary'];
     const stepHeaders: String[] = [
         'Select Template',
         'Enter Quantity',
         'Order Review',
         'Order Complete'
-    ]
+    ];
+    const stepContent: JSX.Element[] = [
+        <SelectRorTemplate />,
+        <div />,
+        <div />,
+        <div />,
+    ];
+
+    useEffect(() => {
+        setCurrentContent(stepContent[currentStep]);
+    }, [currentStep]);
 
     return (
         <div
@@ -43,7 +54,35 @@ export default function CreateRor() {
             >
                 {stepHeaders[currentStep]}
             </Text>
-            <SelectRorTemplate />
+            {currentContent}
+            <div
+                className={classnames.navButtonContainer}
+            >
+                {
+                    currentStep != 0 &&
+                    <Button
+                        variant="filled"
+                        color="#54D0ED"
+                        onClick={() => {
+                            setCurrentStep(currentStep - 1);
+                        }}
+                    >
+                        Back
+                    </Button>
+                }
+                {
+                    currentStep + 1 < stepContent.length &&
+                    <Button
+                        variant="filled"
+                        color="#1B4965"
+                        onClick={() => {
+                            setCurrentStep(currentStep + 1);
+                        }}
+                    >
+                        Next
+                    </Button>
+                }
+            </div>
         </div>
     );
 }
