@@ -9,9 +9,12 @@ import { Text, Group,  } from '@mantine/core';
 import { useState,useEffect } from 'react';
 import CustomNotification from '@/components/CustomNotification/CustomNotification';
 import WizardProgress from '@/components/WizardProgress/WizardProgress';
-
+import { useInventory } from '../_utils/inventory-context';
 import { Button } from '@mantine/core';
-import { ItemOrder, NewItemOrder } from '../_utils/schema';
+import { defaultOnDemandOrderToEdit, ItemOrder, NewItemOrder } from '../_utils/schema';
+import { defaultOrderRequisitionToEdit, OnDemandOrderToEdit } from '../_utils/schema';
+import { OrderRequisitionToEdit } from '../_utils/schema';
+import { postOrderRequisition, postOnDemandOrderRequisition, patchOrderRequisition } from '../_utils/utility';
 
 export default function OdorPage() {
 
@@ -26,8 +29,86 @@ export default function OdorPage() {
   const [recipientName, setRecipientName ] = useState('')
   const [recipientLocation, setRecipientLocation] = useState ('')
   const [remarks,setRemarks] = useState('');
-
+  const [requisitionId, setRequisitionId] = useState ('');
+  const [odorId, setOdorId] = useState ('');
   const stepList = ["Inventory Items","Non-Inventory Items", "Order Review"];
+
+  const { currentEmployee, setRefresh, } = useInventory();
+
+    const handleAddItem = async () => {
+      if (
+        recipientName === '' ||
+        recipientLocation === '' 
+      ) {
+        setNotificationMessage(
+          CustomNotification(
+            'error',
+            'Fill Up Required Fields',
+            'Please Add Recipient name and location.',
+            setShowNotification
+          )
+        );
+      } else {
+             try {
+              const newOrderObj: OrderRequisitionToEdit = {
+                ...defaultOrderRequisitionToEdit,
+                requisitionType: 'odor',
+                requisitionTypeId: '',
+                requisitionDate: '',
+                employeeId: currentEmployee?.employeeId || '',
+                remarks: remarks,
+              };
+              await postOrderRequisition(newOrderObj,setRequisitionId);
+              // const newOnDemandOrderObj: OnDemandOrderToEdit = {
+              //   ...defaultOnDemandOrderToEdit,
+              //   requisitionId: requisitionId,
+              //   itemOrders: itemOrders,
+              //   newItemOrders: newItemOrders,
+              //   orderTotal: orderTotal,
+              //   recipientName: recipientName,
+              //   recipientLocation: recipientLocation,
+              // };
+              // await postOnDemandOrderRequisition(newOnDemandOrderObj, setOdorId);
+              // await patchOrderRequisition(requisitionId, odorId)
+
+            setNotificationMessage(
+              CustomNotification(
+                'success',
+                'Requisition Added!',
+                `Odor successfully added.`,
+                setShowNotification
+              )
+            );
+            revealNotification();
+          
+  
+          // Trigger a refresh to retrieve updated inventory information
+          setRefresh((prev: number) => prev + 1);
+  
+          //Reset Fields
+          setRecipientName('');
+          setRecipientLocation('');
+          setRemarks('');
+        } catch (error) {
+          console.log(error);
+          setNotificationMessage(
+            CustomNotification(
+              'error',
+              'Error Encountered',
+              'Unexpected Error encountered. Please try again.',
+              setShowNotification
+            )
+            
+          );
+          revealNotification();
+        }
+      }
+      // Display notification for 3 seconds.
+      setShowNotification(true);
+      setTimeout(() => {
+        setShowNotification(false);
+      }, 3000);
+    };
 
 
     useEffect(() => {
@@ -113,7 +194,7 @@ export default function OdorPage() {
             variant="filled" color="#1B4965" size="md" radius="md"
             >Next</Button>}
             { pageNumber == 2 ?  
-            <Button classNames={{root: classnames.navbutton,}} onClick={nextPage} 
+            <Button classNames={{root: classnames.navbutton,}} onClick={handleAddItem} 
             variant="filled" color="#1B4965" size="md" radius="md"
             >Submit</Button> : <></> }
           </Group>

@@ -76,7 +76,7 @@ export default function WizardProgress(props: WizardProgressProps) {
                 }
             </>
         )
-    }, []);
+    }, [currentStep]);
 
     return (
         <div className={classes.header}>

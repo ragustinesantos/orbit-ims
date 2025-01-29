@@ -7,7 +7,9 @@ import {
   Item,
   ItemToEdit,
   OnDemandOrder,
+  OnDemandOrderToEdit,
   OrderRequisition,
+  OrderRequisitionToEdit,
   RecurringOrder,
   RecurringOrderTemplate,
   Supplier,
@@ -160,6 +162,49 @@ export const fetchOrderRequisitions = async (
   setOrderRequisitions(data);
 };
 
+export const postOrderRequisition = async (newOrderObj : OrderRequisitionToEdit, setNewOrderId:(id: string) => void
+) => {
+  try {
+      // Create a new request
+    const request = new Request('/api/order-requisitions/', {
+      method: 'POST',
+      body: JSON.stringify(newOrderObj),
+    });
+       
+    const response = await fetch(`/api/order-requisitions`,request);
+    console.log(response)
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+    }
+
+    const data = await response.json();
+
+    setNewOrderId(data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// Fetch a single order requisition based on the requisitionId parameter
+export const patchOrderRequisition = async (requisitionId: string, requisitionTypeId: string) => {
+
+  const request = {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({requisitionTypeId: requisitionTypeId}),
+  };
+
+  const response = await fetch(`/api/order-requisitions/${requisitionId}`, request);
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+  }
+};
+
 // Fetch a single order requisition based on the requisitionId parameter
 export const fetchOrderRequisition = async (requisitionId: string) => {
   const response = await fetch(`/api/order-requisitions/${requisitionId}`);
@@ -256,6 +301,27 @@ export const fetchOnDemandOrderRequisition = async (odorId: string) => {
     const data = await response.json();
 
     return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const postOnDemandOrderRequisition = async (odorObj : OnDemandOrderToEdit, setOdorId:(id: string) => void
+) => {
+  try {
+      // Create a new request
+    const request = new Request('/api/odor/', {
+      method: 'POST',
+      body: JSON.stringify(odorObj),
+    });
+    const response = await fetch(`/api/odor`,request);
+    console.log(response)
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+    }
+    const data = await response.json();
+    setOdorId(data);
   } catch (error) {
     console.log(error);
   }
