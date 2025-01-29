@@ -17,7 +17,7 @@ export default function OdorPage() {
 
   const [itemOrders, setitemOrders] = useState<ItemOrder[]>([]);
   const [newItemOrders, setNewItemOrders] = useState<NewItemOrder[]>([]);
-  const [totalCost, setTotalCost] = useState<number>(0);
+  const [totalCost, setTotalCost] = useState<Number>(0);
   const [showTemplate, setShowTemplate] = useState<boolean>(false)
   const [pageNumber,setPageNumber] = useState<number>(0);
   const [orderTotal,setOrderTotal] = useState<number>(0);
@@ -46,12 +46,14 @@ export default function OdorPage() {
       } else {
              try {
 
+              let date: Date = new Date();  
+              const formattedDate:string = date.toLocaleString();
               // Create new order object
               const newOrderObj: OrderRequisitionToEdit = {
                 ...defaultOrderRequisitionToEdit,
                 requisitionType: 'odor',
                 requisitionTypeId: '',
-                requisitionDate: '',
+                requisitionDate: formattedDate,
                 employeeId: currentEmployee?.employeeId || '',
                 remarks,
               };
@@ -85,10 +87,6 @@ export default function OdorPage() {
               )
             );
             revealNotification();
-          
-  
-          // Trigger a refresh to retrieve updated inventory information
-          setRefresh((prev: number) => prev + 1);
   
           //Reset Fields
           setRecipientName('');
@@ -106,12 +104,16 @@ export default function OdorPage() {
             
           );
           revealNotification();
+
+
+
         }
       }
       // Display notification for 3 seconds.
       setShowNotification(true);
       setTimeout(() => {
         setShowNotification(false);
+        window.location.replace("/");
       }, 3000);
     };
 
@@ -135,7 +137,8 @@ export default function OdorPage() {
                      <OdorComponent2 
                      totalCost={totalCost} setTotalCost={setTotalCost} 
                      newItemOrders={newItemOrders} setNewItemOrders={setNewItemOrders} 
-                     setShowTemplate={setShowTemplate} showTemplate={showTemplate}>
+                     setShowTemplate={setShowTemplate} showTemplate={showTemplate}
+                     nextPage={nextPage}>
                      </OdorComponent2>,
                      <OdorComponent3 
                      itemOrders={itemOrders} newItemOrders={newItemOrders} 
@@ -160,8 +163,7 @@ export default function OdorPage() {
           }
     else if (pageNumber < 2) {
     setPageNumber((prevPageNum)=>prevPageNum+1)
-    }
-    
+    }  
   }
 
   function previousPage () {
@@ -169,6 +171,9 @@ export default function OdorPage() {
       setPageNumber((prevPageNum)=>prevPageNum-1)
     }
   }
+
+
+  
 
 
   return (
@@ -186,7 +191,9 @@ export default function OdorPage() {
       >
         <div>
         <Text classNames={{root: classnames.odorText,}}>On Demand Order Requisition</Text>
-        <WizardProgress stepList={stepList} currentStep={pageNumber+1}></WizardProgress>
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2vh', marginBottom: '2vh',}}> 
+          <WizardProgress stepList={stepList} currentStep={pageNumber+1}></WizardProgress>
+        </div>
           {nav_array[pageNumber]}
         </div>
           <Group justify="flex-end">
