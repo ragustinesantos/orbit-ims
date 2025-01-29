@@ -5,32 +5,27 @@ import OdorComponent from '@/components/Odor1/Odor1';
 import OdorComponent2 from '@/components/Odor2/Odor2';
 import OdorComponent3 from '@/components/Odor3/Odor3';
 import classnames from './odorpage.module.css';
-import { Text, Group,  } from '@mantine/core';
+import { Text, Group, Button} from '@mantine/core';
 import { useState,useEffect } from 'react';
 import CustomNotification from '@/components/CustomNotification/CustomNotification';
 import WizardProgress from '@/components/WizardProgress/WizardProgress';
 import { useInventory } from '../_utils/inventory-context';
-import { Button } from '@mantine/core';
-import { defaultOnDemandOrderToEdit, ItemOrder, NewItemOrder } from '../_utils/schema';
-import { defaultOrderRequisitionToEdit, OnDemandOrderToEdit } from '../_utils/schema';
-import { OrderRequisitionToEdit } from '../_utils/schema';
+import { OrderRequisitionToEdit, defaultOrderRequisitionToEdit, OnDemandOrderToEdit, defaultOnDemandOrderToEdit, ItemOrder, NewItemOrder } from '../_utils/schema';
 import { postOrderRequisition, postOnDemandOrderRequisition, patchOrderRequisition } from '../_utils/utility';
 
 export default function OdorPage() {
 
   const [itemOrders, setitemOrders] = useState<ItemOrder[]>([]);
   const [newItemOrders, setNewItemOrders] = useState<NewItemOrder[]>([]);
-  const [totalCost, setTotalCost] = useState<Number>(0);
+  const [totalCost, setTotalCost] = useState<number>(0);
   const [showTemplate, setShowTemplate] = useState<boolean>(false)
-  const [pageNumber,setpageNumber] = useState<number>(0);
+  const [pageNumber,setPageNumber] = useState<number>(0);
   const [orderTotal,setOrderTotal] = useState<number>(0);
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState(<div/>);
   const [recipientName, setRecipientName ] = useState('')
   const [recipientLocation, setRecipientLocation] = useState ('')
   const [remarks,setRemarks] = useState('');
-  const [requisitionId, setRequisitionId] = useState ('');
-  const [odorId, setOdorId] = useState ('');
   const stepList = ["Inventory Items","Non-Inventory Items", "Order Review"];
 
   const { currentEmployee, setRefresh, } = useInventory();
@@ -50,34 +45,36 @@ export default function OdorPage() {
         );
       } else {
              try {
+
+              // Create new order object
               const newOrderObj: OrderRequisitionToEdit = {
                 ...defaultOrderRequisitionToEdit,
                 requisitionType: 'odor',
                 requisitionTypeId: '',
                 requisitionDate: '',
                 employeeId: currentEmployee?.employeeId || '',
-                remarks: remarks,
+                remarks,
               };
-              await postOrderRequisition(newOrderObj,setRequisitionId);
-
-              setTimeout(() => {
-              }, 1000);
-
+              
+              // Ensure POST is awaited and promise is resolved; store directly in a variable to avoid delays in states
+              const newOrId = await postOrderRequisition(newOrderObj);
+              
+              // Create a new ODOR object and directly declare newOrId
               const newOnDemandOrderObj: OnDemandOrderToEdit = {
                 ...defaultOnDemandOrderToEdit,
-                requisitionId: requisitionId,
-                itemOrders: itemOrders,
-                newItemOrders: newItemOrders,
-                orderTotal: orderTotal,
-                recipientName: recipientName,
-                recipientLocation: recipientLocation,
+                requisitionId: newOrId,
+                itemOrders,
+                newItemOrders,
+                orderTotal,
+                recipientName,
+                recipientLocation,
               };
-              await postOnDemandOrderRequisition(newOnDemandOrderObj, setOdorId);
 
-              setTimeout(() => {
-              }, 1000);
+              // Ensure POST is awaited and promise is resolved; store directly in a variable to avoid delays in states
+              const newOdorId = await postOnDemandOrderRequisition(newOnDemandOrderObj);
               
-              await patchOrderRequisition(requisitionId, odorId)
+              // Await patching of order requisition to cross-reference ODOR through ID
+              await patchOrderRequisition(newOrId, newOdorId)
 
             setNotificationMessage(
               CustomNotification(
@@ -162,14 +159,14 @@ export default function OdorPage() {
                   revealNotification();
           }
     else if (pageNumber < 2) {
-    setpageNumber((prevpageNum)=>prevpageNum+1)
+    setPageNumber((prevPageNum)=>prevPageNum+1)
     }
     
   }
 
   function previousPage () {
     if (pageNumber > 0) {
-      setpageNumber((prevpageNum)=>prevpageNum-1)
+      setPageNumber((prevPageNum)=>prevPageNum-1)
     }
   }
 
