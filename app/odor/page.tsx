@@ -59,17 +59,25 @@ export default function OdorPage() {
                 remarks: remarks,
               };
               await postOrderRequisition(newOrderObj,setRequisitionId);
-              // const newOnDemandOrderObj: OnDemandOrderToEdit = {
-              //   ...defaultOnDemandOrderToEdit,
-              //   requisitionId: requisitionId,
-              //   itemOrders: itemOrders,
-              //   newItemOrders: newItemOrders,
-              //   orderTotal: orderTotal,
-              //   recipientName: recipientName,
-              //   recipientLocation: recipientLocation,
-              // };
-              // await postOnDemandOrderRequisition(newOnDemandOrderObj, setOdorId);
-              // await patchOrderRequisition(requisitionId, odorId)
+
+              setTimeout(() => {
+              }, 1000);
+
+              const newOnDemandOrderObj: OnDemandOrderToEdit = {
+                ...defaultOnDemandOrderToEdit,
+                requisitionId: requisitionId,
+                itemOrders: itemOrders,
+                newItemOrders: newItemOrders,
+                orderTotal: orderTotal,
+                recipientName: recipientName,
+                recipientLocation: recipientLocation,
+              };
+              await postOnDemandOrderRequisition(newOnDemandOrderObj, setOdorId);
+
+              setTimeout(() => {
+              }, 1000);
+              
+              await patchOrderRequisition(requisitionId, odorId)
 
             setNotificationMessage(
               CustomNotification(

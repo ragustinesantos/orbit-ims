@@ -166,12 +166,12 @@ export const postOrderRequisition = async (newOrderObj : OrderRequisitionToEdit,
 ) => {
   try {
       // Create a new request
-    const request = new Request('/api/order-requisitions/', {
+    const request = {
       method: 'POST',
       body: JSON.stringify(newOrderObj),
-    });
+    };
        
-    const response = await fetch(`/api/order-requisitions`,request);
+    const response = await fetch(`/api/order-requisitions/`,request);
     console.log(response)
     if (!response.ok) {
       const errorText = await response.text();
@@ -310,10 +310,10 @@ export const postOnDemandOrderRequisition = async (odorObj : OnDemandOrderToEdit
 ) => {
   try {
       // Create a new request
-    const request = new Request('/api/odor/', {
+    const request =  {
       method: 'POST',
       body: JSON.stringify(odorObj),
-    });
+    };
     const response = await fetch(`/api/odor`,request);
     console.log(response)
     if (!response.ok) {
