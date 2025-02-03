@@ -13,10 +13,11 @@ interface setpropstype  {
   setTotalCost: React.Dispatch<React.SetStateAction<Number>>;
   showTemplate: boolean;
   setShowTemplate: React.Dispatch<React.SetStateAction<boolean>>;
+  nextPage: () => void;
 }
 
 export default function OdorComponent2({ newItemOrders,setNewItemOrders,totalCost,setTotalCost,
-                                         showTemplate,setShowTemplate,}: setpropstype) {
+                                         showTemplate,setShowTemplate, nextPage}: setpropstype) {
 
   const [newItemName, setNewItemName] = useState('');
   const [newItemDescription, setNewItemDescription] = useState('');
@@ -117,6 +118,17 @@ export default function OdorComponent2({ newItemOrders,setNewItemOrders,totalCos
         }, 200);
       },[newItemOrders]);
     
+     function cancelOrder () {
+          setNewItemName('')
+          setNewItemDescription('')
+          setNewItemProductCode('')
+          setNewItemPurchaseQTY(0)
+          setNewItemUnitPrice(0)
+          setDisposalPlan('')
+          setPurposeForPurchase('')
+          setNewItemOrders([]);
+
+      }
 
 
   const template = (
@@ -150,7 +162,7 @@ export default function OdorComponent2({ newItemOrders,setNewItemOrders,totalCos
                 />
                 <div className={classnames.buttonDiv}>
                 <Button onClick={handleAddItem}>Add</Button>
-                <Button classNames={{root: classnames.cancel}} onClick={()=>setShowTemplate(false)} color="red">Cancel</Button>
+                <Button classNames={{root: classnames.cancel}} onClick={()=>{setShowTemplate(false), cancelOrder()}} color="red">Cancel Order</Button>
                 </div>
                 <NumberInput
                   label="Purchase Quantity"
@@ -242,15 +254,16 @@ export default function OdorComponent2({ newItemOrders,setNewItemOrders,totalCos
     }
 
     return (
-    <div>
-      <Text classNames={{root: classnames.odorText,}}>On Demand Order Requisition</Text>
+      <div className={classnames.outerScrollingBox}>
+        <div className={`${classnames.scrollableContainer} scrollableContainer`}>
+
           {showTemplate ? template : 
             <div className={classnames.interiorDiv}>
               <Text classNames={{root: classnames.rootText,}}>Order Non Inventory Item</Text>
               <Text>Would you like to order a item that is not in the Inventory?</Text>
               <div>
               <Button style={{marginLeft: '0.5vw'}} onClick={handleShowTemplate}>Yes</Button>
-              <Button style={{marginLeft: '0.5vw'}} onClick={handleShowTemplate}>No</Button> 
+              <Button style={{marginLeft: '0.5vw'}} onClick={nextPage}>No</Button> 
               </div>
             </div>} 
             <div>{showTemplate ? 
@@ -274,6 +287,7 @@ export default function OdorComponent2({ newItemOrders,setNewItemOrders,totalCos
                 : <></>}
         </div>
         {showNotification && notificationMessage}
+    </div>
     </div>
 
     );

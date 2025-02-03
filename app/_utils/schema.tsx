@@ -160,6 +160,22 @@ export interface OrderRequisitionToEdit {
   [key: string]: any;
 }
 
+export const defaultOrderRequisitionToEdit: OrderRequisitionToEdit = {
+  requisitionType: '',
+  requisitionTypeId: '',
+  requisitionDate: '',
+  employeeId: '',
+  approvalE2: '',
+  approvalE3: '',
+  approvalP1: '',
+  isApprovedE2: false,
+  isApprovedE3: false,
+  isApprovedP1: false,
+  isActive: true,
+  isComplete: false,
+  remarks: '',
+};
+
 export const defaultOrderRequisition: OrderRequisition = {
   requisitionId: '',
   requisitionType: '',
@@ -255,7 +271,6 @@ export interface OnDemandOrder {
   orderTotal: number;
   recipientName: string;
   recipientLocation: string;
-  remarks: string;
 }
 
 export interface OnDemandOrderToEdit {
@@ -265,8 +280,16 @@ export interface OnDemandOrderToEdit {
   orderTotal: number;
   recipientName: string;
   recipientLocation: string;
-  remarks: string;
   [key: string]: any;
+}
+
+export const defaultOnDemandOrderToEdit : OnDemandOrderToEdit = {
+  requisitionId: '',
+  itemOrders: [],
+  newItemOrders: [],
+  orderTotal: 0,
+  recipientName: '',
+  recipientLocation: '',
 }
 
 export interface PurchaseOrderItem {
