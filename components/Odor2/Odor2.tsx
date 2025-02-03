@@ -253,10 +253,6 @@ export default function OdorComponent2({ newItemOrders,setNewItemOrders,totalCos
       setNewItemOrders([...newItemOrders]);
     }
 
-    function handleNo () {
-
-    }
-
     return (
       <div className={classnames.outerScrollingBox}>
         <div className={`${classnames.scrollableContainer} scrollableContainer`}>
