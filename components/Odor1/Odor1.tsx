@@ -143,7 +143,7 @@ export default function OdorComponent( {itemOrders, setitemOrders}: setpropstype
                 size="sm" 
                 withAsterisk
                 />
-                <Button style={{ marginLeft: '1vw'}} variant="filled" color="#1B4965" size="sm" mt="xl" onClick={handleAddItem}>
+                <Button style={{ marginLeft: '1vw'}} variant="filled" color="#228BE6" size="sm" mt="xl" onClick={handleAddItem}>
                 +
                 </Button>
               </Group> 

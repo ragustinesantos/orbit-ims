@@ -198,7 +198,7 @@ export default function OdorPage() {
         </div>
           <Group justify="flex-end">
             { pageNumber == 0 ? <></> : 
-            <Button classNames={{root: classnames.navbutton,}} onClick={previousPage} 
+            <Button classNames={{root: classnames.navbuttonprevious,}} onClick={previousPage} 
             variant="filled" color="#1B4965" size="md" radius="md" 
             >Previous</Button>}
             { pageNumber == 2 ? <></> : 

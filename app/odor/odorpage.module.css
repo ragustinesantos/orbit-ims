@@ -2,6 +2,11 @@
     width: 120px;
 }
 
+.navbuttonprevious {
+    width: 120px;
+    background-color: #1D7ED6;
+}
+
 .odorText {
     font-size: 48px;
     font-weight: bold;
