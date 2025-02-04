@@ -29,7 +29,7 @@ export function NavbarNested() {
         else {
           navItems.splice(3, 1);
         }
-        navItems = navItems.concat(NAV_ITEMS.MI);
+        navItems= navItems.concat(NAV_ITEMS.MI);
       }
       return navItems;
     }
@@ -105,7 +105,7 @@ export function NavbarNested() {
           <Menu.Target>
             <UserButton
               image="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-8.png"
-              name={(currentEmployee) ? currentEmployee.firstName + ' ' + currentEmployee.lastName : ""}
+              name={(currentEmployee) ? `${currentEmployee.firstName  } ${  currentEmployee.lastName}` : ""}
               email={(currentEmployee) ? currentEmployee.email : ""}
             />
           </Menu.Target>
