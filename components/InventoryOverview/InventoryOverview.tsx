@@ -1,6 +1,6 @@
 "use client";
 
-import {Card, Grid, Group, SimpleGrid, Text, Title } from "@mantine/core";
+import {Card, Group, SimpleGrid, Text, Title } from "@mantine/core";
 import classnames from "./InventoryOverview.module.css";
 import { useEffect, useState } from "react";
 import { useInventory } from "@/app/_utils/inventory-context";
@@ -15,7 +15,7 @@ export default function InventoryOverview(){
     const [lowStock, setLowStock] = useState <number>(0);
 
     const {inventory, setCurrentSection} = useInventory();
-    const[opened,{open,close}] = useDisclosure(false);
+    const[opened,{open,close}] = useDisclosure(false); 
 
 
     //total item 
