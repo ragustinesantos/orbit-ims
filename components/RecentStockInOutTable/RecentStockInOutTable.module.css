@@ -1,29 +1,43 @@
 
+.heading {
+  font-weight: 700;
+  margin: 20px;
+  text-align: center;
+  font-size: 1.5rem; 
+}
 
-.heading{
-    font-weight: 700;
-    margin: 20px;
-    text-align: center;
+.table-container {
+  overflow-x: auto;     
+  padding: 10px;  
+}
+
+.table {
+  border-collapse: collapse;
+}
+
+.thead {
+  background-color: #000000;
+  color:white;
+  font-weight: bold;
+}
+
+table.td, table.th {
+  text-align: center;
+  padding: 5px;
+  border-bottom: 1px solid #e1e1e1;
+  white-space: nowrap; 
+}
+
+
+@media (max-width: 768px) {
+  .heading {
+    font-size: 1.2rem;
+    text-align: left; 
+    margin: 10px 0;
   }
+
   
-  .cardContainer{
-    justify-content: center;
-    align-content: center;
+  .td {
+    font-size: 0.9rem; 
   }
-  
-  .cardText{
-    text-align: center;
-    font-weight: 600;
-  }
-  
-  .cardText:hover{
-    cursor: pointer;
-    text-decoration: underline;
-  }
-  
-  
-  .cardNumber{
-    text-align: center;
-    font-weight: 900;
-  }
-  
+}

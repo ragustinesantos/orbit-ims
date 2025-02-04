@@ -114,19 +114,19 @@ export default function RequisitionProcessTable(){
 
   return(
 
-    <div style={{ margin:'10px', padding: '20px', backgroundColor: '#f5f7fa', borderRadius: '8px' }}>
+    <div style={{ margin:'auto', padding: '20px', borderRadius: '8px', overflowX:'auto'}}>
         <Title order={5} classNames={{ root:classnames.heading }}>
-        Your Requisition Process
+        Order Requisition Process
       </Title>
         
-      <Group>
+      <Group className={classnames.group}>
         {/** ROR process table for E1*/}    
-        <Table className={classnames.table} striped data={RORTableData} />
+        <Table className={classnames.table} striped data={RORTableData} style={{ minWidth: '600px' }}/>
       </Group>
 
-      <Group>
+      <Group className={classnames.group}>
         {/** ODOR process table for E1*/}    
-        <Table className={classnames.table} striped data={ODORTableData} />
+        <Table className={classnames.table} striped data={ODORTableData} style={{ minWidth: '600px' }} />
       </Group>
 
     </div>

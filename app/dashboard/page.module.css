@@ -1,0 +1,31 @@
+
+.content-container {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+
+  .responsiveLayout{
+    display: flex;
+    gap: 10px; 
+    justify-content: center;
+    align-items: center;
+    width:90%;
+    margin:auto;
+  }
+  
+  
+
+  
+
+  @media (max-width: 768px) {
+    .responsiveLayout {
+      flex-direction: column; 
+    }
+  
+    .responsiveLayout > * {
+      max-width: 100%; 
+    }
+  }
+  
