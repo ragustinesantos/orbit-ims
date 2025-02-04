@@ -40,14 +40,13 @@ export async function POST(request: Request) {
       orderTotal: z.number(),
       recipientName: z.string(),
       recipientLocation: z.string(),
-      remarks: z.string(),
     });
 
     const validatedOnDemandOrder = onDemandOrderSchema.parse(newOnDemandOrder);
 
-    await dbAddOnDemandOrder(validatedOnDemandOrder);
+    const docId = await dbAddOnDemandOrder(validatedOnDemandOrder);
 
-    return new Response(JSON.stringify(validatedOnDemandOrder), { status: 201 });
+    return new Response(JSON.stringify(docId), { status: 201 });
   } catch (error) {
     return new Response(JSON.stringify({ error }), { status: 401 });
   }

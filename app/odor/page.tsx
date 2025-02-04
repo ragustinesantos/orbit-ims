@@ -5,12 +5,13 @@ import OdorComponent from '@/components/Odor1/Odor1';
 import OdorComponent2 from '@/components/Odor2/Odor2';
 import OdorComponent3 from '@/components/Odor3/Odor3';
 import classnames from './odorpage.module.css';
-import { Text, Group,  } from '@mantine/core';
+import { Text, Group, Button} from '@mantine/core';
 import { useState,useEffect } from 'react';
 import CustomNotification from '@/components/CustomNotification/CustomNotification';
-
-import { Button } from '@mantine/core';
-import { ItemOrder, NewItemOrder } from '../_utils/schema';
+import WizardProgress from '@/components/WizardProgress/WizardProgress';
+import { useInventory } from '../_utils/inventory-context';
+import { OrderRequisitionToEdit, defaultOrderRequisitionToEdit, OnDemandOrderToEdit, defaultOnDemandOrderToEdit, ItemOrder, NewItemOrder } from '../_utils/schema';
+import { postOrderRequisition, postOnDemandOrderRequisition, patchOrderRequisition } from '../_utils/utility';
 
 export default function OdorPage() {
 
@@ -18,13 +19,103 @@ export default function OdorPage() {
   const [newItemOrders, setNewItemOrders] = useState<NewItemOrder[]>([]);
   const [totalCost, setTotalCost] = useState<Number>(0);
   const [showTemplate, setShowTemplate] = useState<boolean>(false)
-  const [pageNumber,setpageNumber] = useState<number>(0);
+  const [pageNumber,setPageNumber] = useState<number>(0);
   const [orderTotal,setOrderTotal] = useState<number>(0);
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState(<div/>);
   const [recipientName, setRecipientName ] = useState('')
   const [recipientLocation, setRecipientLocation] = useState ('')
   const [remarks,setRemarks] = useState('');
+  const stepList = ["Inventory Items","Non-Inventory Items", "Order Review"];
+
+  const { currentEmployee, setRefresh, } = useInventory();
+
+    const handleAddItem = async () => {
+      if (
+        recipientName === '' ||
+        recipientLocation === '' 
+      ) {
+        setNotificationMessage(
+          CustomNotification(
+            'error',
+            'Fill Up Required Fields',
+            'Please Add Recipient name and location.',
+            setShowNotification
+          )
+        );
+      } else {
+             try {
+
+              let date: Date = new Date();  
+              const formattedDate:string = date.toLocaleString();
+              // Create new order object
+              const newOrderObj: OrderRequisitionToEdit = {
+                ...defaultOrderRequisitionToEdit,
+                requisitionType: 'odor',
+                requisitionTypeId: '',
+                requisitionDate: formattedDate,
+                employeeId: currentEmployee?.employeeId || '',
+                remarks,
+              };
+              
+              // Ensure POST is awaited and promise is resolved; store directly in a variable to avoid delays in states
+              const newOrId = await postOrderRequisition(newOrderObj);
+              
+              // Create a new ODOR object and directly declare newOrId
+              const newOnDemandOrderObj: OnDemandOrderToEdit = {
+                ...defaultOnDemandOrderToEdit,
+                requisitionId: newOrId,
+                itemOrders,
+                newItemOrders,
+                orderTotal,
+                recipientName,
+                recipientLocation,
+              };
+
+              // Ensure POST is awaited and promise is resolved; store directly in a variable to avoid delays in states
+              const newOdorId = await postOnDemandOrderRequisition(newOnDemandOrderObj);
+              
+              // Await patching of order requisition to cross-reference ODOR through ID
+              await patchOrderRequisition(newOrId, newOdorId)
+
+            setNotificationMessage(
+              CustomNotification(
+                'success',
+                'Requisition Added!',
+                `Odor successfully added.`,
+                setShowNotification
+              )
+            );
+            revealNotification();
+  
+          //Reset Fields
+          setRecipientName('');
+          setRecipientLocation('');
+          setRemarks('');
+        } catch (error) {
+          console.log(error);
+          setNotificationMessage(
+            CustomNotification(
+              'error',
+              'Error Encountered',
+              'Unexpected Error encountered. Please try again.',
+              setShowNotification
+            )
+            
+          );
+          revealNotification();
+
+
+
+        }
+      }
+      // Display notification for 3 seconds.
+      setShowNotification(true);
+      setTimeout(() => {
+        setShowNotification(false);
+        window.location.replace("/");
+      }, 3000);
+    };
 
 
     useEffect(() => {
@@ -46,7 +137,8 @@ export default function OdorPage() {
                      <OdorComponent2 
                      totalCost={totalCost} setTotalCost={setTotalCost} 
                      newItemOrders={newItemOrders} setNewItemOrders={setNewItemOrders} 
-                     setShowTemplate={setShowTemplate} showTemplate={showTemplate}>
+                     setShowTemplate={setShowTemplate} showTemplate={showTemplate}
+                     nextPage={nextPage}>
                      </OdorComponent2>,
                      <OdorComponent3 
                      itemOrders={itemOrders} newItemOrders={newItemOrders} 
@@ -70,16 +162,18 @@ export default function OdorPage() {
                   revealNotification();
           }
     else if (pageNumber < 2) {
-    setpageNumber((prevpageNum)=>prevpageNum+1)
-    }
-    
+    setPageNumber((prevPageNum)=>prevPageNum+1)
+    }  
   }
 
   function previousPage () {
     if (pageNumber > 0) {
-      setpageNumber((prevpageNum)=>prevpageNum-1)
+      setPageNumber((prevPageNum)=>prevPageNum-1)
     }
   }
+
+
+  
 
 
   return (
@@ -95,10 +189,16 @@ export default function OdorPage() {
         padding: 32,
       }}
       >
+        <div>
+        <Text classNames={{root: classnames.odorText,}}>On Demand Order Requisition</Text>
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2vh', marginBottom: '2vh',}}> 
+          <WizardProgress stepList={stepList} currentStep={pageNumber+1}></WizardProgress>
+        </div>
           {nav_array[pageNumber]}
+        </div>
           <Group justify="flex-end">
             { pageNumber == 0 ? <></> : 
-            <Button classNames={{root: classnames.navbutton,}} onClick={previousPage} 
+            <Button classNames={{root: classnames.navbuttonprevious,}} onClick={previousPage} 
             variant="filled" color="#1B4965" size="md" radius="md" 
             >Previous</Button>}
             { pageNumber == 2 ? <></> : 
@@ -106,7 +206,7 @@ export default function OdorPage() {
             variant="filled" color="#1B4965" size="md" radius="md"
             >Next</Button>}
             { pageNumber == 2 ?  
-            <Button classNames={{root: classnames.navbutton,}} onClick={nextPage} 
+            <Button classNames={{root: classnames.navbutton,}} onClick={handleAddItem} 
             variant="filled" color="#1B4965" size="md" radius="md"
             >Submit</Button> : <></> }
           </Group>
