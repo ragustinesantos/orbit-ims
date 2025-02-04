@@ -90,6 +90,11 @@ export const fetchEmployees = async () => {
   try {
     const response = await fetch('/api/employees');
 
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+    }
+
     const data = await response.json();
 
     return data;

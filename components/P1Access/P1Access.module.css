@@ -1,0 +1,91 @@
+.rootText {
+  font-size: 48px;
+  font-weight: bold;
+  text-decoration: underline;
+  text-underline-offset: 8px;
+  padding-bottom: 32px;
+}
+
+.rootSectionText {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.rootMainGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  height: 80vh;
+  width: 80vw;
+}
+
+.rootSectionGroup {
+  display: flex;
+  flex: 2;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  background-color: #f1f3f5;
+  padding: 16px;
+  border-radius: 20px;
+}
+
+.rootTableGroup {
+  display: flex;
+  flex: 2;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: 30vh;
+  width: 100%;
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+
+@media (max-width: 1024px) {
+  .rootTableGroup {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+}
+
+.rootRequisitionTable {
+  width: 38vw;
+  overflow-y: scroll;
+  min-width: 600px;
+  margin-bottom: 20px;
+}
+
+.rootRequisitionThead {
+  color: white;
+  background-color: #242424;
+}
+
+.rootRequisitionTd {
+  overflow-x: scroll;
+  scrollbar-width: none;
+}
+
+.rootTextId {
+  cursor: pointer;
+}
+
+.rootTextId:hover {
+  color: #3c96aa;
+}
+
+.rootPoTable {
+  height: 30vh;
+  width: 100%;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  gap: 40px;
+}
+
+.loadingContainer {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    width: 80vw;
+}
