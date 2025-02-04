@@ -5,6 +5,7 @@ import { useInventory } from "@/app/_utils/inventory-context";
 import { OnDemandOrder, OrderRequisition, RecurringOrder } from '@/app/_utils/schema';
 import { fetchOnDemandOrderRequisitions, fetchOrderRequisitions, fetchRecurringOrderRequisitions } from '@/app/_utils/utility';
 import RorModal from '@/components/RorModal/RorModal';
+import OdorModal from "../OdorModal/OdorModal";
 import { useEffect, useState } from "react";
 import ApprovalBadge from "../ApprovalBadge/ApprovalBadge";
 
@@ -48,6 +49,10 @@ export default function RequisitionProcessTable(){
     const toggleRorModalState = (rorId: string) => {
       setModalStateTracker((prev) => ({ ...prev, [rorId]: !prev[rorId] }));
     };
+
+    const toggleOdorModalState = (odorId: string) => {
+      setModalStateTracker((prev) => ({ ...prev, [odorId]: !prev[odorId] }));
+    };
     
     
     // Map through the desired list and return components only for active requisitions
@@ -89,7 +94,20 @@ export default function RequisitionProcessTable(){
       if (matchingOr?.isActive) {
         // No modal implementation yet
         return [
-          <Text>{odor.odorId}</Text>,
+          <>
+          {/* The modal accepts the current ror in the iteration for the details, 
+          isOpened that sets the visibility of the modal and defaults as false, 
+          isClosed to toggle the visibility back to false */}
+            <OdorModal
+              onDemandOrder={odor}
+              isOpened={!!modalStateTracker[odor.odorId]}
+              isClosed={() => setModalStateTracker((prev) => ({ ...prev, [odor.odorId]: false }))}
+            />
+            {/* When the ID text is clicked, this will toggle the state of the modal visibility. 
+            The first time this is clicked for the said ror.rorId, 
+            a key-value pair is created by toggle with the value of [ror.rorId]: !prev[rorId] if it cannot find [ror.rorId] (dynamic keys)*/}
+            <Text onClick={() => toggleOdorModalState(odor.odorId)} classNames={{root:classnames.tableID}}>{odor.odorId}</Text>
+          </>,
           <Text>{currentEmployee?.firstName} {currentEmployee?.lastName}</Text>,
           <Text>{formatDate(matchingOr.requisitionDate)}</Text>,
           <ApprovalBadge isApproved={matchingOr.isApprovedP1} />
