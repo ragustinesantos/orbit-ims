@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { Group, Select, Table, Text } from '@mantine/core';
-import classnames from './SearchEmployee.module.css';
-import { useInventory } from '@/app/_utils/inventory-context';
 import { dbGetAllEmployees } from '@/app/_services/employees-service';
+import { useInventory } from '@/app/_utils/inventory-context';
 import { Employee } from '@/app/_utils/schema';
+import classnames from './SearchEmployee.module.css';
 
 export default function SearchEmployee() {
   // Search employees from employee search
@@ -17,7 +17,6 @@ export default function SearchEmployee() {
 
   // Filtering for searched employees
   const rows = employees?.map((employee) => {
-
     let employeeLevelList = '';
 
     for (let i = 0; i < employee.employeeLevel.length; i++) {
@@ -30,27 +29,27 @@ export default function SearchEmployee() {
     return (
       // checks if inputted value matches employee names (case-insensitive)
       employee.firstName?.toLowerCase().includes(searchValue?.toLowerCase() || '') ||
-      employee.lastName?.toLowerCase().includes(searchValue?.toLowerCase() || '')
-    ) ? (
-      <Table.Tr key={employee.employeeId}>
-        <Table.Td style={{ maxWidth: '20px', overflowX: 'scroll', scrollbarWidth: 'none' }}>
-          {employee.employeeId}
-        </Table.Td>
-        <Table.Td>{`${employee.firstName} ${employee.lastName}`}</Table.Td>
-        <Table.Td>{employee.phone}</Table.Td>
-        <Table.Td>{employee.email}</Table.Td>
-        <Table.Td>{employee.position}</Table.Td>
-        <Table.Td>{employee.department}</Table.Td>
-        <Table.Td>{employeeLevelList}</Table.Td>
-      </Table.Tr>
-    ) : null;
+        employee.lastName?.toLowerCase().includes(searchValue?.toLowerCase() || '') ? (
+        <Table.Tr key={employee.employeeId}>
+          <Table.Td style={{ maxWidth: '20px', overflowX: 'scroll', scrollbarWidth: 'none' }}>
+            {employee.employeeId}
+          </Table.Td>
+          <Table.Td>{`${employee.firstName} ${employee.lastName}`}</Table.Td>
+          <Table.Td>{employee.phone}</Table.Td>
+          <Table.Td>{employee.email}</Table.Td>
+          <Table.Td>{employee.position}</Table.Td>
+          <Table.Td>{employee.department}</Table.Td>
+          <Table.Td>{employeeLevelList}</Table.Td>
+        </Table.Tr>
+      ) : null
+    );
   });
 
-  // Fetch employees from db 
+  // Fetch employees from db
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const foundEmployees = await dbGetAllEmployees() || [];
+        const foundEmployees = (await dbGetAllEmployees()) || [];
         // filter out inactive employees
         const activeEmployees = foundEmployees.filter((employee) => employee.isActive === true);
         setEmployees(activeEmployees);
@@ -99,29 +98,31 @@ export default function SearchEmployee() {
           size="md"
           withAsterisk
         />
-
-        <Table
-          stickyHeader
-          horizontalSpacing="xl"
-          verticalSpacing="lg"
-          classNames={{
-            thead: classnames.thead,
-            td: classnames.td,
-          }}
-        >
-          <Table.Thead>
-            <Table.Tr>
-              <Table.Th>Employee ID</Table.Th>
-              <Table.Th>Name</Table.Th>
-              <Table.Th>Phone</Table.Th>
-              <Table.Th>Email</Table.Th>
-              <Table.Th>Position</Table.Th>
-              <Table.Th>Department</Table.Th>
-              <Table.Th>Access Levels</Table.Th>
-            </Table.Tr>
-          </Table.Thead>
-          <Table.Tbody>{rows}</Table.Tbody>
-        </Table>
+        
+        <div className={classnames.rootTable}>
+          <Table
+            stickyHeader
+            horizontalSpacing="xl"
+            verticalSpacing="lg"
+            classNames={{
+              thead: classnames.thead,
+              td: classnames.td,
+            }}
+          >
+            <Table.Thead>
+              <Table.Tr>
+                <Table.Th>Employee ID</Table.Th>
+                <Table.Th>Name</Table.Th>
+                <Table.Th>Phone</Table.Th>
+                <Table.Th>Email</Table.Th>
+                <Table.Th>Position</Table.Th>
+                <Table.Th>Department</Table.Th>
+                <Table.Th>Access Levels</Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>{rows}</Table.Tbody>
+          </Table>
+        </div>
       </Group>
     </main>
   );

@@ -1,22 +1,27 @@
 .rootGroup {
-    align-items: baseline;
-    flex-direction: column;
+  align-items: baseline;
+  flex-direction: column;
 }
 
-
 .rootText {
-    font-size: 48px;
-    font-weight: bold;
-    text-decoration: underline;
-    text-underline-offset: 8px;
+  font-size: 48px;
+  font-weight: bold;
+  text-decoration: underline;
+  text-underline-offset: 8px;
 }
 
 .selectRoot {
-    width: 100%;
+  width: 100%;
+}
+
+.rootTable {
+  overflow-y: scroll;
+  scrollbar-width: none;
+  max-height: 80vh;
 }
 
 .thead {
-    background-color: white;
+  background-color: white;
 }
 
 /* .td {
