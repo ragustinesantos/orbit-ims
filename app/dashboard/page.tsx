@@ -14,22 +14,22 @@ export default function DashBoard(){
     return(
         <main style={{ display: 'flex', width: '100vw' }}>
         <NavbarNested />
-        <div
-            className="content-container"
-            style={{
-            margin: 'auto',
-            height: '100vh',
-            width: '100vw',
-            overflowY: 'scroll',
-            }}
-        >
-            <DashboardTitle />
-            <Group classNames={{root:classnames.responsiveLayout}}>
-                <InventoryOverview />
-                <RequisitionProcessTable />
-            </Group>
-            <RecentStockInOutTable />
-        </div>
+            <div
+                className="content-container"
+                style={{
+                margin: 'auto',
+                height: '100vh',
+                width: '100vw',
+                overflowY: 'scroll',
+                }}
+            >
+                <DashboardTitle />
+                <Group classNames={{root:classnames.responsiveLayout}}>
+                    <InventoryOverview />
+                    <RequisitionProcessTable />
+                </Group>
+                <RecentStockInOutTable />
+            </div>
         </main>
             
     );
