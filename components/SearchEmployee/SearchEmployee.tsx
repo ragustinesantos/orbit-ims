@@ -102,7 +102,6 @@ export default function SearchEmployee() {
 
         <Table
           stickyHeader
-          stickyHeaderOffset={60}
           horizontalSpacing="xl"
           verticalSpacing="lg"
           classNames={{

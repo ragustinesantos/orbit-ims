@@ -10,15 +10,14 @@ export default function SearchItemPage() {
       <div
         style={{
           display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: '100%',
-          minWidth: '50vw',
-          //height: '100vh',
-          padding: 10,
+          flex: 1,
+          justifyContent: 'flex-start',
+          height: '100vh',
+          paddingLeft: 32,
+          paddingTop: 4,
         }}
       >
-        <SearchItem/>
+        <SearchItem />
       </div>
     </main>
   );

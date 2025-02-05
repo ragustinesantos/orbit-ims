@@ -1,4 +1,3 @@
-
 .rootGroup {
     align-items: baseline;
     flex-direction: column;
@@ -17,7 +16,7 @@
 }
 
 .thead {
-    background-color: transparent;
+    background-color: white;
 }
 
 /* .td {
