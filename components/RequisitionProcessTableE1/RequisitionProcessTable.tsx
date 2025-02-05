@@ -122,8 +122,7 @@ export default function RequisitionProcessTable(){
       if (matchingOr?.isActive) {
         // No modal implementation yet
         return [
-          <Text>{odor.odorId}</Text>,
-          <Text>{matchingEmployee?.firstName} {matchingEmployee?.lastName}</Text>,
+          
           <>
           {/* The modal accepts the current ror in the iteration for the details, 
           isOpened that sets the visibility of the modal and defaults as false, 
@@ -138,7 +137,8 @@ export default function RequisitionProcessTable(){
             a key-value pair is created by toggle with the value of [ror.rorId]: !prev[rorId] if it cannot find [ror.rorId] (dynamic keys)*/}
             <Text onClick={() => toggleOdorModalState(odor.odorId)} classNames={{root:classnames.tableID}}>{odor.odorId}</Text>
           </>,
-          <Text>{currentEmployee?.firstName} {currentEmployee?.lastName}</Text>,
+
+          <Text>{matchingEmployee?.firstName} {matchingEmployee?.lastName}</Text>,
           <Text>{formatDate(matchingOr.requisitionDate)}</Text>,
           <ApprovalBadge isApproved={matchingOr.isApprovedP1} />
         ];
