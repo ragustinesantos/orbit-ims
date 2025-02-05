@@ -11,11 +11,11 @@ export default function DeleteEmployeePage() {
       <div
         style={{
           display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: '100%',
-          minWidth: '50vw',
-          padding: 10,
+          flex: 1,
+          justifyContent: 'flex-start',
+          height: '100vh',
+          paddingLeft: 32,
+          paddingTop: 4,
         }}
       >
         <DeleteEmployee />

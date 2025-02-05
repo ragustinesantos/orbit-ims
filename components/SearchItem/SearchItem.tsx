@@ -31,60 +31,59 @@ export default function SearchItem() {
 
   return (
     <main>
-    <Group
-      classNames={{
-        root: classnames.rootGroup,
-      }}
-    >
-      <Text
+      <Group
         classNames={{
-          root: classnames.rootText,
+          root: classnames.rootGroup,
         }}
       >
-        Search
-      </Text>
+        <Text
+          classNames={{
+            root: classnames.rootText,
+          }}
+        >
+          Search
+        </Text>
 
-      <Select
-        label="Search Item"
-        placeholder="Select an item from the list..."
-        data={inventory?.map((item) => ({
-          value: item.itemName,
-          label: item.itemName,
-        }))}
-        allowDeselect
-        searchable
-        value={searchValue || null}
-        onChange={setSearchValue}
-        classNames={{
-          root: classnames.selectRoot,
-        }}
-        size="md"
-        withAsterisk
-      />
+        <Select
+          label="Search Item"
+          placeholder="Select an item from the list..."
+          data={inventory?.map((item) => ({
+            value: item.itemName,
+            label: item.itemName,
+          }))}
+          allowDeselect
+          searchable
+          value={searchValue || null}
+          onChange={setSearchValue}
+          classNames={{
+            root: classnames.selectRoot,
+          }}
+          size="md"
+          withAsterisk
+        />
 
-      <Table
-        stickyHeader
-        stickyHeaderOffset={60}
-        horizontalSpacing="xl"
-        verticalSpacing="lg"
-        classNames={{
-          thead: classnames.thead,
-          td: classnames.td,
-        }}
-      >
-        
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>Item ID</Table.Th>
-            <Table.Th>Name</Table.Th>
-            <Table.Th>Stock</Table.Th>
-            <Table.Th>UOM</Table.Th>
-            <Table.Th>Status</Table.Th>
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>{rows}</Table.Tbody>
-      </Table>
-    </Group>
+        <Table
+          stickyHeader
+          horizontalSpacing="xl"
+          verticalSpacing="lg"
+          classNames={{
+            thead: classnames.thead,
+            td: classnames.td,
+          }}
+        >
+
+          <Table.Thead>
+            <Table.Tr>
+              <Table.Th>Item ID</Table.Th>
+              <Table.Th>Name</Table.Th>
+              <Table.Th>Stock</Table.Th>
+              <Table.Th>UOM</Table.Th>
+              <Table.Th>Status</Table.Th>
+            </Table.Tr>
+          </Table.Thead>
+          <Table.Tbody>{rows}</Table.Tbody>
+        </Table>
+      </Group>
     </main>
   );
 }
