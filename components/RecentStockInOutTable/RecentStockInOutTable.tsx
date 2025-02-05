@@ -24,16 +24,17 @@ export default function RecentStockInOutTable() {
       ));
    
     return(
-      <div style={{marginTop:'30px'}}>
+      <div style={{ margin:'auto', padding: '20px', borderRadius: '8px', overflowX:'auto', width:'90%'}}>
       <Title order={5} classNames={{ root:classnames.heading }}>
        Recent Stock In/Out
      </Title>
 
       <Table
        stickyHeader
-       stickyHeaderOffset={60}
+       stickyHeaderOffset={50}
        horizontalSpacing="xl"
        verticalSpacing="lg"
+       style={{ width: '100%' }}
        classNames={{
          thead: classnames.thead,
          td: classnames.td,

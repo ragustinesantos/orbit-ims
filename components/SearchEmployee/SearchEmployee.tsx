@@ -98,6 +98,7 @@ export default function SearchEmployee() {
           size="md"
           withAsterisk
         />
+        
         <div className={classnames.rootTable}>
           <Table
             stickyHeader

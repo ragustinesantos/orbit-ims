@@ -1,4 +1,4 @@
-import { Title } from "@mantine/core";
+import { Group, Title } from "@mantine/core";
 import classnames from "./DashboardTitle.module.css";
 import { useInventory } from "@/app/_utils/inventory-context";
 
@@ -13,13 +13,7 @@ export default function DashboardTitle(){
 
 
     return(
-        <div style={{  
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-start", 
-            paddingTop: "30px",
-            paddingLeft:"30px",
-            }}>
+        <Group classNames={{ root:classnames.container }}>
             <Title order={2} classNames={{ root:classnames.heading }}>
                 Hello, {" "} 
                 {currentEmployee?.firstName} {currentEmployee?.lastName}
@@ -28,6 +22,6 @@ export default function DashboardTitle(){
             <Title order={5} classNames={{ root:classnames.date }}>
                 Today is {currentDate}
             </Title>
-        </div>
+        </Group>
     );
 }
