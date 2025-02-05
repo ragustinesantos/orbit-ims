@@ -92,6 +92,7 @@ export default function OdorPage() {
           setRecipientName('');
           setRecipientLocation('');
           setRemarks('');
+          window.location.replace("/dashboard");
         } catch (error) {
           console.log(error);
           setNotificationMessage(
@@ -112,8 +113,7 @@ export default function OdorPage() {
       // Display notification for 3 seconds.
       setShowNotification(true);
       setTimeout(() => {
-        setShowNotification(false);
-        window.location.replace("/");
+        setShowNotification(false);       
       }, 3000);
     };
 
