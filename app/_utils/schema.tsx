@@ -347,6 +347,13 @@ export interface rorModalProps {
   handleApprovalActivity?: (message: string, rorId: string, status: string) => void;
 }
 
+export interface odorModalProps {
+  onDemandOrder: OnDemandOrder | null;
+  isOpened: boolean;
+  isClosed: () => void;
+  handleApprovalActivity?: (message: string, odorId: string, status: string) => void;
+}
+
 export interface NavLink {
   label: string;
   link: string;
