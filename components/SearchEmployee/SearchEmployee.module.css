@@ -18,3 +18,13 @@
 .thead {
     background-color: transparent;
 }
+
+.rootTable {
+    overflow-y: scroll;
+    scrollbar-width: none;
+    max-height: 80vh;
+  }
+  
+  .thead {
+    background-color: white;
+  }

@@ -3,6 +3,7 @@
 
 import { useEffect, useState } from 'react';
 import { Group, Table, TableData, Text } from '@mantine/core';
+import { useInventory } from '@/app/_utils/inventory-context';
 import { Employee, OnDemandOrder, OrderRequisition, RecurringOrder } from '@/app/_utils/schema';
 import {
   fetchEmployees,
@@ -16,6 +17,7 @@ import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
 import classnames from './P1Access.module.css';
 
 export default function P1AccessPage() {
+
   // Required State to Keep Track of all modal states
   const [modalStateTracker, setModalStateTracker] = useState<Record<string, boolean>>({});
 

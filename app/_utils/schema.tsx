@@ -313,8 +313,8 @@ export interface PurchaseOrderToEdit {
 }
 
 export interface WizardProgressProps {
-  stepList: string[],
-  currentStep: number
+  stepList: string[];
+  currentStep: number;
 }
 
 export interface rorModalProps {
@@ -400,7 +400,7 @@ export const NAV_ITEMS: navCollection = {
     {
       label: 'P1 Access',
       icon: IconNotes,
-      links: [{ label: 'Access', link: '/' }],
+      links: [{ label: 'Access', link: '/access/P1' }],
     },
   ],
   P2: [
