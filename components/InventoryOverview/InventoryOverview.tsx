@@ -1,6 +1,6 @@
 "use client";
 
-import {Card, Grid, Text, Title } from "@mantine/core";
+import {Card, Group, SimpleGrid, Text, Title } from "@mantine/core";
 import classnames from "./InventoryOverview.module.css";
 import { useEffect, useState } from "react";
 import { useInventory } from "@/app/_utils/inventory-context";
@@ -15,7 +15,7 @@ export default function InventoryOverview(){
     const [lowStock, setLowStock] = useState <number>(0);
 
     const {inventory, setCurrentSection} = useInventory();
-    const[opened,{open,close}] = useDisclosure(false);
+    const[opened,{open,close}] = useDisclosure(false); 
 
 
     //total item 
@@ -44,42 +44,45 @@ export default function InventoryOverview(){
     return(
 
  
-    <div style={{  margin:'20px', padding: '20px', backgroundColor: '#f5f7fa', borderRadius: '8px', justifyItems:'center'}}>
+    <Group classNames={{root:classnames.container}} >
 
-      <Title order={5} classNames={{ root:classnames.heading }}>
+      <Title order={3} classNames={{ root:classnames.heading }}>
         Inventory Overview
       </Title>
 
-      <Grid type="container" justify="center" align="center" >
+      <SimpleGrid  cols={{ base: 1, sm: 1, lg: 2 }}
+      spacing={{ base: 10, sm: 'xl' }}
+      verticalSpacing={{ base: 'md', sm: 'xl' }}
+      classNames={{ root: classnames.grid }}>
         
-        <Grid.Col span={6} >
-          <Card shadow="sm" radius="md" withBorder h={100} w={300}  classNames={{ root:classnames.cardContainer }}>
+        <div>
+          <Card shadow="lg" radius="lg" withBorder classNames={{ root:classnames.cardContainer }}>
               <Text size="md" classNames={{ root:classnames.cardText }}>
                 Total Item
               </Text>
-              <Text size="xl" c="gray" classNames={{ root:classnames.cardNumber }}>
+              <Text size="xl" c="blue" fw={700} classNames={{ root:classnames.cardNumber }}>
                 {totalItem}
               </Text>
           </Card>
-        </Grid.Col>
+        </div>
 
-        <Grid.Col span={6} >
-          <Card shadow="sm" radius="md" withBorder h={100} w={300} classNames={{ root:classnames.cardContainer }}>
+        <div>
+          <Card shadow="lg" radius="lg" withBorder classNames={{ root:classnames.cardContainer }}>
 
               <Text size="md" classNames={{ root:classnames.cardText }} onClick={open}>
                 Low Stock
               </Text>
               <LowStockModal opened = {opened} close={close}/>
 
-              <Text size="xl"  c="gray" classNames={{ root:classnames.cardNumber }}>
+              <Text size="xl" c="blue" fw={700}  classNames={{ root:classnames.cardNumber }}>
                 {lowStock}
               </Text>
 
           </Card>
-        </Grid.Col>
+        </div>
 
-      </Grid>
-      </div>
+      </SimpleGrid>
+      </Group>
 
     
 

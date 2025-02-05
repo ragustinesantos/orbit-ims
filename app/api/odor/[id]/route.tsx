@@ -48,7 +48,6 @@ export async function PUT(request: Request, { params }: { params: any }) {
       orderTotal: z.number(),
       recipientName: z.string(),
       recipientLocation: z.string(),
-      remarks: z.string(),
     });
 
     const validatedOnDemandOrder = onDemandOrderSchema.parse(updatedOnDemandOrder);
@@ -95,7 +94,6 @@ export async function PATCH(request: Request, { params }: { params: any }) {
         orderTotal: z.number().optional(),
         recipientName: z.string().optional(),
         recipientLocation: z.string().optional(),
-        remarks: z.string().optional(),
       })
       .strict();
 

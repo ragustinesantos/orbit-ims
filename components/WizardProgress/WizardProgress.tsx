@@ -1,10 +1,6 @@
 import { useEffect, useState } from 'react';
 import classes from './WizardProgress.module.css';
-
-interface WizardProgressProps {
-    stepList: String[],
-    currentStep: number
-}
+import { WizardProgressProps } from '@/app/_utils/schema';
 
 export default function WizardProgress(props: WizardProgressProps) {
 
@@ -80,7 +76,7 @@ export default function WizardProgress(props: WizardProgressProps) {
                 }
             </>
         )
-    }, []);
+    }, [currentStep]);
 
     return (
         <div className={classes.header}>

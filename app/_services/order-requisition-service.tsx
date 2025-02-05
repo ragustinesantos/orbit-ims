@@ -34,7 +34,8 @@ export async function dbGetAllOrderRequisitions() {
 export async function dbAddOrderRequisition(orderRequisitionObj: OrderRequisitionToEdit) {
   try {
     const newOrderRequisitionReference = collection(db, 'order-requisitions');
-    await addDoc(newOrderRequisitionReference, orderRequisitionObj);
+    const docRef = await addDoc(newOrderRequisitionReference, orderRequisitionObj);
+    return docRef.id;
   } catch (error) {
     return console.log(error);
   }

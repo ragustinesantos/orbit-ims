@@ -70,9 +70,35 @@ export default function OdorComponent3( {itemOrders,newItemOrders,totalCost,orde
       });
 
     return(
-        <div>
-            <Text classNames={{root: classnames.odorText,}}>On Demand Order Requisition</Text>
-            <Text classNames={{root: classnames.templateTitle,}}>Please review your order</Text>
+      <div className={classnames.outerScrollingBox}>
+        <div className={`${classnames.scrollableContainer} scrollableContainer`}>
+        <Text className={classnames.templateHeading}>Order Review</Text>
+              <Group>
+                    <TextInput
+                      label="Recipient Name"
+                      withAsterisk
+                      placeholder="Recipient that will receive the order....."
+                      size="xs"
+                      value={recipientName}
+                      onChange={(event)=>setRecipientName(event.target.value)}
+                    />
+                    <TextInput
+                      label="Recipient Location"
+                      withAsterisk
+                      placeholder="Location to deliver the order...."
+                      size="xs"
+                      value={recipientLocation}
+                      onChange={(event)=>setRecipientLocation(event.target.value)}
+                    /> 
+                    <TextInput
+                    classNames={{root: classnames.remarksStyle,}}
+                      label="Remarks"
+                      placeholder="Add any additional Comments..."
+                      value={remarks}
+                      onChange={(event)=>setRemarks(event.target.value)}
+                      size="xs"
+                    />
+                  </Group>
               {itemOrders.length > 0 && 
                   <div>
                   <Text className={classnames.templateHeading}>Inventory Items</Text>
@@ -122,34 +148,10 @@ export default function OdorComponent3( {itemOrders,newItemOrders,totalCost,orde
                       <Text classNames={{root: classnames.orderTotalText,}}>{'$'+totalCost}</Text>
                       </div>}
                   </Group>
-                  <Group>
-                    <TextInput
-                      label="Recipient Name"
-                      withAsterisk
-                      placeholder="Recipient that will receive the order....."
-                      size="xs"
-                      value={recipientName}
-                      onChange={(event)=>setRecipientName(event.target.value)}
-                    />
-                    <TextInput
-                      label="Recipient Location"
-                      withAsterisk
-                      placeholder="Location to deliver the order...."
-                      size="xs"
-                      value={recipientLocation}
-                      onChange={(event)=>setRecipientLocation(event.target.value)}
-                    /> 
-                  </Group>
-                  <Textarea
-                    classNames={{root: classnames.TextAreaStyle,}}
-                      label="Remarks"
-                      placeholder="Add any additional Comments..."
-                      value={remarks}
-                      onChange={(event)=>setRemarks(event.target.value)}
-                      size="xs"
-                      resize="both"
-                    />
+                  
+                  
             
+        </div>
         </div>
     )
 }

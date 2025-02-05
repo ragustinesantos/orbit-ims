@@ -34,7 +34,8 @@ export async function dbGetAllOnDemandOrders() {
 export async function dbAddOnDemandOrder(onDemandOrderObj: OnDemandOrderToEdit) {
   try {
     const newOnDemandOrderReference = collection(db, 'odor');
-    await addDoc(newOnDemandOrderReference, onDemandOrderObj);
+    const docRef = await addDoc(newOnDemandOrderReference, onDemandOrderObj);
+    return docRef.id;
   } catch (error) {
     return console.log(error);
   }
