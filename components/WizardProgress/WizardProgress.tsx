@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import classes from './WizardProgress.module.css';
 import { WizardProgressProps } from '@/app/_utils/schema';
-import { increment } from 'firebase/firestore';
 
 export default function WizardProgress(props: WizardProgressProps) {
 
