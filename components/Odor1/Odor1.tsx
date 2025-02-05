@@ -119,8 +119,8 @@ export default function OdorComponent( {itemOrders, setitemOrders}: setpropstype
       });
 
     return (
-      <div>
-        <Text classNames={{root: classnames.odorText,}}>On Demand Order Requisition</Text>
+      <div className={classnames.outerScrollingBox}>
+        <div className={`${classnames.scrollableContainer} scrollableContainer`}>
                 <div className={classnames.templateTitle}>Inventory Item</div>
               <Group
                 classNames={{
@@ -143,7 +143,7 @@ export default function OdorComponent( {itemOrders, setitemOrders}: setpropstype
                 size="sm" 
                 withAsterisk
                 />
-                <Button style={{ marginLeft: '1vw'}} variant="filled" color="#1B4965" size="sm" mt="xl" onClick={handleAddItem}>
+                <Button style={{ marginLeft: '1vw'}} variant="filled" color="#228BE6" size="sm" mt="xl" onClick={handleAddItem}>
                 +
                 </Button>
               </Group> 
@@ -166,6 +166,7 @@ export default function OdorComponent( {itemOrders, setitemOrders}: setpropstype
               </Table>}
             </div> 
           {showNotification && notificationMessage}
+      </div>
       </div>
     );
   }
