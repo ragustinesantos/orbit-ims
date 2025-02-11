@@ -4,11 +4,18 @@
 import { useEffect, useState } from 'react';
 import { Group, Table, TableData, Text } from '@mantine/core';
 import { useInventory } from '@/app/_utils/inventory-context';
-import { Employee, OnDemandOrder, OrderRequisition, RecurringOrder } from '@/app/_utils/schema';
+import {
+  Employee,
+  OnDemandOrder,
+  OrderRequisition,
+  PurchaseOrder,
+  RecurringOrder,
+} from '@/app/_utils/schema';
 import {
   fetchEmployees,
   fetchOnDemandOrderRequisitions,
   fetchOrderRequisitions,
+  fetchPurchaseOrders,
   fetchRecurringOrderRequisitions,
 } from '@/app/_utils/utility';
 import CustomNotification from '@/components/CustomNotification/CustomNotification';
@@ -17,7 +24,6 @@ import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
 import classnames from './P1Access.module.css';
 
 export default function P1AccessPage() {
-
   // Required State to Keep Track of all modal states
   const [modalStateTracker, setModalStateTracker] = useState<Record<string, boolean>>({});
 
@@ -25,7 +31,10 @@ export default function P1AccessPage() {
   const [allOrs, setAllOrs] = useState<OrderRequisition[] | null>(null);
   const [allRor, setAllRor] = useState<RecurringOrder[] | null>(null);
   const [allOdor, setAllOdor] = useState<OnDemandOrder[] | null>(null);
+  const [allPo, setAllPo] = useState<PurchaseOrder[] | null>(null);
   const [employeeWithRequisitions, setEmployeeWithRequisitions] = useState<Employee[]>([]);
+
+  console.log(allPo);
 
   // Show notification state
   const [showNotification, setShowNotification] = useState(false);
@@ -38,6 +47,7 @@ export default function P1AccessPage() {
         await fetchOrderRequisitions(setAllOrs);
         await fetchRecurringOrderRequisitions(setAllRor);
         await fetchOnDemandOrderRequisitions(setAllOdor);
+        await fetchPurchaseOrders(setAllPo);
       } catch (error) {
         console.log(error);
       }
@@ -167,9 +177,47 @@ export default function P1AccessPage() {
     );
 
     // If the matching order requisition is active, generate a table line containing the modal
-    if (matchingOr?.isActive && matchingOr.isApprovedE2 && matchingOr.approvalE3) {
+    if (matchingOr?.isActive && matchingOr.isApprovedE2 && matchingOr.isApprovedE3) {
       return [
         <Text classNames={{ root: classnames.rootTextId }}>{odor.odorId}</Text>,
+        <Text>
+          {matchingEmployee?.firstName} {matchingEmployee?.lastName}
+        </Text>,
+        <Text>{formatDate(matchingOr.requisitionDate)}</Text>,
+        <ApprovalBadge isApproved={matchingOr.isApprovedP1} />,
+      ];
+    }
+
+    // Else return an empty line (array)
+    return [];
+  });
+
+  // Map through the desired list and return components only for active requisitions
+  const mappedPo = allPo?.map((po) => {
+    // Cross-reference and retrieve a matching order requisition based on the requisitionId stored in the ror
+    const matchingOr = allOrs?.find((or) => or.requisitionId === po.requisitionId);
+    const matchingEmployee = employeeWithRequisitions.find(
+      (emp) => emp.employeeId === matchingOr?.employeeId
+    );
+
+    // Retrieve matching odor or ror document
+    if (matchingOr?.requisitionType === 'ror') {
+      const matchingRor = allRor?.find((ror) => matchingOr?.requisitionTypeId === ror.rorId);
+    } else if (matchingOr?.requisitionType === 'odor') {
+      const matchingOdor = allOdor?.find((odor) => matchingOr?.requisitionTypeId === odor.odorId);
+    }
+
+    // If the matching order requisition is active and fully approved based on the requisition type, generate a table line containing the modal
+    if (
+      matchingOr?.isActive &&
+      ((matchingOr?.requisitionType === 'odor' &&
+        matchingOr?.isApprovedE2 &&
+        matchingOr?.isApprovedE3 &&
+        matchingOr?.isApprovedP1) ||
+        (matchingOr?.requisitionType === 'ror' && matchingOr?.isApprovedP1))
+    ) {
+      return [
+        <Text classNames={{ root: classnames.rootTextId }}>{matchingOr.requisitionId}</Text>,
         <Text>
           {matchingEmployee?.firstName} {matchingEmployee?.lastName}
         </Text>,
@@ -204,13 +252,13 @@ export default function P1AccessPage() {
       'Generate SO',
       'Close Ticket',
     ],
-    body: [],
+    body: mappedPo,
   };
 
   return (
     <main>
       <Text classNames={{ root: classnames.rootText }}>P1 Access</Text>
-      {allOdor && allOrs && allRor ? (
+      {allOdor && allOrs && allRor && allPo ? (
         <Group classNames={{ root: classnames.rootMainGroup }}>
           <Group classNames={{ root: classnames.rootSectionGroup }}>
             <Text classNames={{ root: classnames.rootSectionText }}>Order Requisitions</Text>
@@ -242,8 +290,6 @@ export default function P1AccessPage() {
               striped
               data={poTableData}
               classNames={{
-                table: classnames.rootPoTable,
-                td: classnames.rootRequisitionTd,
                 thead: classnames.rootRequisitionThead,
               }}
             />
