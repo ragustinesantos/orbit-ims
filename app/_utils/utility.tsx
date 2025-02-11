@@ -10,6 +10,7 @@ import {
   OnDemandOrderToEdit,
   OrderRequisition,
   OrderRequisitionToEdit,
+  PurchaseOrder,
   RecurringOrder,
   RecurringOrderTemplate,
   StockInOrder,
@@ -328,6 +329,24 @@ export const postOnDemandOrderRequisition = async (odorObj: OnDemandOrderToEdit)
     }
     const data = await response.json();
     return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// Fetch all purchase orders
+export const fetchPurchaseOrders = async (setPurchaseOrders: (purchaseOrders: PurchaseOrder[]) => void) => {
+  try {
+    const response = await fetch(`/api/purchase-orders`);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+    }
+
+    const data = await response.json();
+
+    setPurchaseOrders(data);
   } catch (error) {
     console.log(error);
   }
