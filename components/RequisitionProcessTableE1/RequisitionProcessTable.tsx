@@ -162,20 +162,26 @@ export default function RequisitionProcessTable(){
 
   return(
 
+
     <div style={{ margin:'auto', padding: '20px', borderRadius: '8px', overflowX:'auto'}}>
-        <Title order={5} classNames={{ root:classnames.heading }}>
+      <Title order={5} classNames={{ root:classnames.heading }}>
         Order Requisition Process
       </Title>
-        
+      {allOdor && allOrs && allRor ? (
+      <>
       <Group className={classnames.group}>
-        {/** ROR process table for E1*/}    
-        <Table className={classnames.table} striped data={RORTableData} style={{ minWidth: '600px' }}/>
-      </Group>
-
-      <Group className={classnames.group}>
-        {/** ODOR process table for E1*/}    
-        <Table className={classnames.table} striped data={ODORTableData} style={{ minWidth: '600px' }} />
-      </Group>
+          {/** ROR process table for E1*/}
+          <Table className={classnames.table} striped data={RORTableData} style={{ minWidth: '600px' }} />
+        </Group><Group className={classnames.group}>
+            {/** ODOR process table for E1*/}
+            <Table className={classnames.table} striped data={ODORTableData} style={{ minWidth: '600px' }} />
+          </Group>
+          </>
+      ) : (
+        <Group classNames={{ root: classnames.loadingContainer }}>
+          <img src="/assets/loading/Spin@1x-1.0s-200px-200px.gif" alt="Loading..." />
+        </Group>
+      )}
 
     </div>
   

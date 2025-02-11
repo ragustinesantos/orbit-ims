@@ -13,6 +13,7 @@ import {
   PurchaseOrder,
   RecurringOrder,
   RecurringOrderTemplate,
+  StockInOrder,
   Supplier,
 } from './schema';
 
@@ -416,4 +417,28 @@ export const markdownToPlainText = async (text: string) => {
     .replace(/&gt;/g, '>')
     .replace(/\\n/g, '\n');
   return newText;
+};
+
+
+export const postStockInOrder = async (newStockInOrderObj: StockInOrder) => {
+  try {
+    // Create a new request
+    const request = {
+      method: 'POST',
+      body: JSON.stringify(newStockInOrderObj),
+    };
+
+    const response = await fetch(`/api/stockin/`, request);
+    console.log(response);
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
 };

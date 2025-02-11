@@ -168,9 +168,9 @@ export const defaultOrderRequisitionToEdit: OrderRequisitionToEdit = {
   approvalE2: '',
   approvalE3: '',
   approvalP1: '',
-  isApprovedE2: false,
-  isApprovedE3: false,
-  isApprovedP1: false,
+  isApprovedE2: null,
+  isApprovedE3: null,
+  isApprovedP1: null,
   isActive: true,
   isComplete: false,
   remarks: '',
@@ -354,6 +354,15 @@ export interface odorModalProps {
   handleApprovalActivity?: (message: string, odorId: string, status: string) => void;
 }
 
+export interface StockInOrder {
+  stockInId: string;
+  itemId: string; 
+  purchaseOrderId?: string;
+  stockInQuantity: number; 
+  stockInDate: string; 
+  receivedBy: string;
+}
+
 export interface NavLink {
   label: string;
   link: string;
@@ -421,7 +430,7 @@ export const NAV_ITEMS: navCollection = {
         { label: 'Add Item', link: '/inventory/add-item' },
         { label: 'Update Item', link: '/inventory/update-item' },
         { label: 'Delete Item', link: '/inventory/delete-item' },
-        { label: 'Stock In', link: '/' },
+        { label: 'Stock In', link: '/inventory/stock-in' },
         { label: 'Stock Out', link: '/' },
       ],
     },
