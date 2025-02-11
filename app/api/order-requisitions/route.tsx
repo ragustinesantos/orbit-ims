@@ -19,7 +19,6 @@ export async function POST(request: Request) {
     const newOrderRequisition = await request.json();
 
     const orderRequisitionSchema = z.object({
-      requisitionId: z.string(),
       requisitionType: z.string(),
       requisitionTypeId: z.string(),
       requisitionDate: z.string(),
@@ -37,9 +36,9 @@ export async function POST(request: Request) {
 
     const validatedOrderRequisition = orderRequisitionSchema.parse(newOrderRequisition);
 
-    await dbAddOrderRequisition(validatedOrderRequisition);
+    const docId = await dbAddOrderRequisition(validatedOrderRequisition);
 
-    return new Response(JSON.stringify(validatedOrderRequisition), { status: 201 });
+    return new Response(JSON.stringify(docId),{ status: 201 },);
   } catch (error) {
     return new Response(JSON.stringify({ error }), { status: 401 });
   }

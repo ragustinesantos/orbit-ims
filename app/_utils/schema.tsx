@@ -12,6 +12,7 @@ export interface Item {
   isCritical: boolean;
   isCriticalThreshold: number;
   minPurchaseQty: number;
+  price: number;
   isActive: boolean;
 }
 
@@ -26,6 +27,7 @@ export interface ItemToEdit {
   isCritical: boolean;
   isCriticalThreshold: number;
   minPurchaseQty: number;
+  price: number;
   isActive: boolean;
   [key: string]: any;
 }
@@ -42,6 +44,7 @@ export const defaultItem: Item = {
   isCritical: false,
   isCriticalThreshold: 0,
   minPurchaseQty: 0,
+  price: 0,
   isActive: true,
 };
 
@@ -157,6 +160,22 @@ export interface OrderRequisitionToEdit {
   [key: string]: any;
 }
 
+export const defaultOrderRequisitionToEdit: OrderRequisitionToEdit = {
+  requisitionType: '',
+  requisitionTypeId: '',
+  requisitionDate: '',
+  employeeId: '',
+  approvalE2: '',
+  approvalE3: '',
+  approvalP1: '',
+  isApprovedE2: null,
+  isApprovedE3: null,
+  isApprovedP1: null,
+  isActive: true,
+  isComplete: false,
+  remarks: '',
+};
+
 export const defaultOrderRequisition: OrderRequisition = {
   requisitionId: '',
   requisitionType: '',
@@ -252,7 +271,6 @@ export interface OnDemandOrder {
   orderTotal: number;
   recipientName: string;
   recipientLocation: string;
-  remarks: string;
 }
 
 export interface OnDemandOrderToEdit {
@@ -262,13 +280,64 @@ export interface OnDemandOrderToEdit {
   orderTotal: number;
   recipientName: string;
   recipientLocation: string;
-  remarks: string;
+  [key: string]: any;
+}
+
+export const defaultOnDemandOrderToEdit : OnDemandOrderToEdit = {
+  requisitionId: '',
+  itemOrders: [],
+  newItemOrders: [],
+  orderTotal: 0,
+  recipientName: '',
+  recipientLocation: '',
+}
+
+export interface PurchaseOrderItem {
+  itemId: string;
+  quantity: number;
+}
+
+export interface PurchaseOrder {
+  purchaseOrderId: string;
+  requisitionId: string;
+  supplierId: string;
+  orderList: PurchaseOrderItem[];
+  recipientCompanyName: string;
+  recipientCompanyAddress: string;
+  purchaseOrderDate: string;
+  purchaseOrderDeliveryDate: string;
+  subTotal: number;
+  taxRate: number;
+  tax: number;
+  totalOrderCost: string;
+  approvalP2: string;
+  isApproved: boolean;
+  isDelivered: boolean;
+  isActive: boolean;
+}
+
+export interface PurchaseOrderToEdit {
+  requisitionId: string;
+  supplierId: string;
+  orderList: PurchaseOrderItem[];
+  recipientCompanyName: string;
+  recipientCompanyAddress: string;
+  purchaseOrderDate: string;
+  purchaseOrderDeliveryDate: string;
+  subTotal: number;
+  taxRate: number;
+  tax: number;
+  totalOrderCost: string;
+  approvalP2: string;
+  isApproved: boolean;
+  isDelivered: boolean;
+  isActive: boolean;
   [key: string]: any;
 }
 
 export interface WizardProgressProps {
-  stepList: String[],
-  currentStep: number
+  stepList: string[];
+  currentStep: number;
 }
 
 export interface rorModalProps {
@@ -276,6 +345,22 @@ export interface rorModalProps {
   isOpened: boolean;
   isClosed: () => void;
   handleApprovalActivity?: (message: string, rorId: string, status: string) => void;
+}
+
+export interface odorModalProps {
+  onDemandOrder: OnDemandOrder | null;
+  isOpened: boolean;
+  isClosed: () => void;
+  handleApprovalActivity?: (message: string, odorId: string, status: string) => void;
+}
+
+export interface StockInOrder {
+  stockInId: string;
+  itemId: string; 
+  purchaseOrderId?: string;
+  stockInQuantity: number; 
+  stockInDate: string; 
+  receivedBy: string;
 }
 
 export interface NavLink {
@@ -345,7 +430,7 @@ export const NAV_ITEMS: navCollection = {
         { label: 'Add Item', link: '/inventory/add-item' },
         { label: 'Update Item', link: '/inventory/update-item' },
         { label: 'Delete Item', link: '/inventory/delete-item' },
-        { label: 'Stock In', link: '/' },
+        { label: 'Stock In', link: '/inventory/stock-in' },
         { label: 'Stock Out', link: '/' },
       ],
     },
@@ -354,7 +439,7 @@ export const NAV_ITEMS: navCollection = {
     {
       label: 'P1 Access',
       icon: IconNotes,
-      links: [{ label: 'Access', link: '/' }],
+      links: [{ label: 'Access', link: '/access/P1' }],
     },
   ],
   P2: [

@@ -10,12 +10,11 @@ export default function AddItemPage() {
       <div
         style={{
           display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: '100%',
-          minWidth: '50vw',
+          flex: 1,
+          justifyContent: 'flex-start',
           height: '100vh',
-          padding: 10,
+          paddingLeft: 32,
+          paddingTop: 4,
         }}
       >
         <AddItem />

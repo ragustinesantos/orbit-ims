@@ -7,9 +7,13 @@ import {
   Item,
   ItemToEdit,
   OnDemandOrder,
+  OnDemandOrderToEdit,
   OrderRequisition,
+  OrderRequisitionToEdit,
+  PurchaseOrder,
   RecurringOrder,
   RecurringOrderTemplate,
+  StockInOrder,
   Supplier,
 } from './schema';
 
@@ -90,6 +94,11 @@ export const fetchEmployees = async () => {
   try {
     const response = await fetch('/api/employees');
 
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+    }
+
     const data = await response.json();
 
     return data;
@@ -160,6 +169,47 @@ export const fetchOrderRequisitions = async (
   setOrderRequisitions(data);
 };
 
+export const postOrderRequisition = async (newOrderObj: OrderRequisitionToEdit) => {
+  try {
+    // Create a new request
+    const request = {
+      method: 'POST',
+      body: JSON.stringify(newOrderObj),
+    };
+
+    const response = await fetch(`/api/order-requisitions/`, request);
+    console.log(response);
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// Fetch a single order requisition based on the requisitionId parameter
+export const patchOrderRequisition = async (requisitionId: string, requisitionTypeId: string) => {
+  const request = {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ requisitionTypeId: requisitionTypeId }),
+  };
+
+  const response = await fetch(`/api/order-requisitions/${requisitionId}`, request);
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+  }
+};
+
 // Fetch a single order requisition based on the requisitionId parameter
 export const fetchOrderRequisition = async (requisitionId: string) => {
   const response = await fetch(`/api/order-requisitions/${requisitionId}`);
@@ -204,16 +254,19 @@ export const fetchRecurringOrderRequisition = async (rorId: string) => {
 };
 
 // Fetch a single order requisition based on the requisitionId parameter
-export const patchRorApproval = async (requisitionId: string, isApproved: boolean, approverId: string) => {
-
-  console.log(isApproved)
+export const patchRorApproval = async (
+  requisitionId: string,
+  isApproved: boolean,
+  approverId: string
+) => {
+  console.log(isApproved);
 
   const request = {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({isApprovedP1: isApproved, approvalP1: approverId}),
+    body: JSON.stringify({ isApprovedP1: isApproved, approvalP1: approverId }),
   };
 
   const response = await fetch(`/api/order-requisitions/${requisitionId}`, request);
@@ -261,6 +314,43 @@ export const fetchOnDemandOrderRequisition = async (odorId: string) => {
   }
 };
 
+export const postOnDemandOrderRequisition = async (odorObj: OnDemandOrderToEdit) => {
+  try {
+    // Create a new request
+    const request = {
+      method: 'POST',
+      body: JSON.stringify(odorObj),
+    };
+    const response = await fetch(`/api/odor`, request);
+    console.log(response);
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// Fetch all purchase orders
+export const fetchPurchaseOrders = async (setPurchaseOrders: (purchaseOrders: PurchaseOrder[]) => void) => {
+  try {
+    const response = await fetch(`/api/purchase-orders`);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+    }
+
+    const data = await response.json();
+
+    setPurchaseOrders(data);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 // Fetch all employee chats
 export const fetchChats = async (
@@ -327,4 +417,28 @@ export const markdownToPlainText = async (text: string) => {
     .replace(/&gt;/g, '>')
     .replace(/\\n/g, '\n');
   return newText;
+};
+
+
+export const postStockInOrder = async (newStockInOrderObj: StockInOrder) => {
+  try {
+    // Create a new request
+    const request = {
+      method: 'POST',
+      body: JSON.stringify(newStockInOrderObj),
+    };
+
+    const response = await fetch(`/api/stockin/`, request);
+    console.log(response);
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
 };
