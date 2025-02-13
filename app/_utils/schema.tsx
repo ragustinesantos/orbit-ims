@@ -311,7 +311,7 @@ export interface PurchaseOrder {
   tax: number;
   totalOrderCost: string;
   approvalP2: string;
-  isApproved: boolean;
+  isApproved: boolean | null;
   isDelivered: boolean;
   isActive: boolean;
 }
@@ -329,7 +329,7 @@ export interface PurchaseOrderToEdit {
   tax: number;
   totalOrderCost: string;
   approvalP2: string;
-  isApproved: boolean;
+  isApproved: boolean | null;
   isDelivered: boolean;
   isActive: boolean;
   [key: string]: any;
