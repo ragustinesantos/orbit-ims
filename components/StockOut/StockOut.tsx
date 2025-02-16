@@ -82,7 +82,7 @@ export default function StockOut() {
 
       await postStockOutOrder(newStockOutOrder);
 
-      console.log("success stock in");
+      console.log("success stock out");
 
       setSearchValue('');
       setShowSuccess(true);
@@ -176,7 +176,7 @@ export default function StockOut() {
   }, [selectedItem]);
 
   useEffect(() => {
-    setCurrentPage('Stock In');
+    setCurrentPage('Stock Out');
     setCurrentSection('inventory');
   }, []);
 
