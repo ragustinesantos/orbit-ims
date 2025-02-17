@@ -4,13 +4,13 @@
 import { useEffect, useState } from 'react';
 import { Button, Flex, Group, Modal, NumberInput, Select, SimpleGrid, Text, TextInput } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { defaultItem, Item, PurchaseOrder, StockInOrder } from '@/app/_utils/schema';
-import { fetchPurchaseOrders, fetchSupplier, postStockInOrder, putItem} from '@/app/_utils/utility';
+import { defaultItem, Item, PurchaseOrder, StockOutOrder } from '@/app/_utils/schema';
+import { fetchPurchaseOrders, fetchSupplier, postStockOutOrder, putItem} from '@/app/_utils/utility';
 import CustomNotification from '../CustomNotification/CustomNotification';
-import classnames from './StockIn.module.css';
+import classnames from './StockOut.module.css';
 import { useInventory } from '@/app/_utils/inventory-context';
 
-export default function StockIn() {
+export default function StockOut() {
   // Search and selected items from item search
   const [searchValue, setSearchValue] = useState<string | null>('');
   const [selectedItem, setSelectedItem] = useState<Item>({ ...defaultItem });
@@ -30,11 +30,11 @@ export default function StockIn() {
   const [supplyUnit, setSupplyUnit] = useState<string>('');
   const [supplierName, setSupplierName] = useState<string>('');
   const [itemId, setItemId] = useState<string>('');
-  const [stockInQuantity, setStockInQuantity] = useState<number>(0);
+  const [stockOutQuantity, setStockOutQuantity] = useState<number>(0);
   const [purchaseOrderId, setPurchaseOrderId] = useState<string | null>('');
   const [currentStockInStoreRoom, setCurrentStockInStoreRoom] = useState<string>('');
-  const [stockInDate, setStockInDate] = useState<string>(new Date().toISOString().split('T')[0]);
-  const [receivedBy, setReceivedBy] = useState<string>('');
+  const [stockOutDate, setStockOutDate] = useState<string>(new Date().toISOString().split('T')[0]);
+  const [dispatchedBy, setDispatchedBy] = useState<string>('');
 
   //State for PO
   const [allPo, setAllPo] = useState<PurchaseOrder[] | null>(null);
@@ -51,37 +51,38 @@ export default function StockIn() {
   const handleItemName = (newTxt: string) => setItemName(newTxt);
   const handlePackageUnit = (newTxt: string) => setPackageUnit(newTxt);
   const handleSupplyUnit = (newTxt: string) => setSupplyUnit(newTxt);
-  const handleStockInQuantity = (newQty: number) => setStockInQuantity(Number(newQty));
+  const handleStockOutQuantity = (newQty: number) => setStockOutQuantity(Number(newQty));
   const handleCurrentStockInStoreRoom = (newTxt: string) => setCurrentStockInStoreRoom(newTxt);
+
 
   // Handle update submit
   const handleSubmit = async() => {
         if (
           itemName === '' ||
-          stockInQuantity === 0 ||
-          stockInDate === '' ||
-          receivedBy === '' 
+          stockOutQuantity === 0 ||
+          stockOutDate === '' ||
+          dispatchedBy === '' 
         ) {
           console.log("error: field no filled")
         }
         else{
 
-        const newStockInOrder: StockInOrder = {
-          stockInId: `SI-${Date.now()}`,
+        const newStockOutOrder: StockOutOrder = {
+          stockOutId: `SO-${Date.now()}`,
           itemId: selectedItem.itemId,
           purchaseOrderId: purchaseOrderId || "",
-          stockInQuantity,
-          stockInDate,
-          receivedBy,
+          stockOutQuantity,
+          stockOutDate,
+          dispatchedBy,
         };
 
-        const updatedStock = selectedItem.currentStockInStoreRoom + stockInQuantity;
+        const updatedStock = selectedItem.currentStockInStoreRoom - stockOutQuantity;
         
     try {
 
-      await postStockInOrder(newStockInOrder);
+      await postStockOutOrder(newStockOutOrder);
 
-      console.log("success stock in");
+      console.log("success stock out");
 
       setSearchValue('');
       setShowSuccess(true);
@@ -101,11 +102,10 @@ export default function StockIn() {
 
       //Reset Fields
       setSelectedItem({ ...defaultItem });
-      setStockInQuantity(0);
-      setStockInDate("");
-      setReceivedBy("");
+      setStockOutQuantity(0);
+      setStockOutDate("");
+      setDispatchedBy("");
       setPurchaseOrderId("");
-      setCurrentStockInStoreRoom("");
     } catch (error) {
       console.log(error);
       console.log('Unexpected Error encountered. Please try again.');
@@ -154,7 +154,7 @@ export default function StockIn() {
 
   // Update fields whenever there is a new selectedItem
   useEffect(() => {
-    const stockInOrder = async () => {
+    const stockOutOrder = async () => {
       setSupplierId(selectedItem.supplierId || '');
       setSupplierName(supplierName || '');
       setStaticItemId(selectedItem.itemId || '');
@@ -162,13 +162,13 @@ export default function StockIn() {
       setPackageUnit(selectedItem.packageUnit || '');
       setSupplyUnit(selectedItem.supplyUnit || '');
       setCategory(selectedItem.category || '');
-      setCurrentStockInStoreRoom(String(selectedItem.currentStockInStoreRoom) || '');
-      setStockInQuantity(0);
-      setStockInDate("");
-      setReceivedBy("");
+      setCurrentStockInStoreRoom(String(selectedItem.currentStockInStoreRoom) ||'');
+      setStockOutQuantity(0);
+      setStockOutDate("");
+      setDispatchedBy("");
     };
 
-    stockInOrder();
+    stockOutOrder();
   }, [selectedItem]);
 
   useEffect(() => {
@@ -176,7 +176,7 @@ export default function StockIn() {
   }, [selectedItem]);
 
   useEffect(() => {
-    setCurrentPage('Stock In');
+    setCurrentPage('Stock Out');
     setCurrentSection('inventory');
   }, []);
 
@@ -243,21 +243,21 @@ export default function StockIn() {
               </Text>
             </Text>
             <Text>
-              Stock In Quantities:{' '}
+              Stock Out Quantities:{' '}
               <Text fw={700} td="underline" component="span" ml={5}>
-                {stockInQuantity}
+                {stockOutQuantity}
               </Text>
             </Text>
             <Text>
-              Stock In Date:{' '}
+              Stock Out Date:{' '}
               <Text fw={700} td="underline" component="span" ml={5}>
-                {stockInDate}
+                {stockOutDate}
               </Text>
             </Text>
             <Text>
               Received By:{' '}
               <Text fw={700} td="underline" component="span" ml={5}>
-                {receivedBy}
+                {dispatchedBy}
               </Text>
             </Text>
           </SimpleGrid>
@@ -279,7 +279,7 @@ export default function StockIn() {
           root: classnames.rootText,
         }}
       >
-        Stock In
+        Stock Out
       </Text>
       <Select
         label="Search Item"
@@ -327,6 +327,7 @@ export default function StockIn() {
           value={packageUnit}
           onChange={(event) => handlePackageUnit(event.target.value)}
           placeholder="Enter Package Unit..."
+          size="md"
         />
 
         <TextInput
@@ -368,33 +369,34 @@ export default function StockIn() {
           size="md"
         />
 
-        <TextInput
+      <TextInput
           label="Current Stock"
           disabled
           value={currentStockInStoreRoom}
-          onChange={(event) => handleCurrentStockInStoreRoom(event.target.value)}
+          onChange={(value) => handleCurrentStockInStoreRoom(String(value))}
           placeholder="Enter quantity in storage..."
           size="md"
           type="number"
         />
 
-        <TextInput label="Stock In ID" disabled size="md"/>
+        <TextInput label="Stock Out ID" disabled size="md"/>
 
         <NumberInput
-          label="Stock In Quantity"
-          value={stockInQuantity}
-          onChange={(value) => handleStockInQuantity(Number(value)||0)} 
-          placeholder="Enter quantity to stock in..."
+          label="Stock Out Quantity"
+          value={stockOutQuantity}
+          onChange={(value) => handleStockOutQuantity(Number(value)||0)} 
+          placeholder="Enter quantity to stock out..."
           size="md"
           min={0} 
+          max={Number(currentStockInStoreRoom) || 0}
           step={1} 
           withAsterisk
         />
 
         <TextInput
-          label="Stock In Date"
-          value={stockInDate}
-          onChange={(event) => setStockInDate(event.target.value)} 
+          label="Stock Out Date"
+          value={stockOutDate}
+          onChange={(event) => setStockOutDate(event.target.value)} 
           type="date" 
           max={new Date().toISOString().split('T')[0]}
           size="md"
@@ -402,25 +404,15 @@ export default function StockIn() {
         />
 
         <TextInput
-            label="Received By"
-            value={receivedBy}
-            onChange={(event) => setReceivedBy(event.target.value)}
+            label="Dispatched By"
+            value={dispatchedBy}
+            onChange={(event) => setDispatchedBy(event.target.value)}
             placeholder="Enter name..."
             size="md"
             withAsterisk
         />
 
-        <Select
-          label="Related Purchase Order"
-          searchable
-          placeholder="Select a related PO..."
-          data={allPo ? allPo.map((po) => ({ value: po.purchaseOrderId, label: `PO-${po.purchaseOrderId}` })) : []}
-          allowDeselect
-          value={purchaseOrderId || null}
-          onChange={setPurchaseOrderId}
-          size="md"
-        />
-      </SimpleGrid>
+      </SimpleGrid>  
 
       <Button
         variant="filled"
@@ -428,7 +420,7 @@ export default function StockIn() {
         size="md"
         mt="xl"
         onClick={async () => {
-          if (!selectedItem.itemName || !stockInQuantity || !receivedBy|| !stockInDate) {
+          if (!selectedItem.itemName || !stockOutQuantity || !dispatchedBy|| !stockOutDate) {
             setShowError(true);
             setTimeout(() => {
               setShowError(false);
@@ -438,7 +430,7 @@ export default function StockIn() {
           }
         }}
       >
-        Generate SI
+        Generate SO
       </Button>
       {showError &&
         CustomNotification(
@@ -450,14 +442,14 @@ export default function StockIn() {
       {showSuccess &&
         CustomNotification(
           'success',
-          'Item Stock In',
-          'The item has been successfully managed to stock in',
+          'Item Stock Out',
+          'The item has been successfully managed to stock out',
           setShowSuccess
         )}
       {showUpdateError &&
         CustomNotification(
           'error',
-          'Item Stock In Failed',
+          'Item Stock Out Failed',
           'Item failed to update due to a server error',
           setShowUpdateError
         )}

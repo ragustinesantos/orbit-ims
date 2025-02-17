@@ -28,7 +28,7 @@ export async function POST(request: Request) {
       tax: z.number(),
       totalOrderCost: z.string(),
       approvalP2: z.string(),
-      isApproved: z.boolean(),
+      isApproved: z.boolean().nullable(),
       isDelivered: z.boolean(),
       isActive: z.boolean(),
     });

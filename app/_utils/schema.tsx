@@ -311,7 +311,7 @@ export interface PurchaseOrder {
   tax: number;
   totalOrderCost: string;
   approvalP2: string;
-  isApproved: boolean;
+  isApproved: boolean | null;
   isDelivered: boolean;
   isActive: boolean;
 }
@@ -329,7 +329,7 @@ export interface PurchaseOrderToEdit {
   tax: number;
   totalOrderCost: string;
   approvalP2: string;
-  isApproved: boolean;
+  isApproved: boolean | null;
   isDelivered: boolean;
   isActive: boolean;
   [key: string]: any;
@@ -361,6 +361,15 @@ export interface StockInOrder {
   stockInQuantity: number; 
   stockInDate: string; 
   receivedBy: string;
+}
+
+export interface StockOutOrder {
+  stockOutId: string;
+  itemId: string; 
+  purchaseOrderId?: string;
+  stockOutQuantity: number; 
+  stockOutDate: string; 
+  dispatchedBy: string;
 }
 
 export interface NavLink {
@@ -431,7 +440,7 @@ export const NAV_ITEMS: navCollection = {
         { label: 'Update Item', link: '/inventory/update-item' },
         { label: 'Delete Item', link: '/inventory/delete-item' },
         { label: 'Stock In', link: '/inventory/stock-in' },
-        { label: 'Stock Out', link: '/' },
+        { label: 'Stock Out', link: '/inventory/stock-out' },
       ],
     },
   ],
