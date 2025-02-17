@@ -1,57 +1,35 @@
 import { Button, Radio } from "@mantine/core";
 import classnames from './SelectRorTemplate.module.css';
 import { useRouter } from "next/navigation";
+import { useInventory } from "@/app/_utils/inventory-context";
 
 
 
 export default function SelectRorTemplate() {
 
     const { push } = useRouter();
+    const { rorTemplates } = useInventory();
 
     return (
         <div
             className={classnames.rorTemplateContainer}
         >
-            <Radio
-                name="template"
-                label="Grocery"
-                classNames={{
-                    root: classnames.rorRadio,
-                    label: classnames.radioLabel
-                }}
-            />
-            <Radio
-                name="template"
-                label="Food Template"
-                classNames={{
-                    root: classnames.rorRadio,
-                    label: classnames.radioLabel
-                }}
-            />
-            <Radio
-                name="template"
-                label="Medical Supplies"
-                classNames={{
-                    root: classnames.rorRadio,
-                    label: classnames.radioLabel
-                }}
-            />
-            <Radio
-                name="template"
-                label="Stationary"
-                classNames={{
-                    root: classnames.rorRadio,
-                    label: classnames.radioLabel
-                }}
-            />
-            <Radio
-                name="template"
-                label="Nutritional Products"
-                classNames={{
-                    root: classnames.rorRadio,
-                    label: classnames.radioLabel
-                }}
-            />
+            {
+                rorTemplates ?
+                    rorTemplates.map((template) => {
+                        return (
+                            <Radio
+                                name={template.templateName}
+                                label={template.templateName}
+                                classNames={{
+                                    root: classnames.rorRadio,
+                                    label: classnames.radioLabel
+                                }}
+                            />
+                        )
+                    })
+                    : []
+            }
             <Button
                 variant="filled"
                 color="#1B4965"

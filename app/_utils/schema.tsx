@@ -361,6 +361,15 @@ export interface StockInOrder {
   receivedBy: string;
 }
 
+export interface StockOutOrder {
+  stockOutId: string;
+  itemId: string; 
+  purchaseOrderId?: string;
+  stockOutQuantity: number; 
+  stockOutDate: string; 
+  dispatchedBy: string;
+}
+
 export interface NavLink {
   label: string;
   link: string;
@@ -429,7 +438,7 @@ export const NAV_ITEMS: navCollection = {
         { label: 'Update Item', link: '/inventory/update-item' },
         { label: 'Delete Item', link: '/inventory/delete-item' },
         { label: 'Stock In', link: '/inventory/stock-in' },
-        { label: 'Stock Out', link: '/' },
+        { label: 'Stock Out', link: '/inventory/stock-out' },
       ],
     },
   ],
