@@ -9,6 +9,7 @@ import {
   OnDemandOrder,
   OrderRequisition,
   PurchaseOrder,
+  PurchaseOrderToEdit,
   RecurringOrder,
 } from '@/app/_utils/schema';
 import {
@@ -17,6 +18,7 @@ import {
   fetchOrderRequisitions,
   fetchPurchaseOrders,
   fetchRecurringOrderRequisitions,
+  postPurchaseOrder,
 } from '@/app/_utils/utility';
 import CustomNotification from '@/components/CustomNotification/CustomNotification';
 import RorModal from '@/components/RorModal/RorModal';
@@ -235,7 +237,9 @@ export default function P1AccessPage() {
               <PoModal
                 purchaseOrder={po}
                 isOpened={poModalOpen[po.purchaseOrderId]}
-                isClosed={() => setPoModalOpen((prev) => ({ ...prev, [po.purchaseOrderId]: false }))}
+                isClosed={() =>
+                  setPoModalOpen((prev) => ({ ...prev, [po.purchaseOrderId]: false }))
+                }
               />
             )}
             <button
@@ -260,6 +264,63 @@ export default function P1AccessPage() {
     // Else return an empty line (array)
     return [];
   });
+
+  // Function to generate PO for "+ PO" button
+  const generatePo = async (requisitionId: string) => {
+    if (!allPo?.find((po) => po.requisitionId === requisitionId)) {
+      // Create a purchase order object for persistence
+      const purchaseOrder: PurchaseOrderToEdit = {
+        requisitionId,
+        orderList: [],
+        recipientCompanyName: '',
+        recipientCompanyAddress: '',
+        purchaseOrderDate: new Date().toLocaleDateString(),
+        purchaseOrderDeliveryDate: '',
+        subTotal: 0,
+        taxRate: 0,
+        tax: 0,
+        totalOrderCost: 0,
+        approvalP2: '',
+        isApproved: null,
+        isDelivered: false,
+        isActive: false,
+      };
+      try {
+        const generatedPo = await postPurchaseOrder(purchaseOrder);
+        if (!generatedPo) {
+          setNotificationMessage(
+            CustomNotification(
+              'error',
+              'Error Encountered',
+              'Unexpected Error encountered. Please try again.',
+              setShowNotification
+            )
+          );
+          revealNotification();
+        } else {
+          setNotificationMessage(
+            CustomNotification(
+              'Success',
+              'PO Created!',
+              `Purchase Order #${generatePo} has been successfully created`,
+              setShowNotification
+            )
+          );
+        }
+      } catch (error) {
+        console.log(error);
+        setNotificationMessage(
+          CustomNotification(
+            'error',
+            'Error Encountered',
+            `PO for requisition #${requisitionId} already exists`,
+            setShowNotification
+          )
+        );
+        revealNotification();
+      }
+    }
+  };
 
   // Sample table to contain line items that can generate the modal
   const rorTableData: TableData = {

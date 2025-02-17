@@ -25,7 +25,6 @@ export async function PUT(request: Request, { params }: { params: any }) {
 
     const purchaseOrderSchema = z.object({
       requisitionId: z.string(),
-      supplierId: z.string(),
       orderList: z.array(z.object({ itemId: z.string(), quantity: z.number() })),
       recipientCompanyName: z.string(),
       recipientCompanyAddress: z.string(),
@@ -34,7 +33,7 @@ export async function PUT(request: Request, { params }: { params: any }) {
       subTotal: z.number(),
       taxRate: z.number(),
       tax: z.number(),
-      totalOrderCost: z.string(),
+      totalOrderCost: z.number(),
       approvalP2: z.string(),
       isApproved: z.boolean(),
       isDelivered: z.boolean(),
@@ -58,7 +57,6 @@ export async function PATCH(request: Request, { params }: { params: any }) {
     const purchaseOrderSchema = z
       .object({
         requisitionId: z.string().optional(),
-        supplierId: z.string().optional(),
         orderList: z.array(z.object({ itemId: z.string(), quantity: z.number() })).optional(),
         recipientCompanyName: z.string().optional(),
         recipientCompanyAddress: z.string().optional(),
@@ -67,7 +65,7 @@ export async function PATCH(request: Request, { params }: { params: any }) {
         subTotal: z.number().optional(),
         taxRate: z.number().optional(),
         tax: z.number().optional(),
-        totalOrderCost: z.string().optional(),
+        totalOrderCost: z.number().optional(),
         approvalP2: z.string().optional(),
         isApproved: z.boolean().optional(),
         isDelivered: z.boolean().optional(),

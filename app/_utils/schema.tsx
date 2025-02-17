@@ -300,7 +300,6 @@ export interface PurchaseOrderItem {
 export interface PurchaseOrder {
   purchaseOrderId: string;
   requisitionId: string;
-  supplierId: string;
   orderList: PurchaseOrderItem[];
   recipientCompanyName: string;
   recipientCompanyAddress: string;
@@ -309,7 +308,7 @@ export interface PurchaseOrder {
   subTotal: number;
   taxRate: number;
   tax: number;
-  totalOrderCost: string;
+  totalOrderCost: number;
   approvalP2: string;
   isApproved: boolean | null;
   isDelivered: boolean;
@@ -318,7 +317,6 @@ export interface PurchaseOrder {
 
 export interface PurchaseOrderToEdit {
   requisitionId: string;
-  supplierId: string;
   orderList: PurchaseOrderItem[];
   recipientCompanyName: string;
   recipientCompanyAddress: string;
@@ -327,7 +325,7 @@ export interface PurchaseOrderToEdit {
   subTotal: number;
   taxRate: number;
   tax: number;
-  totalOrderCost: string;
+  totalOrderCost: number;
   approvalP2: string;
   isApproved: boolean | null;
   isDelivered: boolean;

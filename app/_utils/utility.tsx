@@ -11,6 +11,7 @@ import {
   OrderRequisition,
   OrderRequisitionToEdit,
   PurchaseOrder,
+  PurchaseOrderToEdit,
   RecurringOrder,
   RecurringOrderTemplate,
   StockInOrder,
@@ -335,7 +336,9 @@ export const postOnDemandOrderRequisition = async (odorObj: OnDemandOrderToEdit)
 };
 
 // Fetch all purchase orders
-export const fetchPurchaseOrders = async (setPurchaseOrders: (purchaseOrders: PurchaseOrder[]) => void) => {
+export const fetchPurchaseOrders = async (
+  setPurchaseOrders: (purchaseOrders: PurchaseOrder[]) => void
+) => {
   try {
     const response = await fetch(`/api/purchase-orders`);
 
@@ -347,6 +350,27 @@ export const fetchPurchaseOrders = async (setPurchaseOrders: (purchaseOrders: Pu
     const data = await response.json();
 
     setPurchaseOrders(data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// Post a Purchase Order database entry
+export const postPurchaseOrder = async (purchaseOrderObj: PurchaseOrderToEdit) => {
+  try {
+    // Create a new request
+    const request = {
+      method: 'POST',
+      body: JSON.stringify(purchaseOrderObj),
+    };
+    const response = await fetch(`/api/purchase-orders`, request);
+    console.log(response);
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+    }
+    const data = await response.json();
+    return data;
   } catch (error) {
     console.log(error);
   }
@@ -418,7 +442,6 @@ export const markdownToPlainText = async (text: string) => {
     .replace(/\\n/g, '\n');
   return newText;
 };
-
 
 export const postStockInOrder = async (newStockInOrderObj: StockInOrder) => {
   try {
