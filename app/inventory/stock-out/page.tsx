@@ -1,9 +1,9 @@
 'use client';
 
 import { NavbarNested } from '@/components/NavbarNested/NavbarNested';
-import StockIn from '@/components/StockIn/StockIn';
+import StockOut from '@/components/StockOut/StockOut';
 
-export default function StockInPage() {
+export default function StockOutPage() {
   return (
     <main style={{ display: 'flex', width: '100vw' }}>
       <NavbarNested />
@@ -18,7 +18,7 @@ export default function StockInPage() {
           overflowY:'scroll',
         }}
       >
-        <StockIn />
+        <StockOut />
       </div>
     </main>
   );
