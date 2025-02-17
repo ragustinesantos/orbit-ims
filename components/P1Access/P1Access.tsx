@@ -287,38 +287,36 @@ export default function P1AccessPage() {
       };
       try {
         const generatedPo = await postPurchaseOrder(purchaseOrder);
-        if (!generatedPo) {
-          setNotificationMessage(
-            CustomNotification(
-              'error',
-              'Error Encountered',
-              'Unexpected Error encountered. Please try again.',
-              setShowNotification
-            )
-          );
-          revealNotification();
-        } else {
-          setNotificationMessage(
-            CustomNotification(
-              'Success',
-              'PO Created!',
-              `Purchase Order #${generatePo} has been successfully created`,
-              setShowNotification
-            )
-          );
-        }
+        setNotificationMessage(
+          CustomNotification(
+            'Success',
+            'PO Created!',
+            `Purchase Order #${generatedPo} has been successfully created`,
+            setShowNotification
+          )
+        );
       } catch (error) {
         console.log(error);
         setNotificationMessage(
           CustomNotification(
             'error',
             'Error Encountered',
-            `PO for requisition #${requisitionId} already exists`,
+            'Unexpected Error encountered. Please try again.',
             setShowNotification
           )
         );
         revealNotification();
       }
+    } else {
+      setNotificationMessage(
+        CustomNotification(
+          'error',
+          'Error Encountered',
+          `PO for requisition #${requisitionId} already exists`,
+          setShowNotification
+        )
+      );
+      revealNotification();
     }
   };
 
