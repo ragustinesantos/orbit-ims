@@ -40,6 +40,9 @@ export default function P1AccessPage() {
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState(<div />);
 
+  // State for PO modal
+  const [poModalOpen, setPoModalOpen] = useState<{ [key: string]: boolean }>({});
+
   // Sample use effect to store order requisitions and ror's for mapping
   useEffect(() => {
     const retrieveRequisition = async () => {
@@ -223,6 +226,34 @@ export default function P1AccessPage() {
         </Text>,
         <Text>{formatDate(matchingOr.requisitionDate)}</Text>,
         <ApprovalBadge isApproved={matchingOr.isApprovedP1} />,
+        poModalOpen[po.purchaseOrderId] ? (
+          <Text classNames={{ root: classnames.rootPoId }}>{po.purchaseOrderId}</Text>
+        ) : (
+          <>
+            {poModalOpen[po.purchaseOrderId] && (
+              // To Do: Implement modal -- right now it just shows the PO ID without the modal
+              <PoModal
+                purchaseOrder={po}
+                isOpened={poModalOpen[po.purchaseOrderId]}
+                isClosed={() => setPoModalOpen((prev) => ({ ...prev, [po.purchaseOrderId]: false }))}
+              />
+            )}
+            <button
+              className={classnames.generatePoButton}
+              onClick={() => {
+                // Open the modal when clicked
+                setPoModalOpen((prev) => ({ ...prev, [po.purchaseOrderId]: true }));
+              }}
+            >
+              + PO
+            </button>
+          </>
+        ),
+        <ApprovalBadge isApproved={po.isApproved} />,
+
+        // To Do: Modals for these two buttons
+        <button className={classnames.generateSoButton}>+ SO</button>,
+        <button className={classnames.closeTicketButton}>Close</button>,
       ];
     }
 
