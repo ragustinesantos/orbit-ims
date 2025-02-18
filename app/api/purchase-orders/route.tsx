@@ -17,7 +17,6 @@ export async function POST(request: Request) {
 
     const purchaseOrderSchema = z.object({
       requisitionId: z.string(),
-      supplierId: z.string(),
       orderList: z.array(z.object({ itemId: z.string(), quantity: z.number() })),
       recipientCompanyName: z.string(),
       recipientCompanyAddress: z.string(),
@@ -26,7 +25,7 @@ export async function POST(request: Request) {
       subTotal: z.number(),
       taxRate: z.number(),
       tax: z.number(),
-      totalOrderCost: z.string(),
+      totalOrderCost: z.number(),
       approvalP2: z.string(),
       isApproved: z.boolean().nullable(),
       isDelivered: z.boolean(),
