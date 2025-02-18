@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useInventory } from "@/app/_utils/inventory-context";
 import LowStockModal from "../LowStockModal/LowStockModal";
 import { useDisclosure } from "@mantine/hooks";
+import { useRouter } from "next/navigation";
 
 
 export default function InventoryOverview(){
@@ -16,6 +17,7 @@ export default function InventoryOverview(){
 
     const {inventory, setCurrentSection} = useInventory();
     const[opened,{open,close}] = useDisclosure(false); 
+    const router = useRouter();
 
 
     //total item 
@@ -40,6 +42,10 @@ export default function InventoryOverview(){
         setCurrentSection('Dashboard');
     }, []);
 
+    const handleTotalItemClick = () =>{
+      router.push('/inventory/search-item');
+    }
+
     
     return(
 
@@ -57,7 +63,8 @@ export default function InventoryOverview(){
         
         <div>
           <Card shadow="lg" radius="lg" withBorder classNames={{ root:classnames.cardContainer }}>
-              <Text size="md" classNames={{ root:classnames.cardText }}>
+              <Text size="md" classNames={{ root:classnames.cardText }}
+              onClick = {handleTotalItemClick}>
                 Total Item
               </Text>
               <Text size="xl" c="blue" fw={700} classNames={{ root:classnames.cardNumber }}>
