@@ -364,7 +364,7 @@ export interface StockInOrder {
 export interface StockOutOrder {
   stockOutId: string;
   itemId: string; 
-  purchaseOrderId?: string;
+  requisitionId?: string;
   stockOutQuantity: number; 
   stockOutDate: string; 
   dispatchedBy: string;
