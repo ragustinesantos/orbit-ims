@@ -2,34 +2,52 @@ import { Button, Radio } from "@mantine/core";
 import classnames from './SelectRorTemplate.module.css';
 import { useRouter } from "next/navigation";
 import { useInventory } from "@/app/_utils/inventory-context";
+import { useEffect, useState } from "react";
+import { SelectRorTemplateProps } from "@/app/_utils/schema";
 
 
 
-export default function SelectRorTemplate() {
-
+export default function SelectRorTemplate(props: SelectRorTemplateProps) {
     const { push } = useRouter();
     const { rorTemplates } = useInventory();
+
+    const [radioValue, setRadioValue] = useState<string | null>(null);
+
+    useEffect(() => {
+        const selectedRor = rorTemplates?.find(template => template.rorTemplateId == radioValue);
+        if (selectedRor) {
+            props.handleSelectRor(selectedRor);
+        }
+    }, [radioValue]);
 
     return (
         <div
             className={classnames.rorTemplateContainer}
         >
-            {
-                rorTemplates ?
-                    rorTemplates.map((template) => {
-                        return (
-                            <Radio
-                                name={template.templateName}
-                                label={template.templateName}
-                                classNames={{
-                                    root: classnames.rorRadio,
-                                    label: classnames.radioLabel
-                                }}
-                            />
-                        )
-                    })
-                    : []
-            }
+            <Radio.Group
+                value={radioValue}
+                onChange={setRadioValue}
+            >
+                {
+                    rorTemplates ?
+                        rorTemplates.map((template) => {
+                            return (
+                                <Radio
+                                    key={template.rorTemplateId}
+                                    name={template.templateName}
+                                    label={template.templateName}
+                                    value={template.rorTemplateId}
+                                    checked={template.rorTemplateId == radioValue}
+                                    classNames={{
+                                        root: classnames.rorRadio,
+                                        label: classnames.radioLabel
+                                    }}
+                                />
+                            )
+                        })
+                        : []
+                }
+            </Radio.Group>
             <Button
                 variant="filled"
                 color="#1B4965"

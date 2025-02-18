@@ -3,22 +3,33 @@ import classnames from './CreateRor.module.css';
 import WizardProgress from "../WizardProgress/WizardProgress";
 import { useEffect, useState } from "react";
 import SelectRorTemplate from "../SelectRorTemplate/SelectRorTemplate";
+import { RecurringOrderTemplate } from "@/app/_utils/schema";
 
 
 
 export default function CreateRor() {
 
-    const [currentStep, setCurrentStep] = useState(0);
+    const [currentStep, setCurrentStep] = useState<number>(0);
     const [currentContent, setCurrentContent] = useState(<div />);
-    const steps: String[] = ['Template', 'Order', 'Confirmation', 'Summary'];
+    const [selectedRorTemplate, setSelectedRorTemplate] = useState<RecurringOrderTemplate | null>()
+    const steps: string[] = ['Template', 'Order', 'Confirmation', 'Summary'];
     const stepHeaders: String[] = [
         'Select Template',
         'Enter Quantity',
         'Order Review',
         'Order Complete'
     ];
+
+    const handleSelectRORTemplate = (paramRorTemplate: RecurringOrderTemplate) => {
+        console.log("radio changed");
+        console.log(paramRorTemplate);
+        setSelectedRorTemplate(paramRorTemplate)
+    };
+
     const stepContent: JSX.Element[] = [
-        <SelectRorTemplate />,
+        <SelectRorTemplate
+            handleSelectRor={handleSelectRORTemplate}
+        />,
         <div />,
         <div />,
         <div />,

@@ -283,7 +283,7 @@ export interface OnDemandOrderToEdit {
   [key: string]: any;
 }
 
-export const defaultOnDemandOrderToEdit : OnDemandOrderToEdit = {
+export const defaultOnDemandOrderToEdit: OnDemandOrderToEdit = {
   requisitionId: '',
   itemOrders: [],
   newItemOrders: [],
@@ -340,6 +340,10 @@ export interface WizardProgressProps {
   currentStep: number;
 }
 
+export interface SelectRorTemplateProps {
+  handleSelectRor: (paramRorTemplate: RecurringOrderTemplate) => void
+}
+
 export interface rorModalProps {
   recurringOrder: RecurringOrder | null;
   isOpened: boolean;
@@ -356,19 +360,19 @@ export interface odorModalProps {
 
 export interface StockInOrder {
   stockInId: string;
-  itemId: string; 
+  itemId: string;
   purchaseOrderId?: string;
-  stockInQuantity: number; 
-  stockInDate: string; 
+  stockInQuantity: number;
+  stockInDate: string;
   receivedBy: string;
 }
 
 export interface StockOutOrder {
   stockOutId: string;
-  itemId: string; 
+  itemId: string;
   purchaseOrderId?: string;
-  stockOutQuantity: number; 
-  stockOutDate: string; 
+  stockOutQuantity: number;
+  stockOutDate: string;
   dispatchedBy: string;
 }
 
