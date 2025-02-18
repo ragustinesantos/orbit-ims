@@ -32,3 +32,9 @@
 .td::-webkit-scrollbar {
     display: none;
 } */
+
+
+.tableID:hover{
+  text-decoration: underline;
+  cursor:pointer;
+}

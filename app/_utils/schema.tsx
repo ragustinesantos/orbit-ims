@@ -352,6 +352,12 @@ export interface odorModalProps {
   handleApprovalActivity?: (message: string, odorId: string, status: string) => void;
 }
 
+export interface imgModalProps {
+  isOpened: boolean;
+  isClosed: () => void;
+  item: Item;
+}
+
 export interface StockInOrder {
   stockInId: string;
   itemId: string; 

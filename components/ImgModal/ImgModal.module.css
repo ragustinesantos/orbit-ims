@@ -1,0 +1,10 @@
+.imgdiv{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.picture {
+  height: 200px;
+  width: auto;
+}
