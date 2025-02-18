@@ -20,6 +20,7 @@ export default function SelectRorTemplate(props: SelectRorTemplateProps) {
         }
     }, [radioValue]);
 
+    // If there are existing ror templates, default to the first option
     useEffect(() => {
         if (rorTemplates
             && rorTemplates.length > 0) {

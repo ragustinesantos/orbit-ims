@@ -208,6 +208,14 @@ export interface RecurringOrder {
   orderTotal: number;
 }
 
+export const defaultRecurringOrder: RecurringOrder = {
+  rorId: '',
+  rorTemplateId: '',
+  requisitionId: '',
+  itemOrders: [],
+  orderTotal: 0
+}
+
 export interface RecurringOrderToEdit {
   rorTemplateId: string;
   requisitionId: string;

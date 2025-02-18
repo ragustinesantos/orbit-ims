@@ -3,7 +3,8 @@ import classnames from './CreateRor.module.css';
 import WizardProgress from "../WizardProgress/WizardProgress";
 import { useEffect, useState } from "react";
 import SelectRorTemplate from "../SelectRorTemplate/SelectRorTemplate";
-import { RecurringOrderTemplate } from "@/app/_utils/schema";
+import { defaultRecurringOrder, ItemOrder, RecurringOrder, RecurringOrderTemplate } from "@/app/_utils/schema";
+import OrderRor from "../OrderRor/OrderRor";
 
 
 
@@ -11,7 +12,9 @@ export default function CreateRor() {
 
     const [currentStep, setCurrentStep] = useState<number>(0);
     const [currentContent, setCurrentContent] = useState(<div />);
-    const [selectedRorTemplate, setSelectedRorTemplate] = useState<RecurringOrderTemplate | null>()
+    const [selectedRorTemplate, setSelectedRorTemplate] = useState<RecurringOrder | null>()
+
+    // These are the titles of the steps and their respective headers
     const steps: string[] = ['Template', 'Order', 'Confirmation', 'Summary'];
     const stepHeaders: String[] = [
         'Select Template',
@@ -20,17 +23,37 @@ export default function CreateRor() {
         'Order Complete'
     ];
 
+    // This would update the ROR template that would be used in later steps
     const handleSelectRORTemplate = (paramRorTemplate: RecurringOrderTemplate) => {
-        console.log("radio changed");
-        console.log(paramRorTemplate);
-        setSelectedRorTemplate(paramRorTemplate)
+        let itemList: ItemOrder[] = [];
+
+        paramRorTemplate.itemList.forEach(item => {
+            const newItemObj: ItemOrder = {
+                itemId: item,
+                orderQty: 0,
+                pendingQty: 0,
+                servedQty: 0
+            }
+
+            itemList.push(newItemObj);
+        });
+
+        let orderObj: RecurringOrder = {
+            ...defaultRecurringOrder,
+            rorTemplateId: paramRorTemplate.rorTemplateId,
+            requisitionId: "",
+            itemOrders: itemList,
+            orderTotal: 0
+        }
+        setSelectedRorTemplate(orderObj)
     };
 
+    // This is an array of content to display based on the current index
     const stepContent: JSX.Element[] = [
         <SelectRorTemplate
             handleSelectRor={handleSelectRORTemplate}
         />,
-        <div />,
+        <OrderRor />,
         <div />,
         <div />,
     ];
