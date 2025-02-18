@@ -11,7 +11,7 @@ export default function SelectRorTemplate(props: SelectRorTemplateProps) {
     const { push } = useRouter();
     const { rorTemplates } = useInventory();
 
-    const [radioValue, setRadioValue] = useState<string | null>(null);
+    const [radioValue, setRadioValue] = useState<string | null>();
 
     useEffect(() => {
         const selectedRor = rorTemplates?.find(template => template.rorTemplateId == radioValue);
@@ -19,6 +19,14 @@ export default function SelectRorTemplate(props: SelectRorTemplateProps) {
             props.handleSelectRor(selectedRor);
         }
     }, [radioValue]);
+
+    useEffect(() => {
+        if (rorTemplates
+            && rorTemplates.length > 0) {
+            setRadioValue(rorTemplates[0].rorTemplateId)
+        }
+
+    }, [rorTemplates])
 
     return (
         <div
