@@ -39,7 +39,6 @@ export default function P1AccessPage() {
   const [allPo, setAllPo] = useState<PurchaseOrder[] | null>(null);
   const [employeeWithRequisitions, setEmployeeWithRequisitions] = useState<Employee[]>([]);
   const[opened,{open,close}] = useDisclosure(false); 
-  const [openedStockOutModal, setOpenedStockOutModal] = useState(false);
   const [selectedRequisitionId, setSelectedRequisitionId] = useState<string | null>(null);
 
   console.log(allPo);
@@ -50,14 +49,18 @@ export default function P1AccessPage() {
 
   // State for PO modal
   const [poModalOpen, setPoModalOpen] = useState<{ [key: string]: boolean }>({});
-  const [stockOutModalOpen, setStockOutModalOpen] = useState<{ [key: string]: boolean }>({});
 
-  const openStockOutModal = (requisitionId: string) => {
+  //State for StockOutModal
+  const [openedStockOutModal, setOpenedStockOutModal] = useState(false);
+
+  //open stockoutmodal
+  const handleStockOutModalOpen = (requisitionId: string) => {
     setSelectedRequisitionId(requisitionId);
     setOpenedStockOutModal(true);
   };
-  
-  const closeStockOutModal = () => {
+
+  // close StockOutModal
+  const handleStockOutModalClose = () => {
     setOpenedStockOutModal(false);
     setSelectedRequisitionId(null);
   };
@@ -142,6 +145,7 @@ export default function P1AccessPage() {
       setShowNotification(false);
     }, 3000);
   };
+
 
   // Map through the desired list and return components only for active requisitions
   const mappedRor = allRor?.map((ror) => {
@@ -272,10 +276,8 @@ export default function P1AccessPage() {
         ),
         <ApprovalBadge isApproved={po.isApproved} />,
 
+        <Text className={classnames.generateSoButton} onClick={()=>handleStockOutModalOpen(matchingOr.requisitionId)}>+ SO</Text>,
 
-        
-        <Text className={classnames.generateSoButton} onClick={open}>+ SO</Text>,
-        <StockOutModal opened={opened} close={close} requisitionId={matchingOr.requisitionId}/>,
 
       
 
@@ -412,6 +414,14 @@ export default function P1AccessPage() {
         <Group classNames={{ root: classnames.loadingContainer }}>
           <img src="/assets/loading/Spin@1x-1.0s-200px-200px.gif" alt="Loading..." />
         </Group>
+        
+      )}
+      {selectedRequisitionId && (
+        <StockOutModal
+          opened={openedStockOutModal}
+          close={handleStockOutModalClose}
+          requisitionId={selectedRequisitionId}
+        />
       )}
     </main>
   );
