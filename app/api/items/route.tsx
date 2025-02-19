@@ -30,7 +30,8 @@ export async function POST(request: Request) {
       isCriticalThreshold: z.number(),
       minPurchaseQty: z.number(),
       price: z.number(),
-      isActive: z.boolean()
+      isActive: z.boolean(),
+      picurl: z.string()
     });
 
     const validatedItem = itemSchema.parse(newItem);

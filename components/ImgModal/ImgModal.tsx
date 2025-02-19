@@ -45,7 +45,7 @@ export default function ImgModal ({
                         w="auto"
                         fit="contain"
                         radius="md"
-                        src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-7.png"
+                        src={currentItem?.picurl || "/assets/no_image/no_image_avail.png"}
                     />
                     
                 </div>
