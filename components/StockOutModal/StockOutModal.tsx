@@ -25,10 +25,11 @@ export default function StockOutModal({ opened, close, requisitionId }: { opened
 
   const [stockOutOrders, setStockOutOrders] = useState<StockOutOrder[]>([]); 
   const [orderQtyMap, setOrderQtyMap] = useState<Record<string, number>>({}); 
+
   
    useEffect(() => {
       fetchStockOutOrders(setStockOutOrders);
-   }, []);
+   }, [stockOutOrders]);
 
 
   
@@ -130,8 +131,9 @@ export default function StockOutModal({ opened, close, requisitionId }: { opened
       await putItem(selectedItem.itemId, { ...selectedItem, currentStockInStoreRoom: selectedItem.currentStockInStoreRoom - stockOutQuantity });
 
       console.log('Stock out success');
-      setSearchValue("");
+      fetchStockOutOrders(setStockOutOrders);
       setShowSuccess(true);
+      setSearchValue(null);
       setSelectedItem(defaultItem);
       setStockOutQuantity(0);
       setStockOutDate(new Date().toISOString().split('T')[0]);
@@ -179,10 +181,17 @@ export default function StockOutModal({ opened, close, requisitionId }: { opened
         <TextInput label="Dispatched By" value={dispatchedBy} onChange={(e) => setDispatchedBy(e.target.value)} size="md" withAsterisk />
       </SimpleGrid>
 
+      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "30px", marginTop:"30px" }}>
+        <Button 
+          variant="filled" 
+          color="blue" 
+          size="md" 
+          onClick={handleSubmit}
+        >
+          Generate SO
+        </Button>
+      </div>
 
-      <Button variant="filled" color="blue" size="md" mt="xl" style={{marginBottom:'20px'}} onClick={handleSubmit}>
-        Generate SO
-      </Button>
             {showError &&
               CustomNotification(
                 'error',
@@ -221,9 +230,6 @@ export default function StockOutModal({ opened, close, requisitionId }: { opened
                 </Table.Thead>
                 <Table.Tbody>{stockOutRows}</Table.Tbody>
             </Table>
-
-
-
     </Modal>
   );
 }

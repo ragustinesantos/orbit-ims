@@ -2,7 +2,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Group, Table, TableData, Text } from '@mantine/core';
+import { Button, Group, Table, TableData, Text } from '@mantine/core';
 import { useInventory } from '@/app/_utils/inventory-context';
 import {
   Employee,
@@ -278,10 +278,7 @@ export default function P1AccessPage() {
 
         <Text className={classnames.generateSoButton} onClick={()=>handleStockOutModalOpen(matchingOr.requisitionId)}>+ SO</Text>,
 
-
-      
-
-            <button className={classnames.closeTicketButton}>Close</button>,
+        <button className={classnames.closeTicketButton}>Close</button>,
           ];
         }
 
