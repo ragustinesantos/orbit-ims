@@ -24,6 +24,9 @@ import CustomNotification from '@/components/CustomNotification/CustomNotificati
 import RorModal from '@/components/RorModal/RorModal';
 import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
 import classnames from './P1Access.module.css';
+import { useDisclosure } from '@mantine/hooks';
+import StockOutModal from '../StockOutModal/StockOutModal';
+import { string } from 'zod';
 
 export default function P1AccessPage() {
   // Required State to Keep Track of all modal states
@@ -35,6 +38,9 @@ export default function P1AccessPage() {
   const [allOdor, setAllOdor] = useState<OnDemandOrder[] | null>(null);
   const [allPo, setAllPo] = useState<PurchaseOrder[] | null>(null);
   const [employeeWithRequisitions, setEmployeeWithRequisitions] = useState<Employee[]>([]);
+  const[opened,{open,close}] = useDisclosure(false); 
+  const [openedStockOutModal, setOpenedStockOutModal] = useState(false);
+  const [selectedRequisitionId, setSelectedRequisitionId] = useState<string | null>(null);
 
   console.log(allPo);
 
@@ -44,6 +50,17 @@ export default function P1AccessPage() {
 
   // State for PO modal
   const [poModalOpen, setPoModalOpen] = useState<{ [key: string]: boolean }>({});
+  const [stockOutModalOpen, setStockOutModalOpen] = useState<{ [key: string]: boolean }>({});
+
+  const openStockOutModal = (requisitionId: string) => {
+    setSelectedRequisitionId(requisitionId);
+    setOpenedStockOutModal(true);
+  };
+  
+  const closeStockOutModal = () => {
+    setOpenedStockOutModal(false);
+    setSelectedRequisitionId(null);
+  };
 
   // Sample use effect to store order requisitions and ror's for mapping
   useEffect(() => {
@@ -255,11 +272,16 @@ export default function P1AccessPage() {
         ),
         <ApprovalBadge isApproved={po.isApproved} />,
 
-        // To Do: Modals for these two buttons
-        <button className={classnames.generateSoButton}>+ SO</button>,
-        <button className={classnames.closeTicketButton}>Close</button>,
-      ];
-    }
+
+        
+        <Text className={classnames.generateSoButton} onClick={open}>+ SO</Text>,
+        <StockOutModal opened={opened} close={close} requisitionId={matchingOr.requisitionId}/>,
+
+      
+
+            <button className={classnames.closeTicketButton}>Close</button>,
+          ];
+        }
 
     // Else return an empty line (array)
     return [];
