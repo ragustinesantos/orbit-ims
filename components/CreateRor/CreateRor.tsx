@@ -62,8 +62,16 @@ export default function CreateRor() {
             setRor={handleSetRor}
             adjustQuantity={true}
         />,
-        <div />,
-        <div />,
+        <OrderRor
+            selectedRorTemplate={selectedRorTemplate}
+            setRor={handleSetRor}
+            adjustQuantity={false}
+        />,
+        <OrderRor
+            selectedRorTemplate={selectedRorTemplate}
+            setRor={handleSetRor}
+            adjustQuantity={false}
+        />,
     ];
 
     useEffect(() => {
@@ -105,7 +113,8 @@ export default function CreateRor() {
                 className={classnames.navButtonContainer}
             >
                 {
-                    currentStep != 0 &&
+                    currentStep > 0 &&
+                    currentStep < 3 &&
                     <Button
                         variant="filled"
                         color="#54D0ED"

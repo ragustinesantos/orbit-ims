@@ -8,9 +8,11 @@ import classnames from './OrderRor.module.css';
 export default function OrderRor(props: OrderRorProps) {
 
     const { inventory } = useInventory();
-    const [itemOrders, setItemOrders] = useState<ItemOrder[]>(props.selectedRorTemplate?.itemOrders ?? []);
-    const setRor = props.setRor;
     const selectedRorTemplate = props.selectedRorTemplate;
+    const [itemOrders, setItemOrders] = useState<ItemOrder[]>(selectedRorTemplate?.itemOrders ?? []);
+    const setRor = props.setRor;
+    const adjustQuantity = props.adjustQuantity;
+
 
     const rows = itemOrders ?
         itemOrders.map((orderItem) => {
@@ -24,15 +26,18 @@ export default function OrderRor(props: OrderRorProps) {
                         <Table.Td>{itemFound.packageUnit}</Table.Td>
                         <Table.Td>{itemFound.supplyUnit}</Table.Td>
                         <Table.Td>
-                            <Button
-                                classNames={{ root: `${classnames.buttonDecrement} ${classnames.button}` }}
-                                onClick={() => (decrement(orderItem.itemId))}
-                                variant="filled"
-                                size="xs"
-                                radius="md"
-                            >
-                                -
-                            </Button>
+                            {
+                                adjustQuantity &&
+                                <Button
+                                    classNames={{ root: `${classnames.buttonDecrement} ${classnames.button}` }}
+                                    onClick={() => (decrement(orderItem.itemId))}
+                                    variant="filled"
+                                    size="xs"
+                                    radius="md"
+                                >
+                                    -
+                                </Button>
+                            }
                             <span
                                 style={{
                                     width: '30px',
@@ -42,15 +47,17 @@ export default function OrderRor(props: OrderRorProps) {
                             >
                                 {orderItem.orderQty}
                             </span>
-                            <Button
-                                classNames={{ root: `${classnames.buttonIncrement} ${classnames.button}` }}
-                                onClick={() => (increment(orderItem.itemId))}
-                                variant="filled"
-                                size="xs"
-                                radius="md" >
-                                +
-                            </Button>
-
+                            {
+                                adjustQuantity &&
+                                <Button
+                                    classNames={{ root: `${classnames.buttonIncrement} ${classnames.button}` }}
+                                    onClick={() => (increment(orderItem.itemId))}
+                                    variant="filled"
+                                    size="xs"
+                                    radius="md" >
+                                    +
+                                </Button>
+                            }
                         </Table.Td>
                     </TableTr>
                 );
