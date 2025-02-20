@@ -10,7 +10,7 @@ import { StockInOrder, StockOutOrder } from "@/app/_utils/schema";
 export default function RecentStockInOutTable() {
   const [stockInOrders, setStockInOrders] = useState<StockInOrder[]>([]);
   const [stockOutOrders, setStockOutOrders] = useState<StockOutOrder[]>([]);  
-    const { inventory } = useInventory();
+  const { inventory } = useInventory();
 
     const [showAllStockIn, setShowAllStockIn] = useState(false);
     const [showAllStockOut, setShowAllStockOut] = useState(false);
