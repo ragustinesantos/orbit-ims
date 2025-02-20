@@ -30,9 +30,7 @@ export default function SelectRorTemplate(props: SelectRorTemplateProps) {
     }, [rorTemplates])
 
     return (
-        <div
-            className={classnames.rorTemplateContainer}
-        >
+        <div>
             <Radio.Group
                 value={radioValue}
                 onChange={setRadioValue}

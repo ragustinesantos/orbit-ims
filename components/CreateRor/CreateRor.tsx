@@ -12,7 +12,7 @@ export default function CreateRor() {
 
     const [currentStep, setCurrentStep] = useState<number>(0);
     const [currentContent, setCurrentContent] = useState(<div />);
-    const [selectedRorTemplate, setSelectedRorTemplate] = useState<RecurringOrder | null>()
+    const [selectedRorTemplate, setSelectedRorTemplate] = useState<RecurringOrder | null>(null)
 
     // These are the titles of the steps and their respective headers
     const steps: string[] = ['Template', 'Order', 'Confirmation', 'Summary'];
@@ -53,7 +53,11 @@ export default function CreateRor() {
         <SelectRorTemplate
             handleSelectRor={handleSelectRORTemplate}
         />,
-        <OrderRor />,
+        <OrderRor
+            selectedRorTemplate={selectedRorTemplate}
+            handleSelectRor={handleSelectRORTemplate}
+            adjustQuantity={true}
+        />,
         <div />,
         <div />,
     ];
@@ -88,7 +92,11 @@ export default function CreateRor() {
             >
                 {stepHeaders[currentStep]}
             </Text>
-            {currentContent}
+            <div
+                className={classnames.rorTemplateContainer}
+            >
+                {currentContent}
+            </div>
             <div
                 className={classnames.navButtonContainer}
             >

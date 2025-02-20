@@ -31,3 +31,8 @@
     justify-content: flex-end;
     gap: 40px;
 }
+
+.rorTemplateContainer {
+    margin-left: 120px;
+    margin-top: 30px;
+}
