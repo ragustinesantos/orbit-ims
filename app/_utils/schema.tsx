@@ -358,7 +358,8 @@ export interface odorModalProps {
 export interface imgModalProps {
   isOpened: boolean;
   isClosed: () => void;
-  item: Item;
+  item?: Item;
+  itemid?: string;
 }
 
 export interface StockInOrder {

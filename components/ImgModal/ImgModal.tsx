@@ -19,15 +19,18 @@ import { imgModalProps } from '@/app/_utils/schema';
 import { useInventory } from '@/app/_utils/inventory-context';
 import classnames from './ImgModal.module.css';
 
+//Pass in either a 
 export default function ImgModal ({
       item,
       isOpened,
       isClosed,
+      itemid
     }: imgModalProps) {
     const {inventory, supplierList} = useInventory();
     const [opened, { open, close }] = useDisclosure(false);
 
-    const currentItem = inventory?.find((invItem)=>(invItem.itemId === item.itemId));
+    const currentItem = inventory?.find((invItem)=>(invItem.itemId === item?.itemId));
+    const currentId = inventory?.find((invItem)=>(invItem.itemId === itemid))
 
     
     return (
@@ -45,11 +48,11 @@ export default function ImgModal ({
                         w="auto"
                         fit="contain"
                         radius="md"
-                        src={currentItem?.picurl || "/assets/no_image/no_image_avail.png"}
+                        src={currentItem?.picurl || currentId?.picurl || "/assets/no_image/no_image_avail.png"}
                     />
                     
                 </div>
-                <Text>{currentItem?.itemName}</Text>
+                <Text>{currentItem?.itemName || currentId?.itemName}</Text>
             </div>
         </Modal>
         </>
