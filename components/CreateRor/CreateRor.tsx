@@ -48,6 +48,10 @@ export default function CreateRor() {
         setSelectedRorTemplate(orderObj)
     };
 
+    const handleSetRor = (paramRecurringOrder: RecurringOrder) => {
+        setSelectedRorTemplate(paramRecurringOrder);
+    }
+
     // This is an array of content to display based on the current index
     const stepContent: JSX.Element[] = [
         <SelectRorTemplate
@@ -55,7 +59,7 @@ export default function CreateRor() {
         />,
         <OrderRor
             selectedRorTemplate={selectedRorTemplate}
-            handleSelectRor={handleSelectRORTemplate}
+            setRor={handleSetRor}
             adjustQuantity={true}
         />,
         <div />,

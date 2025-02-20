@@ -354,7 +354,7 @@ export interface SelectRorTemplateProps {
 
 export interface OrderRorProps {
   selectedRorTemplate: RecurringOrder | null;
-  handleSelectRor: (paramRorTemplate: RecurringOrderTemplate) => void;
+  setRor: (paramRor: RecurringOrder) => void;
   adjustQuantity: boolean;
 }
 

@@ -1,12 +1,16 @@
 import { useInventory } from "@/app/_utils/inventory-context";
-import { OrderRorProps } from "@/app/_utils/schema";
-import { Table, TableTr } from "@mantine/core";
+import { ItemOrder, OrderRorProps, RecurringOrder } from "@/app/_utils/schema";
+import { Button, Table, TableTr } from "@mantine/core";
+import { useEffect, useState } from "react";
+import classnames from './OrderRor.module.css';
 
 
 export default function OrderRor(props: OrderRorProps) {
 
     const { inventory } = useInventory();
-    const itemOrders = props.selectedRorTemplate?.itemOrders;
+    const [itemOrders, setItemOrders] = useState<ItemOrder[]>(props.selectedRorTemplate?.itemOrders ?? []);
+    const setRor = props.setRor;
+    const selectedRorTemplate = props.selectedRorTemplate;
 
     const rows = itemOrders ?
         itemOrders.map((orderItem) => {
@@ -19,11 +23,58 @@ export default function OrderRor(props: OrderRorProps) {
                         <Table.Td>{itemFound.supplyUnit}</Table.Td>
                         <Table.Td>{itemFound.packageUnit}</Table.Td>
                         <Table.Td>{itemFound.supplyUnit}</Table.Td>
-                        <Table.Td>{orderItem.orderQty}</Table.Td>
+                        <Table.Td>
+                            <Button
+                                classNames={{ root: `${classnames.buttonDecrement} ${classnames.button}` }}
+                                onClick={() => (decrement(orderItem.itemId))}
+                                variant="filled"
+                                size="xs"
+                                radius="md"
+                            >
+                                -
+                            </Button>
+                            <span
+                                style={{
+                                    width: '30px',
+                                    textAlign: 'center',
+                                    display: 'inline-block'
+                                }}
+                            >
+                                {orderItem.orderQty}
+                            </span>
+                            <Button
+                                classNames={{ root: `${classnames.buttonIncrement} ${classnames.button}` }}
+                                onClick={() => (increment(orderItem.itemId))}
+                                variant="filled"
+                                size="xs"
+                                radius="md" >
+                                +
+                            </Button>
+
+                        </Table.Td>
                     </TableTr>
                 );
             }
         }) : []
+
+    const increment = (id: string) => {
+        setItemOrders((prevItems) =>
+            prevItems?.map((item) => item.itemId === id ?
+                { ...item, orderQty: item.orderQty + 1, pendingQty: item.pendingQty + 1 } : item));
+    }
+
+    const decrement = (id: string) => {
+        setItemOrders((prevItems) =>
+            prevItems?.map((item) => item.itemId === id && item.orderQty > 0 ?
+                { ...item, orderQty: item.orderQty - 1, pendingQty: item.pendingQty - 1 } : item));
+    }
+
+    useEffect(() => {
+        if (selectedRorTemplate) {
+            const tempRor: RecurringOrder = { ...selectedRorTemplate, itemOrders: itemOrders };
+            setRor(tempRor);
+        }
+    }, [itemOrders]);
 
     return (
         <div>
