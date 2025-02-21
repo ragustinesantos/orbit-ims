@@ -14,6 +14,7 @@ export interface Item {
   minPurchaseQty: number;
   price: number;
   isActive: boolean;
+  picurl: string;
 }
 
 export interface ItemToEdit {
@@ -29,6 +30,7 @@ export interface ItemToEdit {
   minPurchaseQty: number;
   price: number;
   isActive: boolean;
+  picurl: string;
   [key: string]: any;
 }
 
@@ -46,6 +48,7 @@ export const defaultItem: Item = {
   minPurchaseQty: 0,
   price: 0,
   isActive: true,
+  picurl: '',
 };
 
 export interface Supplier {
@@ -308,7 +311,6 @@ export interface PurchaseOrderItem {
 export interface PurchaseOrder {
   purchaseOrderId: string;
   requisitionId: string;
-  supplierId: string;
   orderList: PurchaseOrderItem[];
   recipientCompanyName: string;
   recipientCompanyAddress: string;
@@ -317,7 +319,7 @@ export interface PurchaseOrder {
   subTotal: number;
   taxRate: number;
   tax: number;
-  totalOrderCost: string;
+  totalOrderCost: number;
   approvalP2: string;
   isApproved: boolean | null;
   isDelivered: boolean;
@@ -326,7 +328,6 @@ export interface PurchaseOrder {
 
 export interface PurchaseOrderToEdit {
   requisitionId: string;
-  supplierId: string;
   orderList: PurchaseOrderItem[];
   recipientCompanyName: string;
   recipientCompanyAddress: string;
@@ -335,7 +336,7 @@ export interface PurchaseOrderToEdit {
   subTotal: number;
   taxRate: number;
   tax: number;
-  totalOrderCost: string;
+  totalOrderCost: number;
   approvalP2: string;
   isApproved: boolean | null;
   isDelivered: boolean;
@@ -373,6 +374,13 @@ export interface odorModalProps {
   handleApprovalActivity?: (message: string, odorId: string, status: string) => void;
 }
 
+export interface imgModalProps {
+  isOpened: boolean;
+  isClosed: () => void;
+  item?: Item;
+  itemid?: string;
+}
+
 export interface StockInOrder {
   stockInId: string;
   itemId: string;
@@ -385,7 +393,7 @@ export interface StockInOrder {
 export interface StockOutOrder {
   stockOutId: string;
   itemId: string;
-  purchaseOrderId?: string;
+  requisitionId?: string;
   stockOutQuantity: number;
   stockOutDate: string;
   dispatchedBy: string;

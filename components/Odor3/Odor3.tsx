@@ -8,6 +8,7 @@ import { useInventory } from '@/app/_utils/inventory-context';
 import { number } from 'zod';
 import { ItemOrder, NewItemOrder } from '@/app/_utils/schema';
 import CustomNotification from '../CustomNotification/CustomNotification';
+import ImgModal from '../ImgModal/ImgModal';
 
 
 
@@ -30,13 +31,22 @@ interface setpropstype  {
 export default function OdorComponent3( {itemOrders,newItemOrders,totalCost,orderTotal,remarks,setRemarks,recipientName,setRecipientName,recipientLocation,setRecipientLocation}: setpropstype) {
 
     const { inventory, supplierList,} = useInventory();
+    const [modalStateTracker, setModalStateTracker] = useState<Record<string, boolean>>({});
+
+    // Every time an ID is clicked this should run and set the state of modal visibility to the opposite of its previous value
+    const toggleImgModalState = (itemId: string) => {
+      setModalStateTracker((prev) => ({ ...prev, [itemId]: !prev[itemId] }));
+    };
 
     const itemrows = itemOrders.map((item) => {
         const odorItem = inventory?.find((inv)=> inv.itemId === item.itemId)
         const supplier = supplierList?.find((inv)=> inv.supplierId === odorItem?.supplierId)
         return (
           <Table.Tr key={odorItem?.itemId}>
-            <Table.Td style={{maxWidth: '100px', overflowX: 'scroll', scrollbarWidth: 'none',whiteSpace: 'nowrap', }}>{odorItem?.itemId}</Table.Td>
+            <ImgModal item={odorItem} isOpened={!!modalStateTracker[item.itemId]} isClosed={() => setModalStateTracker((prev) => ({ ...prev, [item.itemId]: false }))} ></ImgModal>
+              <Table.Td style={{maxWidth: '100px', overflowX: 'scroll', scrollbarWidth: 'none',whiteSpace: 'nowrap', }}>
+              <Text onClick={() => toggleImgModalState(item.itemId)} classNames={{root:classnames.imgModalID}}>{odorItem?.itemId}</Text>
+              </Table.Td>
             <Table.Td>{odorItem?.itemName}</Table.Td>
             <Table.Td>{odorItem?.category}</Table.Td>
             <Table.Td>{odorItem?.supplyUnit}</Table.Td>

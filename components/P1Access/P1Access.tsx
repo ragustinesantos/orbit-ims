@@ -2,13 +2,14 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Group, Table, TableData, Text } from '@mantine/core';
+import { Button, Group, Table, TableData, Text } from '@mantine/core';
 import { useInventory } from '@/app/_utils/inventory-context';
 import {
   Employee,
   OnDemandOrder,
   OrderRequisition,
   PurchaseOrder,
+  PurchaseOrderToEdit,
   RecurringOrder,
 } from '@/app/_utils/schema';
 import {
@@ -17,11 +18,15 @@ import {
   fetchOrderRequisitions,
   fetchPurchaseOrders,
   fetchRecurringOrderRequisitions,
+  postPurchaseOrder,
 } from '@/app/_utils/utility';
 import CustomNotification from '@/components/CustomNotification/CustomNotification';
 import RorModal from '@/components/RorModal/RorModal';
 import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
 import classnames from './P1Access.module.css';
+import { useDisclosure } from '@mantine/hooks';
+import StockOutModal from '../StockOutModal/StockOutModal';
+import { string } from 'zod';
 
 export default function P1AccessPage() {
   // Required State to Keep Track of all modal states
@@ -33,6 +38,8 @@ export default function P1AccessPage() {
   const [allOdor, setAllOdor] = useState<OnDemandOrder[] | null>(null);
   const [allPo, setAllPo] = useState<PurchaseOrder[] | null>(null);
   const [employeeWithRequisitions, setEmployeeWithRequisitions] = useState<Employee[]>([]);
+  const[opened,{open,close}] = useDisclosure(false); 
+  const [selectedRequisitionId, setSelectedRequisitionId] = useState<string | null>(null);
 
   console.log(allPo);
 
@@ -42,6 +49,21 @@ export default function P1AccessPage() {
 
   // State for PO modal
   const [poModalOpen, setPoModalOpen] = useState<{ [key: string]: boolean }>({});
+
+  //State for StockOutModal
+  const [openedStockOutModal, setOpenedStockOutModal] = useState(false);
+
+  //open stockoutmodal
+  const handleStockOutModalOpen = (requisitionId: string) => {
+    setSelectedRequisitionId(requisitionId);
+    setOpenedStockOutModal(true);
+  };
+
+  // close StockOutModal
+  const handleStockOutModalClose = () => {
+    setOpenedStockOutModal(false);
+    setSelectedRequisitionId(null);
+  };
 
   // Sample use effect to store order requisitions and ror's for mapping
   useEffect(() => {
@@ -123,6 +145,7 @@ export default function P1AccessPage() {
       setShowNotification(false);
     }, 3000);
   };
+
 
   // Map through the desired list and return components only for active requisitions
   const mappedRor = allRor?.map((ror) => {
@@ -235,7 +258,9 @@ export default function P1AccessPage() {
               <PoModal
                 purchaseOrder={po}
                 isOpened={poModalOpen[po.purchaseOrderId]}
-                isClosed={() => setPoModalOpen((prev) => ({ ...prev, [po.purchaseOrderId]: false }))}
+                isClosed={() =>
+                  setPoModalOpen((prev) => ({ ...prev, [po.purchaseOrderId]: false }))
+                }
               />
             )}
             <button
@@ -251,15 +276,70 @@ export default function P1AccessPage() {
         ),
         <ApprovalBadge isApproved={po.isApproved} />,
 
-        // To Do: Modals for these two buttons
-        <button className={classnames.generateSoButton}>+ SO</button>,
+        <Text className={classnames.generateSoButton} onClick={()=>handleStockOutModalOpen(matchingOr.requisitionId)}>+ SO</Text>,
+
         <button className={classnames.closeTicketButton}>Close</button>,
-      ];
-    }
+          ];
+        }
 
     // Else return an empty line (array)
     return [];
   });
+
+  // Function to generate PO for "+ PO" button
+  const generatePo = async (requisitionId: string) => {
+    if (!allPo?.find((po) => po.requisitionId === requisitionId)) {
+      // Create a purchase order object for persistence
+      const purchaseOrder: PurchaseOrderToEdit = {
+        requisitionId,
+        orderList: [],
+        recipientCompanyName: '',
+        recipientCompanyAddress: '',
+        purchaseOrderDate: new Date().toLocaleDateString(),
+        purchaseOrderDeliveryDate: '',
+        subTotal: 0,
+        taxRate: 0,
+        tax: 0,
+        totalOrderCost: 0,
+        approvalP2: '',
+        isApproved: null,
+        isDelivered: false,
+        isActive: false,
+      };
+      try {
+        const generatedPo = await postPurchaseOrder(purchaseOrder);
+        setNotificationMessage(
+          CustomNotification(
+            'Success',
+            'PO Created!',
+            `Purchase Order #${generatedPo} has been successfully created`,
+            setShowNotification
+          )
+        );
+      } catch (error) {
+        console.log(error);
+        setNotificationMessage(
+          CustomNotification(
+            'error',
+            'Error Encountered',
+            'Unexpected Error encountered. Please try again.',
+            setShowNotification
+          )
+        );
+        revealNotification();
+      }
+    } else {
+      setNotificationMessage(
+        CustomNotification(
+          'error',
+          'Error Encountered',
+          `PO for requisition #${requisitionId} already exists`,
+          setShowNotification
+        )
+      );
+      revealNotification();
+    }
+  };
 
   // Sample table to contain line items that can generate the modal
   const rorTableData: TableData = {
@@ -331,6 +411,14 @@ export default function P1AccessPage() {
         <Group classNames={{ root: classnames.loadingContainer }}>
           <img src="/assets/loading/Spin@1x-1.0s-200px-200px.gif" alt="Loading..." />
         </Group>
+        
+      )}
+      {selectedRequisitionId && (
+        <StockOutModal
+          opened={openedStockOutModal}
+          close={handleStockOutModalClose}
+          requisitionId={selectedRequisitionId}
+        />
       )}
     </main>
   );

@@ -11,6 +11,7 @@ import {
   OrderRequisition,
   OrderRequisitionToEdit,
   PurchaseOrder,
+  PurchaseOrderToEdit,
   RecurringOrder,
   RecurringOrderTemplate,
   RecurringOrderToEdit,
@@ -63,6 +64,26 @@ export const fetchSupplier = async (supplierId: string) => {
     console.log(error);
   }
 };
+
+export const postItem = async (item : Item) => {
+  try {
+    const request = {
+      method: 'POST',
+      body: JSON.stringify(item)
+    }
+
+    const response = await fetch(`/api/items/`, request);
+    if(!response.ok){
+      const errorText = await response.text()
+      throw new Error(`HTTP Error: ${response.status} - ${response.statusText} - ${errorText}`);
+    }
+    return response;
+  }
+  catch (error) {
+    console.log(error);
+    return undefined;
+  }
+}
 
 // Update item through PUT
 export const putItem = async (itemId: string, updatedItem: ItemToEdit) => {
@@ -360,7 +381,9 @@ export const postRecurringOrderRequisition = async (rorObj: RecurringOrderToEdit
 }
 
 // Fetch all purchase orders
-export const fetchPurchaseOrders = async (setPurchaseOrders: (purchaseOrders: PurchaseOrder[]) => void) => {
+export const fetchPurchaseOrders = async (
+  setPurchaseOrders: (purchaseOrders: PurchaseOrder[]) => void
+) => {
   try {
     const response = await fetch(`/api/purchase-orders`);
 
@@ -372,6 +395,27 @@ export const fetchPurchaseOrders = async (setPurchaseOrders: (purchaseOrders: Pu
     const data = await response.json();
 
     setPurchaseOrders(data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// Post a Purchase Order database entry
+export const postPurchaseOrder = async (purchaseOrderObj: PurchaseOrderToEdit) => {
+  try {
+    // Create a new request
+    const request = {
+      method: 'POST',
+      body: JSON.stringify(purchaseOrderObj),
+    };
+    const response = await fetch(`/api/purchase-orders`, request);
+    console.log(response);
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+    }
+    const data = await response.json();
+    return data;
   } catch (error) {
     console.log(error);
   }
