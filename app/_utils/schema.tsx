@@ -361,7 +361,7 @@ export interface OrderRorProps {
 }
 
 export interface rorModalProps {
-  recurringOrder: RecurringOrderToEdit | null;
+  recurringOrder: RecurringOrder | null;
   isOpened: boolean;
   isClosed: () => void;
   handleApprovalActivity?: (message: string, rorId: string, status: string) => void;
