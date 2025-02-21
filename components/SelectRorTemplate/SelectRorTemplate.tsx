@@ -11,11 +11,12 @@ export default function SelectRorTemplate(props: SelectRorTemplateProps) {
     const { push } = useRouter();
     const { rorTemplates } = useInventory();
 
-    const [radioValue, setRadioValue] = useState<string | null>();
+    const [radioValue, setRadioValue] = useState<string | null>(props.selectedRorTemplate?.rorTemplateId ?? null);
 
     useEffect(() => {
         const selectedRor = rorTemplates?.find(template => template.rorTemplateId == radioValue);
-        if (selectedRor) {
+        if (selectedRor
+            && selectedRor.rorTemplateId != props.selectedRorTemplate?.rorTemplateId) {
             props.handleSelectRor(selectedRor);
         }
     }, [radioValue]);
@@ -23,10 +24,11 @@ export default function SelectRorTemplate(props: SelectRorTemplateProps) {
     // If there are existing ror templates, default to the first option
     useEffect(() => {
         if (rorTemplates
-            && rorTemplates.length > 0) {
-            setRadioValue(rorTemplates[0].rorTemplateId)
-        }
+            && rorTemplates.length > 0
+            && !props.selectedRorTemplate) {
 
+            setRadioValue(rorTemplates[0].rorTemplateId);
+        }
     }, [rorTemplates])
 
     return (

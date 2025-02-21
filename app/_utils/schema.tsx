@@ -349,6 +349,7 @@ export interface WizardProgressProps {
 }
 
 export interface SelectRorTemplateProps {
+  selectedRorTemplate: RecurringOrder | null;
   handleSelectRor: (paramRorTemplate: RecurringOrderTemplate) => void;
 }
 

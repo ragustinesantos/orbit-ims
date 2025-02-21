@@ -55,6 +55,7 @@ export default function CreateRor() {
     // This is an array of content to display based on the current index
     const stepContent: JSX.Element[] = [
         <SelectRorTemplate
+            selectedRorTemplate={selectedRorTemplate}
             handleSelectRor={handleSelectRORTemplate}
         />,
         <OrderRor
