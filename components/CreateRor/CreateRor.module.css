@@ -31,3 +31,16 @@
     justify-content: flex-end;
     gap: 40px;
 }
+
+.rorTemplateContainer {
+    margin-left: 120px;
+    margin-top: 30px;
+}
+
+.modalTitle {
+    font-size: x-large;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    color: #1B4965;
+}

@@ -16,7 +16,6 @@ export async function POST(request: Request) {
     const newRecurringOrder = await request.json();
 
     const recurringOrderSchema = z.object({
-      rorId: z.string(),
       rorTemplateId: z.string(),
       requisitionId: z.string(),
       itemOrders: z.array(
@@ -32,9 +31,9 @@ export async function POST(request: Request) {
 
     const validatedRecurringOrder = recurringOrderSchema.parse(newRecurringOrder);
 
-    await dbAddRecurringOrder(validatedRecurringOrder);
+    const docId = await dbAddRecurringOrder(validatedRecurringOrder);
 
-    return new Response(JSON.stringify(validatedRecurringOrder), { status: 201 });
+    return new Response(JSON.stringify(docId), { status: 201 });
   } catch (error) {
     return new Response(JSON.stringify({ error }), { status: 401 });
   }
