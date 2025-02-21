@@ -14,6 +14,7 @@ export interface Item {
   minPurchaseQty: number;
   price: number;
   isActive: boolean;
+  picurl: string;
 }
 
 export interface ItemToEdit {
@@ -29,6 +30,7 @@ export interface ItemToEdit {
   minPurchaseQty: number;
   price: number;
   isActive: boolean;
+  picurl: string;
   [key: string]: any;
 }
 
@@ -46,6 +48,7 @@ export const defaultItem: Item = {
   minPurchaseQty: 0,
   price: 0,
   isActive: true,
+  picurl: '',
 };
 
 export interface Supplier {
@@ -350,6 +353,13 @@ export interface odorModalProps {
   isOpened: boolean;
   isClosed: () => void;
   handleApprovalActivity?: (message: string, odorId: string, status: string) => void;
+}
+
+export interface imgModalProps {
+  isOpened: boolean;
+  isClosed: () => void;
+  item?: Item;
+  itemid?: string;
 }
 
 export interface StockInOrder {

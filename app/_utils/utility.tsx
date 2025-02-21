@@ -64,6 +64,26 @@ export const fetchSupplier = async (supplierId: string) => {
   }
 };
 
+export const postItem = async (item : Item) => {
+  try {
+    const request = {
+      method: 'POST',
+      body: JSON.stringify(item)
+    }
+
+    const response = await fetch(`/api/items/`, request);
+    if(!response.ok){
+      const errorText = await response.text()
+      throw new Error(`HTTP Error: ${response.status} - ${response.statusText} - ${errorText}`);
+    }
+    return response;
+  }
+  catch (error) {
+    console.log(error);
+    return undefined;
+  }
+}
+
 // Update item through PUT
 export const putItem = async (itemId: string, updatedItem: ItemToEdit) => {
   try {
