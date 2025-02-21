@@ -11,12 +11,12 @@ export default function SelectRorTemplate(props: SelectRorTemplateProps) {
     const { push } = useRouter();
     const { rorTemplates } = useInventory();
 
-    const [radioValue, setRadioValue] = useState<string | null>(props.selectedRorTemplate?.rorTemplateId ?? null);
+    const [radioValue, setRadioValue] = useState<string | null>(props.recurringOrder?.rorTemplateId ?? null);
 
     useEffect(() => {
         const selectedRor = rorTemplates?.find(template => template.rorTemplateId == radioValue);
         if (selectedRor
-            && selectedRor.rorTemplateId != props.selectedRorTemplate?.rorTemplateId) {
+            && selectedRor.rorTemplateId != props.recurringOrder?.rorTemplateId) {
             props.handleSelectRor(selectedRor);
         }
     }, [radioValue]);
@@ -25,7 +25,7 @@ export default function SelectRorTemplate(props: SelectRorTemplateProps) {
     useEffect(() => {
         if (rorTemplates
             && rorTemplates.length > 0
-            && !props.selectedRorTemplate) {
+            && !props.recurringOrder) {
 
             setRadioValue(rorTemplates[0].rorTemplateId);
         }

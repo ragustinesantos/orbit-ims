@@ -1,5 +1,5 @@
 import { useInventory } from "@/app/_utils/inventory-context";
-import { ItemOrder, OrderRorProps, RecurringOrder } from "@/app/_utils/schema";
+import { ItemOrder, OrderRorProps, RecurringOrderToEdit } from "@/app/_utils/schema";
 import { Button, Table, TableTr } from "@mantine/core";
 import { useEffect, useState } from "react";
 import classnames from './OrderRor.module.css';
@@ -8,8 +8,8 @@ import classnames from './OrderRor.module.css';
 export default function OrderRor(props: OrderRorProps) {
 
     const { inventory } = useInventory();
-    const selectedRorTemplate = props.selectedRorTemplate;
-    const [itemOrders, setItemOrders] = useState<ItemOrder[]>(selectedRorTemplate?.itemOrders ?? []);
+    const recurringOrder = props.recurringOrder;
+    const [itemOrders, setItemOrders] = useState<ItemOrder[]>(recurringOrder?.itemOrders ?? []);
     const setRor = props.setRor;
     const adjustQuantity = props.adjustQuantity;
 
@@ -77,8 +77,8 @@ export default function OrderRor(props: OrderRorProps) {
     }
 
     useEffect(() => {
-        if (selectedRorTemplate) {
-            const tempRor: RecurringOrder = { ...selectedRorTemplate, itemOrders: itemOrders };
+        if (recurringOrder) {
+            const tempRor: RecurringOrderToEdit = { ...recurringOrder, itemOrders: itemOrders };
             setRor(tempRor);
         }
     }, [itemOrders]);

@@ -3,18 +3,25 @@ import classnames from './CreateRor.module.css';
 import WizardProgress from "../WizardProgress/WizardProgress";
 import { useEffect, useState } from "react";
 import SelectRorTemplate from "../SelectRorTemplate/SelectRorTemplate";
-import { defaultRecurringOrder, ItemOrder, RecurringOrder, RecurringOrderTemplate } from "@/app/_utils/schema";
+import { defaultOrderRequisitionToEdit, defaultRecurringOrderToEdit, ItemOrder, OrderRequisitionToEdit, RecurringOrderTemplate, RecurringOrderToEdit } from "@/app/_utils/schema";
 import OrderRor from "../OrderRor/OrderRor";
 import { useDisclosure } from "@mantine/hooks";
+import CustomNotification from "../CustomNotification/CustomNotification";
+import { useInventory } from "@/app/_utils/inventory-context";
+import { patchOrderRequisition, postOrderRequisition, postRecurringOrderRequisition } from "@/app/_utils/utility";
 
 
 
 export default function CreateRor() {
 
+    const { currentEmployee } = useInventory();
     const [currentStep, setCurrentStep] = useState<number>(0);
     const [currentContent, setCurrentContent] = useState(<div />);
-    const [selectedRorTemplate, setSelectedRorTemplate] = useState<RecurringOrder | null>(null)
+    const [recurringOrder, setrecurringOrder] = useState<RecurringOrderToEdit | null>(null)
     const [buttonName, setButtonName] = useState("Next");
+    const [showNotification, setShowNotification] = useState(false);
+    const [notificationMessage, setNotificationMessage] = useState(<div />);
+    const [showButton, setShowButton] = useState(true);
 
     // Confirmation Modal State
     const [opened, { close, open }] = useDisclosure(false);
@@ -43,38 +50,36 @@ export default function CreateRor() {
             itemList.push(newItemObj);
         });
 
-        let orderObj: RecurringOrder = {
-            ...defaultRecurringOrder,
+        let orderObj: RecurringOrderToEdit = {
+            ...defaultRecurringOrderToEdit,
             rorTemplateId: paramRorTemplate.rorTemplateId,
-            requisitionId: "",
             itemOrders: itemList,
-            orderTotal: 0
         }
-        setSelectedRorTemplate(orderObj)
+        setrecurringOrder(orderObj)
     };
 
-    const handleSetRor = (paramRecurringOrder: RecurringOrder) => {
-        setSelectedRorTemplate(paramRecurringOrder);
+    const handleSetRor = (paramRecurringOrder: RecurringOrderToEdit) => {
+        setrecurringOrder(paramRecurringOrder);
     }
 
     // This is an array of content to display based on the current index
     const stepContent: JSX.Element[] = [
         <SelectRorTemplate
-            selectedRorTemplate={selectedRorTemplate}
+            recurringOrder={recurringOrder}
             handleSelectRor={handleSelectRORTemplate}
         />,
         <OrderRor
-            selectedRorTemplate={selectedRorTemplate}
+            recurringOrder={recurringOrder}
             setRor={handleSetRor}
             adjustQuantity={true}
         />,
         <OrderRor
-            selectedRorTemplate={selectedRorTemplate}
+            recurringOrder={recurringOrder}
             setRor={handleSetRor}
             adjustQuantity={false}
         />,
         <OrderRor
-            selectedRorTemplate={selectedRorTemplate}
+            recurringOrder={recurringOrder}
             setRor={handleSetRor}
             adjustQuantity={false}
         />,
@@ -95,8 +100,74 @@ export default function CreateRor() {
 
     const resetPage = () => {
         setCurrentStep(0);
-        setSelectedRorTemplate(null);
+        setrecurringOrder(null);
     }
+
+    const handleSubmit = async () => {
+        setShowButton(false);
+
+        try {
+
+            let date: Date = new Date();
+            const formattedDate: string = date.toLocaleString();
+            // Create new order object
+            const newOrderReqObj: OrderRequisitionToEdit = {
+                ...defaultOrderRequisitionToEdit,
+                requisitionType: 'ror',
+                requisitionTypeId: '',
+                requisitionDate: formattedDate,
+                employeeId: currentEmployee?.employeeId || '',
+            };
+
+            // Create the requisition that would be linked with ROR vice versa
+            const newOrdReqId = await postOrderRequisition(newOrderReqObj);
+
+            const newRorObj: RecurringOrderToEdit = {
+                ...defaultRecurringOrderToEdit,
+                ...recurringOrder,
+                requisitionId: newOrdReqId
+            };
+
+            // Ensure POST is awaited and promise is resolved; store directly in a variable to avoid delays in states
+            const newRorId = await postRecurringOrderRequisition(newRorObj);
+
+            // Update the order requisition with the new ROR ID created
+            await patchOrderRequisition(newOrdReqId, newRorId);
+
+            // Only change the page if it was successful
+            setCurrentStep(currentStep + 1);
+
+            setNotificationMessage(
+                CustomNotification(
+                    'success',
+                    'ROR Submitted!',
+                    `Recurring Order Requisition successfully added.`,
+                    closeNotification
+                )
+            );
+
+        } catch (error) {
+            console.log(error);
+            setNotificationMessage(
+                CustomNotification(
+                    'error',
+                    'Error Encountered',
+                    'Unexpected Error encountered. Please try again.',
+                    closeNotification
+                )
+            );
+        }
+        // Display notification for 3 seconds.
+        setShowNotification(true);
+        setTimeout(() => {
+            setShowNotification(false);
+        }, 3000);
+        setShowButton(true);
+    }
+
+    const closeNotification = () => {
+        setShowNotification(false);
+    };
 
     return (
         <div
@@ -142,7 +213,7 @@ export default function CreateRor() {
                     </Button>
                     <Button
                         onClick={() => {
-                            // handleSubmit();
+                            handleSubmit();
                             close();
                         }}
                         color="#1B4965"
@@ -186,6 +257,7 @@ export default function CreateRor() {
                 {
                     currentStep > 0 &&
                     currentStep < 3 &&
+                    showButton &&
                     <Button
                         variant="filled"
                         color="#54D0ED"
@@ -198,7 +270,8 @@ export default function CreateRor() {
                 }
                 {
                     currentStep < stepContent.length &&
-                    selectedRorTemplate &&
+                    recurringOrder &&
+                    showButton &&
                     <Button
                         variant="filled"
                         color="#1B4965"
@@ -221,6 +294,7 @@ export default function CreateRor() {
                     </Button>
                 }
             </div>
+            {showNotification && notificationMessage}
         </div >
     );
 }

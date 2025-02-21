@@ -349,18 +349,18 @@ export interface WizardProgressProps {
 }
 
 export interface SelectRorTemplateProps {
-  selectedRorTemplate: RecurringOrder | null;
+  recurringOrder: RecurringOrderToEdit | null;
   handleSelectRor: (paramRorTemplate: RecurringOrderTemplate) => void;
 }
 
 export interface OrderRorProps {
-  selectedRorTemplate: RecurringOrder | null;
-  setRor: (paramRor: RecurringOrder) => void;
+  recurringOrder: RecurringOrderToEdit | null;
+  setRor: (paramRor: RecurringOrderToEdit) => void;
   adjustQuantity: boolean;
 }
 
 export interface rorModalProps {
-  recurringOrder: RecurringOrder | null;
+  recurringOrder: RecurringOrderToEdit | null;
   isOpened: boolean;
   isClosed: () => void;
   handleApprovalActivity?: (message: string, rorId: string, status: string) => void;
