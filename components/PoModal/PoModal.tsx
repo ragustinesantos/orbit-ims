@@ -80,6 +80,16 @@ export default function PoModal({
         withRowBorders
         classNames={{ table: classnames.rootApprovalTable, td: classnames.tableTd }}
       />
+
+      <div className={classnames.rootBtnArea}>
+        <Button 
+          classNames={{ root: classnames.rootBtn }}
+          onClick={isClosed}
+          color="#1B4965"
+        >
+          Submit
+        </Button>
+      </div>
     </Modal>
   );
 }
