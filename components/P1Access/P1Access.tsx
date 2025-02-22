@@ -27,6 +27,7 @@ import classnames from './P1Access.module.css';
 import { useDisclosure } from '@mantine/hooks';
 import StockOutModal from '../StockOutModal/StockOutModal';
 import { string } from 'zod';
+import PoModal from '../PoModal/PoModal';
 
 export default function P1AccessPage() {
   // Required State to Keep Track of all modal states
@@ -249,38 +250,27 @@ export default function P1AccessPage() {
         </Text>,
         <Text>{formatDate(matchingOr.requisitionDate)}</Text>,
         <ApprovalBadge isApproved={matchingOr.isApprovedP1} />,
-        poModalOpen[po.purchaseOrderId] ? (
+        <>
           <Text classNames={{ root: classnames.rootPoId }}>{po.purchaseOrderId}</Text>
-        ) : (
-          <>
-            {poModalOpen[po.purchaseOrderId] && (
-              // To Do: Implement modal -- right now it just shows the PO ID without the modal
-              <PoModal
-                purchaseOrder={po}
-                isOpened={poModalOpen[po.purchaseOrderId]}
-                isClosed={() =>
-                  setPoModalOpen((prev) => ({ ...prev, [po.purchaseOrderId]: false }))
-                }
-              />
-            )}
-            <button
-              className={classnames.generatePoButton}
-              onClick={() => {
-                // Open the modal when clicked
-                setPoModalOpen((prev) => ({ ...prev, [po.purchaseOrderId]: true }));
-              }}
-            >
-              + PO
-            </button>
-          </>
-        ),
+          <PoModal
+            purchaseOrder={po}
+            isOpened={!!poModalOpen[po.purchaseOrderId]}
+            isClosed={() => setPoModalOpen((prev) => ({ ...prev, [po.purchaseOrderId]: false }))}
+          />
+          <button
+            className={classnames.generatePoButton}
+            onClick={() => {
+              setPoModalOpen((prev) => ({ ...prev, [po.purchaseOrderId]: true }));
+            }}
+          >
+            + PO
+          </button>
+        </>,
         <ApprovalBadge isApproved={po.isApproved} />,
-
         <Text className={classnames.generateSoButton} onClick={()=>handleStockOutModalOpen(matchingOr.requisitionId)}>+ SO</Text>,
-
         <button className={classnames.closeTicketButton}>Close</button>,
-          ];
-        }
+      ];
+    }
 
     // Else return an empty line (array)
     return [];
