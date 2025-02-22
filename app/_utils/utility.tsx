@@ -14,6 +14,7 @@ import {
   PurchaseOrderToEdit,
   RecurringOrder,
   RecurringOrderTemplate,
+  RecurringOrderToEdit,
   StockInOrder,
   StockOutOrder,
   Supplier,
@@ -355,6 +356,29 @@ export const postOnDemandOrderRequisition = async (odorObj: OnDemandOrderToEdit)
     console.log(error);
   }
 };
+
+export const postRecurringOrderRequisition = async (rorObj: RecurringOrderToEdit) => {
+  try {
+
+    // Create a new request
+    const request = new Request('/api/ror/', {
+      method: 'POST',
+      body: JSON.stringify(rorObj),
+    });
+
+    // Fetch the request created
+    const response = await fetch(request);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 // Fetch all purchase orders
 export const fetchPurchaseOrders = async (
