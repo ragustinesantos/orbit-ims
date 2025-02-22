@@ -549,3 +549,29 @@ export const fetchStockOutOrders = async (setStockOutOrders: (stockOutOrders: St
     console.log(error);
   }
 };
+
+export const patchOdorApproval = async (
+  requisitionId: string,
+  isApproved: boolean,
+  approverId: string
+) => {
+  try {
+    const request = {
+      method: 'PATCH',
+      body: JSON.stringify({
+        isApprovedP1: isApproved,
+        approvalP1: approverId,
+      }),
+    };
+
+    const response = await fetch(`/api/order-requisitions/${requisitionId}`, request);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+    }
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
