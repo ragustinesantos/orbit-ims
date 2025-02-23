@@ -211,6 +211,14 @@ export interface RecurringOrder {
   orderTotal: number;
 }
 
+export const defaultRecurringOrder: RecurringOrder = {
+  rorId: '',
+  rorTemplateId: '',
+  requisitionId: '',
+  itemOrders: [],
+  orderTotal: 0
+}
+
 export interface RecurringOrderToEdit {
   rorTemplateId: string;
   requisitionId: string;
@@ -286,7 +294,7 @@ export interface OnDemandOrderToEdit {
   [key: string]: any;
 }
 
-export const defaultOnDemandOrderToEdit : OnDemandOrderToEdit = {
+export const defaultOnDemandOrderToEdit: OnDemandOrderToEdit = {
   requisitionId: '',
   itemOrders: [],
   newItemOrders: [],
@@ -341,6 +349,17 @@ export interface WizardProgressProps {
   currentStep: number;
 }
 
+export interface SelectRorTemplateProps {
+  recurringOrder: RecurringOrderToEdit | null;
+  handleSelectRor: (paramRorTemplate: RecurringOrderTemplate) => void;
+}
+
+export interface OrderRorProps {
+  recurringOrder: RecurringOrderToEdit | null;
+  setRor: (paramRor: RecurringOrderToEdit) => void;
+  adjustQuantity: boolean;
+}
+
 export interface rorModalProps {
   recurringOrder: RecurringOrder | null;
   isOpened: boolean;
@@ -370,19 +389,19 @@ export interface imgModalProps {
 
 export interface StockInOrder {
   stockInId: string;
-  itemId: string; 
+  itemId: string;
   purchaseOrderId?: string;
-  stockInQuantity: number; 
-  stockInDate: string; 
+  stockInQuantity: number;
+  stockInDate: string;
   receivedBy: string;
 }
 
 export interface StockOutOrder {
   stockOutId: string;
-  itemId: string; 
+  itemId: string;
   requisitionId?: string;
-  stockOutQuantity: number; 
-  stockOutDate: string; 
+  stockOutQuantity: number;
+  stockOutDate: string;
   dispatchedBy: string;
 }
 
