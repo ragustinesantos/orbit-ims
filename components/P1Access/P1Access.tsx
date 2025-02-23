@@ -251,7 +251,6 @@ export default function P1AccessPage() {
         <Text>{formatDate(matchingOr.requisitionDate)}</Text>,
         <ApprovalBadge isApproved={matchingOr.isApprovedP1} />,
         <>
-          <Text classNames={{ root: classnames.rootPoId }}>{po.purchaseOrderId}</Text>
           <PoModal
             purchaseOrder={po}
             isOpened={!!poModalOpen[po.purchaseOrderId]}
