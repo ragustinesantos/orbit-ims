@@ -15,6 +15,7 @@ import {
   RecurringOrder,
   RecurringOrderTemplate,
   StockInOrder,
+  StockOutOrder,
   Supplier,
 } from './schema';
 
@@ -444,6 +445,7 @@ export const markdownToPlainText = async (text: string) => {
   return newText;
 };
 
+//add stock in order
 export const postStockInOrder = async (newStockInOrderObj: StockInOrder) => {
   try {
     // Create a new request
@@ -462,6 +464,68 @@ export const postStockInOrder = async (newStockInOrderObj: StockInOrder) => {
     const data = await response.json();
 
     return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+// Fetch all stock in orders
+export const fetchStockInOrders = async (setStockInOrders: (stockInOrders: StockInOrder[]) => void) => {
+  try {
+    const response = await fetch(`/api/stockin`);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+    }
+
+    const data = await response.json();
+
+    setStockInOrders(data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//add stock out order
+export const postStockOutOrder = async (newStockOutOrderObj: StockOutOrder) => {
+  try {
+    // Create a new request
+    const request = {
+      method: 'POST',
+      body: JSON.stringify(newStockOutOrderObj),
+    };
+
+    const response = await fetch(`/api/stockout/`, request);
+    console.log(response);
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+// Fetch all stock out orders
+export const fetchStockOutOrders = async (setStockOutOrders: (stockOutOrders: StockOutOrder[]) => void) => {
+  try {
+    const response = await fetch(`/api/stockout`);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+    }
+
+    const data = await response.json();
+
+    setStockOutOrders(data);
   } catch (error) {
     console.log(error);
   }
