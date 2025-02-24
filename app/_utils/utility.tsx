@@ -14,6 +14,7 @@ import {
   PurchaseOrderToEdit,
   RecurringOrder,
   RecurringOrderTemplate,
+  RecurringOrderToEdit,
   StockInOrder,
   StockOutOrder,
   Supplier,
@@ -63,6 +64,26 @@ export const fetchSupplier = async (supplierId: string) => {
     console.log(error);
   }
 };
+
+export const postItem = async (item : Item) => {
+  try {
+    const request = {
+      method: 'POST',
+      body: JSON.stringify(item)
+    }
+
+    const response = await fetch(`/api/items/`, request);
+    if(!response.ok){
+      const errorText = await response.text()
+      throw new Error(`HTTP Error: ${response.status} - ${response.statusText} - ${errorText}`);
+    }
+    return response;
+  }
+  catch (error) {
+    console.log(error);
+    return undefined;
+  }
+}
 
 // Update item through PUT
 export const putItem = async (itemId: string, updatedItem: ItemToEdit) => {
@@ -336,6 +357,29 @@ export const postOnDemandOrderRequisition = async (odorObj: OnDemandOrderToEdit)
   }
 };
 
+export const postRecurringOrderRequisition = async (rorObj: RecurringOrderToEdit) => {
+  try {
+
+    // Create a new request
+    const request = new Request('/api/ror/', {
+      method: 'POST',
+      body: JSON.stringify(rorObj),
+    });
+
+    // Fetch the request created
+    const response = await fetch(request);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 // Fetch all purchase orders
 export const fetchPurchaseOrders = async (
   setPurchaseOrders: (purchaseOrders: PurchaseOrder[]) => void
@@ -528,5 +572,31 @@ export const fetchStockOutOrders = async (setStockOutOrders: (stockOutOrders: St
     setStockOutOrders(data);
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const patchOdorApproval = async (
+  requisitionId: string,
+  isApproved: boolean,
+  approverId: string
+) => {
+  try {
+    const request = {
+      method: 'PATCH',
+      body: JSON.stringify({
+        isApprovedP1: isApproved,
+        approvalP1: approverId,
+      }),
+    };
+
+    const response = await fetch(`/api/order-requisitions/${requisitionId}`, request);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+    }
+  } catch (error) {
+    console.log(error);
+    throw error;
   }
 };

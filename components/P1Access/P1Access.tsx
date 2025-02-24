@@ -2,7 +2,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Group, Table, TableData, Text } from '@mantine/core';
+import { Button, Group, Table, TableData, Text } from '@mantine/core';
 import { useInventory } from '@/app/_utils/inventory-context';
 import {
   Employee,
@@ -24,6 +24,9 @@ import CustomNotification from '@/components/CustomNotification/CustomNotificati
 import RorModal from '@/components/RorModal/RorModal';
 import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
 import classnames from './P1Access.module.css';
+import { useDisclosure } from '@mantine/hooks';
+import StockOutModal from '../StockOutModal/StockOutModal';
+import { string } from 'zod';
 
 export default function P1AccessPage() {
   // Required State to Keep Track of all modal states
@@ -35,6 +38,8 @@ export default function P1AccessPage() {
   const [allOdor, setAllOdor] = useState<OnDemandOrder[] | null>(null);
   const [allPo, setAllPo] = useState<PurchaseOrder[] | null>(null);
   const [employeeWithRequisitions, setEmployeeWithRequisitions] = useState<Employee[]>([]);
+  const[opened,{open,close}] = useDisclosure(false); 
+  const [selectedRequisitionId, setSelectedRequisitionId] = useState<string | null>(null);
 
   console.log(allPo);
 
@@ -44,6 +49,21 @@ export default function P1AccessPage() {
 
   // State for PO modal
   const [poModalOpen, setPoModalOpen] = useState<{ [key: string]: boolean }>({});
+
+  //State for StockOutModal
+  const [openedStockOutModal, setOpenedStockOutModal] = useState(false);
+
+  //open stockoutmodal
+  const handleStockOutModalOpen = (requisitionId: string) => {
+    setSelectedRequisitionId(requisitionId);
+    setOpenedStockOutModal(true);
+  };
+
+  // close StockOutModal
+  const handleStockOutModalClose = () => {
+    setOpenedStockOutModal(false);
+    setSelectedRequisitionId(null);
+  };
 
   // Sample use effect to store order requisitions and ror's for mapping
   useEffect(() => {
@@ -125,6 +145,7 @@ export default function P1AccessPage() {
       setShowNotification(false);
     }, 3000);
   };
+
 
   // Map through the desired list and return components only for active requisitions
   const mappedRor = allRor?.map((ror) => {
@@ -255,11 +276,11 @@ export default function P1AccessPage() {
         ),
         <ApprovalBadge isApproved={po.isApproved} />,
 
-        // To Do: Modals for these two buttons
-        <button className={classnames.generateSoButton}>+ SO</button>,
+        <Text className={classnames.generateSoButton} onClick={()=>handleStockOutModalOpen(matchingOr.requisitionId)}>+ SO</Text>,
+
         <button className={classnames.closeTicketButton}>Close</button>,
-      ];
-    }
+          ];
+        }
 
     // Else return an empty line (array)
     return [];
@@ -390,6 +411,14 @@ export default function P1AccessPage() {
         <Group classNames={{ root: classnames.loadingContainer }}>
           <img src="/assets/loading/Spin@1x-1.0s-200px-200px.gif" alt="Loading..." />
         </Group>
+        
+      )}
+      {selectedRequisitionId && (
+        <StockOutModal
+          opened={openedStockOutModal}
+          close={handleStockOutModalClose}
+          requisitionId={selectedRequisitionId}
+        />
       )}
     </main>
   );

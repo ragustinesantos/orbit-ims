@@ -34,7 +34,8 @@ export async function dbGetAllRecurringOrders() {
 export async function dbAddRecurringOrder(recurringOrderObj: RecurringOrderToEdit) {
   try {
     const newRecurringOrderReference = collection(db, 'ror');
-    await addDoc(newRecurringOrderReference, recurringOrderObj);
+    const docRef = await addDoc(newRecurringOrderReference, recurringOrderObj);
+    return docRef.id;
   } catch (error) {
     return console.log(error);
   }
