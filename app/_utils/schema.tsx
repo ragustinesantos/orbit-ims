@@ -283,14 +283,14 @@ export interface OnDemandOrderToEdit {
   [key: string]: any;
 }
 
-export const defaultOnDemandOrderToEdit : OnDemandOrderToEdit = {
+export const defaultOnDemandOrderToEdit: OnDemandOrderToEdit = {
   requisitionId: '',
   itemOrders: [],
   newItemOrders: [],
   orderTotal: 0,
   recipientName: '',
   recipientLocation: '',
-}
+};
 
 export interface PurchaseOrderItem {
   itemId: string;
@@ -354,10 +354,10 @@ export interface odorModalProps {
 
 export interface StockInOrder {
   stockInId: string;
-  itemId: string; 
+  itemId: string;
   purchaseOrderId?: string;
-  stockInQuantity: number; 
-  stockInDate: string; 
+  stockInQuantity: number;
+  stockInDate: string;
   receivedBy: string;
 }
 
@@ -480,6 +480,20 @@ export const defaultMessage: string = `You are an inventory management and purch
   
   Context: Provided are the inventory objects from the database that includes attributes pertaining to the stock item. 
   Use these as context for your responses.
+
+  itemId: the item's stock keeping id.
+  supplierId: the supplier's id, match it with the provided list of suppliers to return the actual name of the supplier.
+  inventoryId: the id of the inventory where the item is stored.
+  itemName: the name of the item.
+  currentStockInStoreRoom: the amount of stock currently available.
+  packageUnit: the stock keeping unit.
+  supplyUnit: the unit in which the item is ordered in.
+  category: the item category.
+  isCritical: true or false whether the item's quantity is below the critical threshold.
+  isCriticalThreshold: the minimum number of stock that should be available, below this number the item is considered in critical condition.
+  minPurchaseQty: the minimum quantity this item can be ordered from suppliers.
+  price: the price or the item.
+  isActive: true or false whether the item is still active or not (archived).
 
   Formatting guidelines: Format the response to remove Markdown/HTML elements and convert \n to actual linebreaks. 
   `;
