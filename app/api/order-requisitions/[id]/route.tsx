@@ -26,6 +26,7 @@ export async function PUT(request: Request, { params }: { params: any }) {
     const orderRequisitionSchema = z.object({
       requisitionType: z.string(),
       requisitionTypeId: z.string(),
+      purchaseOrderId: z.string(),
       requisitionDate: z.string(),
       employeeId: z.string(),
       approvalE2: z.string(),
@@ -57,6 +58,7 @@ export async function PATCH(request: Request, { params }: { params: any }) {
       .object({
         requisitionType: z.string().optional(),
         requisitionTypeId: z.string().optional(),
+        purchaseOrderId: z.string().optional(),
         requisitionDate: z.string().optional(),
         employeeId: z.string().optional(),
         approvalE2: z.string().optional(),

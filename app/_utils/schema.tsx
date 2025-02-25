@@ -130,6 +130,7 @@ export interface OrderRequisition {
   requisitionId: string;
   requisitionType: string;
   requisitionTypeId: string;
+  purchaseOrderId: string;
   requisitionDate: string;
   employeeId: string;
   approvalE2: string;
@@ -146,6 +147,7 @@ export interface OrderRequisition {
 export interface OrderRequisitionToEdit {
   requisitionType: string;
   requisitionTypeId: string;
+  purchaseOrderId: string;
   requisitionDate: string;
   employeeId: string;
   approvalE2: string;
@@ -163,6 +165,7 @@ export interface OrderRequisitionToEdit {
 export const defaultOrderRequisitionToEdit: OrderRequisitionToEdit = {
   requisitionType: '',
   requisitionTypeId: '',
+  purchaseOrderId: '',
   requisitionDate: '',
   employeeId: '',
   approvalE2: '',
@@ -180,6 +183,7 @@ export const defaultOrderRequisition: OrderRequisition = {
   requisitionId: '',
   requisitionType: '',
   requisitionTypeId: '',
+  purchaseOrderId: '',
   requisitionDate: '',
   employeeId: '',
   approvalE2: '',
@@ -363,10 +367,10 @@ export interface StockInOrder {
 
 export interface StockOutOrder {
   stockOutId: string;
-  itemId: string; 
+  itemId: string;
   purchaseOrderId?: string;
-  stockOutQuantity: number; 
-  stockOutDate: string; 
+  stockOutQuantity: number;
+  stockOutDate: string;
   dispatchedBy: string;
 }
 

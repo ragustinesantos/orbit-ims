@@ -18,6 +18,7 @@ import {
   fetchOrderRequisitions,
   fetchPurchaseOrders,
   fetchRecurringOrderRequisitions,
+  patchOrderRequisitionPo,
   postPurchaseOrder,
 } from '@/app/_utils/utility';
 import CustomNotification from '@/components/CustomNotification/CustomNotification';
@@ -198,47 +199,41 @@ export default function P1AccessPage() {
   });
 
   // Map through the desired list and return components only for active requisitions
-  const mappedPo = allPo?.map((po) => {
-    // Cross-reference and retrieve a matching order requisition based on the requisitionId stored in the ror
-    const matchingOr = allOrs?.find((or) => or.requisitionId === po.requisitionId);
+  const mappedOr = allOrs?.map((or) => {
+    // Cross-reference and retrieve a matching employee based on the requisitionId stored in the ror
     const matchingEmployee = employeeWithRequisitions.find(
-      (emp) => emp.employeeId === matchingOr?.employeeId
+      (emp) => emp.employeeId === or?.employeeId
     );
-
-    // Retrieve matching odor or ror document
-    if (matchingOr?.requisitionType === 'ror') {
-      const matchingRor = allRor?.find((ror) => matchingOr?.requisitionTypeId === ror.rorId);
-    } else if (matchingOr?.requisitionType === 'odor') {
-      const matchingOdor = allOdor?.find((odor) => matchingOr?.requisitionTypeId === odor.odorId);
-    }
+    const matchingPo = allPo?.find((po) => po.purchaseOrderId === or.purchaseOrderId);
 
     // If the matching order requisition is active and fully approved based on the requisition type, generate a table line containing the modal
     if (
-      matchingOr?.isActive &&
-      ((matchingOr?.requisitionType === 'odor' &&
-        matchingOr?.isApprovedE2 &&
-        matchingOr?.isApprovedE3 &&
-        matchingOr?.isApprovedP1) ||
-        (matchingOr?.requisitionType === 'ror' && matchingOr?.isApprovedP1))
+      matchingPo &&
+      or?.isActive &&
+      ((or?.requisitionType === 'odor' &&
+        or?.isApprovedE2 &&
+        or?.isApprovedE3 &&
+        or?.isApprovedP1) ||
+        (or?.requisitionType === 'ror' && or?.isApprovedP1))
     ) {
       return [
-        <Text classNames={{ root: classnames.rootTextId }}>{matchingOr.requisitionId}</Text>,
+        <Text classNames={{ root: classnames.rootTextId }}>{or.requisitionId}</Text>,
         <Text>
           {matchingEmployee?.firstName} {matchingEmployee?.lastName}
         </Text>,
-        <Text>{formatDate(matchingOr.requisitionDate)}</Text>,
-        <ApprovalBadge isApproved={matchingOr.isApprovedP1} />,
-        poModalOpen[po.purchaseOrderId] ? (
-          <Text classNames={{ root: classnames.rootPoId }}>{po.purchaseOrderId}</Text>
+        <Text>{formatDate(or.requisitionDate)}</Text>,
+        <ApprovalBadge isApproved={or.isApprovedP1} />,
+        poModalOpen[matchingPo.purchaseOrderId] ? (
+          <Text classNames={{ root: classnames.rootPoId }}>{matchingPo.purchaseOrderId}</Text>
         ) : (
           <>
-            {poModalOpen[po.purchaseOrderId] && (
+            {poModalOpen[matchingPo.purchaseOrderId] && (
               // To Do: Implement modal -- right now it just shows the PO ID without the modal
               <PoModal
-                purchaseOrder={po}
-                isOpened={poModalOpen[po.purchaseOrderId]}
+                purchaseOrder={matchingPo}
+                isOpened={poModalOpen[matchingPo.purchaseOrderId]}
                 isClosed={() =>
-                  setPoModalOpen((prev) => ({ ...prev, [po.purchaseOrderId]: false }))
+                  setPoModalOpen((prev) => ({ ...prev, [matchingPo.purchaseOrderId]: false }))
                 }
               />
             )}
@@ -253,7 +248,7 @@ export default function P1AccessPage() {
             </button>
           </>
         ),
-        <ApprovalBadge isApproved={po.isApproved} />,
+        <ApprovalBadge isApproved={matchingPo.isApproved} />,
 
         // To Do: Modals for these two buttons
         <button className={classnames.generateSoButton}>+ SO</button>,
@@ -267,36 +262,28 @@ export default function P1AccessPage() {
 
   // Function to generate PO for "+ PO" button
   const generatePo = async (requisitionId: string) => {
+    // Check if a PO already exists containing the requisition ID
     if (!allPo?.find((po) => po.requisitionId === requisitionId)) {
-      // Create a purchase order object for persistence
-      const purchaseOrder: PurchaseOrderToEdit = {
-        requisitionId,
-        orderList: [],
-        recipientCompanyName: '',
-        recipientCompanyAddress: '',
-        purchaseOrderDate: new Date().toLocaleDateString(),
-        purchaseOrderDeliveryDate: '',
-        subTotal: 0,
-        taxRate: 0,
-        tax: 0,
-        totalOrderCost: 0,
-        approvalP2: '',
-        isApproved: null,
-        isDelivered: false,
-        isActive: false,
-      };
       try {
-        const generatedPo = await postPurchaseOrder(purchaseOrder);
+        // Generate PO from object, referencing the requisition ID within the PO object
+        const generatedPoId = await postPurchaseOrder(requisitionId);
+
+        // Reference the generated PO's ID within the order requisition
+        await patchOrderRequisitionPo(requisitionId, generatedPoId);
+
+        // Create Success Notification
         setNotificationMessage(
           CustomNotification(
             'Success',
             'PO Created!',
-            `Purchase Order #${generatedPo} has been successfully created`,
+            `Purchase Order #${generatedPoId} has been successfully created`,
             setShowNotification
           )
         );
       } catch (error) {
         console.log(error);
+
+        // Create Error Notification
         setNotificationMessage(
           CustomNotification(
             'error',
@@ -305,9 +292,12 @@ export default function P1AccessPage() {
             setShowNotification
           )
         );
+
+        // Toggle Notification
         revealNotification();
       }
     } else {
+      // Create Error Notification
       setNotificationMessage(
         CustomNotification(
           'error',
@@ -316,6 +306,8 @@ export default function P1AccessPage() {
           setShowNotification
         )
       );
+
+      // Toggle Notification
       revealNotification();
     }
   };
@@ -342,7 +334,7 @@ export default function P1AccessPage() {
       'Generate SO',
       'Close Ticket',
     ],
-    body: mappedPo,
+    body: mappedOr,
   };
 
   return (
