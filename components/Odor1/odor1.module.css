@@ -80,3 +80,9 @@
     border-radius: 100vw;
     border: 0.20rem solid #ffffff;
   }
+
+
+  .imgModalID:hover{
+    text-decoration: underline;
+    cursor:pointer;
+  }

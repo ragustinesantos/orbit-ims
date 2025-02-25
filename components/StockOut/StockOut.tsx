@@ -4,8 +4,8 @@
 import { useEffect, useState } from 'react';
 import { Button, Flex, Group, Modal, NumberInput, Select, SimpleGrid, Text, TextInput } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { defaultItem, Item, PurchaseOrder, StockOutOrder } from '@/app/_utils/schema';
-import { fetchPurchaseOrders, fetchSupplier, postStockOutOrder, putItem} from '@/app/_utils/utility';
+import { defaultItem, Item, StockOutOrder } from '@/app/_utils/schema';
+import { fetchSupplier, postStockOutOrder, putItem} from '@/app/_utils/utility';
 import CustomNotification from '../CustomNotification/CustomNotification';
 import classnames from './StockOut.module.css';
 import { useInventory } from '@/app/_utils/inventory-context';
@@ -31,13 +31,10 @@ export default function StockOut() {
   const [supplierName, setSupplierName] = useState<string>('');
   const [itemId, setItemId] = useState<string>('');
   const [stockOutQuantity, setStockOutQuantity] = useState<number>(0);
-  const [purchaseOrderId, setPurchaseOrderId] = useState<string | null>('');
   const [currentStockInStoreRoom, setCurrentStockInStoreRoom] = useState<string>('');
   const [stockOutDate, setStockOutDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [dispatchedBy, setDispatchedBy] = useState<string>('');
 
-  //State for PO
-  const [allPo, setAllPo] = useState<PurchaseOrder[] | null>(null);
 
 
   // Nullable states due to Select Mantine component handling
@@ -70,7 +67,7 @@ export default function StockOut() {
         const newStockOutOrder: StockOutOrder = {
           stockOutId: `SO-${Date.now()}`,
           itemId: selectedItem.itemId,
-          purchaseOrderId: purchaseOrderId || "",
+          requisitionId: "",
           stockOutQuantity,
           stockOutDate,
           dispatchedBy,
@@ -105,7 +102,6 @@ export default function StockOut() {
       setStockOutQuantity(0);
       setStockOutDate("");
       setDispatchedBy("");
-      setPurchaseOrderId("");
     } catch (error) {
       console.log(error);
       console.log('Unexpected Error encountered. Please try again.');
@@ -138,19 +134,6 @@ export default function StockOut() {
     retrieveSupplierName();
   }, [selectedItem]);
 
-  //Retrieve all PO
-  useEffect(
-    ()=>{
-      const retrievePO = async () =>{
-        try {
-          await fetchPurchaseOrders(setAllPo);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      retrievePO();
-    },[]
-  );
 
   // Update fields whenever there is a new selectedItem
   useEffect(() => {

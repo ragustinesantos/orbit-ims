@@ -74,11 +74,9 @@ export default function WizardProgress(props: WizardProgressProps) {
                         }
                         currentStepDisplay.push(stepType(index < currentStep, step, index, localIndex));
 
-                        console.log("ror wizard index1:" + index);
-                        console.log("ror wizard index2:" + localIndex);
                         localIndex++;
                         return currentStepDisplay;
-                        
+
                     })
                 }
             </>

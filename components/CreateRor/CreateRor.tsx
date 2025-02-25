@@ -1,37 +1,229 @@
-import { Button, Text } from "@mantine/core";
+import { Button, Flex, Modal, Text } from "@mantine/core";
 import classnames from './CreateRor.module.css';
 import WizardProgress from "../WizardProgress/WizardProgress";
 import { useEffect, useState } from "react";
 import SelectRorTemplate from "../SelectRorTemplate/SelectRorTemplate";
+import { defaultOrderRequisitionToEdit, defaultRecurringOrderToEdit, ItemOrder, OrderRequisitionToEdit, RecurringOrderTemplate, RecurringOrderToEdit } from "@/app/_utils/schema";
+import OrderRor from "../OrderRor/OrderRor";
+import { useDisclosure } from "@mantine/hooks";
+import CustomNotification from "../CustomNotification/CustomNotification";
+import { useInventory } from "@/app/_utils/inventory-context";
+import { patchOrderRequisition, postOrderRequisition, postRecurringOrderRequisition } from "@/app/_utils/utility";
 
 
 
 export default function CreateRor() {
 
-    const [currentStep, setCurrentStep] = useState(0);
+    const { currentEmployee } = useInventory();
+    const [currentStep, setCurrentStep] = useState<number>(0);
     const [currentContent, setCurrentContent] = useState(<div />);
-    const steps: String[] = ['Template', 'Order', 'Confirmation', 'Summary'];
+    const [recurringOrder, setrecurringOrder] = useState<RecurringOrderToEdit | null>(null)
+    const [buttonName, setButtonName] = useState("Next");
+    const [showNotification, setShowNotification] = useState(false);
+    const [notificationMessage, setNotificationMessage] = useState(<div />);
+    const [showButton, setShowButton] = useState(true);
+
+    // Confirmation Modal State
+    const [opened, { close, open }] = useDisclosure(false);
+
+    // These are the titles of the steps and their respective headers
+    const steps: string[] = ['Template', 'Order', 'Confirmation', 'Summary'];
     const stepHeaders: String[] = [
         'Select Template',
         'Enter Quantity',
         'Order Review',
         'Order Complete'
     ];
+
+    // This would update the ROR template that would be used in later steps
+    const handleSelectRORTemplate = (paramRorTemplate: RecurringOrderTemplate) => {
+        let itemList: ItemOrder[] = [];
+
+        paramRorTemplate.itemList.forEach(item => {
+            const newItemObj: ItemOrder = {
+                itemId: item,
+                orderQty: 0,
+                pendingQty: 0,
+                servedQty: 0
+            }
+
+            itemList.push(newItemObj);
+        });
+
+        let orderObj: RecurringOrderToEdit = {
+            ...defaultRecurringOrderToEdit,
+            rorTemplateId: paramRorTemplate.rorTemplateId,
+            itemOrders: itemList,
+        }
+        setrecurringOrder(orderObj)
+    };
+
+    const handleSetRor = (paramRecurringOrder: RecurringOrderToEdit) => {
+        setrecurringOrder(paramRecurringOrder);
+    }
+
+    // This is an array of content to display based on the current index
     const stepContent: JSX.Element[] = [
-        <SelectRorTemplate />,
-        <div />,
-        <div />,
-        <div />,
+        <SelectRorTemplate
+            recurringOrder={recurringOrder}
+            handleSelectRor={handleSelectRORTemplate}
+        />,
+        <OrderRor
+            recurringOrder={recurringOrder}
+            setRor={handleSetRor}
+            adjustQuantity={true}
+        />,
+        <OrderRor
+            recurringOrder={recurringOrder}
+            setRor={handleSetRor}
+            adjustQuantity={false}
+        />,
+        <OrderRor
+            recurringOrder={recurringOrder}
+            setRor={handleSetRor}
+            adjustQuantity={false}
+        />,
     ];
 
     useEffect(() => {
         setCurrentContent(stepContent[currentStep]);
+        if (currentStep + 1 == stepContent.length) {
+            setButtonName("Finish");
+        }
+        else if (currentStep + 2 == stepContent.length) {
+            setButtonName("Confirm");
+        }
+        else {
+            setButtonName("Next");
+        }
     }, [currentStep]);
+
+    const resetPage = () => {
+        setCurrentStep(0);
+        setrecurringOrder(null);
+    }
+
+    const handleSubmit = async () => {
+        setShowButton(false);
+
+        try {
+
+            let date: Date = new Date();
+            const formattedDate: string = date.toLocaleString();
+            // Create new order object
+            const newOrderReqObj: OrderRequisitionToEdit = {
+                ...defaultOrderRequisitionToEdit,
+                requisitionType: 'ror',
+                requisitionTypeId: '',
+                requisitionDate: formattedDate,
+                employeeId: currentEmployee?.employeeId || '',
+            };
+
+            // Create the requisition that would be linked with ROR vice versa
+            const newOrdReqId = await postOrderRequisition(newOrderReqObj);
+
+            const newRorObj: RecurringOrderToEdit = {
+                ...defaultRecurringOrderToEdit,
+                ...recurringOrder,
+                requisitionId: newOrdReqId
+            };
+
+            // Ensure POST is awaited and promise is resolved; store directly in a variable to avoid delays in states
+            const newRorId = await postRecurringOrderRequisition(newRorObj);
+
+            // Update the order requisition with the new ROR ID created
+            await patchOrderRequisition(newOrdReqId, newRorId);
+
+            // Only change the page if it was successful
+            setCurrentStep(currentStep + 1);
+
+            setNotificationMessage(
+                CustomNotification(
+                    'success',
+                    'ROR Submitted!',
+                    `Recurring Order Requisition successfully added.`,
+                    closeNotification
+                )
+            );
+
+        } catch (error) {
+            console.log(error);
+            setNotificationMessage(
+                CustomNotification(
+                    'error',
+                    'Error Encountered',
+                    'Unexpected Error encountered. Please try again.',
+                    closeNotification
+                )
+            );
+        }
+        // Display notification for 3 seconds.
+        setShowNotification(true);
+        setTimeout(() => {
+            setShowNotification(false);
+        }, 3000);
+        setShowButton(true);
+    }
+
+    const closeNotification = () => {
+        setShowNotification(false);
+    };
 
     return (
         <div
             className={classnames.rorContainer}
         >
+            {/* Confirmation Modal */}
+            <Modal
+                centered
+                opened={opened}
+                onClose={close}
+                size="md"
+                title="Confirmation"
+                classNames={{
+                    title: classnames.modalTitle,
+                }}
+            >
+                <Flex
+                    justify="center"
+                    align="center"
+                >
+                    <Text
+                        mt={10}
+                        mb={30}
+                        size="lg"
+                        fw={500}
+                    >
+                        Do you want to submit this Recurring Order Requisiton?
+                    </Text>
+                </Flex>
+                <Flex
+                    justify="center"
+                    align="center"
+                    direction="row"
+                    gap={"xl"}
+                >
+                    <Button
+                        onClick={() => {
+                            close();
+                        }}
+                        color="#54D0ED"
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            handleSubmit();
+                            close();
+                        }}
+                        color="#1B4965"
+                    >
+                        Confirm
+                    </Button>
+                </Flex>
+            </Modal>
+
+            {/* Page Content */}
             <Text
                 classNames={{
                     root: classnames.rootText,
@@ -54,12 +246,18 @@ export default function CreateRor() {
             >
                 {stepHeaders[currentStep]}
             </Text>
-            {currentContent}
+            <div
+                className={classnames.rorTemplateContainer}
+            >
+                {currentContent}
+            </div>
             <div
                 className={classnames.navButtonContainer}
             >
                 {
-                    currentStep != 0 &&
+                    currentStep > 0 &&
+                    currentStep < 3 &&
+                    showButton &&
                     <Button
                         variant="filled"
                         color="#54D0ED"
@@ -71,18 +269,32 @@ export default function CreateRor() {
                     </Button>
                 }
                 {
-                    currentStep + 1 < stepContent.length &&
+                    currentStep < stepContent.length &&
+                    recurringOrder &&
+                    showButton &&
                     <Button
                         variant="filled"
                         color="#1B4965"
                         onClick={() => {
-                            setCurrentStep(currentStep + 1);
+                            if (currentStep + 2 < stepContent.length) {
+                                setCurrentStep(currentStep + 1);
+                            }
+
+                            if (currentStep + 2 == stepContent.length) {
+                                open();
+                            }
+
+                            // This is the summary page and resets it after clicking finish
+                            if (currentStep + 1 == stepContent.length) {
+                                resetPage();
+                            }
                         }}
                     >
-                        Next
+                        {buttonName}
                     </Button>
                 }
             </div>
-        </div>
+            {showNotification && notificationMessage}
+        </div >
     );
 }

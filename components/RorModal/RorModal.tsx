@@ -25,6 +25,7 @@ import {
 import { fetchEmployee, fetchOrderRequisition, patchRorApproval } from '@/app/_utils/utility';
 import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
 import classnames from './RorModal.module.css';
+import ImgModal from '../ImgModal/ImgModal';
 
 export default function RorModal({
   recurringOrder,
@@ -41,6 +42,8 @@ export default function RorModal({
   const [confirmation, setConfirmation] = useState<boolean>(false);
   const [orDate, setOrDate] = useState<string>('');
   const [approval, setApproval] = useState<boolean>(false);
+
+  const [modalStateTracker, setModalStateTracker] = useState<Record<string, boolean>>({});
 
   // Retrieve the matching order requisition every time a new ROR is passed
   useEffect(() => {
@@ -110,6 +113,11 @@ export default function RorModal({
     setRefresh((prev: number) => prev + 1);
   };
 
+      // Every time an ID is clicked this should run and set the state of modal visibility to the opposite of its previous value
+      const toggleImgModalState = (itemId: string) => {
+        setModalStateTracker((prev) => ({ ...prev, [itemId]: !prev[itemId] }));
+      };
+
   // Map through the list of item id's to retrieve data for the template table body
   const mappedItemList = recurringOrder?.itemOrders.map((item) => {
     const currentItem = inventory?.find((invItem) => invItem.itemId === item.itemId);
@@ -117,12 +125,13 @@ export default function RorModal({
       (supplier) => supplier.supplierId === currentItem?.supplierId
     );
     return [
-      currentItem?.itemName,
+      <Text onClick={() => toggleImgModalState(item.itemId)} classNames={{root:classnames.imgModalID}}>{currentItem?.itemName}</Text>,
       currentItem?.category,
       currentItem?.supplyUnit,
       currentItem?.packageUnit,
       currentSupplier?.supplierName,
       item.orderQty,
+      <ImgModal item={currentItem} isOpened={!!modalStateTracker[item.itemId]} isClosed={() => setModalStateTracker((prev) => ({ ...prev, [item.itemId]: false }))} ></ImgModal>
     ];
   });
 
@@ -193,6 +202,7 @@ export default function RorModal({
             <TextInput disabled label="Requisition ID" value={currentOr?.requisitionId} size="md" />
           </SimpleGrid>
           <Table striped classNames={{ table: classnames.rootTable }} data={tableData} />
+          
           <Text classNames={{ root: classnames.rootHeaderTxt }}>Approvals:</Text>
           <Table
             withTableBorder

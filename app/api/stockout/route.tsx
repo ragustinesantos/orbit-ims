@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     const stockOutSchema = z.object({
       stockOutId: z.string(),
       itemId: z.string(),
-      purchaseOrderId: z.string(),
+      requisitionId: z.string(),
       stockOutQuantity: z.number(), 
       stockOutDate: z.string(),
       dispatchedBy: z.string(),

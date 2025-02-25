@@ -14,6 +14,7 @@ export interface Item {
   minPurchaseQty: number;
   price: number;
   isActive: boolean;
+  picurl: string;
 }
 
 export interface ItemToEdit {
@@ -29,6 +30,7 @@ export interface ItemToEdit {
   minPurchaseQty: number;
   price: number;
   isActive: boolean;
+  picurl: string;
   [key: string]: any;
 }
 
@@ -46,6 +48,7 @@ export const defaultItem: Item = {
   minPurchaseQty: 0,
   price: 0,
   isActive: true,
+  picurl: '',
 };
 
 export interface Supplier {
@@ -212,6 +215,14 @@ export interface RecurringOrder {
   orderTotal: number;
 }
 
+export const defaultRecurringOrder: RecurringOrder = {
+  rorId: '',
+  rorTemplateId: '',
+  requisitionId: '',
+  itemOrders: [],
+  orderTotal: 0
+}
+
 export interface RecurringOrderToEdit {
   rorTemplateId: string;
   requisitionId: string;
@@ -342,6 +353,17 @@ export interface WizardProgressProps {
   currentStep: number;
 }
 
+export interface SelectRorTemplateProps {
+  recurringOrder: RecurringOrderToEdit | null;
+  handleSelectRor: (paramRorTemplate: RecurringOrderTemplate) => void;
+}
+
+export interface OrderRorProps {
+  recurringOrder: RecurringOrderToEdit | null;
+  setRor: (paramRor: RecurringOrderToEdit) => void;
+  adjustQuantity: boolean;
+}
+
 export interface rorModalProps {
   recurringOrder: RecurringOrder | null;
   isOpened: boolean;
@@ -356,6 +378,13 @@ export interface odorModalProps {
   handleApprovalActivity?: (message: string, odorId: string, status: string) => void;
 }
 
+export interface imgModalProps {
+  isOpened: boolean;
+  isClosed: () => void;
+  item?: Item;
+  itemid?: string;
+}
+
 export interface StockInOrder {
   stockInId: string;
   itemId: string;
@@ -368,7 +397,7 @@ export interface StockInOrder {
 export interface StockOutOrder {
   stockOutId: string;
   itemId: string;
-  purchaseOrderId?: string;
+  requisitionId?: string;
   stockOutQuantity: number;
   stockOutDate: string;
   dispatchedBy: string;
