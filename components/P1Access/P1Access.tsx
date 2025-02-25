@@ -42,8 +42,6 @@ export default function P1AccessPage() {
   const [employeeWithRequisitions, setEmployeeWithRequisitions] = useState<Employee[]>([]);
   const [selectedRequisitionId, setSelectedRequisitionId] = useState<string | null>(null);
 
-  console.log(allPo);
-
   // Show notification state
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState(<div />);
@@ -54,7 +52,7 @@ export default function P1AccessPage() {
   //State for StockOutModal
   const [openedStockOutModal, setOpenedStockOutModal] = useState(false);
 
-  //open stockoutmodal
+  //open StockOutModal
   const handleStockOutModalOpen = (requisitionId: string) => {
     setSelectedRequisitionId(requisitionId);
     setOpenedStockOutModal(true);
@@ -66,46 +64,7 @@ export default function P1AccessPage() {
     setSelectedRequisitionId(null);
   };
 
-  // Sample use effect to store order requisitions and ror's for mapping
-  useEffect(() => {
-    const retrieveRequisition = async () => {
-      try {
-        await fetchOrderRequisitions(setAllOrs);
-        await fetchRecurringOrderRequisitions(setAllRor);
-        await fetchOnDemandOrderRequisitions(setAllOdor);
-        await fetchPurchaseOrders(setAllPo);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    retrieveRequisition();
-  }, []);
-
-  // Retrieve employees with active requisitions
-  useEffect(() => {
-    const retrieveEmployeeWithReq = async () => {
-      try {
-        const employees = await fetchEmployees();
-
-        // Map out Order Requisitions and return the employee with an active requisition that matches the query
-        const matchingEmployees = allOrs
-          ?.filter((or) => or.isActive)
-          .map((or) => {
-            return employees?.find((emp: Employee) => emp.employeeId === or.employeeId);
-          });
-
-        //Either provide a valid value or empty array to the setter
-        setEmployeeWithRequisitions(matchingEmployees ?? []);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    retrieveEmployeeWithReq();
-  }, [allOrs]);
-
-  // Every time an ID is clicked this should run and set the state of modal visibility to the opposite of its previous value
+    // Every time an ID is clicked this should run and set the state of modal visibility to the opposite of its previous value
   // Toggling a modal for the first time will generate a key-value pair within the state tracker
   const toggleModalState = (id: string) => {
     setModalStateTracker((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -148,6 +107,45 @@ export default function P1AccessPage() {
       setShowNotification(false);
     }, 3000);
   };
+
+  // Sample use effect to store order requisitions and ror's for mapping
+  useEffect(() => {
+    const retrieveRequisition = async () => {
+      try {
+        await fetchOrderRequisitions(setAllOrs);
+        await fetchRecurringOrderRequisitions(setAllRor);
+        await fetchOnDemandOrderRequisitions(setAllOdor);
+        await fetchPurchaseOrders(setAllPo);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    retrieveRequisition();
+  }, []);
+
+  // Retrieve employees with active requisitions
+  useEffect(() => {
+    const retrieveEmployeeWithReq = async () => {
+      try {
+        const employees = await fetchEmployees();
+
+        // Map out Order Requisitions and return the employee with an active requisition that matches the query
+        const matchingEmployees = allOrs
+          ?.filter((or) => or.isActive)
+          .map((or) => {
+            return employees?.find((emp: Employee) => emp.employeeId === or.employeeId);
+          });
+
+        //Either provide a valid value or empty array to the setter
+        setEmployeeWithRequisitions(matchingEmployees ?? []);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    retrieveEmployeeWithReq();
+  }, [allOrs]);
 
   // Map through RORs and return components only for active requisitions
   const mappedRor = allRor?.map((ror) => {
