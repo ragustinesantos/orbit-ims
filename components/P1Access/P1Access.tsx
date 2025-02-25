@@ -2,7 +2,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { string } from 'zod';
 import { Button, Group, Table, TableData, Text } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import { useInventory } from '@/app/_utils/inventory-context';
 import {
   Employee,
@@ -24,10 +26,9 @@ import {
 import CustomNotification from '@/components/CustomNotification/CustomNotification';
 import RorModal from '@/components/RorModal/RorModal';
 import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
-import classnames from './P1Access.module.css';
-import { useDisclosure } from '@mantine/hooks';
+import OdorModal from '../OdorModal/OdorModal';
 import StockOutModal from '../StockOutModal/StockOutModal';
-import { string } from 'zod';
+import classnames from './P1Access.module.css';
 
 export default function P1AccessPage() {
   // Required State to Keep Track of all modal states
@@ -39,7 +40,6 @@ export default function P1AccessPage() {
   const [allOdor, setAllOdor] = useState<OnDemandOrder[] | null>(null);
   const [allPo, setAllPo] = useState<PurchaseOrder[] | null>(null);
   const [employeeWithRequisitions, setEmployeeWithRequisitions] = useState<Employee[]>([]);
-  const[opened,{open,close}] = useDisclosure(false); 
   const [selectedRequisitionId, setSelectedRequisitionId] = useState<string | null>(null);
 
   console.log(allPo);
@@ -106,10 +106,12 @@ export default function P1AccessPage() {
   }, [allOrs]);
 
   // Every time an ID is clicked this should run and set the state of modal visibility to the opposite of its previous value
-  const toggleRorModalState = (rorId: string) => {
-    setModalStateTracker((prev) => ({ ...prev, [rorId]: !prev[rorId] }));
+  // Toggling a modal for the first time will generate a key-value pair within the state tracker
+  const toggleModalState = (id: string) => {
+    setModalStateTracker((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
+  // Function for formatting the date to be persisted
   const formatDate = (dateString: any) => {
     const date = new Date(dateString);
     return date.toLocaleString('en-us');
@@ -147,8 +149,7 @@ export default function P1AccessPage() {
     }, 3000);
   };
 
-
-  // Map through the desired list and return components only for active requisitions
+  // Map through RORs and return components only for active requisitions
   const mappedRor = allRor?.map((ror) => {
     // Cross-reference and retrieve a matching order requisition based on the requisitionId stored in the ror
     const matchingOr = allOrs?.find((or) => or.requisitionTypeId === ror.rorId);
@@ -160,24 +161,18 @@ export default function P1AccessPage() {
     if (matchingOr?.isActive) {
       return [
         <>
-          {/* The modal accepts the current ror in the iteration for the details, 
-            isOpened that sets the visibility of the modal and defaults as false, 
-            isClosed to toggle the visibility back to false, 
-            handleApprovalActivity to trigger the appropriate notification on the page, 
-            this is an optional prop. only pass the function to it if in the appropriate employee level */}
           <RorModal
             recurringOrder={ror}
-            // Source: ChatGPT
+            // Retrieve the actual state of the modal, !! will retrieve it's actual value because default is 'falsey'
             isOpened={!!modalStateTracker[ror.rorId]}
-            // ---
+            // Close the modal by setting its opened state to false
             isClosed={() => setModalStateTracker((prev) => ({ ...prev, [ror.rorId]: false }))}
             handleApprovalActivity={handleApprovalActivity}
           />
-          {/* When the ID text is clicked, this will toggle the state of the modal visibility. 
-            The first time this is clicked for the said ror.rorId, 
-            a key-value pair is created by toggle with the value of [ror.rorId]: !prev[rorId] if it cannot find [ror.rorId] (dynamic keys)*/}
+
+          {/* When the ID text is clicked, this will toggle the state of the modal visibility.*/}
           <Text
-            onClick={() => toggleRorModalState(ror.rorId)}
+            onClick={() => toggleModalState(ror.rorId)}
             classNames={{ root: classnames.rootTextId }}
           >
             {ror.rorId}
@@ -195,7 +190,7 @@ export default function P1AccessPage() {
     return [];
   });
 
-  // Map through the desired list and return components only for active requisitions
+  // Map through ODORs and return components only for active requisitions
   const mappedOdor = allOdor?.map((odor) => {
     // Cross-reference and retrieve a matching order requisition based on the requisitionId stored in the ror
     const matchingOr = allOrs?.find((or) => or.requisitionTypeId === odor.odorId);
@@ -206,7 +201,24 @@ export default function P1AccessPage() {
     // If the matching order requisition is active, generate a table line containing the modal
     if (matchingOr?.isActive && matchingOr.isApprovedE2 && matchingOr.isApprovedE3) {
       return [
-        <Text classNames={{ root: classnames.rootTextId }}>{odor.odorId}</Text>,
+        <>
+          <OdorModal
+            onDemandOrder={odor}
+            // Retrieve the actual state of the modal, !! will retrieve it's actual value because default is 'falsey'
+            isOpened={!!modalStateTracker[odor.odorId]}
+            // Close the modal by directly setting its opened state to false
+            isClosed={() => setModalStateTracker((prev) => ({ ...prev, [odor.odorId]: false }))}
+            handleApprovalActivity={handleApprovalActivity}
+          />
+
+          {/* When the ID text is clicked, this will toggle the state of the modal visibility.*/}
+          <Text
+            onClick={() => toggleModalState(odor.odorId)}
+            classNames={{ root: classnames.rootTextId }}
+          >
+            {odor.odorId}
+          </Text>
+        </>,
         <Text>
           {matchingEmployee?.firstName} {matchingEmployee?.lastName}
         </Text>,
@@ -219,7 +231,7 @@ export default function P1AccessPage() {
     return [];
   });
 
-  // Map through the desired list and return components only for active requisitions
+  // Map through Order Requisitions and return components only for active requisitions
   const mappedOr = allOrs?.map((or) => {
     // Cross-reference and retrieve a matching employee based on the requisitionId stored in the ror
     const matchingEmployee = employeeWithRequisitions.find(
@@ -271,11 +283,16 @@ export default function P1AccessPage() {
         ),
         <ApprovalBadge isApproved={matchingPo.isApproved} />,
 
-        <Text className={classnames.generateSoButton} onClick={()=>handleStockOutModalOpen(matchingOr.requisitionId)}>+ SO</Text>,
+        <Text
+          className={classnames.generateSoButton}
+          onClick={() => handleStockOutModalOpen(matchingOr.requisitionId)}
+        >
+          + SO
+        </Text>,
 
         <button className={classnames.closeTicketButton}>Close</button>,
-          ];
-        }
+      ];
+    }
 
     // Else return an empty line (array)
     return [];
@@ -403,7 +420,6 @@ export default function P1AccessPage() {
         <Group classNames={{ root: classnames.loadingContainer }}>
           <img src="/assets/loading/Spin@1x-1.0s-200px-200px.gif" alt="Loading..." />
         </Group>
-        
       )}
       {selectedRequisitionId && (
         <StockOutModal
