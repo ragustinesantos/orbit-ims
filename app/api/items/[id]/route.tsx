@@ -28,9 +28,8 @@ export async function PUT(request: Request, { params }: { params: any }) {
       isCritical: z.boolean(),
       isCriticalThreshold: z.number(),
       minPurchaseQty: z.number(),
-      //price and is active need to be added to Update function or else they break the entire functionality!
-      //price: z.number(),
-      //isActive: z.boolean(),
+      price: z.number(),
+      isActive: z.boolean(),
       picurl: z.string()
     });
 
