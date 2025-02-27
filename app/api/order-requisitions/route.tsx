@@ -21,6 +21,7 @@ export async function POST(request: Request) {
     const orderRequisitionSchema = z.object({
       requisitionType: z.string(),
       requisitionTypeId: z.string(),
+      purchaseOrderId: z.string(),
       requisitionDate: z.string(),
       employeeId: z.string(),
       approvalE2: z.string(),
