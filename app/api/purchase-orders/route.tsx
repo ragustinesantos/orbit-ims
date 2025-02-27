@@ -34,9 +34,9 @@ export async function POST(request: Request) {
 
     const validatedPurchaseOrder = purchaseOrderSchema.parse(newPurchaseOrder);
 
-    await dbAddPurchaseOrder(validatedPurchaseOrder);
+    const docId = await dbAddPurchaseOrder(validatedPurchaseOrder);
 
-    return new Response(JSON.stringify(validatedPurchaseOrder), { status: 201 });
+    return new Response(JSON.stringify(docId), { status: 201 });
   } catch (error) {
     return new Response(JSON.stringify({ error }), { status: 401 });
   }
