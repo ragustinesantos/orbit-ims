@@ -378,6 +378,12 @@ export interface odorModalProps {
   handleApprovalActivity?: (message: string, odorId: string, status: string) => void;
 }
 
+export interface poModalProps {
+  purchaseOrder: PurchaseOrder | null;
+  isOpened: boolean;
+  isClosed: () => void;
+}
+
 export interface imgModalProps {
   isOpened: boolean;
   isClosed: () => void;

@@ -30,6 +30,7 @@ import OdorModal from '../OdorModal/OdorModal';
 import StockOutModal from '../StockOutModal/StockOutModal';
 import classnames from './P1Access.module.css';
 
+
 export default function P1AccessPage() {
   // Required State to Keep Track of all modal states
   const [modalStateTracker, setModalStateTracker] = useState<Record<string, boolean>>({});
@@ -287,7 +288,6 @@ export default function P1AccessPage() {
         >
           + SO
         </Text>,
-
         <button className={classnames.closeTicketButton}>Close</button>,
       ];
     }
