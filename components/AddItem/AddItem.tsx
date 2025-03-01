@@ -58,20 +58,9 @@ export default function AddItem() {
         picurl,
       };
 
-      // Create a new request
-      // old way
-      // const request = new Request('/api/items/', {
-      //   method: 'POST',
-      //   body: JSON.stringify(newItemObj),
-      // });
-
       try {
-        // Fetch the request created
-        //old way
-        //const response = await fetch(request);
 
         const response = await postItem(newItemObj);
-
         // If it is successful provide feedback
         if (response && response.ok) {
           console.log('Success');

@@ -66,6 +66,8 @@ export default function UpdateItem() {
         isCriticalThreshold: Number(minStorageQty),
         minPurchaseQty: Number(minPurchaseQty),
         picurl: picurl || '',
+        price: 0,
+        isActive: true
       };
 
       // Send updated item for PUT
