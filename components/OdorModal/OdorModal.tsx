@@ -25,6 +25,7 @@ import {
 import { fetchEmployee, fetchOrderRequisition, patchOdorApproval } from '@/app/_utils/utility';
 import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
 import classnames from './OdorModal.module.css';
+import ImgModal from '../ImgModal/ImgModal';
 
 export default function OdorModal({
   onDemandOrder,
@@ -41,6 +42,8 @@ export default function OdorModal({
   const [confirmation, setConfirmation] = useState<boolean>(false);
   const [orDate, setOrDate] = useState<string>('');
   const [approval, setApproval] = useState<boolean>(false);
+
+  const [modalStateTracker, setModalStateTracker] = useState<Record<string, boolean>>({});
 
   // Retrieve the matching order requisition every time a new ODOR is passed
   useEffect(() => {
@@ -110,6 +113,11 @@ export default function OdorModal({
     setRefresh((prev: number) => prev + 1);
   };
 
+  // Every time an ID is clicked this should run and set the state of modal visibility to the opposite of its previous value
+  const toggleImgModalState = (itemId: string) => {
+    setModalStateTracker((prev) => ({ ...prev, [itemId]: !prev[itemId] }));
+  };
+
   // Map through inventory items
   const mappedInventoryItems = onDemandOrder?.itemOrders.map((item) => {
     const currentItem = inventory?.find((invItem) => invItem.itemId === item.itemId);
@@ -117,12 +125,13 @@ export default function OdorModal({
       (supplier) => supplier.supplierId === currentItem?.supplierId
     );
     return [
-      currentItem?.itemName,
+      <Text onClick={()=> toggleImgModalState(item.itemId)} classNames={{root:classnames.imgModalID}}> {currentItem?.itemName}</Text>,
       currentItem?.category,
       currentItem?.supplyUnit,
       currentItem?.packageUnit,
       currentSupplier?.supplierName,
       item.orderQty,
+      <ImgModal item={currentItem} isOpened={!!modalStateTracker[item.itemId]} isClosed={() => setModalStateTracker((prev) => ({ ...prev, [item.itemId]: false }))} ></ImgModal>
     ];
   });
 
