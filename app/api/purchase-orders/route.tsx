@@ -17,7 +17,6 @@ export async function POST(request: Request) {
 
     const purchaseOrderSchema = z.object({
       requisitionId: z.string(),
-      supplierId: z.string(),
       orderList: z.array(z.object({ itemId: z.string(), quantity: z.number() })),
       recipientCompanyName: z.string(),
       recipientCompanyAddress: z.string(),
@@ -26,18 +25,18 @@ export async function POST(request: Request) {
       subTotal: z.number(),
       taxRate: z.number(),
       tax: z.number(),
-      totalOrderCost: z.string(),
+      totalOrderCost: z.number(),
       approvalP2: z.string(),
-      isApproved: z.boolean(),
+      isApproved: z.boolean().nullable(),
       isDelivered: z.boolean(),
       isActive: z.boolean(),
     });
 
     const validatedPurchaseOrder = purchaseOrderSchema.parse(newPurchaseOrder);
 
-    await dbAddPurchaseOrder(validatedPurchaseOrder);
+    const docId = await dbAddPurchaseOrder(validatedPurchaseOrder);
 
-    return new Response(JSON.stringify(validatedPurchaseOrder), { status: 201 });
+    return new Response(JSON.stringify(docId), { status: 201 });
   } catch (error) {
     return new Response(JSON.stringify({ error }), { status: 401 });
   }

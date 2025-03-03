@@ -7,6 +7,7 @@ import { useInventory } from '@/app/_utils/inventory-context';
 import { defaultItem, Item } from '@/app/_utils/schema';
 import CustomNotification from '@/components/CustomNotification/CustomNotification';
 import classnames from './AddItem.module.css';
+import { postItem } from '@/app/_utils/utility';
 
 export default function AddItem() {
   const [itemName, setItemName] = useState('');
@@ -14,6 +15,7 @@ export default function AddItem() {
   const [unitOfMeasurement, setUnitOfMeasurement] = useState('');
   const [supplier, setSupplier] = useState<string | null>('');
   const [category, setCategory] = useState<string | null>('');
+  const [picurl, setPicurl] = useState('');
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState(<div />);
 
@@ -26,6 +28,8 @@ export default function AddItem() {
     setPackageUnit(event.target.value);
   const handleUnitOfMeasurementChange = (event: ChangeEvent<HTMLInputElement>) =>
     setUnitOfMeasurement(event.target.value);
+  const handlePicurlChange = (event: ChangeEvent<HTMLInputElement>) =>
+    setPicurl(event.target.value);
 
   const handleAddItem = async () => {
     if (
@@ -51,20 +55,14 @@ export default function AddItem() {
         packageUnit,
         supplyUnit: unitOfMeasurement,
         category: category ?? '',
+        picurl,
       };
 
-      // Create a new request
-      const request = new Request('/api/items/', {
-        method: 'POST',
-        body: JSON.stringify(newItemObj),
-      });
-
       try {
-        // Fetch the request created
-        const response = await fetch(request);
 
+        const response = await postItem(newItemObj);
         // If it is successful provide feedback
-        if (response.ok) {
+        if (response && response.ok) {
           console.log('Success');
           setNotificationMessage(
             CustomNotification(
@@ -183,6 +181,13 @@ export default function AddItem() {
             allowDeselect
             value={category || null}
             onChange={setCategory}
+          />
+          <TextInput
+            label="Picture URL"
+            placeholder="Link to photo of the item..."
+            value={picurl}
+            onChange={handlePicurlChange}
+            size="md"
           />
         </SimpleGrid>
         <Button variant="filled" color="#1B4965" size="md" mt="xl" onClick={handleAddItem}>

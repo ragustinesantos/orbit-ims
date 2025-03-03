@@ -2,17 +2,23 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { Roboto } from 'next/font/google';
 import { Button, TextInput } from '@mantine/core';
 import { useInventory } from '../../app/_utils/inventory-context';
 import { Chat, defaultMessage } from '../../app/_utils/schema';
 import { addChats, fetchChats, queryAssistant } from '../../app/_utils/utility';
+
+const roboto = Roboto({
+  weight: '400',
+  subsets: ['latin'],
+});
 
 export default function ChatAssistant() {
   const [chat, setChat] = useState('');
   const [chatHistory, setChatHistory] = useState<Chat[]>([]);
   const [messageKey, setMessageKey] = useState(0);
   const [assistantResponse, setAssistantResponse] = useState('');
-  const { inventory, setRefresh, currentEmployee } = useInventory();
+  const { inventory, setRefresh, currentEmployee, supplierList } = useInventory();
 
   const handleChat = (newTxt: string) => setChat(newTxt);
 
@@ -24,7 +30,7 @@ export default function ChatAssistant() {
         messages: [
           {
             role: 'user',
-            content: `${defaultMessage} \n ${JSON.stringify(inventory)} \n ${chat}`,
+            content: `${defaultMessage} \n ${JSON.stringify(inventory)} \n ${JSON.stringify(supplierList)} \n ${chat}`,
           },
         ],
         model: 'gpt-4o-mini',
@@ -83,6 +89,7 @@ export default function ChatAssistant() {
     backgroundColor: '#1B4965',
     color: '#f2f2f2',
     borderRadius: 8,
+    whiteSpace: 'pre-wrap',
   };
 
   const assistantChatStyle = {
@@ -93,6 +100,7 @@ export default function ChatAssistant() {
     backgroundColor: '#e8f4f9',
     color: '#000',
     borderRadius: 8,
+    whiteSpace: 'pre-wrap',
   };
 
   const mappedChats = chatHistory.map((chat, index) => {
@@ -106,9 +114,12 @@ export default function ChatAssistant() {
           alignSelf: 'flex-end',
         }}
       >
-        <div style={chat.type === 'employee' ? employeeChatStyle : assistantChatStyle}>
+        <pre
+          style={chat.type === 'employee' ? employeeChatStyle : assistantChatStyle}
+          className={roboto.className}
+        >
           {chat.message}
-        </div>
+        </pre>
       </div>
     );
   });
@@ -119,7 +130,6 @@ export default function ChatAssistant() {
         id="chat-container"
         style={{
           flexDirection: 'column',
-          width: '100%',
           height: '85vh',
           marginBottom: 20,
           overflowY: 'scroll',

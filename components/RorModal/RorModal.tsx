@@ -25,6 +25,7 @@ import {
 import { fetchEmployee, fetchOrderRequisition, patchRorApproval } from '@/app/_utils/utility';
 import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
 import classnames from './RorModal.module.css';
+import ImgModal from '../ImgModal/ImgModal';
 
 export default function RorModal({
   recurringOrder,
@@ -32,15 +33,17 @@ export default function RorModal({
   isClosed,
   handleApprovalActivity,
 }: rorModalProps) {
-  const { currentEmployee, inventory, supplierList } = useInventory();
+  const { currentEmployee, inventory, supplierList, setRefresh } = useInventory();
 
   const [opened, { open, close }] = useDisclosure(false);
   const [employee, setEmployee] = useState<Employee>({ ...defaultEmployee });
-  const [currentOr, setCurrentOr] = useState<OrderRequisition>({ ...defaultOrderRequisition });
+  const [currentOr, setCurrentOr] = useState<OrderRequisition | null>(null);
   const [p1Approver, setP1Approver] = useState<Employee>({ ...defaultEmployee });
   const [confirmation, setConfirmation] = useState<boolean>(false);
   const [orDate, setOrDate] = useState<string>('');
   const [approval, setApproval] = useState<boolean>(false);
+
+  const [modalStateTracker, setModalStateTracker] = useState<Record<string, boolean>>({});
 
   // Retrieve the matching order requisition every time a new ROR is passed
   useEffect(() => {
@@ -60,8 +63,10 @@ export default function RorModal({
 
   // Format date retrieved from matching order requisition
   useEffect(() => {
-    const date = new Date(currentOr.requisitionDate);
-    setOrDate(date.toLocaleString('en-us'));
+    if (currentOr) {
+      const date = new Date(currentOr.requisitionDate);
+      setOrDate(date.toLocaleString('en-us'));
+    }
   }, [currentOr]);
 
   // Retrieve P1 approver information from
@@ -77,7 +82,7 @@ export default function RorModal({
     setApproval((prev) => !prev);
 
     // Send a request for approval update and provide feedback based on try-catch result
-    if (currentEmployee && handleApprovalActivity) {
+    if (currentOr && currentEmployee && handleApprovalActivity) {
       try {
         await patchRorApproval(currentOr.requisitionId, isApproved, currentEmployee.employeeId);
         handleApprovalActivity(
@@ -103,7 +108,15 @@ export default function RorModal({
 
     // Return confirmation value to default
     setConfirmation(false);
+
+    //Refresh Information
+    setRefresh((prev: number) => prev + 1);
   };
+
+      // Every time an ID is clicked this should run and set the state of modal visibility to the opposite of its previous value
+      const toggleImgModalState = (itemId: string) => {
+        setModalStateTracker((prev) => ({ ...prev, [itemId]: !prev[itemId] }));
+      };
 
   // Map through the list of item id's to retrieve data for the template table body
   const mappedItemList = recurringOrder?.itemOrders.map((item) => {
@@ -112,12 +125,13 @@ export default function RorModal({
       (supplier) => supplier.supplierId === currentItem?.supplierId
     );
     return [
-      currentItem?.itemName,
+      <Text onClick={() => toggleImgModalState(item.itemId)} classNames={{root:classnames.imgModalID}}>{currentItem?.itemName}</Text>,
       currentItem?.category,
       currentItem?.supplyUnit,
       currentItem?.packageUnit,
       currentSupplier?.supplierName,
       item.orderQty,
+      <ImgModal item={currentItem} isOpened={!!modalStateTracker[item.itemId]} isClosed={() => setModalStateTracker((prev) => ({ ...prev, [item.itemId]: false }))} ></ImgModal>
     ];
   });
 
@@ -130,11 +144,11 @@ export default function RorModal({
 
   const approvalData: TableData = {
     head: [
-      currentOr.isApprovedP1 !== null
-        ? `${currentOr.isApprovedP1 ? 'Approved' : 'Rejected'} By: ${p1Approver?.firstName} ${p1Approver?.lastName}`
+      currentOr?.isApprovedP1 !== null
+        ? `${currentOr?.isApprovedP1 ? 'Approved' : 'Rejected'} By: ${p1Approver?.firstName} ${p1Approver?.lastName}`
         : 'P1 Approval',
     ],
-    body: [[<ApprovalBadge isApproved={currentOr.isApprovedP1} />]],
+    body: [[currentOr && <ApprovalBadge isApproved={currentOr.isApprovedP1} />]],
   };
 
   return (
@@ -145,56 +159,66 @@ export default function RorModal({
       size="xl"
       scrollAreaComponent={ScrollArea.Autosize}
     >
-      <Modal opened={opened} onClose={close} title="Confirmation" centered>
-        <Text
-          classNames={{
-            root: classnames.rootConfirmationText,
-          }}
-        >
-          Do you want to proceed with the {confirmation ? 'approval' : 'rejection'} of the ROR?
-        </Text>
-        <Group classNames={{ root: classnames.rootBtnArea }}>
-          <Button
-            classNames={{ root: classnames.rootBtn }}
-            onClick={() => handleApproval(confirmation)}
-            color="#1B4965"
+      {currentOr ? (
+        <>
+          <Modal opened={opened} onClose={close} title="Confirmation" centered>
+            <Text
+              classNames={{
+                root: classnames.rootConfirmationText,
+              }}
+            >
+              Do you want to proceed with the {confirmation ? 'approval' : 'rejection'} of the ROR?
+            </Text>
+            <Group classNames={{ root: classnames.rootBtnArea }}>
+              <Button
+                classNames={{ root: classnames.rootBtn }}
+                onClick={() => handleApproval(confirmation)}
+                color="#1B4965"
+              >
+                Proceed
+              </Button>
+              <Button classNames={{ root: classnames.rootBtn }} onClick={() => close()} color="red">
+                Cancel
+              </Button>
+            </Group>
+          </Modal>
+          <Text
+            classNames={{
+              root: classnames.rootText,
+            }}
           >
-            Proceed
-          </Button>
-          <Button classNames={{ root: classnames.rootBtn }} onClick={() => close()} color="red">
-            Cancel
-          </Button>
+            Recurring Order Requisition
+          </Text>
+          <TextInput
+            disabled
+            label="Employee Name"
+            value={`${employee.firstName} ${employee.lastName}`}
+            size="md"
+            classNames={{ root: classnames.rootSection }}
+          />
+          <SimpleGrid cols={3} classNames={{ root: classnames.rootSection }}>
+            <TextInput disabled label="Employee ID" value={employee.employeeId} size="md" />
+            <TextInput disabled label="Date" value={orDate} size="md" />
+            <TextInput disabled label="Requisition ID" value={currentOr?.requisitionId} size="md" />
+          </SimpleGrid>
+          <Table striped classNames={{ table: classnames.rootTable }} data={tableData} />
+          
+          <Text classNames={{ root: classnames.rootHeaderTxt }}>Approvals:</Text>
+          <Table
+            withTableBorder
+            withColumnBorders
+            withRowBorders
+            classNames={{ table: classnames.rootApprovalTable, td: classnames.tableTd }}
+            data={approvalData}
+          />
+        </>
+      ) : (
+        <Group classNames={{ root: classnames.loadingContainer }}>
+          <img src="/assets/loading/Spin@1x-1.0s-200px-200px.gif" alt="Loading..." />
         </Group>
-      </Modal>
-      <Text
-        classNames={{
-          root: classnames.rootText,
-        }}
-      >
-        Recurring Order Requisition
-      </Text>
-      <TextInput
-        disabled
-        label="Employee Name"
-        value={`${employee.firstName} ${employee.lastName}`}
-        size="md"
-        classNames={{ root: classnames.rootSection }}
-      />
-      <SimpleGrid cols={3} classNames={{ root: classnames.rootSection }}>
-        <TextInput disabled label="Employee ID" value={employee.employeeId} size="md" />
-        <TextInput disabled label="Date" value={orDate} size="md" />
-        <TextInput disabled label="Requisition ID" value={currentOr.requisitionId} size="md" />
-      </SimpleGrid>
-      <Table striped classNames={{ table: classnames.rootTable }} data={tableData} />
-      <Text classNames={{ root: classnames.rootHeaderTxt }}>Approvals:</Text>
-      <Table
-        withTableBorder
-        withColumnBorders
-        withRowBorders
-        classNames={{ table: classnames.rootApprovalTable, td: classnames.tableTd }}
-        data={approvalData}
-      />
-      {currentEmployee?.employeeLevel.includes('P1') && currentOr.isApprovedP1 == null && (
+      )}
+
+      {currentEmployee?.employeeLevel.includes('P1') && currentOr?.isApprovedP1 == null && (
         <Group classNames={{ root: classnames.rootBtnArea }}>
           <Button
             classNames={{ root: classnames.rootBtn }}

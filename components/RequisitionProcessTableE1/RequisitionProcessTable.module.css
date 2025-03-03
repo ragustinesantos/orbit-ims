@@ -33,6 +33,13 @@
     color:white;
 }
 
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
 @media (max-width: 768px) {
     .heading {
       font-size: 1.2rem;

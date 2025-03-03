@@ -14,6 +14,7 @@ export interface Item {
   minPurchaseQty: number;
   price: number;
   isActive: boolean;
+  picurl: string;
 }
 
 export interface ItemToEdit {
@@ -29,6 +30,7 @@ export interface ItemToEdit {
   minPurchaseQty: number;
   price: number;
   isActive: boolean;
+  picurl: string;
   [key: string]: any;
 }
 
@@ -46,6 +48,7 @@ export const defaultItem: Item = {
   minPurchaseQty: 0,
   price: 0,
   isActive: true,
+  picurl: '',
 };
 
 export interface Supplier {
@@ -130,6 +133,7 @@ export interface OrderRequisition {
   requisitionId: string;
   requisitionType: string;
   requisitionTypeId: string;
+  purchaseOrderId: string;
   requisitionDate: string;
   employeeId: string;
   approvalE2: string;
@@ -146,6 +150,7 @@ export interface OrderRequisition {
 export interface OrderRequisitionToEdit {
   requisitionType: string;
   requisitionTypeId: string;
+  purchaseOrderId: string;
   requisitionDate: string;
   employeeId: string;
   approvalE2: string;
@@ -163,14 +168,15 @@ export interface OrderRequisitionToEdit {
 export const defaultOrderRequisitionToEdit: OrderRequisitionToEdit = {
   requisitionType: '',
   requisitionTypeId: '',
+  purchaseOrderId: '',
   requisitionDate: '',
   employeeId: '',
   approvalE2: '',
   approvalE3: '',
   approvalP1: '',
-  isApprovedE2: false,
-  isApprovedE3: false,
-  isApprovedP1: false,
+  isApprovedE2: null,
+  isApprovedE3: null,
+  isApprovedP1: null,
   isActive: true,
   isComplete: false,
   remarks: '',
@@ -180,6 +186,7 @@ export const defaultOrderRequisition: OrderRequisition = {
   requisitionId: '',
   requisitionType: '',
   requisitionTypeId: '',
+  purchaseOrderId: '',
   requisitionDate: '',
   employeeId: '',
   approvalE2: '',
@@ -206,6 +213,14 @@ export interface RecurringOrder {
   requisitionId: string;
   itemOrders: ItemOrder[];
   orderTotal: number;
+}
+
+export const defaultRecurringOrder: RecurringOrder = {
+  rorId: '',
+  rorTemplateId: '',
+  requisitionId: '',
+  itemOrders: [],
+  orderTotal: 0
 }
 
 export interface RecurringOrderToEdit {
@@ -283,14 +298,14 @@ export interface OnDemandOrderToEdit {
   [key: string]: any;
 }
 
-export const defaultOnDemandOrderToEdit : OnDemandOrderToEdit = {
+export const defaultOnDemandOrderToEdit: OnDemandOrderToEdit = {
   requisitionId: '',
   itemOrders: [],
   newItemOrders: [],
   orderTotal: 0,
   recipientName: '',
   recipientLocation: '',
-}
+};
 
 export interface PurchaseOrderItem {
   itemId: string;
@@ -300,7 +315,6 @@ export interface PurchaseOrderItem {
 export interface PurchaseOrder {
   purchaseOrderId: string;
   requisitionId: string;
-  supplierId: string;
   orderList: PurchaseOrderItem[];
   recipientCompanyName: string;
   recipientCompanyAddress: string;
@@ -309,16 +323,15 @@ export interface PurchaseOrder {
   subTotal: number;
   taxRate: number;
   tax: number;
-  totalOrderCost: string;
+  totalOrderCost: number;
   approvalP2: string;
-  isApproved: boolean;
+  isApproved: boolean | null;
   isDelivered: boolean;
   isActive: boolean;
 }
 
 export interface PurchaseOrderToEdit {
   requisitionId: string;
-  supplierId: string;
   orderList: PurchaseOrderItem[];
   recipientCompanyName: string;
   recipientCompanyAddress: string;
@@ -327,17 +340,28 @@ export interface PurchaseOrderToEdit {
   subTotal: number;
   taxRate: number;
   tax: number;
-  totalOrderCost: string;
+  totalOrderCost: number;
   approvalP2: string;
-  isApproved: boolean;
+  isApproved: boolean | null;
   isDelivered: boolean;
   isActive: boolean;
   [key: string]: any;
 }
 
 export interface WizardProgressProps {
-  stepList: string[],
-  currentStep: number
+  stepList: string[];
+  currentStep: number;
+}
+
+export interface SelectRorTemplateProps {
+  recurringOrder: RecurringOrderToEdit | null;
+  handleSelectRor: (paramRorTemplate: RecurringOrderTemplate) => void;
+}
+
+export interface OrderRorProps {
+  recurringOrder: RecurringOrderToEdit | null;
+  setRor: (paramRor: RecurringOrderToEdit) => void;
+  adjustQuantity: boolean;
 }
 
 export interface rorModalProps {
@@ -352,6 +376,37 @@ export interface odorModalProps {
   isOpened: boolean;
   isClosed: () => void;
   handleApprovalActivity?: (message: string, odorId: string, status: string) => void;
+}
+
+export interface poModalProps {
+  purchaseOrder: PurchaseOrder | null;
+  isOpened: boolean;
+  isClosed: () => void;
+}
+
+export interface imgModalProps {
+  isOpened: boolean;
+  isClosed: () => void;
+  item?: Item;
+  itemid?: string;
+}
+
+export interface StockInOrder {
+  stockInId: string;
+  itemId: string;
+  purchaseOrderId?: string;
+  stockInQuantity: number;
+  stockInDate: string;
+  receivedBy: string;
+}
+
+export interface StockOutOrder {
+  stockOutId: string;
+  itemId: string;
+  requisitionId?: string;
+  stockOutQuantity: number;
+  stockOutDate: string;
+  dispatchedBy: string;
 }
 
 export interface NavLink {
@@ -421,8 +476,8 @@ export const NAV_ITEMS: navCollection = {
         { label: 'Add Item', link: '/inventory/add-item' },
         { label: 'Update Item', link: '/inventory/update-item' },
         { label: 'Delete Item', link: '/inventory/delete-item' },
-        { label: 'Stock In', link: '/' },
-        { label: 'Stock Out', link: '/' },
+        { label: 'Stock In', link: '/inventory/stock-in' },
+        { label: 'Stock Out', link: '/inventory/stock-out' },
       ],
     },
   ],
@@ -430,7 +485,7 @@ export const NAV_ITEMS: navCollection = {
     {
       label: 'P1 Access',
       icon: IconNotes,
-      links: [{ label: 'Access', link: '/' }],
+      links: [{ label: 'Access', link: '/access/P1' }],
     },
   ],
   P2: [
@@ -473,6 +528,20 @@ export const defaultMessage: string = `You are an inventory management and purch
   
   Context: Provided are the inventory objects from the database that includes attributes pertaining to the stock item. 
   Use these as context for your responses.
+
+  itemId: the item's stock keeping id.
+  supplierId: the supplier's id, match it with the provided list of suppliers to return the actual name of the supplier.
+  inventoryId: the id of the inventory where the item is stored.
+  itemName: the name of the item.
+  currentStockInStoreRoom: the amount of stock currently available.
+  packageUnit: the stock keeping unit.
+  supplyUnit: the unit in which the item is ordered in.
+  category: the item category.
+  isCritical: true or false whether the item's quantity is below the critical threshold.
+  isCriticalThreshold: the minimum number of stock that should be available, below this number the item is considered in critical condition.
+  minPurchaseQty: the minimum quantity this item can be ordered from suppliers.
+  price: the price or the item.
+  isActive: true or false whether the item is still active or not (archived).
 
   Formatting guidelines: Format the response to remove Markdown/HTML elements and convert \n to actual linebreaks. 
   `;

@@ -31,6 +31,7 @@ export default function UpdateItem() {
   const [supplierName, setSupplierName] = useState<string>('');
   const [minPurchaseQty, setMinPurchaseQty] = useState<string>('');
   const [minStorageQty, setMinStorageQty] = useState<string>('');
+  const [picurl, setPicurl] = useState<string>('');
   const [currentStockInStoreRoom, setCurrentStockInStoreRoom] = useState<string>('');
 
   // Nullable states due to Select Mantine component handling
@@ -46,6 +47,7 @@ export default function UpdateItem() {
   const handleSupplyUnit = (newTxt: string) => setSupplyUnit(newTxt);
   const handleMinPurchaseQty = (newTxt: string) => setMinPurchaseQty(newTxt);
   const handleMinStorageQty = (newTxt: string) => setMinStorageQty(newTxt);
+  const handlePicurl = (newTxt: string) => setPicurl(newTxt);
   const handleCurrentStockInStoreRoom = (newTxt: string) => setCurrentStockInStoreRoom(newTxt);
 
   // Handle update submit
@@ -63,6 +65,9 @@ export default function UpdateItem() {
         isCritical: Number(minStorageQty) >= Number(currentStockInStoreRoom),
         isCriticalThreshold: Number(minStorageQty),
         minPurchaseQty: Number(minPurchaseQty),
+        picurl: picurl || '',
+        price: 0,
+        isActive: true
       };
 
       // Send updated item for PUT
@@ -123,6 +128,7 @@ export default function UpdateItem() {
       setMinPurchaseQty(String(selectedItem.minPurchaseQty));
       setMinStorageQty(String(selectedItem.isCriticalThreshold));
       setCurrentStockInStoreRoom(String(selectedItem.currentStockInStoreRoom));
+      setPicurl(String(selectedItem.picurl) || '');
     };
 
     updateValues();
@@ -206,6 +212,13 @@ export default function UpdateItem() {
                 {minStorageQty}
               </Text>
             </Text>
+            <Text>
+              Picture URL:{' '}
+              <Text fw={700} td="underline" component="span" ml={5}>
+                {picurl}
+              </Text>
+            </Text>
+            
           </SimpleGrid>
           <Group mt="xl">
             <Button
@@ -336,6 +349,13 @@ export default function UpdateItem() {
           onChange={setCategory}
           size="md"
           withAsterisk
+        />
+        <TextInput
+          label="Picture URL"
+          value={picurl}
+          onChange={(event) => handlePicurl(event.target.value)}
+          placeholder="Link to photo of the item..."
+          size="md"
         />
       </SimpleGrid>
       <Button
