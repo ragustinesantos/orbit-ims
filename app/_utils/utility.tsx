@@ -234,6 +234,24 @@ export const patchOrderRequisition = async (requisitionId: string, requisitionTy
 };
 
 // Fetch a single order requisition based on the requisitionId parameter
+export const patchOrderRequisitionPo = async (requisitionId: string, purchaseOrderId: string) => {
+  const request = {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ purchaseOrderId: purchaseOrderId }),
+  };
+
+  const response = await fetch(`/api/order-requisitions/${requisitionId}`, request);
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+  }
+};
+
+// Fetch a single order requisition based on the requisitionId parameter
 export const fetchOrderRequisition = async (requisitionId: string) => {
   const response = await fetch(`/api/order-requisitions/${requisitionId}`);
 
@@ -401,12 +419,31 @@ export const fetchPurchaseOrders = async (
 };
 
 // Post a Purchase Order database entry
-export const postPurchaseOrder = async (purchaseOrderObj: PurchaseOrderToEdit) => {
+export const postPurchaseOrder = async (requisitionId: string) => {
+
+  // Create a purchase order object for persistence
+  const purchaseOrder: PurchaseOrderToEdit = {
+    requisitionId,
+    orderList: [],
+    recipientCompanyName: '',
+    recipientCompanyAddress: '',
+    purchaseOrderDate: new Date().toLocaleDateString(),
+    purchaseOrderDeliveryDate: '',
+    subTotal: 0,
+    taxRate: 0,
+    tax: 0,
+    totalOrderCost: 0,
+    approvalP2: '',
+    isApproved: null,
+    isDelivered: false,
+    isActive: false,
+  };
+
   try {
     // Create a new request
     const request = {
       method: 'POST',
-      body: JSON.stringify(purchaseOrderObj),
+      body: JSON.stringify(purchaseOrder),
     };
     const response = await fetch(`/api/purchase-orders`, request);
     console.log(response);
@@ -481,6 +518,7 @@ export const markdownToPlainText = async (text: string) => {
     .replace(/<[^>]*>/g, '')
     .replace(/&quot;/g, '')
     .replace(/&apos;/g, "'")
+    .replace(/&#39;/g, "'")
     .replace(/&amp;/g, '&')
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>')
@@ -512,9 +550,10 @@ export const postStockInOrder = async (newStockInOrderObj: StockInOrder) => {
   }
 };
 
-
 // Fetch all stock in orders
-export const fetchStockInOrders = async (setStockInOrders: (stockInOrders: StockInOrder[]) => void) => {
+export const fetchStockInOrders = async (
+  setStockInOrders: (stockInOrders: StockInOrder[]) => void
+) => {
   try {
     const response = await fetch(`/api/stockin`);
 
@@ -555,9 +594,10 @@ export const postStockOutOrder = async (newStockOutOrderObj: StockOutOrder) => {
   }
 };
 
-
 // Fetch all stock out orders
-export const fetchStockOutOrders = async (setStockOutOrders: (stockOutOrders: StockOutOrder[]) => void) => {
+export const fetchStockOutOrders = async (
+  setStockOutOrders: (stockOutOrders: StockOutOrder[]) => void
+) => {
   try {
     const response = await fetch(`/api/stockout`);
 
@@ -571,5 +611,31 @@ export const fetchStockOutOrders = async (setStockOutOrders: (stockOutOrders: St
     setStockOutOrders(data);
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const patchOdorApproval = async (
+  requisitionId: string,
+  isApproved: boolean,
+  approverId: string
+) => {
+  try {
+    const request = {
+      method: 'PATCH',
+      body: JSON.stringify({
+        isApprovedP1: isApproved,
+        approvalP1: approverId,
+      }),
+    };
+
+    const response = await fetch(`/api/order-requisitions/${requisitionId}`, request);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+    }
+  } catch (error) {
+    console.log(error);
+    throw error;
   }
 };
