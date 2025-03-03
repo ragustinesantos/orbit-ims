@@ -44,8 +44,8 @@ export default function DeleteEmployee() {
   const handleSubmit = async () => {
     try {
       // Set employee status to inactive rather than permanent deletion
-      const updatedEmployee = { 
-        isActive: false 
+      const updatedEmployee = {
+        isActive: false
       };
       await dbUpdateEmployee(staticEmployeeId, updatedEmployee);
 
@@ -99,7 +99,15 @@ export default function DeleteEmployee() {
       setPhone(selectedEmployee.phone || '');
       setPosition(selectedEmployee.position || '');
       setDepartment(selectedEmployee.department || '');
-      setEmployeeLevel(selectedEmployee.employeeLevel || '');
+
+      let employeeLevelList = '';
+      selectedEmployee.employeeLevel.forEach(employeeLevel => {
+        if (employeeLevelList) {
+          employeeLevelList += ', ';
+        }
+        employeeLevelList += employeeLevel
+      });
+      setEmployeeLevel(employeeLevelList);
     };
 
     updateValues();
