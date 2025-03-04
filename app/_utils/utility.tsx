@@ -458,6 +458,33 @@ export const postPurchaseOrder = async (requisitionId: string) => {
   }
 };
 
+export const patchPurchaseOrder = async (purchaseOrderId: string, approvalP2: string, isApproved: boolean) => {
+  const request = {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ 
+      approvalP2, 
+      isApproved 
+    }),
+  };
+
+  try {
+    const response = await fetch(`/api/purchase-orders/${purchaseOrderId}`, request);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+    }
+    
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
 // Fetch all employee chats
 export const fetchChats = async (
   employeeId: string | undefined,
