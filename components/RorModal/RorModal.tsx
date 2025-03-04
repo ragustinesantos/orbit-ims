@@ -113,10 +113,10 @@ export default function RorModal({
     setRefresh((prev: number) => prev + 1);
   };
 
-      // Every time an ID is clicked this should run and set the state of modal visibility to the opposite of its previous value
-      const toggleImgModalState = (itemId: string) => {
-        setModalStateTracker((prev) => ({ ...prev, [itemId]: !prev[itemId] }));
-      };
+  // Every time an ID is clicked this should run and set the state of modal visibility to the opposite of its previous value
+  const toggleImgModalState = (itemId: string) => {
+    setModalStateTracker((prev) => ({ ...prev, [itemId]: !prev[itemId] }));
+  };
 
   // Map through the list of item id's to retrieve data for the template table body
   const mappedItemList = recurringOrder?.itemOrders.map((item) => {
@@ -125,7 +125,7 @@ export default function RorModal({
       (supplier) => supplier.supplierId === currentItem?.supplierId
     );
     return [
-      <Text onClick={() => toggleImgModalState(item.itemId)} classNames={{root:classnames.imgModalID}}>{currentItem?.itemName}</Text>,
+      <Text onClick={()=> toggleImgModalState(item.itemId)} classNames={{root:classnames.imgModalID}}>{currentItem?.itemName}</Text>,
       currentItem?.category,
       currentItem?.supplyUnit,
       currentItem?.packageUnit,

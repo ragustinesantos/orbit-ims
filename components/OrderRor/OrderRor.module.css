@@ -13,3 +13,8 @@
 .buttonDecrement {
     margin-right: 0.5vw;
 }
+
+.imgModalID:hover{
+    text-decoration: underline;
+    cursor:pointer;
+  }

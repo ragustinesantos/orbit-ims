@@ -41,3 +41,8 @@ table.td, table.th {
     font-size: 0.9rem; 
   }
 }
+
+.imgModalID:hover{
+  text-decoration: underline;
+  cursor:pointer;
+}
