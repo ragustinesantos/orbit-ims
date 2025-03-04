@@ -1,0 +1,153 @@
+.rootText {
+  font-size: 48px;
+  font-weight: bold;
+  text-decoration: underline;
+  text-underline-offset: 8px;
+  padding-bottom: 32px;
+}
+
+.rootSectionText {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.rootMainGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  height: 65vh;
+  width: 80vw;
+}
+
+.rootSectionGroup {
+  display: flex;
+  flex: 2;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  background-color: #f1f3f5;
+  padding: 16px;
+  border-radius: 20px;
+  max-height: 55vh;
+}
+
+.rootTableGroup {
+  display: flex;
+  flex: 2;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: 30vh;
+  width: 100%;
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+
+@media (max-width: 1024px) {
+  .rootTableGroup {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+}
+
+.rootRequisitionTable {
+  width: 100%;
+  overflow-y: scroll;
+  min-width: 800px;
+  margin-bottom: 20px;
+  max-height: 35vh;
+}
+
+.rootRequisitionThead {
+  color: white;
+  background-color: #242424;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.rootRequisitionTd {
+  overflow-x: scroll;
+  scrollbar-width: none;
+  white-space: nowrap;
+}
+
+.rootTextId {
+  cursor: pointer;
+}
+
+.rootTextId:hover {
+  color: #3c96aa;
+}
+
+.rootPoId {
+  cursor: pointer;
+}
+
+.rootPoId:hover {
+  color: #3c96aa;
+}
+
+.rootPoTable {
+  height: 30vh;
+  width: 100%;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  gap: 40px;
+}
+
+.loadingContainer {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  height: 65vh;
+  width: 80vw;
+}
+
+.approveButton {
+  background-color: #54D0ED;
+  color: white;
+  border: none;
+  padding: 2px 18px;
+  text-align: center;
+  display: inline-block;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.approveButton:hover {
+  background-color: #3c96aa;
+}
+
+.rejectButton {
+  background-color: #6D6875;
+  color: white;
+  border: none;
+  padding: 2px 18px;
+  text-align: center;
+  display: inline-block;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.rejectButton:hover {
+  background-color: #5e5a65;
+}
+
+.closeTicketButton {
+  background-color: #FFA62B;
+  color: white;
+  border: none;
+  padding: 2px 18px;
+  text-align: center;
+  display: inline-block;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.closeTicketButton:hover {
+  background-color: #e89726;
+} 
