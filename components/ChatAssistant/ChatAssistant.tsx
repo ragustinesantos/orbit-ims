@@ -7,6 +7,7 @@ import { Button, TextInput } from '@mantine/core';
 import { useInventory } from '../../app/_utils/inventory-context';
 import { Chat, defaultMessage } from '../../app/_utils/schema';
 import { addChats, fetchChats, queryAssistant } from '../../app/_utils/utility';
+import classnames from './ChatAssistant.module.css';
 
 const roboto = Roboto({
   weight: '400',
@@ -18,6 +19,7 @@ export default function ChatAssistant() {
   const [chatHistory, setChatHistory] = useState<Chat[]>([]);
   const [messageKey, setMessageKey] = useState(0);
   const [assistantResponse, setAssistantResponse] = useState('');
+  const [showLoading, setShowLoading] = useState<boolean>(false);
   const { inventory, setRefresh, currentEmployee, supplierList } = useInventory();
 
   const handleChat = (newTxt: string) => setChat(newTxt);
@@ -42,6 +44,9 @@ export default function ChatAssistant() {
           await addChats(currentEmployee.employeeId, chat, 'employee');
           setChat('');
           setMessageKey((prev) => prev + 1);
+
+          // Show loading ducks
+          setShowLoading(true);
         }
       } catch (error) {
         console.log(error);
@@ -56,6 +61,7 @@ export default function ChatAssistant() {
             console.log(assistantResponse);
             setMessageKey((prev) => prev + 1);
             setAssistantResponse('');
+            setShowLoading(false);
           }
         }
       } catch (error) {
@@ -133,14 +139,22 @@ export default function ChatAssistant() {
           height: '85vh',
           marginBottom: 20,
           overflowY: 'scroll',
+          scrollbarWidth: 'none',
         }}
       >
         {mappedChats}
+        {showLoading && (
+          <section className={classnames.duckSection}>
+            <img src="/assets/loading/duck1.gif" alt="Loading..." />
+            <img src="/assets/loading/duck1.gif" alt="Loading..." />
+            <img src="/assets/loading/duck1.gif" alt="Loading..." />
+          </section>
+        )}
       </section>
       <section>
         <TextInput
           style={{ paddingBottom: 10 }}
-          placeholder="enter message"
+          placeholder="Enter message"
           value={chat}
           onChange={(event) => handleChat(event.target.value)}
         />

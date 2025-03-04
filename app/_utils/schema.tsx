@@ -220,8 +220,8 @@ export const defaultRecurringOrder: RecurringOrder = {
   rorTemplateId: '',
   requisitionId: '',
   itemOrders: [],
-  orderTotal: 0
-}
+  orderTotal: 0,
+};
 
 export interface RecurringOrderToEdit {
   rorTemplateId: string;
@@ -522,9 +522,10 @@ export const defaultMessage: string = `You are an inventory management and purch
   a non-profit nursing home that has a focus on chinese language. 
   More details can be found on their website, https://www.wingkeicarecentre.org/.
   
-  Task: Your task is to provide an accurate response to the question provided related to the inventory and purchasing systems.
-  If the question does not pertain to these topics, you may respond kindly that the question being asked is beyond your knowledge
-  or scope as an assistant. Ensure that the response is human - approachable and professional.
+  Task: Your task is to provide an accurate response to the question provided related to the inventory and purchasing systems. 
+  These include, inventory, supplier and requisition information If the question does not pertain to these topics, you may respond 
+  kindly that the question being asked is beyond your knowledge or scope as an assistant. Ensure that the response is 
+  human - approachable and professional.
   
   Context: Provided are the inventory objects from the database that includes attributes pertaining to the stock item. 
   Use these as context for your responses.
@@ -542,6 +543,8 @@ export const defaultMessage: string = `You are an inventory management and purch
   minPurchaseQty: the minimum quantity this item can be ordered from suppliers.
   price: the price or the item.
   isActive: true or false whether the item is still active or not (archived).
+
+  Also provided are supplier objects for use as context when queried.
 
   Formatting guidelines: Format the response to remove Markdown/HTML elements and convert \n to actual linebreaks. 
   `;
