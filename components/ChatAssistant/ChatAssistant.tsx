@@ -35,7 +35,7 @@ export default function ChatAssistant() {
             content: `${defaultMessage} \n ${JSON.stringify(inventory)} \n ${JSON.stringify(supplierList)} \n ${chat}`,
           },
         ],
-        model: 'gpt-4o-mini',
+        model: 'gpt-4o',
         temperature: 0.5,
       };
 
