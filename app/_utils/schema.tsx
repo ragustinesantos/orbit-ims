@@ -492,7 +492,7 @@ export const NAV_ITEMS: navCollection = {
     {
       label: 'P2 Access',
       icon: IconNotes,
-      links: [{ label: 'Access', link: '/' }],
+      links: [{ label: 'Access', link: '/access/P2' }],
     },
   ],
   // Inventory Admin and System Admin has the same Navigation items.
