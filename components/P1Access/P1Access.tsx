@@ -28,6 +28,7 @@ import RorModal from '@/components/RorModal/RorModal';
 import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
 import OdorModal from '../OdorModal/OdorModal';
 import StockOutModal from '../StockOutModal/StockOutModal';
+import PoModal from '../PoModal/PoModal';
 import classnames from './P1Access.module.css';
 
 
@@ -273,7 +274,7 @@ export default function P1AccessPage() {
               className={classnames.generatePoButton}
               onClick={() => {
                 // Open the modal when clicked
-                setPoModalOpen((prev) => ({ ...prev, [po.purchaseOrderId]: true }));
+                setPoModalOpen((prev) => ({ ...prev, [matchingPo.purchaseOrderId]: true }));
               }}
             >
               + PO
@@ -284,7 +285,7 @@ export default function P1AccessPage() {
 
         <Text
           className={classnames.generateSoButton}
-          onClick={() => handleStockOutModalOpen(matchingOr.requisitionId)}
+          onClick={() => handleStockOutModalOpen(or.requisitionId)}
         >
           + SO
         </Text>,

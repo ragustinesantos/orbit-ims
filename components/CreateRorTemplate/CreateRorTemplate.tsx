@@ -13,6 +13,7 @@ import {
 import CustomNotification from '@/components/CustomNotification/CustomNotification';
 import TableDeleteBtn from '../TableDeleteBtn/TableDeleteBtn';
 import classnames from './CreateRorTemplate.module.css';
+import ImgModal from '../ImgModal/ImgModal';
 
 export default function CreateRorTemplate() {
   const { inventory, supplierList, setRefresh, rorTemplates } = useInventory();
@@ -23,6 +24,7 @@ export default function CreateRorTemplate() {
   const [itemList, setItemList] = useState<string[]>([]);
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState(<div />);
+  const [modalStateTracker, setModalStateTracker] = useState<Record<string, boolean>>({});
 
   console.log(templateName, itemList);
 
@@ -151,6 +153,12 @@ export default function CreateRorTemplate() {
     setRefresh((prev: number) => prev + 1);
   }, [searchValue]);
 
+  // Every time an ID is clicked this should run and set the state of modal visibility to the opposite of its previous value
+  const toggleImgModalState = (itemId: string) => {
+    setModalStateTracker((prev) => ({ ...prev, [itemId]: !prev[itemId] }));
+  };
+
+
   // Map through the list of item id's to retrieve data for the template table body
   const mappedItemList = itemList.map((itemId) => {
     const currentItem = inventory?.find((invItem) => invItem.itemId === itemId);
@@ -158,12 +166,13 @@ export default function CreateRorTemplate() {
       (supplier) => supplier.supplierId === currentItem?.supplierId
     );
     return [
-      currentItem?.itemName,
+      <Text onClick={() => toggleImgModalState(itemId)} classNames={{root:classnames.imgModalID}}>{currentItem?.itemName}</Text>,
       currentItem?.category,
       currentItem?.supplyUnit,
       currentItem?.packageUnit,
       currentSupplier?.supplierName,
       <TableDeleteBtn itemId={currentItem?.itemId} handleDelete={handleDeleteFromItemList} />,
+      <ImgModal item={currentItem} isOpened={!!modalStateTracker[itemId]} isClosed={() => setModalStateTracker((prev) => ({ ...prev, [itemId]: false }))} ></ImgModal>
     ];
   });
 

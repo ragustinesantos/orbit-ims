@@ -60,6 +60,8 @@ export default function SelectRorTemplate(props: SelectRorTemplateProps) {
             <Button
                 variant="filled"
                 color="#1B4965"
+                size="md"
+                radius="md"
                 onClick={() => {
                     push('/ror/create-ror-template')
                 }}
