@@ -98,6 +98,28 @@ export default function CreateRor() {
         }
     }, [currentStep]);
 
+    const checkQuantity = () => {
+        const itemList = recurringOrder?.itemOrders;
+        if (!itemList?.find((item) => item.orderQty > 0)) {
+            setNotificationMessage(
+                CustomNotification(
+                    'error',
+                    'Zero Quantity',
+                    'Please enter a quantity to any item to proceed.',
+                    closeNotification
+                )
+            );
+            // Display notification for 3 seconds.
+            setShowNotification(true);
+            setTimeout(() => {
+                setShowNotification(false);
+            }, 3000);
+            setShowButton(true);
+            return false;
+        }
+        return true;
+    }
+
     const resetPage = () => {
         setCurrentStep(0);
         setrecurringOrder(null);
@@ -286,6 +308,12 @@ export default function CreateRor() {
                         variant="filled"
                         color="#1B4965"
                         onClick={() => {
+                            if (currentStep + 3 == stepContent.length
+                                && !checkQuantity()
+                            ) {
+                                return;
+                            }
+
                             if (currentStep + 2 < stepContent.length) {
                                 setCurrentStep(currentStep + 1);
                             }

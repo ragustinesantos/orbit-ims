@@ -118,7 +118,7 @@ export default function OrderRor(props: OrderRorProps) {
                     {rows}
                 </Table.Tbody>
                 <Table.Caption>
-                    End of line
+                    End of list
                 </Table.Caption>
             </Table>
         </div>
