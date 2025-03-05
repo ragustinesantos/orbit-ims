@@ -239,17 +239,21 @@ export default function CreateRor() {
                     currentStep={currentStep + 1}
                 />
             </div>
-            <Text
-                classNames={{
-                    root: classnames.stepHeader,
-                }}
-            >
-                {stepHeaders[currentStep]}
-            </Text>
-            <div
-                className={classnames.rorTemplateContainer}
-            >
-                {currentContent}
+            <div className={classnames.outerScrollBox}>
+                <div className={`${classnames.scrollableContainer} scrollableContainer`}>
+                    <Text
+                        classNames={{
+                            root: classnames.stepHeader,
+                        }}
+                    >
+                        {stepHeaders[currentStep]}
+                    </Text>
+                    <div
+                        className={classnames.rorTemplateContainer}
+                    >
+                        {currentContent}
+                    </div>
+                </div>
             </div>
             <div
                 className={classnames.navButtonContainer}
@@ -259,13 +263,16 @@ export default function CreateRor() {
                     currentStep < 3 &&
                     showButton &&
                     <Button
+                        classNames={{ root: classnames.navButton, }}
+                        size="md"
+                        radius="md"
                         variant="filled"
                         color="#54D0ED"
                         onClick={() => {
                             setCurrentStep(currentStep - 1);
                         }}
                     >
-                        Back
+                        Previous
                     </Button>
                 }
                 {
@@ -273,6 +280,9 @@ export default function CreateRor() {
                     recurringOrder &&
                     showButton &&
                     <Button
+                        classNames={{ root: classnames.navButton, }}
+                        size="md"
+                        radius="md"
                         variant="filled"
                         color="#1B4965"
                         onClick={() => {
