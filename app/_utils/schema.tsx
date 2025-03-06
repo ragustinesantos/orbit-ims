@@ -328,6 +328,7 @@ export interface PurchaseOrder {
   isApproved: boolean | null;
   isDelivered: boolean;
   isActive: boolean;
+  isSubmitted: boolean;
 }
 
 export interface PurchaseOrderToEdit {
@@ -345,6 +346,7 @@ export interface PurchaseOrderToEdit {
   isApproved: boolean | null;
   isDelivered: boolean;
   isActive: boolean;
+  isSubmitted: boolean;
   [key: string]: any;
 }
 
@@ -382,6 +384,8 @@ export interface poModalProps {
   purchaseOrder: PurchaseOrder | null;
   isOpened: boolean;
   isClosed: () => void;
+  handleApprovalActivity?: (message: string, poId: string, status: string) => void;
+  onSubmit?: (purchaseOrderId: string) => void;
 }
 
 export interface imgModalProps {
