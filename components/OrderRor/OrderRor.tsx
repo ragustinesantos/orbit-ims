@@ -1,8 +1,9 @@
 import { useInventory } from "@/app/_utils/inventory-context";
 import { ItemOrder, OrderRorProps, RecurringOrderToEdit } from "@/app/_utils/schema";
-import { Button, Table, TableTr } from "@mantine/core";
+import { Button, Table, TableTr, Text } from "@mantine/core";
 import { useEffect, useState } from "react";
 import classnames from './OrderRor.module.css';
+import ImgModal from "../ImgModal/ImgModal";
 
 
 export default function OrderRor(props: OrderRorProps) {
@@ -12,15 +13,32 @@ export default function OrderRor(props: OrderRorProps) {
     const [itemOrders, setItemOrders] = useState<ItemOrder[]>(recurringOrder?.itemOrders ?? []);
     const setRor = props.setRor;
     const adjustQuantity = props.adjustQuantity;
+    const [modalStateTracker, setModalStateTracker] = useState<Record<string, boolean>>({});
 
-
+    // Every time an ID is clicked this should run and set the state of modal visibility to the opposite of its previous value
+    const toggleImgModalState = (itemId: string) => {
+        setModalStateTracker((prev) => ({ ...prev, [itemId]: !prev[itemId] }));
+    };
     const rows = itemOrders ?
         itemOrders.map((orderItem) => {
             const itemFound = inventory?.find(item => item.itemId == orderItem.itemId);
             if (itemFound) {
                 return (
                     <TableTr key={orderItem.itemId}>
-                        <Table.Td>{itemFound.itemName}</Table.Td>
+                        <ImgModal
+                            item={itemFound}
+                            isOpened={!!modalStateTracker[itemFound.itemId]}
+                            isClosed={() => setModalStateTracker((prev) => ({ ...prev, [itemFound.itemId]: false }))}
+                        >
+                        </ImgModal>
+                        <Table.Td>
+                            <Text
+                                onClick={() => toggleImgModalState(itemFound.itemId)}
+                                classNames={{ root: classnames.imgModalID }}
+                            >
+                                {itemFound.itemName}
+                            </Text>
+                        </Table.Td>
                         <Table.Td>{itemFound.category}</Table.Td>
                         <Table.Td>{itemFound.supplyUnit}</Table.Td>
                         <Table.Td>{itemFound.packageUnit}</Table.Td>
@@ -85,7 +103,7 @@ export default function OrderRor(props: OrderRorProps) {
 
     return (
         <div>
-            <Table striped highlightOnHover withTableBorder withColumnBorders>
+            <Table striped highlightOnHover>
                 <Table.Thead>
                     <Table.Tr>
                         <Table.Th>Item</Table.Th>
@@ -100,7 +118,7 @@ export default function OrderRor(props: OrderRorProps) {
                     {rows}
                 </Table.Tbody>
                 <Table.Caption>
-                    End of line
+                    End of list
                 </Table.Caption>
             </Table>
         </div>

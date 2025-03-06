@@ -42,3 +42,8 @@
 .submitButton {
   align-self: self-end;
 }
+
+.imgModalID:hover{
+  text-decoration: underline;
+  cursor:pointer;
+}

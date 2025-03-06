@@ -39,7 +39,7 @@ export default function ImgModal ({
         centered
         opened={isOpened}
         onClose={isClosed}
-        size="xl"
+        size="lg"
         scrollAreaComponent={ScrollArea.Autosize}>
             <div className={classnames.imgdiv}>
                 <div>
