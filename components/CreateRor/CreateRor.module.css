@@ -14,26 +14,23 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 30px;
-    margin-bottom: 30px;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
 }
 
 .stepHeader {
     font-size: 32px;
     font-weight: bold;
-    margin-left: 80px;
 }
 
 .navButtonContainer {
-    margin-top: 50px;
-    margin-right: 15%;
+    margin-top: 30px;
     display: flex;
     justify-content: flex-end;
     gap: 40px;
 }
 
 .rorTemplateContainer {
-    margin-left: 120px;
     margin-top: 30px;
 }
 
@@ -43,4 +40,34 @@
     text-decoration: underline;
     text-underline-offset: 4px;
     color: #1B4965;
+}
+
+.outerScrollBox {
+    border: 2px solid rgb(237, 237, 232);
+    padding: 8px;
+    border-radius: 20px;
+}
+
+.scrollableContainer {
+    overflow-y: scroll;
+    height: 58vh;
+    padding-left: 1rem;
+}
+
+.scrollableContainer::-webkit-scrollbar {
+    width: 1rem;
+}
+
+.scrollableContainer::-webkit-scrollbar-track {
+    background: #ffffff;
+}
+
+.scrollableContainer::-webkit-scrollbar-thumb {
+    background: #9da9b0;
+    border-radius: 100vw;
+    border: 0.20rem solid #ffffff;
+}
+
+.navButton {
+    width: 120px;
 }
