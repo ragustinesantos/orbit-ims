@@ -48,6 +48,21 @@
   }
 }
 
+.rootPaginationGroupRequisition {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 310px;
+}
+
+.rootPaginationGroupPo {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 250px;
+  width: 100%;
+}
+
 .rootRequisitionTable {
   width: 38vw;
   overflow-y: scroll;
@@ -90,16 +105,16 @@
 }
 
 .loadingContainer {
-    display: flex;
-    flex: 1;
-    justify-content: center;
-    align-items: center;
-    height: 80vh;
-    width: 80vw;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  width: 80vw;
 }
 
 .generatePoButton {
-  background-color: #54D0ED;
+  background-color: #54d0ed;
   color: white;
   border: none;
   padding: 2px 18px;
@@ -115,7 +130,7 @@
 }
 
 .generateSoButton {
-  background-color: #6D6875;
+  background-color: #6d6875;
   color: white;
   border: none;
   padding: 2px 18px;
@@ -170,7 +185,7 @@
 }
 
 .closeTicketButton {
-  background-color: #FFA62B;
+  background-color: #ffa62b;
   color: white;
   border: none;
   padding: 2px 18px;
