@@ -102,3 +102,53 @@ test('update item', async ({ page }) => {
   await expect(page.getByRole('cell', { name: 'bottle' })).toBeVisible();
   await expect(page.getByRole('cell', { name: 'Critical' })).toBeVisible();
 });
+
+test('delete item', async ({ page }) => {
+
+  await page.goto('http://localhost:3000/');
+  await page.getByRole('textbox', { name: 'Type Your Username' }).click();
+  await page.getByRole('textbox', { name: 'Type Your Username' }).fill(userlogin);
+  await page.getByRole('textbox', { name: 'Type Your Username' }).press('Tab');
+  await page.getByRole('textbox', { name: 'Type Your Password' }).fill(password);
+  await page.getByRole('button', { name: 'Login' }).click();
+
+  await page.getByRole('button', { name: 'Manage Inventory' }).click();
+
+  await page.getByRole('link', { name: 'Delete Item' }).click();
+
+  await page.waitForSelector(`text=${userlogin}`);
+  await page.getByRole('textbox', { name: 'Search Item' }).click();
+  await page.getByRole('textbox', { name: 'Search Item' }).fill('wingkei');
+  await page.getByRole('option', { name: 'Wingkei Important Item' }).click();
+
+  // Double check values as well before deleting as an additional check for the update test
+  const searchItem = await page.getByRole('textbox', { name: 'Search Item' });
+  await expect(searchItem).toHaveValue('Wingkei Important Item');
+  const packageUnit = await page.getByRole('textbox', { name: 'Package Unit' });
+  await expect(packageUnit).toHaveValue('dozen');
+  const unitOfMeasurement = await page.getByRole('textbox', { name: 'Unit of Measurement' });
+  await expect(unitOfMeasurement).toHaveValue('bottle');
+  const currentStock = await page.getByRole('spinbutton', { name: 'Current Stock' });
+  await expect(currentStock).toHaveValue('4');
+  const minimumPurchaseQuantity = await page.getByRole('spinbutton', { name: 'Minimum Purchase Quantity' });
+  await expect(minimumPurchaseQuantity).toHaveValue('2');
+  const minimumStorageQuantity = await page.getByRole('spinbutton', { name: 'Minimum Storage Quantity' });
+  await expect(minimumStorageQuantity).toHaveValue('1');
+  const supplierSource = await page.getByRole('textbox', { name: 'Supplier/Source' });
+  await expect(supplierSource).toHaveValue('Eco Green Industries');
+  const category = await page.getByRole('textbox', { name: 'Category' });
+  await expect(category).toHaveValue('Medical Supplies');
+
+  // Delete item and check if success message appeared
+  await page.getByRole('button', { name: 'Delete' }).click();
+  await page.getByRole('button', { name: 'Confirm Delete' }).click();
+  await expect(page.getByText('Item Deleted')).toBeVisible();
+
+  await page.getByRole('button', { name: 'Manage Inventory' }).click();
+  await page.getByRole('link', { name: 'Search Item' }).click();
+  await page.waitForSelector(`text=${userlogin}`);
+
+  //Check that the item no longer exists after deletion
+  await expect(page.getByRole('cell', { name: 'Wingkei Important Item' })).toBeHidden;
+
+});
