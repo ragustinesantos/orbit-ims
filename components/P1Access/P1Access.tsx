@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from 'react';
 import { string } from 'zod';
-import { Button, Group, Table, TableData, Text } from '@mantine/core';
+import { Button, Group, Table, TableData, Text, Modal } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useInventory } from '@/app/_utils/inventory-context';
 import {
@@ -22,6 +22,7 @@ import {
   fetchRecurringOrderRequisitions,
   patchOrderRequisitionPo,
   postPurchaseOrder,
+  submitPurchaseOrder,
 } from '@/app/_utils/utility';
 import CustomNotification from '@/components/CustomNotification/CustomNotification';
 import RorModal from '@/components/RorModal/RorModal';
@@ -43,6 +44,9 @@ export default function P1AccessPage() {
   const [allPo, setAllPo] = useState<PurchaseOrder[] | null>(null);
   const [employeeWithRequisitions, setEmployeeWithRequisitions] = useState<Employee[]>([]);
   const [selectedRequisitionId, setSelectedRequisitionId] = useState<string | null>(null);
+  
+  // Refresh trigger for data updates
+  const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
 
   // Show notification state
   const [showNotification, setShowNotification] = useState(false);
@@ -53,6 +57,11 @@ export default function P1AccessPage() {
 
   //State for StockOutModal
   const [openedStockOutModal, setOpenedStockOutModal] = useState(false);
+  
+  // State for confirmation modal
+  const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
+
+  const [pendingPoId, setPendingPoId] = useState<string | null>(null);
 
   //open StockOutModal
   const handleStockOutModalOpen = (requisitionId: string) => {
@@ -89,6 +98,11 @@ export default function P1AccessPage() {
           setShowNotification
         )
       );
+      
+      // Trigger a refresh when an ROR is approved to update the purchase orders table
+      if (status === 'APPROVED') {
+        setRefreshTrigger(prev => prev + 1);
+      }
     } else if (message === 'error') {
       setNotificationMessage(
         CustomNotification(
@@ -124,7 +138,7 @@ export default function P1AccessPage() {
     };
 
     retrieveRequisition();
-  }, []);
+  }, [refreshTrigger]);
 
   // Retrieve employees with active requisitions
   useEffect(() => {
@@ -148,6 +162,19 @@ export default function P1AccessPage() {
 
     retrieveEmployeeWithReq();
   }, [allOrs]);
+
+  // Initialize poModalOpen state based on submitted purchase orders
+  useEffect(() => {
+    if (allPo) {
+      const newPoModalOpen = { ...poModalOpen };
+      allPo.forEach(po => {
+        if (po.isSubmitted) {
+          newPoModalOpen[po.purchaseOrderId] = true;
+        }
+      });
+      setPoModalOpen(newPoModalOpen);
+    }
+  }, [allPo, refreshTrigger]);
 
   // Map through RORs and return components only for active requisitions
   const mappedRor = allRor?.map((ror) => {
@@ -241,7 +268,6 @@ export default function P1AccessPage() {
 
     // If the matching order requisition is active and fully approved based on the requisition type, generate a table line containing the modal
     if (
-      matchingPo &&
       or?.isActive &&
       ((or?.requisitionType === 'odor' &&
         or?.isApprovedE2 &&
@@ -256,39 +282,51 @@ export default function P1AccessPage() {
         </Text>,
         <Text>{formatDate(or.requisitionDate)}</Text>,
         <ApprovalBadge isApproved={or.isApprovedP1} />,
-        poModalOpen[matchingPo.purchaseOrderId] ? (
-          <Text classNames={{ root: classnames.rootPoId }}>{matchingPo.purchaseOrderId}</Text>
+        matchingPo ? (
+          matchingPo.isSubmitted || poModalOpen[matchingPo.purchaseOrderId] ? (
+            <Text classNames={{ root: classnames.rootPoId }}>{matchingPo.purchaseOrderId}</Text>
+          ) : (
+            <>
+              <button
+                className={classnames.generatePoButton}
+                onClick={() => {
+                  // Open the modal when clicked
+                  setModalStateTracker((prev) => ({ ...prev, [matchingPo.purchaseOrderId]: true }));
+                }}
+              >
+                + PO
+              </button>
+            </>
+          )
         ) : (
           <>
-            {poModalOpen[matchingPo.purchaseOrderId] && (
-              // To Do: Implement modal -- right now it just shows the PO ID without the modal
-              <PoModal
-                purchaseOrder={matchingPo}
-                isOpened={poModalOpen[matchingPo.purchaseOrderId]}
-                isClosed={() =>
-                  setPoModalOpen((prev) => ({ ...prev, [matchingPo.purchaseOrderId]: false }))
-                }
-              />
-            )}
             <button
               className={classnames.generatePoButton}
-              onClick={() => {
-                // Open the modal when clicked
-                setPoModalOpen((prev) => ({ ...prev, [matchingPo.purchaseOrderId]: true }));
-              }}
+              onClick={() => createPo(or.requisitionId)}
             >
               + PO
             </button>
           </>
         ),
-        <ApprovalBadge isApproved={matchingPo.isApproved} />,
+        matchingPo ? (
+          <ApprovalBadge isApproved={matchingPo.isApproved} />
+        ) : (
+          <ApprovalBadge isApproved={null} />
+        ),
 
-        <Text
-          className={classnames.generateSoButton}
-          onClick={() => handleStockOutModalOpen(or.requisitionId)}
-        >
-          + SO
-        </Text>,
+        // Only show the SO button if the PO has been approved
+        matchingPo && matchingPo.isApproved ? (
+          <Text
+            className={classnames.generateSoButton}
+            onClick={() => handleStockOutModalOpen(or.requisitionId)}
+          >
+            + SO
+          </Text>
+        ) : (
+          <Text className={`${classnames.generateSoButton} ${classnames.disabledButton}`}>
+            + SO
+          </Text>
+        ),
         <button className={classnames.closeTicketButton}>Close</button>,
       ];
     }
@@ -297,26 +335,24 @@ export default function P1AccessPage() {
     return [];
   });
 
-  // Function to generate PO for "+ PO" button
-  const generatePo = async (requisitionId: string) => {
+  // Function to create a PO for the modal
+  const createPo = async (requisitionId: string) => {
     // Check if a PO already exists containing the requisition ID
     if (!allPo?.find((po) => po.requisitionId === requisitionId)) {
       try {
-        // Generate PO from object, referencing the requisition ID within the PO object
+        // Generate PO from object
         const generatedPoId = await postPurchaseOrder(requisitionId);
 
-        // Reference the generated PO's ID within the order requisition
+        // Reference the generated PO's ID in the order requisition
         await patchOrderRequisitionPo(requisitionId, generatedPoId);
-
-        // Create Success Notification
-        setNotificationMessage(
-          CustomNotification(
-            'Success',
-            'PO Created!',
-            `Purchase Order #${generatedPoId} has been successfully created`,
-            setShowNotification
-          )
-        );
+        
+        // Open the PO modal for the newly created PO
+        setModalStateTracker((prev) => ({ ...prev, [generatedPoId]: true }));
+        
+        // Trigger a refresh to update the purchase orders table
+        setRefreshTrigger(prev => prev + 1);
+        
+        return generatedPoId;
       } catch (error) {
         console.log(error);
 
@@ -332,6 +368,7 @@ export default function P1AccessPage() {
 
         // Toggle Notification
         revealNotification();
+        return null;
       }
     } else {
       // Create Error Notification
@@ -346,6 +383,112 @@ export default function P1AccessPage() {
 
       // Toggle Notification
       revealNotification();
+      return null;
+    }
+  };
+
+  // Generate a purchase order for a requisition
+  const generatePo = async (requisitionId: string) => {
+    try {
+      // Create a purchase order
+      const generatedPoId = await createPo(requisitionId);
+      
+      if (generatedPoId) {
+        // Update the UI to show the PO ID instead of the button
+        setPoModalOpen((prev) => ({ ...prev, [generatedPoId]: true }));
+        
+        // Trigger a refresh to update the data
+        setRefreshTrigger(prev => prev + 1);
+        
+        // Show success notification
+        setNotificationMessage(
+          CustomNotification(
+            'success',
+            'PO Generated',
+            `Purchase Order ${generatedPoId} has been generated`,
+            setShowNotification
+          )
+        );
+        
+        // Trigger notification
+        revealNotification();
+      }
+    } catch (error) {
+      console.error('Error generating PO:', error);
+      
+      // Show error notification
+      setNotificationMessage(
+        CustomNotification(
+          'error',
+          'Error',
+          'Failed to generate Purchase Order',
+          setShowNotification
+        )
+      );
+      
+      // Trigger notification
+      revealNotification();
+    }
+  };
+
+  // Handle purchase order submission
+  const handlePoSubmit = async (purchaseOrderId: string) => {
+    try {
+      // Update the purchase order's isSubmitted status
+      await submitPurchaseOrder(purchaseOrderId);
+      
+      // Update the poModalOpen state to show the PO ID instead of the button
+      setPoModalOpen((prev) => ({ ...prev, [purchaseOrderId]: true }));
+      
+      // Close both modals
+      setModalStateTracker((prev) => ({ ...prev, [purchaseOrderId]: false }));
+      setConfirmationModalOpen(false);
+      
+      setNotificationMessage(
+        CustomNotification(
+          'success',
+          'PO Submitted',
+          `Purchase Order ${purchaseOrderId} has been submitted for approval`,
+          setShowNotification
+        )
+      );
+      
+      revealNotification();
+      
+      // Trigger a refresh to update the purchase orders table
+      setRefreshTrigger(prev => prev + 1);
+    } catch (error) {
+      console.error("Error submitting purchase order:", error);
+      
+      setNotificationMessage(
+        CustomNotification(
+          'error',
+          'Submission Failed',
+          `Failed to submit Purchase Order ${purchaseOrderId}`,
+          setShowNotification
+        )
+      );
+      
+      revealNotification();
+    }
+  };
+
+  // Open confirmation modal before submitting PO
+  const openConfirmationModal = (purchaseOrderId: string) => {
+    setPendingPoId(purchaseOrderId);
+    setConfirmationModalOpen(true);
+  };
+  
+  // Close confirmation modal without submitting
+  const closeConfirmationModal = () => {
+    setPendingPoId(null);
+    setConfirmationModalOpen(false);
+  };
+  
+  // Confirm PO submission
+  const confirmPoSubmission = () => {
+    if (pendingPoId) {
+      handlePoSubmit(pendingPoId);
     }
   };
 
@@ -413,12 +556,16 @@ export default function P1AccessPage() {
               }}
             />
           </Group>
-          {showNotification && notificationMessage}
         </Group>
       ) : (
         <Group classNames={{ root: classnames.loadingContainer }}>
           <img src="/assets/loading/Spin@1x-1.0s-200px-200px.gif" alt="Loading..." />
         </Group>
+      )}
+      {showNotification && (
+        <div className={classnames.notificationWrapper}>
+          {notificationMessage}
+        </div>
       )}
       {selectedRequisitionId && (
         <StockOutModal
@@ -427,6 +574,50 @@ export default function P1AccessPage() {
           requisitionId={selectedRequisitionId}
         />
       )}
+      {allPo?.map((po) => (
+        <PoModal
+          key={po.purchaseOrderId}
+          purchaseOrder={po}
+          isOpened={!!modalStateTracker[po.purchaseOrderId]}
+          isClosed={() => {
+            // Close the modal
+            setModalStateTracker((prev) => ({ ...prev, [po.purchaseOrderId]: false }));
+          }}
+          onSubmit={openConfirmationModal}
+        />
+      ))}
+      
+      <Modal 
+        opened={confirmationModalOpen} 
+        onClose={closeConfirmationModal} 
+        title="Confirmation" 
+        centered
+        zIndex={1000}
+      >
+        <Text
+          classNames={{
+            root: classnames.rootConfirmationText,
+          }}
+        >
+          Do you want to proceed with the submission of the Purchase Order?
+        </Text>
+        <Group classNames={{ root: classnames.rootBtnArea }}>
+          <Button
+            classNames={{ root: classnames.rootBtn }}
+            onClick={confirmPoSubmission}
+            color="#1B4965"
+          >
+            Proceed
+          </Button>
+          <Button 
+            classNames={{ root: classnames.rootBtn }} 
+            onClick={closeConfirmationModal} 
+            color="red"
+          >
+            Cancel
+          </Button>
+        </Group>
+      </Modal>
     </main>
   );
 }
