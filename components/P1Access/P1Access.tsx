@@ -739,18 +739,7 @@ export default function P1AccessPage() {
               )}
             </Group>
           </Group>
-          <Group classNames={{ root: classnames.rootSectionGroup }}>
-            <Text classNames={{ root: classnames.rootSectionText }}>Purchase Orders</Text>
-            <Table
-              stickyHeader
-              striped
-              data={poTableData}
-              classNames={{
-                thead: classnames.rootRequisitionThead,
-              }}
-            />
-            {showNotification && notificationMessage}
-          </Group>
+        </Group>
       ) : (
         <Group classNames={{ root: classnames.loadingContainer }}>
           <img src="/assets/loading/Spin@1x-1.0s-200px-200px.gif" alt="Loading..." />
