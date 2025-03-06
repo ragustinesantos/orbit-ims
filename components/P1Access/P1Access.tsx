@@ -2,16 +2,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { string } from 'zod';
-import { Button, Group, Table, TableData, Text } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
-import { useInventory } from '@/app/_utils/inventory-context';
+import { Group, Pagination, Table, TableData, Text } from '@mantine/core';
+import { usePagination } from '@mantine/hooks';
 import {
   Employee,
   OnDemandOrder,
   OrderRequisition,
   PurchaseOrder,
-  PurchaseOrderToEdit,
   RecurringOrder,
 } from '@/app/_utils/schema';
 import {
@@ -27,10 +24,9 @@ import CustomNotification from '@/components/CustomNotification/CustomNotificati
 import RorModal from '@/components/RorModal/RorModal';
 import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
 import OdorModal from '../OdorModal/OdorModal';
-import StockOutModal from '../StockOutModal/StockOutModal';
 import PoModal from '../PoModal/PoModal';
+import StockOutModal from '../StockOutModal/StockOutModal';
 import classnames from './P1Access.module.css';
-
 
 export default function P1AccessPage() {
   // Required State to Keep Track of all modal states
@@ -66,7 +62,7 @@ export default function P1AccessPage() {
     setSelectedRequisitionId(null);
   };
 
-    // Every time an ID is clicked this should run and set the state of modal visibility to the opposite of its previous value
+  // Every time an ID is clicked this should run and set the state of modal visibility to the opposite of its previous value
   // Toggling a modal for the first time will generate a key-value pair within the state tracker
   const toggleModalState = (id: string) => {
     setModalStateTracker((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -125,6 +121,129 @@ export default function P1AccessPage() {
 
     retrieveRequisition();
   }, []);
+
+  // Sort OR
+  useEffect(() => {
+    const sortOr = async () => {
+      try {
+        allOrs?.sort((a, b) => {
+          return new Date(b.requisitionDate).getTime() - new Date(a.requisitionDate).getTime();
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    sortOr();
+  }, [allOrs]);
+
+  // Sort ROR
+  useEffect(() => {
+    const sortRor = async () => {
+      try {
+        allRor?.sort((a, b) => {
+          const matchingOrA = allOrs?.find((or) => or.requisitionTypeId === a.rorId);
+          const matchingOrB = allOrs?.find((or) => or.requisitionTypeId === b.rorId);
+
+          // If both exist, compare by requisition date
+          if (matchingOrA && matchingOrB) {
+            return (
+              new Date(matchingOrB.requisitionDate).getTime() -
+              new Date(matchingOrA.requisitionDate).getTime()
+            );
+          }
+
+          // If only matchingOrA exists, decide its position
+          if (matchingOrA) {
+            return 1;
+          }
+          // If only matchingOrB exists, decide its position
+          if (matchingOrB) {
+            return -1;
+          }
+
+          // If neither exist, they are considered equal
+          return 0;
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    sortRor();
+  }, [allRor]);
+
+  // Sort ODOR
+  useEffect(() => {
+    const sortOdor = async () => {
+      try {
+        allOdor?.sort((a, b) => {
+          const matchingOrA = allOrs?.find((or) => or.requisitionTypeId === a.odorId);
+          const matchingOrB = allOrs?.find((or) => or.requisitionTypeId === b.odorId);
+
+          // If both exist, compare by requisition date
+          if (matchingOrA && matchingOrB) {
+            return (
+              new Date(matchingOrB.requisitionDate).getTime() -
+              new Date(matchingOrA.requisitionDate).getTime()
+            );
+          }
+
+          // If only matchingOrA exists, decide its position
+          if (matchingOrA) {
+            return 1;
+          }
+          // If only matchingOrB exists, decide its position
+          if (matchingOrB) {
+            return -1;
+          }
+
+          // If neither exist, they are considered equal
+          return 0;
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    sortOdor();
+  }, [allOdor]);
+
+  // Sort PO
+  useEffect(() => {
+    const sortPo = async () => {
+      try {
+        allPo?.sort((a, b) => {
+          const matchingOrA = allOrs?.find((or) => or.purchaseOrderId === a.purchaseOrderId);
+          const matchingOrB = allOrs?.find((or) => or.purchaseOrderId === b.purchaseOrderId);
+
+          // If both exist, compare by requisition date
+          if (matchingOrA && matchingOrB) {
+            return (
+              new Date(matchingOrB.requisitionDate).getTime() -
+              new Date(matchingOrA.requisitionDate).getTime()
+            );
+          }
+
+          // If only matchingOrA exists, decide its position
+          if (matchingOrA) {
+            return 1;
+          }
+          // If only matchingOrB exists, decide its position
+          if (matchingOrB) {
+            return -1;
+          }
+
+          // If neither exist, they are considered equal
+          return 0;
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    sortPo();
+  }, [allPo]);
 
   // Retrieve employees with active requisitions
   useEffect(() => {
@@ -349,15 +468,48 @@ export default function P1AccessPage() {
     }
   };
 
+  // Size or requisition pagination
+  const requisitionSize = 5;
+
+  // Clean mapped items to remove blank rows
+  const cleanedMappedRor = (mappedRor ?? []).filter((row) => row.length > 0);
+  const cleanedMappedOdor = (mappedOdor ?? []).filter((row) => row.length > 0);
+  const cleanedMappedOr = (mappedOr ?? []).filter((row) => row.length > 0);
+
+  // Ror Pagination
+  const rorTotalPages = Math.ceil((cleanedMappedRor ?? []).length / requisitionSize);
+  const rorPagination = usePagination({ total: rorTotalPages, initialPage: 1 });
+  const paginatedRor = (cleanedMappedRor ?? []).slice(
+    (rorPagination.active - 1) * requisitionSize,
+    rorPagination.active * requisitionSize
+  );
+
+  // ODOR Pagination
+  const odorTotalPages = Math.ceil((cleanedMappedOdor ?? []).length / requisitionSize);
+  const odorPagination = usePagination({ total: odorTotalPages, initialPage: 1 });
+  const paginatedOdor = (cleanedMappedOdor ?? []).slice(
+    (odorPagination.active - 1) * requisitionSize,
+    odorPagination.active * requisitionSize
+  );
+
+  // PO Pagination
+  const poSize = 4;
+  const poTotalPages = Math.ceil((cleanedMappedOr ?? []).length / poSize);
+  const poPagination = usePagination({ total: poTotalPages, initialPage: 1 });
+  const paginatedPo = (cleanedMappedOr ?? []).slice(
+    (poPagination.active - 1) * poSize,
+    poPagination.active * poSize
+  );
+
   // Sample table to contain line items that can generate the modal
   const rorTableData: TableData = {
     head: ['ROR ID', 'Employee', 'Date Submitted', 'Status'],
-    body: mappedRor,
+    body: paginatedRor,
   };
 
   const odorTableData: TableData = {
     head: ['ODOR ID', 'Employee', 'Date Submitted', 'Status'],
-    body: mappedOdor,
+    body: paginatedOdor,
   };
 
   const poTableData: TableData = {
@@ -371,7 +523,7 @@ export default function P1AccessPage() {
       'Generate SO',
       'Close Ticket',
     ],
-    body: mappedOr,
+    body: paginatedPo,
   };
 
   return (
@@ -382,36 +534,63 @@ export default function P1AccessPage() {
           <Group classNames={{ root: classnames.rootSectionGroup }}>
             <Text classNames={{ root: classnames.rootSectionText }}>Order Requisitions</Text>
             <Group classNames={{ root: classnames.rootTableGroup }}>
-              <Table
-                stickyHeader
-                striped
-                data={rorTableData}
-                classNames={{
-                  table: classnames.rootRequisitionTable,
-                  td: classnames.rootRequisitionTd,
-                  thead: classnames.rootRequisitionThead,
-                }}
-              />
-              <Table
-                striped
-                data={odorTableData}
-                classNames={{
-                  table: classnames.rootRequisitionTable,
-                  thead: classnames.rootRequisitionThead,
-                }}
-              />
+              <Group classNames={{ root: classnames.rootPaginationGroupRequisition }}>
+                <Table
+                  stickyHeader
+                  striped
+                  data={rorTableData}
+                  classNames={{
+                    table: classnames.rootRequisitionTable,
+                    td: classnames.rootRequisitionTd,
+                    thead: classnames.rootRequisitionThead,
+                  }}
+                />
+                {cleanedMappedRor && (
+                  <Pagination
+                    value={rorPagination.active}
+                    onChange={rorPagination.setPage}
+                    total={rorTotalPages}
+                  />
+                )}
+              </Group>
+              <Group classNames={{ root: classnames.rootPaginationGroupRequisition }}>
+                <Table
+                  striped
+                  data={odorTableData}
+                  classNames={{
+                    table: classnames.rootRequisitionTable,
+                    thead: classnames.rootRequisitionThead,
+                  }}
+                />
+                {cleanedMappedOdor && (
+                  <Pagination
+                    value={odorPagination.active}
+                    onChange={odorPagination.setPage}
+                    total={odorTotalPages}
+                  />
+                )}
+              </Group>
             </Group>
           </Group>
           <Group classNames={{ root: classnames.rootSectionGroup }}>
             <Text classNames={{ root: classnames.rootSectionText }}>Purchase Orders</Text>
-            <Table
-              stickyHeader
-              striped
-              data={poTableData}
-              classNames={{
-                thead: classnames.rootRequisitionThead,
-              }}
-            />
+            <Group classNames={{ root: classnames.rootPaginationGroupPo }}>
+              <Table
+                stickyHeader
+                striped
+                data={poTableData}
+                classNames={{
+                  thead: classnames.rootRequisitionThead,
+                }}
+              />
+              {cleanedMappedOr && (
+                <Pagination
+                  value={poPagination.active}
+                  onChange={poPagination.setPage}
+                  total={poTotalPages}
+                />
+              )}
+            </Group>
           </Group>
           {showNotification && notificationMessage}
         </Group>
