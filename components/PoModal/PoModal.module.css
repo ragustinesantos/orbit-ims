@@ -4,8 +4,14 @@
   margin-bottom: 24px;
 }
 
+.rootConfirmationText {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 36px;
+}
+
 .rootSection {
-  margin-bottom: 24px;
+  margin-bottom: 36px;
 }
 
 .rootHeaderTxt {
@@ -30,6 +36,18 @@
   font-weight: bold;
 }
 
+.rootApprovalTable {
+  width: 33.33%;
+  table-layout: auto;
+  margin-bottom: 18px;
+}
+
+.tableTd {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
 .rootBtnArea {
   display: flex;
   width: 100%;
@@ -42,5 +60,17 @@
 .rootBtn {
   height: 48px;
   width: 128px;
-  background-color: #1B4965;
+}
+
+.imgModalID:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.loadingContainer {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 0;
 }
