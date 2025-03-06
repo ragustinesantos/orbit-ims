@@ -437,6 +437,7 @@ export const postPurchaseOrder = async (requisitionId: string) => {
     isApproved: null,
     isDelivered: false,
     isActive: false,
+    isSubmitted: false,
   };
 
   try {
@@ -664,5 +665,32 @@ export const patchOdorApproval = async (
   } catch (error) {
     console.log(error);
     throw error;
+  }
+};
+
+// Update a purchase order's isSubmitted status
+export const submitPurchaseOrder = async (purchaseOrderId: string) => {
+  const request = {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ 
+      isSubmitted: true 
+    }),
+  };
+
+  try {
+    const response = await fetch(`/api/purchase-orders/${purchaseOrderId}`, request);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+    }
+    
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
   }
 };
