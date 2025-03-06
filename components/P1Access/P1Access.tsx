@@ -122,6 +122,129 @@ export default function P1AccessPage() {
     retrieveRequisition();
   }, []);
 
+  // Sort OR
+  useEffect(() => {
+    const sortOr = async () => {
+      try {
+        allOrs?.sort((a, b) => {
+          return new Date(b.requisitionDate).getTime() - new Date(a.requisitionDate).getTime();
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    sortOr();
+  }, [allOrs]);
+
+  // Sort ROR
+  useEffect(() => {
+    const sortRor = async () => {
+      try {
+        allRor?.sort((a, b) => {
+          const matchingOrA = allOrs?.find((or) => or.requisitionTypeId === a.rorId);
+          const matchingOrB = allOrs?.find((or) => or.requisitionTypeId === b.rorId);
+
+          // If both exist, compare by requisition date
+          if (matchingOrA && matchingOrB) {
+            return (
+              new Date(matchingOrB.requisitionDate).getTime() -
+              new Date(matchingOrA.requisitionDate).getTime()
+            );
+          }
+
+          // If only matchingOrA exists, decide its position
+          if (matchingOrA) {
+            return 1;
+          }
+          // If only matchingOrB exists, decide its position
+          if (matchingOrB) {
+            return -1;
+          }
+
+          // If neither exist, they are considered equal
+          return 0;
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    sortRor();
+  }, [allRor]);
+
+  // Sort ODOR
+  useEffect(() => {
+    const sortOdor = async () => {
+      try {
+        allOdor?.sort((a, b) => {
+          const matchingOrA = allOrs?.find((or) => or.requisitionTypeId === a.odorId);
+          const matchingOrB = allOrs?.find((or) => or.requisitionTypeId === b.odorId);
+
+          // If both exist, compare by requisition date
+          if (matchingOrA && matchingOrB) {
+            return (
+              new Date(matchingOrB.requisitionDate).getTime() -
+              new Date(matchingOrA.requisitionDate).getTime()
+            );
+          }
+
+          // If only matchingOrA exists, decide its position
+          if (matchingOrA) {
+            return 1;
+          }
+          // If only matchingOrB exists, decide its position
+          if (matchingOrB) {
+            return -1;
+          }
+
+          // If neither exist, they are considered equal
+          return 0;
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    sortOdor();
+  }, [allOdor]);
+
+  // Sort PO
+  useEffect(() => {
+    const sortPo = async () => {
+      try {
+        allPo?.sort((a, b) => {
+          const matchingOrA = allOrs?.find((or) => or.purchaseOrderId === a.purchaseOrderId);
+          const matchingOrB = allOrs?.find((or) => or.purchaseOrderId === b.purchaseOrderId);
+
+          // If both exist, compare by requisition date
+          if (matchingOrA && matchingOrB) {
+            return (
+              new Date(matchingOrB.requisitionDate).getTime() -
+              new Date(matchingOrA.requisitionDate).getTime()
+            );
+          }
+
+          // If only matchingOrA exists, decide its position
+          if (matchingOrA) {
+            return 1;
+          }
+          // If only matchingOrB exists, decide its position
+          if (matchingOrB) {
+            return -1;
+          }
+
+          // If neither exist, they are considered equal
+          return 0;
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    sortPo();
+  }, [allPo]);
+
   // Retrieve employees with active requisitions
   useEffect(() => {
     const retrieveEmployeeWithReq = async () => {
