@@ -27,12 +27,14 @@ export default function ImgModal ({
       itemid
     }: imgModalProps) {
     const {inventory, supplierList} = useInventory();
-    const [opened, { open, close }] = useDisclosure(false);
+    //const [opened, { open, close }] = useDisclosure(false);
 
     const currentItem = inventory?.find((invItem)=>(invItem.itemId === item?.itemId));
     const currentId = inventory?.find((invItem)=>(invItem.itemId === itemid))
 
-    
+    //isOpened is a state variable, if its true the modal opens
+    // onClose is called whenever we click the modal closed or click outside of it. it runs the funciton isClosed which could do many things. in our case
+    // it sets the item to null and isOpened to false.
     return (
         <>
         <Modal

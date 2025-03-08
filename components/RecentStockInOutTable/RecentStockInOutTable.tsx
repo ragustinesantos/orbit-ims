@@ -7,6 +7,7 @@ import { fetchStockInOrders, fetchStockOutOrders } from "@/app/_utils/utility";
 import { useInventory } from "@/app/_utils/inventory-context";
 import { StockInOrder, StockOutOrder } from "@/app/_utils/schema";
 import ImgModal from "../ImgModal/ImgModal";
+import { Item } from "@/app/_utils/schema";
 
 export default function RecentStockInOutTable() {
   const [stockInOrders, setStockInOrders] = useState<StockInOrder[]>([]);
@@ -15,14 +16,14 @@ export default function RecentStockInOutTable() {
 
     const [showAllStockIn, setShowAllStockIn] = useState(false);
     const [showAllStockOut, setShowAllStockOut] = useState(false);
-    const [modalStateTracker, setModalStateTracker] = useState<Record<string, boolean>>({});
+    //Image modal state
+    const [selectedItem, setSelectedItem] = useState<Item | null>(null);
 
     useEffect(() => {
         fetchStockInOrders(setStockInOrders);
         fetchStockOutOrders(setStockOutOrders);
     }, []);
 
-    
     const isRecent = (dateString: string) => {
         const today = new Date();
         const sevenDaysAgo = new Date();
@@ -32,7 +33,6 @@ export default function RecentStockInOutTable() {
         return orderDate >= sevenDaysAgo; 
     };
 
-
     const getItemDetails = (itemId: string) => {
         const foundItem = inventory?.find((item) => item.itemId === itemId);
         return {
@@ -41,10 +41,16 @@ export default function RecentStockInOutTable() {
         };
     };
 
-    // Every time an ID is clicked this should run and set the state of modal visibility to the opposite of its previous value
-    const toggleImgModalState = (itemId: string) => {
-        setModalStateTracker((prev) => ({ ...prev, [itemId]: !prev[itemId] }));
-        };
+    // Close handler
+    const handleCloseModal = () => {
+        setSelectedItem(null);
+    };
+
+    // Handler to toggle modal state and set selected item
+    const handleToggleModal = (itemId: string) => {
+        const item = inventory?.find((inv) => inv.itemId === itemId) || null;
+        setSelectedItem(item);
+    };
 
     // Stock In data in recent 7 days
     const recentStockInOrders = stockInOrders.filter((order) => isRecent(order.stockInDate));
@@ -52,13 +58,11 @@ export default function RecentStockInOutTable() {
     .sort((a,b)=>new Date(b.stockInDate).getTime() - new Date(a.stockInDate).getTime())
     .map((stockInOrder) => {
         const { name, unit } = getItemDetails(stockInOrder.itemId);
-        const picItem = inventory?.find((inv)=> inv.itemId === stockInOrder.itemId);
         return (
             <Table.Tr key={stockInOrder.stockInId}>
-                <ImgModal item={picItem} isOpened={!!modalStateTracker[stockInOrder.itemId]} isClosed={() => setModalStateTracker((prev) => ({ ...prev, [stockInOrder.itemId]: false }))} ></ImgModal>
                 <Table.Td>{stockInOrder.stockInId}</Table.Td>
                 <Table.Td>{stockInOrder.stockInDate}</Table.Td>
-                <Table.Td><Text onClick={() => toggleImgModalState(stockInOrder.itemId)} classNames={{root:classnames.imgModalID}}>{name}</Text></Table.Td>
+                <Table.Td><Text onClick={() => handleToggleModal(stockInOrder.itemId)}classNames={{ root: classnames.imgModalID }}>{name}</Text></Table.Td>
                 <Table.Td>{stockInOrder.stockInQuantity}</Table.Td>
                 <Table.Td>{unit}</Table.Td>
                 <Table.Td>{stockInOrder.receivedBy}</Table.Td>
@@ -72,13 +76,11 @@ export default function RecentStockInOutTable() {
     .sort((a,b)=>new Date(b.stockOutDate).getTime() - new Date(a.stockOutDate).getTime())
     .map((stockOutOrder) => {
         const { name, unit } = getItemDetails(stockOutOrder.itemId);
-        const picItem = inventory?.find((inv)=> inv.itemId === stockOutOrder.itemId);
         return (
             <Table.Tr key={stockOutOrder.stockOutId}>
-                <ImgModal item={picItem} isOpened={!!modalStateTracker[stockOutOrder.itemId]} isClosed={() => setModalStateTracker((prev) => ({ ...prev, [stockOutOrder.itemId]: false }))} ></ImgModal>
                 <Table.Td>{stockOutOrder.stockOutId}</Table.Td>
                 <Table.Td>{stockOutOrder.stockOutDate}</Table.Td>
-                <Table.Td><Text onClick={() => toggleImgModalState(stockOutOrder.itemId)} classNames={{root:classnames.imgModalID}}>{name}</Text></Table.Td>
+                <Table.Td><Text onClick={() => handleToggleModal(stockOutOrder.itemId)}classNames={{ root: classnames.imgModalID }}>{name}</Text></Table.Td>
                 <Table.Td>{stockOutOrder.stockOutQuantity}</Table.Td>
                 <Table.Td>{unit}</Table.Td>
                 <Table.Td>{stockOutOrder.dispatchedBy}</Table.Td>
@@ -106,6 +108,12 @@ export default function RecentStockInOutTable() {
                 </Table.Thead>
                 <Table.Tbody>{stockInRows}</Table.Tbody>
             </Table>
+            <ImgModal
+                item={selectedItem}
+                //!!null = false, !!true = true. !!false = false.
+                isOpened={!!selectedItem}
+                isClosed={handleCloseModal}
+                />
 
             {recentStockInOrders.length > 3 && (
                 <Text
