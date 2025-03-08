@@ -24,7 +24,6 @@ export default function RecentStockInOutTable() {
         fetchStockOutOrders(setStockOutOrders);
     }, []);
 
-    
     const isRecent = (dateString: string) => {
         const today = new Date();
         const sevenDaysAgo = new Date();
@@ -33,7 +32,6 @@ export default function RecentStockInOutTable() {
         const orderDate = new Date(dateString);
         return orderDate >= sevenDaysAgo; 
     };
-
 
     const getItemDetails = (itemId: string) => {
         const foundItem = inventory?.find((item) => item.itemId === itemId);
@@ -53,7 +51,6 @@ export default function RecentStockInOutTable() {
         const item = inventory?.find((inv) => inv.itemId === itemId) || null;
         setSelectedItem(item);
     };
-
 
     // Stock In data in recent 7 days
     const recentStockInOrders = stockInOrders.filter((order) => isRecent(order.stockInDate));
@@ -83,7 +80,7 @@ export default function RecentStockInOutTable() {
             <Table.Tr key={stockOutOrder.stockOutId}>
                 <Table.Td>{stockOutOrder.stockOutId}</Table.Td>
                 <Table.Td>{stockOutOrder.stockOutDate}</Table.Td>
-                <Table.Td> <Text onClick={() => handleToggleModal(stockOutOrder.itemId)}classNames={{ root: classnames.imgModalID }}>{name}</Text></Table.Td>
+                <Table.Td><Text onClick={() => handleToggleModal(stockOutOrder.itemId)}classNames={{ root: classnames.imgModalID }}>{name}</Text></Table.Td>
                 <Table.Td>{stockOutOrder.stockOutQuantity}</Table.Td>
                 <Table.Td>{unit}</Table.Td>
                 <Table.Td>{stockOutOrder.dispatchedBy}</Table.Td>
