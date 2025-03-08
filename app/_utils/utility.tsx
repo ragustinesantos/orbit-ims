@@ -113,7 +113,7 @@ export const deleteItem = async (itemId: string) => {
 };
 
 // Fetch one or all employees
-export const fetchEmployees = async () => {
+export const fetchEmployees = async (setEmployees: unknown) => {
   try {
     const response = await fetch('/api/employees');
 

@@ -1,5 +1,5 @@
 "use client"
-import { Group, Table, TableData, Title, Text } from "@mantine/core";
+import { Group, Table, TableData, Title, Text, Pagination } from "@mantine/core";
 import classnames from "./RequisitionProcessTable.module.css";
 import { useInventory } from "@/app/_utils/inventory-context";
 import { Employee, OnDemandOrder, OrderRequisition, RecurringOrder } from '@/app/_utils/schema';
@@ -7,6 +7,7 @@ import { fetchEmployees,fetchOnDemandOrderRequisitions, fetchOrderRequisitions, 
 import RorModal from '@/components/RorModal/RorModal';
 import OdorModal from "../OdorModal/OdorModal";
 import { useEffect, useState } from "react";
+import { usePagination } from '@mantine/hooks';
 import ApprovalBadge from "../ApprovalBadge/ApprovalBadge";
 
 export default function RequisitionProcessTable(){
@@ -24,7 +25,7 @@ export default function RequisitionProcessTable(){
     const [allRor, setAllRor] = useState<RecurringOrder[] | null>(null);
     const [allOdor, setAllOdor] = useState<OnDemandOrder[] | null>(null);
     const [employeeWithRequisitions, setEmployeeWithRequisitions] = useState<Employee[]>([]);
-  
+
     // Sample use effect to store order requisitions and ror's for mapping
     useEffect(() => {
       const retrieveRequisition = async () => {
@@ -147,18 +148,41 @@ export default function RequisitionProcessTable(){
       // Else return an empty line (array)
       return [];
     });
+
+    // Size or requisition pagination
+    const requisitionSize = 5;
+
+    // Clean mapped items to remove blank rows
+    const cleanedMappedRor = (mappedRor ?? []).filter((row) => row.length > 0);
+    const cleanedMappedOdor = (mappedOdor ?? []).filter((row) => row.length > 0);
+
+    // Ror Pagination
+    const rorTotalPages = Math.ceil((cleanedMappedRor ?? []).length / requisitionSize);
+    const rorPagination = usePagination({ total: rorTotalPages, initialPage: 1 });
+    const paginatedRor = (cleanedMappedRor ?? []).slice(
+      (rorPagination.active - 1) * requisitionSize,
+      rorPagination.active * requisitionSize
+    );
   
-    // Sample table to contain line items that can generate the modal
-    const RORTableData: TableData = {
-      head: ['ROR ID', 'Submitter', 'Date Submitted', 'Status'],
-      body: mappedRor,
-    };
+    // ODOR Pagination
+    const odorTotalPages = Math.ceil((cleanedMappedOdor ?? []).length / requisitionSize);
+    const odorPagination = usePagination({ total: odorTotalPages, initialPage: 1 });
+    const paginatedOdor = (cleanedMappedOdor ?? []).slice(
+      (odorPagination.active - 1) * requisitionSize,
+      odorPagination.active * requisitionSize
+    );
+  
+  
+  // Sample table to contain line items that can generate the modal
+  const rorTableData: TableData = {
+    head: ['ROR ID', 'Employee', 'Date Submitted', 'Status'],
+    body: paginatedRor,
+  };
 
-    const ODORTableData: TableData = {
-      head: ['ODOR ID', 'Submitter', 'Date Submitted', 'Status'],
-      body: mappedOdor,
-    };
-
+  const odorTableData: TableData = {
+    head: ['ODOR ID', 'Employee', 'Date Submitted', 'Status'],
+    body: paginatedOdor,
+  };
 
   return(
 
@@ -171,11 +195,30 @@ export default function RequisitionProcessTable(){
       <>
       <Group className={classnames.group}>
           {/** ROR process table for E1*/}
-          <Table className={classnames.table} striped data={RORTableData} style={{ minWidth: '600px' }} />
-        </Group><Group className={classnames.group}>
+          <Table className={classnames.table} striped data={rorTableData} style={{ minWidth: '600px' }} />
+          {cleanedMappedRor && (
+            <div className={classnames.paginationContainer}>
+              <Pagination
+              value={rorPagination.active}
+              onChange={rorPagination.setPage}
+              total={rorTotalPages}
+              />
+            </div>
+                          )}
+      </Group>
+      <Group className={classnames.group}>
             {/** ODOR process table for E1*/}
-            <Table className={classnames.table} striped data={ODORTableData} style={{ minWidth: '600px' }} />
-          </Group>
+            <Table className={classnames.table} striped data={odorTableData} style={{ minWidth: '600px' }} />
+            {cleanedMappedOdor && (
+              <div className={classnames.paginationContainer}>
+                  <Pagination
+                    value={odorPagination.active}
+                    onChange={odorPagination.setPage}
+                    total={odorTotalPages}
+                  />
+              </div>
+                )}
+      </Group>
           </>
       ) : (
         <Group classNames={{ root: classnames.loadingContainer }}>
