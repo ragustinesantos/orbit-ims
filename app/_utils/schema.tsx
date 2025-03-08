@@ -460,14 +460,14 @@ export const NAV_ITEMS: navCollection = {
     {
       label: 'E2 Access',
       icon: IconNotes,
-      links: [{ label: 'Access', link: '/' }],
+      links: [{ label: 'Access', link: '/access/E2' }],
     },
   ],
   E3: [
     {
       label: 'E3 Access',
       icon: IconNotes,
-      links: [{ label: 'Access', link: '/' }],
+      links: [{ label: 'Access', link: '/access/E3' }],
     },
   ],
   // Manage Inventory is accessible to P1, P2, IA, and SA roles
