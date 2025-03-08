@@ -387,7 +387,7 @@ export interface poModalProps {
 export interface imgModalProps {
   isOpened: boolean;
   isClosed: () => void;
-  item?: Item;
+  item?: Item | null;
   itemid?: string;
 }
 
