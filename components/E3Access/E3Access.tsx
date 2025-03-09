@@ -86,7 +86,7 @@ export default function E3AccessPage() {
   const filteredTemplates = rorTemplates.filter(template => template.isTemplateApprovedE2 === true);
 
   // Map templates to table rows
-  const mappedTemplates = rorTemplates.map((template) => [
+  const mappedTemplates = filteredTemplates.map((template) => [
     <>
       <RorTemplateModal
        recurringOrderTemplate = {template}
