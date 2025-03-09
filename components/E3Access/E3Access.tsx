@@ -69,11 +69,7 @@ export default function E3AccessPage() {
     <ApprovalBadge 
       key={`approval-${template.rorTemplateId}`} 
       isApproved={
-        template.approvalE2 === "true" && template.approvalE3 === "true"
-          ? true
-          : template.approvalE2 === "false" || template.approvalE3 === "false"
-          ? false
-          : null
+        template.isTemplateApprovedE3
       } 
     />
   ]);

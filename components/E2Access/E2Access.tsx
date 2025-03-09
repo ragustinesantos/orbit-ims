@@ -106,11 +106,7 @@ export default function E2AccessPage() {
     <ApprovalBadge 
     key={`approval-${template.rorTemplateId}`} 
     isApproved={
-    template.approvalE2 === "true" 
-      ? true
-      : template.approvalE2 === "false"
-      ? false
-      : null
+    template.isTemplateApprovedE2
   } 
 />
 

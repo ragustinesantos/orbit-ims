@@ -49,21 +49,18 @@ export default function RorTemplateModal({
           handleApprovalActivity(
             "success",
             updatedTemplate.rorTemplateId,
-            isApproved ? "APPROVED" : "REJECTED"
+            updatedTemplate.isTemplateApprovedE2 ? "APPROVED" : "REJECTED"
           );
         }
-        
         setRefresh((prev: number) => prev + 1); 
       }
     } catch (error) {
-      console.error(error);
       handleApprovalActivity(
         "error",
         recurringOrderTemplate?.rorTemplateId || "Unknown",
         isApproved ? "APPROVED" : "REJECTED"
       );
     }
-  
     isClosed();
     close();
   };
@@ -140,6 +137,7 @@ export default function RorTemplateModal({
 
           <SimpleGrid cols={2} classNames={{ root: classnames.rootSection }}>
             <TextInput disabled label="Template ID" value={recurringOrderTemplate.rorTemplateId} size="md" />
+            <TextInput disabled label="Template Name" value={recurringOrderTemplate.templateName || "Unnamed Template"} size="md" />
           </SimpleGrid>
           <Table striped classNames={{ table: classnames.rootTable }} data={tableData} />
           <Text classNames={{ root: classnames.rootHeaderTxt }}>Approvals:</Text>
@@ -149,11 +147,7 @@ export default function RorTemplateModal({
             <ApprovalBadge 
             key={`approval-${recurringOrderTemplate.rorTemplateId}`} 
             isApproved={
-              recurringOrderTemplate.approvalE2 === "true" 
-              ? true
-              : recurringOrderTemplate.approvalE2 === "false"
-              ? false
-              : null
+              recurringOrderTemplate.isTemplateApprovedE2
             } 
             /> 
          </div>
@@ -162,11 +156,7 @@ export default function RorTemplateModal({
           <ApprovalBadge 
           key={`approval-${recurringOrderTemplate.rorTemplateId}`} 
           isApproved={
-            recurringOrderTemplate.approvalE3 === "true" 
-            ? true
-            : recurringOrderTemplate.approvalE3 === "false"
-            ? false
-            : null
+            recurringOrderTemplate.isTemplateApprovedE3
             } 
           /> 
         </div>  
