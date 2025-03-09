@@ -196,8 +196,13 @@ export default function RorTemplateModal({
           <Text classNames={{ root: classnames.rootHeaderTxt }}>Approvals:</Text>
           <div className={classnames.approvalCardContainer}>
           <div className={classnames.approvalCard}>
-            <Text classNames={{ root: classnames.rootHeaderTxt }}>Approval By</Text>
-            <Text classNames={{ root: classnames.rootHeaderTxt }}>{approvalNameE2}</Text>
+          <Text classNames={{ root: classnames.rootHeaderTxt }}>
+            {recurringOrderTemplate.isTemplateApprovedE2 === null
+              ? "E2 Approval" 
+              : recurringOrderTemplate.isTemplateApprovedE2 === true
+              ? `Approved by ${approvalNameE2}` 
+              : `Rejected by ${approvalNameE2}`} 
+          </Text>
             <ApprovalBadge 
             key={`approval-${recurringOrderTemplate.rorTemplateId}`} 
             isApproved={
@@ -206,8 +211,13 @@ export default function RorTemplateModal({
             /> 
          </div>
          <div className={classnames.approvalCard}>
-          <Text classNames={{ root: classnames.rootHeaderTxt }}>Approval By</Text>
-          <Text classNames={{ root: classnames.rootHeaderTxt }}>{approvalNameE3}</Text>
+         <Text classNames={{ root: classnames.rootHeaderTxt }}>
+          {recurringOrderTemplate.isTemplateApprovedE3 === null
+            ? "E3 Approval"
+            : recurringOrderTemplate.isTemplateApprovedE3 === true
+            ? `Approved by ${approvalNameE3}`
+            : `Rejected by ${approvalNameE3}`}
+        </Text>
           <ApprovalBadge 
           key={`approval-${recurringOrderTemplate.rorTemplateId}`} 
           isApproved={
