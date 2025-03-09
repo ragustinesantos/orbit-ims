@@ -3,16 +3,17 @@ import { Button, Group, Select, SimpleGrid, Text, TextInput, Avatar, Flex } from
 import  classnames  from './ProfilePage.module.css';
 import { useInventory } from '@/app/_utils/inventory-context';
 import { useUserAuth } from '@/app/_utils/auth-context';
-
+import { useDisclosure } from '@mantine/hooks';
+import { useState } from 'react';
+import { Modal } from '@mantine/core';
 
 
 export default function ProfilePage () {
+    // Use the useUserAuth hook to get the user object and the login and logout functions
+    const { currentEmployee } = useInventory();
+    const [modalshow, setModalshow] = useState<boolean>(false);
 
 
- 
-// Use the useUserAuth hook to get the user object and the login and logout functions
-const { currentEmployee } = useInventory();
-    console.log(currentEmployee);
     const { firebaseSignOut } = useUserAuth();
 
     const handleLogout = async () => {
@@ -21,6 +22,29 @@ const { currentEmployee } = useInventory();
         }
         window.location.replace("/")
     };
+
+
+    const showmodal = () => {
+        setModalshow(true);
+    }
+    function close () {
+        setModalshow(false);
+    }
+
+    const resetpass = async (email: string | undefined) => {
+        if(!email){
+        console.error("Email is undefined");
+        return;
+        }
+
+        try {
+        console.log(email)
+        } catch (error) {
+
+        }
+    close();
+    };
+
 
     return (
         
@@ -49,8 +73,29 @@ const { currentEmployee } = useInventory();
                             
                         </SimpleGrid>
                         <div>
-                        <Button variant="filled" classNames={{root:classnames.button}}>Change Password</Button>
+                        <Button variant="filled" onClick={showmodal} classNames={{root:classnames.button}}>Change Password</Button>
                         <Button variant="filled" onClick={handleLogout} classNames={{root:classnames.button}}>Logout</Button>
+                        <Modal opened={modalshow} onClose={close} title="Confirmation" centered>
+                        <Text
+                        classNames={{
+                            root: classnames.rootConfirmationText,
+                        }}
+                        >
+                        Send Reset Password email to _______ ?
+                        </Text>
+                        <Group classNames={{ root: classnames.rootBtnArea }}>
+                        <Button
+                            classNames={{ root: classnames.rootBtn }}
+                            onClick={() => resetpass(currentEmployee?.email)}
+                            color="#1B4965"
+                        >
+                            Proceed
+                        </Button>
+                        <Button classNames={{ root: classnames.rootBtn }} onClick={() => close()} color="red">
+                            Cancel
+                        </Button>
+                        </Group>
+                    </Modal>
                         </div>  
                     </div>
             </div>
