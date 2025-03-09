@@ -20,7 +20,7 @@ import {
   Employee,
   rorTemplateModalProps,
 } from '@/app/_utils/schema';
-import { fetchEmployee, fetchRorTemplate } from '@/app/_utils/utility';
+import { fetchEmployee, fetchRorTemplate, patchRorTemplateApproval } from '@/app/_utils/utility';
 import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
 import classnames from './RorTemplateModal.module.css';
 import ImgModal from '../ImgModal/ImgModal';
@@ -29,41 +29,80 @@ export default function RorTemplateModal({
   recurringOrderTemplate,
   isOpened,
   isClosed,
-  handleApprovalActivity,
+  handleApprovalE2,
+  handleApprovalE3,
+  isE2Page=false,
+  isE3Page=false
 }: rorTemplateModalProps) {
   const { currentEmployee, inventory, supplierList, setRefresh } = useInventory();
 
   const [opened, { open, close }] = useDisclosure(false);
-  const [employee, setEmployee] = useState<Employee>({ ...defaultEmployee });
-  const [approval, setApproval] = useState<boolean>(false);
   const [modalStateTracker, setModalStateTracker] = useState<Record<string, boolean>>({});
+  const [approvalNameE2, setApprovalNameE2] = useState<string | null>(null);
+  const [approvalNameE3, setApprovalNameE3] = useState<string | null>(null);
 
-
-  const handleApproval = async (isApproved: boolean) => {
-    try {
+  useEffect(() => {
+    const fetchApproverNames = async () => {
       if (recurringOrderTemplate) {
-        
-        const updatedTemplate = await fetchRorTemplate(recurringOrderTemplate.rorTemplateId);
-  
-        if (updatedTemplate) {
-          handleApprovalActivity(
-            "success",
-            updatedTemplate.rorTemplateId,
-            updatedTemplate.isTemplateApprovedE2 ? "APPROVED" : "REJECTED"
-          );
+        if (recurringOrderTemplate.approvalE2) {
+          const approverE2 = await fetchEmployee(recurringOrderTemplate.approvalE2);
+          setApprovalNameE2(`${approverE2.firstName} ${approverE2.lastName}`);
         }
-        setRefresh((prev: number) => prev + 1); 
+        if (recurringOrderTemplate.approvalE3) {
+          const approverE3 = await fetchEmployee(recurringOrderTemplate.approvalE3);
+          setApprovalNameE3(`${approverE3.firstName} ${approverE3.lastName}`);
+        }
+      }
+    };
+    fetchApproverNames();
+  }, [recurringOrderTemplate]);
+
+
+  const handleApproval = async (isApprovedE2: boolean | null, isApprovedE3: boolean | null) => {
+    try {
+      if (recurringOrderTemplate && currentEmployee) {
+        const isE2 = currentEmployee.employeeLevel.includes('E2');
+        const isE3 = currentEmployee.employeeLevel.includes('E3');
+  
+        if (!isE2 && !isE3) {
+          console.error("User does not have approval permissions.");
+          return;
+        }
+  
+        const updatedE2 = isE2 ? isApprovedE2 : recurringOrderTemplate.isTemplateApprovedE2;
+        const updatedE3 = isE3 ? isApprovedE3 : recurringOrderTemplate.isTemplateApprovedE3;
+  
+        const updatedE2Approver = isE2 ? currentEmployee.employeeId : recurringOrderTemplate.approvalE2;
+        const updatedE3Approver = isE3 ? currentEmployee.employeeId : recurringOrderTemplate.approvalE3;
+  
+        await patchRorTemplateApproval(
+          recurringOrderTemplate.rorTemplateId,
+          updatedE2, 
+          updatedE3, 
+          updatedE2Approver,
+          updatedE3Approver
+        );
+  
+        if (isE2) {
+          handleApprovalE2?.(recurringOrderTemplate.rorTemplateId, isApprovedE2);
+          setApprovalNameE2(`${currentEmployee.firstName} ${currentEmployee.lastName}`);
+        }
+        if (isE3) {
+          handleApprovalE3?.(recurringOrderTemplate.rorTemplateId, isApprovedE3);
+          setApprovalNameE3(`${currentEmployee.firstName} ${currentEmployee.lastName}`);
+        }
+  
+        setRefresh((prev: number) => prev + 1);
       }
     } catch (error) {
-      handleApprovalActivity(
-        "error",
-        recurringOrderTemplate?.rorTemplateId || "Unknown",
-        isApproved ? "APPROVED" : "REJECTED"
-      );
+      console.error("Approval error:", error);
     }
+  
     isClosed();
     close();
   };
+  
+  
   
 
   // Toggle image modal state
@@ -143,7 +182,8 @@ export default function RorTemplateModal({
           <Text classNames={{ root: classnames.rootHeaderTxt }}>Approvals:</Text>
           <div className={classnames.approvalCardContainer}>
           <div className={classnames.approvalCard}>
-            <Text classNames={{ root: classnames.rootHeaderTxt }}>E2 Approval Status:</Text>
+            <Text classNames={{ root: classnames.rootHeaderTxt }}>Approval By</Text>
+            <Text classNames={{ root: classnames.rootHeaderTxt }}>{approvalNameE2}</Text>
             <ApprovalBadge 
             key={`approval-${recurringOrderTemplate.rorTemplateId}`} 
             isApproved={
@@ -152,7 +192,8 @@ export default function RorTemplateModal({
             /> 
          </div>
          <div className={classnames.approvalCard}>
-          <Text classNames={{ root: classnames.rootHeaderTxt }}>E3 Approval Status:</Text>
+          <Text classNames={{ root: classnames.rootHeaderTxt }}>Approval By</Text>
+          <Text classNames={{ root: classnames.rootHeaderTxt }}>{approvalNameE3}</Text>
           <ApprovalBadge 
           key={`approval-${recurringOrderTemplate.rorTemplateId}`} 
           isApproved={
@@ -168,24 +209,61 @@ export default function RorTemplateModal({
         </Group>
       )}
 
-      {recurringOrderTemplate.approvalE2 !== true  && (
-        <Group classNames={{ root: classnames.rootBtnArea }}>
+{(currentEmployee?.employeeLevel.includes("E2") && recurringOrderTemplate.isTemplateApprovedE2 === null) ||
+ (currentEmployee?.employeeLevel.includes("E3") && recurringOrderTemplate.isTemplateApprovedE3 === null) ? (
+  <Group classNames={{ root: classnames.rootBtnArea }}>
+    {/* E2 Approval */}
+    {isE2Page&&currentEmployee?.employeeLevel.includes("E2") &&
+      recurringOrderTemplate.isTemplateApprovedE2 === null && (
+        <>
           <Button
             classNames={{ root: classnames.rootBtn }}
-            onClick={() => handleApproval(true)}
+            onClick={() =>
+              handleApproval(true, recurringOrderTemplate.isTemplateApprovedE3)
+            }
             color="#1B4965"
           >
             Approve
           </Button>
           <Button
             classNames={{ root: classnames.rootBtn }}
-            onClick={() => handleApproval(false)}
+            onClick={() =>
+              handleApproval(false, recurringOrderTemplate.isTemplateApprovedE3)
+            }
             color="red"
           >
             Reject
           </Button>
-        </Group>
-      )}
+        </>
+    )}
+
+    {/* E3 Approval */}
+    {isE3Page&&currentEmployee?.employeeLevel.includes("E3") &&
+      recurringOrderTemplate.isTemplateApprovedE3 === null && (
+        <>
+          <Button
+            classNames={{ root: classnames.rootBtn }}
+            onClick={() =>
+              handleApproval(recurringOrderTemplate.isTemplateApprovedE2, true)
+            }
+            color="#1B4965"
+          >
+            Approve
+          </Button>
+          <Button
+            classNames={{ root: classnames.rootBtn }}
+            onClick={() =>
+              handleApproval(recurringOrderTemplate.isTemplateApprovedE2, false)
+            }
+            color="red"
+          >
+            Reject
+          </Button>
+        </>
+    )}
+  </Group>
+) : null}
+
     </Modal>
   );
 }

@@ -17,14 +17,13 @@ export default function E2AccessPage() {
   // State for fetching data
   const [rorTemplates, setRorTemplates] = useState<RecurringOrderTemplate[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [modalOpened, setModalOpened] = useState<boolean>(false);
   // State for modal tracking
   const [modalStateTracker, setModalStateTracker] = useState<Record<string, boolean>>({});
   const [refreshTrigger, setRefreshTrigger] = useState(0);
-  const [selectedTemplate,setSelectedTemplate] = useState<RecurringOrderTemplate | null>(null);
   // Notification states
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState(<div />);
+  const [isE2PageView, setIsE2PageView] = useState(true);
 
   useEffect(() => {
     // Fetch Templates & Employees
@@ -91,7 +90,9 @@ export default function E2AccessPage() {
        recurringOrderTemplate = {template}
        isOpened={!!modalStateTracker[template.rorTemplateId]}
        isClosed={() => setModalStateTracker((prev) => ({ ...prev, [template.rorTemplateId]: false }))}
-       handleApprovalActivity={handleApproval}
+       handleApprovalE2={handleApproval}
+       handleApprovalE3={undefined}
+       isE2Page={isE2PageView}
       />
       {/* Open Modal when clicking the Template ID */}
       <Text

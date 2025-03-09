@@ -176,6 +176,43 @@ export const fetchRorTemplates = async (
   }
 };
 
+export const patchRorTemplateApproval = async (
+  templateId: string,
+  isTemplateApprovedByE2: boolean | null,  
+  isTemplateApprovedByE3: boolean | null,  
+  approvalE2Id: string | "",
+  approvalE3Id: string | "",
+) => {
+  console.log(`Approving Template ${templateId} as E2: ${isTemplateApprovedByE2}, E3: ${isTemplateApprovedByE3}`);
+
+  const requestBody: Record<string, any> = {
+    ...(isTemplateApprovedByE2 !== null && { isTemplateApprovedE2: isTemplateApprovedByE2 }), 
+    ...(isTemplateApprovedByE3 !== null && { isTemplateApprovedE3: isTemplateApprovedByE3 }),
+    ...(approvalE2Id && { approvalE2: approvalE2Id }), 
+    ...(approvalE3Id && { approvalE3: approvalE3Id }), 
+  };
+
+  Object.keys(requestBody).forEach(
+    (key) => requestBody[key] === undefined && delete requestBody[key]
+  );
+
+  const request = {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(requestBody),
+  };
+
+  const response = await fetch(`/api/ror-templates/${templateId}`, request);
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+  }
+};
+
+
 // Fetch all order requisitions and set to the provided state parameter
 export const fetchOrderRequisitions = async (
   setOrderRequisitions: (orderRequisitions: OrderRequisition[]) => void
