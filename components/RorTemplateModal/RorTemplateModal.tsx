@@ -232,18 +232,21 @@ export default function RorTemplateModal({
     >
       {recurringOrderTemplate ? (
         <>
-        {/* Confirmation Modal */}
-        <Modal opened={confirmationOpened} onClose={closeConfirmation} title="Confirmation" centered>
-            <Text>Are you sure you want to {approvalSelection ? 'approve' : 'reject'} this request?</Text>
-            <Group>
-              <Button onClick={confirmApproval} color="#1B4965">
-                Confirm
-              </Button>
-              <Button onClick={closeConfirmation} color="red">
-                Cancel
-              </Button>
-            </Group>
-          </Modal>
+      {/* Confirmation Modal */}
+      <Modal opened={confirmationOpened} onClose={closeConfirmation} title="Confirmation" centered classNames={{ root: classnames.confirmationModal }}>
+        <Text className={classnames.confirmationText}>
+          Are you sure you want to {approvalSelection ? 'approve' : 'reject'} this request?
+        </Text>
+        <Group className={classnames.modalButton}>
+          <Button onClick={confirmApproval} className={classnames.confirmButton}>
+            Confirm
+          </Button>
+          <Button onClick={closeConfirmation} className={classnames.cancelButton}>
+            Cancel
+          </Button>
+        </Group>
+      </Modal>
+
 
           <Text classNames={{ root: classnames.rootText }}>Recurring Order Template</Text>
 

@@ -76,5 +76,58 @@
   color: #000000;
 }
 
+/* Modal Buttons */
+.modalButton {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+/* Confirmation Modal */
+.confirmationModal {
+  text-align: center;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+/* Modal Title */
+.confirmationModalTitle {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+/* Modal Text */
+.confirmationText {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Confirm Button */
+.confirmButton {
+  background-color: #1B4965;
+  color: white;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.confirmButton:hover {
+  background-color: #0F3A57;
+}
+
+/* Cancel Button */
+.cancelButton {
+  background-color: red;
+  color: white;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.cancelButton:hover {
+  background-color: darkred;
+}
+
+
 
 

@@ -42,7 +42,7 @@
   }
 
   .templateTextId:hover{
-    text-decoration: underline;
+    color: #3c96aa;
     cursor: pointer;
   }
   
