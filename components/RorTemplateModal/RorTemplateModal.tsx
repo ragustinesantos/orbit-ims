@@ -35,11 +35,14 @@ export default function RorTemplateModal({
   isE3Page=false
 }: rorTemplateModalProps) {
   const { currentEmployee, inventory, supplierList, setRefresh } = useInventory();
+  const [confirmationOpened, { open: openConfirmation, close: closeConfirmation }] = useDisclosure(false);
 
-  const [opened, { open, close }] = useDisclosure(false);
   const [modalStateTracker, setModalStateTracker] = useState<Record<string, boolean>>({});
   const [approvalNameE2, setApprovalNameE2] = useState<string | null>(null);
   const [approvalNameE3, setApprovalNameE3] = useState<string | null>(null);
+  const [approvalSelection, setApprovalSelection] = useState<boolean | null>(null);
+  const [approvingE2, setApprovingE2] = useState<boolean>(false);
+  const [approvingE3, setApprovingE3] = useState<boolean>(false);
   const [confirmation, setConfirmation] = useState<boolean>(false);
 
   useEffect(() => {
@@ -114,7 +117,50 @@ export default function RorTemplateModal({
   
   };
   
+    // Execute approval after confirmation
+    const confirmApproval = async () => {
+      try {
+        if (recurringOrderTemplate && currentEmployee && approvalSelection !== null) {
+          const isE2 = approvingE2 && currentEmployee.employeeLevel.includes('E2');
+          const isE3 = approvingE3 && currentEmployee.employeeLevel.includes('E3');
   
+          if (!isE2 && !isE3) {
+            console.error("User does not have approval permissions.");
+            return;
+          }
+  
+          const updatedE2 = isE2 ? approvalSelection : recurringOrderTemplate.isTemplateApprovedE2;
+          const updatedE3 = isE3 ? approvalSelection : recurringOrderTemplate.isTemplateApprovedE3;
+          const updatedE2Approver = isE2 ? currentEmployee.employeeId : recurringOrderTemplate.approvalE2;
+          const updatedE3Approver = isE3 ? currentEmployee.employeeId : recurringOrderTemplate.approvalE3;
+  
+          await patchRorTemplateApproval(
+            recurringOrderTemplate.rorTemplateId,
+            updatedE2,
+            updatedE3,
+            updatedE2Approver,
+            updatedE3Approver
+          );
+  
+          if (isE2) {
+            handleApprovalE2?.(recurringOrderTemplate.rorTemplateId, approvalSelection);
+            setApprovalNameE2(`${currentEmployee.firstName} ${currentEmployee.lastName}`);
+            recurringOrderTemplate.isTemplateApprovedE2 = approvalSelection;
+          }
+          if (isE3) {
+            handleApprovalE3?.(recurringOrderTemplate.rorTemplateId, approvalSelection);
+            setApprovalNameE3(`${currentEmployee.firstName} ${currentEmployee.lastName}`);
+            recurringOrderTemplate.isTemplateApprovedE3 = approvalSelection;
+          }
+  
+          setRefresh((prev) => prev + 1);
+        }
+      } catch (error) {
+        console.error("Approval error:", error);
+      }
+  
+      closeConfirmation();
+    };
   
 
   // Toggle image modal state
@@ -186,6 +232,19 @@ export default function RorTemplateModal({
     >
       {recurringOrderTemplate ? (
         <>
+        {/* Confirmation Modal */}
+        <Modal opened={confirmationOpened} onClose={closeConfirmation} title="Confirmation" centered>
+            <Text>Are you sure you want to {approvalSelection ? 'approve' : 'reject'} this request?</Text>
+            <Group>
+              <Button onClick={confirmApproval} color="#1B4965">
+                Confirm
+              </Button>
+              <Button onClick={closeConfirmation} color="red">
+                Cancel
+              </Button>
+            </Group>
+          </Modal>
+
           <Text classNames={{ root: classnames.rootText }}>Recurring Order Template</Text>
 
           <SimpleGrid cols={2} classNames={{ root: classnames.rootSection }}>
@@ -243,7 +302,8 @@ export default function RorTemplateModal({
           <Button
             classNames={{ root: classnames.rootBtn }}
             onClick={() =>
-              handleApproval(true, recurringOrderTemplate.isTemplateApprovedE3)
+              {
+                setApprovalSelection(true); setApprovingE2(isE2Page); setApprovingE3(isE3Page); openConfirmation(); }
             }
             color="#1B4965"
           >
@@ -252,7 +312,8 @@ export default function RorTemplateModal({
           <Button
             classNames={{ root: classnames.rootBtn }}
             onClick={() =>
-              handleApproval(false, recurringOrderTemplate.isTemplateApprovedE3)
+              {
+                setApprovalSelection(false); setApprovingE2(isE2Page); setApprovingE3(isE3Page); openConfirmation(); }
             }
             color="red"
           >
@@ -268,7 +329,7 @@ export default function RorTemplateModal({
           <Button
             classNames={{ root: classnames.rootBtn }}
             onClick={() =>{
-              handleApproval(recurringOrderTemplate.isTemplateApprovedE2, true);}
+             setApprovalSelection(true); setApprovingE2(isE2Page); setApprovingE3(isE3Page); openConfirmation(); }
             }
             color="#1B4965"
           >
@@ -276,8 +337,8 @@ export default function RorTemplateModal({
           </Button>
           <Button
             classNames={{ root: classnames.rootBtn }}
-            onClick={() =>
-              handleApproval(recurringOrderTemplate.isTemplateApprovedE2, false)
+            onClick={() =>{
+              setApprovalSelection(false); setApprovingE2(isE2Page); setApprovingE3(isE3Page); openConfirmation(); }
             }
             color="red"
           >
