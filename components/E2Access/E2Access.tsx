@@ -8,7 +8,6 @@ import { Employee, RecurringOrderTemplate } from '@/app/_utils/schema';
 import { fetchEmployees, fetchRorTemplates } from '@/app/_utils/utility';
 import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
 import CustomNotification from '@/components/CustomNotification/CustomNotification';
-import RorModal from '../RorModal/RorModal';
 import classnames from './E2Access.module.css';
 import RorTemplateModal from '../RorTemplateModal/RorTemplateModal';
 
@@ -25,19 +24,7 @@ export default function E2AccessPage() {
   const [notificationMessage, setNotificationMessage] = useState(<div />);
   const [isE2PageView, setIsE2PageView] = useState(true);
 
-  useEffect(() => {
-    // Fetch Templates & Employees
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        await fetchRorTemplates(setRorTemplates);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-      setLoading(false);
-    };
-    fetchData();
-  }, []);
+
 
   // Function to show notifications
   const revealNotification = () => {
@@ -53,9 +40,17 @@ export default function E2AccessPage() {
   };
 
 
-  const handleApproval = async (message:string, templateId: string, isApproved: boolean) => {
-
-    if(message==='success'){
+  const handleApproval = async (message: string, templateId: string, isApproved: boolean) => {
+    if (message === 'success') {
+      // Update the specific template's approval status immediately in local state
+      setRorTemplates((prevTemplates) =>
+        prevTemplates.map((template) =>
+          template.rorTemplateId === templateId
+            ? { ...template, isTemplateApprovedE2: isApproved }
+            : template
+        )
+      );
+  
       setNotificationMessage(
         CustomNotification(
           'success',
@@ -64,10 +59,7 @@ export default function E2AccessPage() {
           setShowNotification
         )
       );
-      if (status === 'APPROVED') {
-        setRefreshTrigger(prev => prev + 1);
-      }
-    }else if (message === 'error') {
+    } else if (message === 'error') {
       console.error(Error);
       setNotificationMessage(
         CustomNotification(
@@ -80,6 +72,22 @@ export default function E2AccessPage() {
     }
     revealNotification();
   };
+  
+  
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        await fetchRorTemplates(setRorTemplates);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+      setLoading(false);
+    };
+    fetchData();
+  }, [refreshTrigger]); // 🔹 Re-run when refreshTrigger updates
+  
   
 
 

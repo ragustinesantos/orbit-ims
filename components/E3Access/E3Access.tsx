@@ -58,6 +58,13 @@ export default function E3AccessPage() {
   const handleApprovalE3 = async (message:string, templateId: string, isApproved: boolean) => {
 
     if(message==='success'){
+      setRorTemplates((prevTemplates) =>
+        prevTemplates.map((template) =>
+          template.rorTemplateId === templateId
+            ? { ...template, isTemplateApprovedE3: isApproved }
+            : template
+        )
+      );
       setNotificationMessage(
         CustomNotification(
           'success',

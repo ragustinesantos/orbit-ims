@@ -40,6 +40,7 @@ export default function RorTemplateModal({
   const [modalStateTracker, setModalStateTracker] = useState<Record<string, boolean>>({});
   const [approvalNameE2, setApprovalNameE2] = useState<string | null>(null);
   const [approvalNameE3, setApprovalNameE3] = useState<string | null>(null);
+  const [confirmation, setConfirmation] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchApproverNames = async () => {
@@ -86,10 +87,12 @@ export default function RorTemplateModal({
         if (isE2) {
           handleApprovalE2?.(recurringOrderTemplate.rorTemplateId, isApprovedE2);
           setApprovalNameE2(`${currentEmployee.firstName} ${currentEmployee.lastName}`);
+          recurringOrderTemplate.isTemplateApprovedE2 = isApprovedE2; 
         }
         if (isE3) {
           handleApprovalE3?.(recurringOrderTemplate.rorTemplateId, isApprovedE3);
           setApprovalNameE3(`${currentEmployee.firstName} ${currentEmployee.lastName}`);
+          recurringOrderTemplate.isTemplateApprovedE3 = isApprovedE3;
         }
   
         setRefresh((prev: number) => prev + 1);
@@ -97,9 +100,18 @@ export default function RorTemplateModal({
     } catch (error) {
       console.error("Approval error:", error);
     }
-  
+
+    // Close the main modal
     isClosed();
+
+    //Close the confirmation modal
     close();
+    
+    // Return confirmation value to default
+    setConfirmation(false);
+
+    setRefresh((prev: number) => prev + 1);
+  
   };
   
   
@@ -130,6 +142,8 @@ export default function RorTemplateModal({
   
     fetchItemDetails();
   }, [recurringOrderTemplate, inventory]);
+
+  useEffect(()=>{},[]);
   
 
   const mappedItemList = (recurringOrderTemplate?.itemList ?? []).map((itemId: string) => {
@@ -243,8 +257,8 @@ export default function RorTemplateModal({
         <>
           <Button
             classNames={{ root: classnames.rootBtn }}
-            onClick={() =>
-              handleApproval(recurringOrderTemplate.isTemplateApprovedE2, true)
+            onClick={() =>{
+              handleApproval(recurringOrderTemplate.isTemplateApprovedE2, true);}
             }
             color="#1B4965"
           >
