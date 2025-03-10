@@ -8,35 +8,22 @@ import { Employee, RecurringOrderTemplate } from '@/app/_utils/schema';
 import { fetchEmployees, fetchRorTemplates } from '@/app/_utils/utility';
 import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
 import CustomNotification from '@/components/CustomNotification/CustomNotification';
-import RorModal from '../RorModal/RorModal';
 import classnames from './E2Access.module.css';
+import RorTemplateModal from '../RorTemplateModal/RorTemplateModal';
 
 export default function E2AccessPage() {
 
   // State for fetching data
   const [rorTemplates, setRorTemplates] = useState<RecurringOrderTemplate[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-
   // State for modal tracking
   const [modalStateTracker, setModalStateTracker] = useState<Record<string, boolean>>({});
-  
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
   // Notification states
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState(<div />);
+  const [isE2PageView, setIsE2PageView] = useState(true);
 
-  useEffect(() => {
-    // Fetch Templates & Employees
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        await fetchRorTemplates(setRorTemplates);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-      setLoading(false);
-    };
-    fetchData();
-  }, []);
 
 
   // Function to show notifications
@@ -52,9 +39,69 @@ export default function E2AccessPage() {
     setModalStateTracker((prev) => ({ ...prev, [templateId]: !prev[templateId] }));
   };
 
+
+  const handleApproval = async (message: string, templateId: string, isApproved: boolean) => {
+    if (message === 'success') {
+      // Update the specific template's approval status immediately in local state
+      setRorTemplates((prevTemplates) =>
+        prevTemplates.map((template) =>
+          template.rorTemplateId === templateId
+            ? { ...template, isTemplateApprovedE2: isApproved }
+            : template
+        )
+      );
+  
+      setNotificationMessage(
+        CustomNotification(
+          'success',
+          'Template Approval',
+          `Template ID ${templateId} was ${isApproved ? 'APPROVED' : 'REJECTED'}.`,
+          setShowNotification
+        )
+      );
+    } else if (message === 'error') {
+      console.error(Error);
+      setNotificationMessage(
+        CustomNotification(
+          'error',
+          'Approval Error',
+          `Failed to update Template ID ${templateId}.`,
+          setShowNotification
+        )
+      );
+    }
+    revealNotification();
+  };
+  
+  
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        await fetchRorTemplates(setRorTemplates);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+      setLoading(false);
+    };
+    fetchData();
+  }, [refreshTrigger]); // 🔹 Re-run when refreshTrigger updates
+  
+  
+
+
   // Map templates to table rows
   const mappedTemplates = rorTemplates.map((template) => [
     <>
+      <RorTemplateModal
+       recurringOrderTemplate = {template}
+       isOpened={!!modalStateTracker[template.rorTemplateId]}
+       isClosed={() => setModalStateTracker((prev) => ({ ...prev, [template.rorTemplateId]: false }))}
+       handleApprovalE2={handleApproval}
+       handleApprovalE3={undefined}
+       isE2Page={isE2PageView}
+      />
       {/* Open Modal when clicking the Template ID */}
       <Text
         key={`temp-${template.rorTemplateId}`}
@@ -68,11 +115,7 @@ export default function E2AccessPage() {
     <ApprovalBadge 
     key={`approval-${template.rorTemplateId}`} 
     isApproved={
-    template.approvalE2 === "true" 
-      ? true
-      : template.approvalE2 === "false"
-      ? false
-      : null
+    template.isTemplateApprovedE2
   } 
 />
 

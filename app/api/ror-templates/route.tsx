@@ -20,8 +20,8 @@ export async function POST(request: Request) {
       itemList: z.array(z.string()),
       approvalE2: z.string(),
       approvalE3: z.string(),
-      isTemplateApprovedE2: z.boolean(),
-      isTemplateApprovedE3: z.boolean(),
+      isTemplateApprovedE2: z.boolean().nullable(),
+      isTemplateApprovedE3: z.boolean().nullable(),
     });
 
     const validatedRorTemplate = rorTemplateSchema.parse(newRorTemplate);
