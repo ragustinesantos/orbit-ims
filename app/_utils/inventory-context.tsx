@@ -39,8 +39,6 @@ export const InventoryContextProvider = ({ children }: { children: ReactNode }) 
   const [currentPage, setCurrentPage] = useState<string>('');
   const [rorTemplates, setRorTemplates] = useState<RecurringOrderTemplate[]>([]);
 
-  console.log(currentEmployee);
-
   useEffect(() => {
     const retrieveEmployee = async () => {
       try {
@@ -62,7 +60,6 @@ export const InventoryContextProvider = ({ children }: { children: ReactNode }) 
     fetchSuppliers(setSupplierList);
     fetchCategories(setCategoryList);
     fetchRorTemplates(setRorTemplates);
-    console.log(supplierList);
   }, [refresh]);
 
   return (
