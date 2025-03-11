@@ -25,7 +25,7 @@ export default function SelectRorTemplate(props: SelectRorTemplateProps) {
     // If there are existing ror templates, default to the first option
     useEffect(() => {
         // Filter the list of ror templates to e2 and e3 approved
-        const rorTemplateList = rorTemplates?.filter((template) => template.approvalE2 && template.approvalE3);
+        const rorTemplateList = rorTemplates?.filter((template) => template.isTemplateApprovedE2 && template.isTemplateApprovedE3);
         setApprovedRorTemplates(rorTemplateList);
         if (rorTemplateList
             && rorTemplateList.length > 0
