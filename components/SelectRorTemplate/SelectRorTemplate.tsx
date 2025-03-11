@@ -3,7 +3,7 @@ import classnames from './SelectRorTemplate.module.css';
 import { useRouter } from "next/navigation";
 import { useInventory } from "@/app/_utils/inventory-context";
 import { useEffect, useState } from "react";
-import { SelectRorTemplateProps } from "@/app/_utils/schema";
+import { RecurringOrderTemplate, SelectRorTemplateProps } from "@/app/_utils/schema";
 
 
 
@@ -11,6 +11,7 @@ export default function SelectRorTemplate(props: SelectRorTemplateProps) {
     const { push } = useRouter();
     const { rorTemplates } = useInventory();
 
+    const [approvedRorTemplates, setApprovedRorTemplates] = useState<RecurringOrderTemplate[] | undefined>([]);
     const [radioValue, setRadioValue] = useState<string | null>(props.recurringOrder?.rorTemplateId ?? null);
 
     useEffect(() => {
@@ -23,11 +24,14 @@ export default function SelectRorTemplate(props: SelectRorTemplateProps) {
 
     // If there are existing ror templates, default to the first option
     useEffect(() => {
-        if (rorTemplates
-            && rorTemplates.length > 0
+        // Filter the list of ror templates to e2 and e3 approved
+        const rorTemplateList = rorTemplates?.filter((template) => template.isTemplateApprovedE2 && template.isTemplateApprovedE3);
+        setApprovedRorTemplates(rorTemplateList);
+        if (rorTemplateList
+            && rorTemplateList.length > 0
             && !props.recurringOrder) {
 
-            setRadioValue(rorTemplates[0].rorTemplateId);
+            setRadioValue(rorTemplateList[0].rorTemplateId);
         }
     }, [rorTemplates])
 
@@ -38,8 +42,8 @@ export default function SelectRorTemplate(props: SelectRorTemplateProps) {
                 onChange={setRadioValue}
             >
                 {
-                    rorTemplates ?
-                        rorTemplates.map((template) => {
+                    approvedRorTemplates ?
+                        approvedRorTemplates.map((template) => {
                             return (
                                 <Radio
                                     key={template.rorTemplateId}
