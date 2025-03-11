@@ -40,6 +40,11 @@
     overflow-y: scroll;
     scrollbar-width: none;
   }
+
+  .templateTextId:hover{
+    color: #3c96aa;
+    cursor: pointer;
+  }
   
   @media (max-width: 1024px) {
     .rootTableGroup {

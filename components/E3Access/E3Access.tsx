@@ -8,8 +8,8 @@ import { Employee, RecurringOrderTemplate } from '@/app/_utils/schema';
 import { fetchEmployees, fetchRorTemplates } from '@/app/_utils/utility';
 import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
 import CustomNotification from '@/components/CustomNotification/CustomNotification';
-import RorModal from '../RorModal/RorModal';
 import classnames from './E3Access.module.css';
+import RorTemplateModal from '../RorTemplateModal/RorTemplateModal';
 
 export default function E3AccessPage() {
 
@@ -19,10 +19,14 @@ export default function E3AccessPage() {
 
   // State for modal tracking
   const [modalStateTracker, setModalStateTracker] = useState<Record<string, boolean>>({});
-  
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+
   // Notification states
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState(<div />);
+  const [isE3PageView, setIsE3PageView] = useState(true);
+
 
   useEffect(() => {
     // Fetch Templates & Employees
@@ -36,7 +40,7 @@ export default function E3AccessPage() {
       setLoading(false);
     };
     fetchData();
-  }, []);
+  }, [refreshTrigger]);
 
   // Function to show notifications
   const revealNotification = () => {
@@ -51,11 +55,54 @@ export default function E3AccessPage() {
     setModalStateTracker((prev) => ({ ...prev, [templateId]: !prev[templateId] }));
   };
 
-  const filteredTemplates = rorTemplates.filter(template => template.approvalE2 === "true");
+  const handleApprovalE3 = async (message:string, templateId: string, isApproved: boolean) => {
+
+    if(message==='success'){
+      setRorTemplates((prevTemplates) =>
+        prevTemplates.map((template) =>
+          template.rorTemplateId === templateId
+            ? { ...template, isTemplateApprovedE3: isApproved }
+            : template
+        )
+      );
+      setNotificationMessage(
+        CustomNotification(
+          'success',
+          'Template Approval',
+          `Template ID ${templateId} was ${isApproved ? 'APPROVED' : 'REJECTED'}.`,
+          setShowNotification
+        )
+      );
+      if (status === 'APPROVED') {
+        setRefreshTrigger(prev => prev + 1);
+      }
+    }else if (message === 'error') {
+      console.error(Error);
+      setNotificationMessage(
+        CustomNotification(
+          'error',
+          'Approval Error',
+          `Failed to update Template ID ${templateId}.`,
+          setShowNotification
+        )
+      );
+    }
+    revealNotification();
+  };
+  
+  const filteredTemplates = rorTemplates.filter(template => template.isTemplateApprovedE2 === true);
 
   // Map templates to table rows
   const mappedTemplates = filteredTemplates.map((template) => [
     <>
+      <RorTemplateModal
+       recurringOrderTemplate = {template}
+       isOpened={!!modalStateTracker[template.rorTemplateId]}
+       isClosed={() => setModalStateTracker((prev) => ({ ...prev, [template.rorTemplateId]: false }))}
+       handleApprovalE2={undefined}
+       handleApprovalE3={handleApprovalE3}
+       isE3Page={isE3PageView}
+      />
       {/* Open Modal when clicking the Template ID */}
       <Text
         key={`temp-${template.rorTemplateId}`}
@@ -67,15 +114,12 @@ export default function E3AccessPage() {
     </>,
     <Text key={`name-${template.rorTemplateId}`}>{template.templateName}</Text>,
     <ApprovalBadge 
-      key={`approval-${template.rorTemplateId}`} 
-      isApproved={
-        template.approvalE2 === "true" && template.approvalE3 === "true"
-          ? true
-          : template.approvalE2 === "false" || template.approvalE3 === "false"
-          ? false
-          : null
-      } 
-    />
+    key={`approval-${template.rorTemplateId}`} 
+    isApproved={
+    template.isTemplateApprovedE3
+  } 
+/>
+
   ]);
 
   return (

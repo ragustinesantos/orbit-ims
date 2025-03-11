@@ -1,0 +1,133 @@
+.rootText {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 24px;
+}
+
+.rootConfirmationText {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 36px;
+}
+
+.rootTable {
+  width: 100%;
+  table-layout: auto;
+  margin-bottom: 36px;
+}
+
+.rootApprovalTable {
+  width: 33.33%;
+  table-layout: auto;
+  margin-bottom: 18px;
+}
+
+.rootSection {
+  margin-bottom: 36px;
+}
+
+.rootHeaderTxt {
+  margin-bottom: 18px;
+  font-weight: 800;
+}
+
+.rootBtnArea {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  gap: 48px;
+  margin-top: 36px;
+}
+
+.rootBtn {
+  height: 48px;
+  width: 128px;
+}
+
+.tableTd {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.imgModalID:hover{
+  text-decoration: underline;
+  cursor:pointer;
+}
+
+.approvalCardContainer {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.approvalCard {
+  flex: 1;
+  padding: 16px;
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  background-color: #ffffff;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  color: #000000;
+}
+
+/* Modal Buttons */
+.modalButton {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+/* Confirmation Modal */
+.confirmationModal {
+  text-align: center;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+/* Modal Title */
+.confirmationModalTitle {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+/* Modal Text */
+.confirmationText {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Confirm Button */
+.confirmButton {
+  background-color: #1B4965;
+  color: white;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.confirmButton:hover {
+  background-color: #0F3A57;
+}
+
+/* Cancel Button */
+.cancelButton {
+  background-color: red;
+  color: white;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.cancelButton:hover {
+  background-color: darkred;
+}
+
+
+
+

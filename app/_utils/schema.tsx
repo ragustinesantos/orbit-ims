@@ -244,8 +244,8 @@ export interface RecurringOrderTemplate {
   itemList: string[];
   approvalE2: string;
   approvalE3: string;
-  isTemplateApprovedE2: boolean;
-  isTemplateApprovedE3: boolean;
+  isTemplateApprovedE2: boolean| null;
+  isTemplateApprovedE3: boolean| null;
 }
 
 export interface RecurringOrderTemplateToEdit {
@@ -253,8 +253,8 @@ export interface RecurringOrderTemplateToEdit {
   itemList: string[];
   approvalE2: string;
   approvalE3: string;
-  isTemplateApprovedE2: boolean;
-  isTemplateApprovedE3: boolean;
+  isTemplateApprovedE2: boolean| null;
+  isTemplateApprovedE3: boolean| null;
   [key: string]: any;
 }
 
@@ -263,8 +263,8 @@ export const defaultRecurringOrderTemplateToEdit: RecurringOrderTemplateToEdit =
   itemList: [],
   approvalE2: '',
   approvalE3: '',
-  isTemplateApprovedE2: false,
-  isTemplateApprovedE3: false,
+  isTemplateApprovedE2: null,
+  isTemplateApprovedE3: null,
 };
 
 export interface NewItemOrder {

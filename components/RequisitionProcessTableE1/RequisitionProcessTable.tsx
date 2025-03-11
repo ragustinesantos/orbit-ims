@@ -138,7 +138,6 @@ export default function RequisitionProcessTable(){
             a key-value pair is created by toggle with the value of [ror.rorId]: !prev[rorId] if it cannot find [ror.rorId] (dynamic keys)*/}
             <Text onClick={() => toggleOdorModalState(odor.odorId)} classNames={{root:classnames.tableID}}>{odor.odorId}</Text>
           </>,
-
           <Text>{matchingEmployee?.firstName} {matchingEmployee?.lastName}</Text>,
           <Text>{formatDate(matchingOr.requisitionDate)}</Text>,
           <ApprovalBadge isApproved={matchingOr.isApprovedP1} />
