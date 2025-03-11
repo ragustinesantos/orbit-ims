@@ -43,7 +43,7 @@ export default function ProfilePage () {
         }
 
         try {
-        const response = await sendResetEmail("this shoudl not work");
+        const response = await sendResetEmail(email);
         if(response)
         {
             setNotificationMessage(
