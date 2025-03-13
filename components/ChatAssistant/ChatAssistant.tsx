@@ -115,7 +115,7 @@ export default function ChatAssistant() {
         key={index}
         style={{
           display: 'flex',
-          flexDirection: chat.type === 'employee' ? 'row' : 'row-reverse',
+          flexDirection: chat.type === 'employee' ? 'row-reverse' : 'row',
           width: '100%',
           alignSelf: 'flex-end',
         }}

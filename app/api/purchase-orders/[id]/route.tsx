@@ -38,6 +38,7 @@ export async function PUT(request: Request, { params }: { params: any }) {
       isApproved: z.boolean(),
       isDelivered: z.boolean(),
       isActive: z.boolean(),
+      isSubmitted: z.boolean(),
     });
 
     const validatedPurchaseOrder = purchaseOrderSchema.parse(updatedPurchaseOrder);
@@ -70,6 +71,7 @@ export async function PATCH(request: Request, { params }: { params: any }) {
         isApproved: z.boolean().optional(),
         isDelivered: z.boolean().optional(),
         isActive: z.boolean().optional(),
+        isSubmitted: z.boolean().optional(),
       })
       .strict();
 

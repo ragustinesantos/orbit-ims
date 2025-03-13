@@ -16,6 +16,7 @@
     "prettier:check": "prettier --check \"**/*.{ts,tsx}\"",
     "prettier:write": "prettier --write \"**/*.{ts,tsx}\"",
     "test": "npm run prettier:check && npm run lint && npm run typecheck && npm run jest",
+    "autotest": "npx playwright test tests/",
     "storybook": "storybook dev -p 6006",
     "storybook:build": "storybook build"
   },
@@ -26,6 +27,7 @@
     "@next/bundle-analyzer": "^14.2.4",
     "@tabler/icons-react": "^3.6.0",
     "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.7",
     "encoding": "^0.1.13",
     "firebase": "^11.0.2",
     "marked": "^15.0.3",
@@ -39,6 +41,7 @@
     "@babel/core": "^7.24.7",
     "@eslint/js": "^9.15.0",
     "@ianvs/prettier-plugin-sort-imports": "^4.3.1",
+    "@playwright/test": "^1.50.1",
     "@storybook/nextjs": "^8.1.10",
     "@storybook/react": "^8.1.10",
     "@testing-library/dom": "^10.1.0",

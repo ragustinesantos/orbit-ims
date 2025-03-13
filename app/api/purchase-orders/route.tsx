@@ -30,6 +30,7 @@ export async function POST(request: Request) {
       isApproved: z.boolean().nullable(),
       isDelivered: z.boolean(),
       isActive: z.boolean(),
+      isSubmitted: z.boolean(),
     });
 
     const validatedPurchaseOrder = purchaseOrderSchema.parse(newPurchaseOrder);

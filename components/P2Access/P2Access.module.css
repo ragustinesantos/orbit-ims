@@ -9,25 +9,25 @@
 .rootSectionText {
   font-size: 24px;
   font-weight: bold;
+  margin-bottom: 16px;
+  display: block;
 }
 
 .rootMainGroup {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   width: 80vw;
-  gap: 20px;
 }
 
 .rootSectionGroup {
   display: flex;
-  flex: 2;
   flex-direction: column;
-  align-items: flex-start;
   width: 100%;
   background-color: #f1f3f5;
   padding: 16px;
   border-radius: 20px;
+  max-height: 55vh;
+  overflow-y: auto;
 }
 
 .rootTableGroup {
@@ -48,36 +48,26 @@
   }
 }
 
-.rootPaginationGroupRequisition {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 310px;
-}
-
-.rootPaginationGroupPo {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 250px;
-  width: 100%;
-}
-
 .rootRequisitionTable {
-  width: 38vw;
+  width: 100%;
   overflow-y: scroll;
-  min-width: 600px;
+  min-width: 800px;
   margin-bottom: 20px;
+  max-height: 35vh;
 }
 
 .rootRequisitionThead {
   color: white;
   background-color: #242424;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
 .rootRequisitionTd {
   overflow-x: scroll;
   scrollbar-width: none;
+  white-space: nowrap;
 }
 
 .rootTextId {
@@ -109,12 +99,12 @@
   flex: 1;
   justify-content: center;
   align-items: center;
-  height: 80vh;
+  height: 65vh;
   width: 80vw;
 }
 
-.generatePoButton {
-  background-color: #54d0ed;
+.approveButton {
+  background-color: #54D0ED;
   color: white;
   border: none;
   padding: 2px 18px;
@@ -125,12 +115,12 @@
   border-radius: 4px;
 }
 
-.generatePoButton:hover {
+.approveButton:hover {
   background-color: #3c96aa;
 }
 
-.generateSoButton {
-  background-color: #6d6875;
+.rejectButton {
+  background-color: #6D6875;
   color: white;
   border: none;
   padding: 2px 18px;
@@ -141,51 +131,12 @@
   border-radius: 4px;
 }
 
-.generateSoButton:hover {
+.rejectButton:hover {
   background-color: #5e5a65;
 }
 
-.disabledButton {
-  opacity: 0.5;
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-.disabledButton:hover {
-  background-color: #6D6875;
-}
-
-.notificationWrapper {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1000;
-  width: auto;
-}
-
-.rootConfirmationText {
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 36px;
-}
-
-.rootBtnArea {
-  display: flex;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-  gap: 48px;
-  margin-top: 36px;
-}
-
-.rootBtn {
-  height: 48px;
-  width: 128px;
-}
-
 .closeTicketButton {
-  background-color: #ffa62b;
+  background-color: #FFA62B;
   color: white;
   border: none;
   padding: 2px 18px;

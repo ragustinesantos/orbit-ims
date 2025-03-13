@@ -244,8 +244,8 @@ export interface RecurringOrderTemplate {
   itemList: string[];
   approvalE2: string;
   approvalE3: string;
-  isTemplateApprovedE2: boolean;
-  isTemplateApprovedE3: boolean;
+  isTemplateApprovedE2: boolean| null;
+  isTemplateApprovedE3: boolean| null;
 }
 
 export interface RecurringOrderTemplateToEdit {
@@ -253,8 +253,8 @@ export interface RecurringOrderTemplateToEdit {
   itemList: string[];
   approvalE2: string;
   approvalE3: string;
-  isTemplateApprovedE2: boolean;
-  isTemplateApprovedE3: boolean;
+  isTemplateApprovedE2: boolean| null;
+  isTemplateApprovedE3: boolean| null;
   [key: string]: any;
 }
 
@@ -263,8 +263,8 @@ export const defaultRecurringOrderTemplateToEdit: RecurringOrderTemplateToEdit =
   itemList: [],
   approvalE2: '',
   approvalE3: '',
-  isTemplateApprovedE2: false,
-  isTemplateApprovedE3: false,
+  isTemplateApprovedE2: null,
+  isTemplateApprovedE3: null,
 };
 
 export interface NewItemOrder {
@@ -328,6 +328,7 @@ export interface PurchaseOrder {
   isApproved: boolean | null;
   isDelivered: boolean;
   isActive: boolean;
+  isSubmitted: boolean;
 }
 
 export interface PurchaseOrderToEdit {
@@ -345,6 +346,7 @@ export interface PurchaseOrderToEdit {
   isApproved: boolean | null;
   isDelivered: boolean;
   isActive: boolean;
+  isSubmitted: boolean;
   [key: string]: any;
 }
 
@@ -382,12 +384,14 @@ export interface poModalProps {
   purchaseOrder: PurchaseOrder | null;
   isOpened: boolean;
   isClosed: () => void;
+  handleApprovalActivity?: (message: string, poId: string, status: string) => void;
+  onSubmit?: (purchaseOrderId: string) => void;
 }
 
 export interface imgModalProps {
   isOpened: boolean;
   isClosed: () => void;
-  item?: Item;
+  item?: Item | null;
   itemid?: string;
 }
 
@@ -456,14 +460,14 @@ export const NAV_ITEMS: navCollection = {
     {
       label: 'E2 Access',
       icon: IconNotes,
-      links: [{ label: 'Access', link: '/' }],
+      links: [{ label: 'Access', link: '/access/E2' }],
     },
   ],
   E3: [
     {
       label: 'E3 Access',
       icon: IconNotes,
-      links: [{ label: 'Access', link: '/' }],
+      links: [{ label: 'Access', link: '/access/E3' }],
     },
   ],
   // Manage Inventory is accessible to P1, P2, IA, and SA roles
@@ -492,7 +496,7 @@ export const NAV_ITEMS: navCollection = {
     {
       label: 'P2 Access',
       icon: IconNotes,
-      links: [{ label: 'Access', link: '/' }],
+      links: [{ label: 'Access', link: '/access/P2' }],
     },
   ],
   // Inventory Admin and System Admin has the same Navigation items.
