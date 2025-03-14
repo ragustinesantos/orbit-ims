@@ -190,7 +190,7 @@ export default function GenerateReport() {
           color="blue"
           onClick={()=>window.print()}
         >
-          Download PDF
+          Print
         </Button>
         </>
       )}
