@@ -79,6 +79,14 @@
   max-width: 100%;
 }
 
+.noData {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 500;
+  color: #999;
+  padding: 20px;
+}
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
