@@ -1,12 +1,11 @@
 .responsiveLayout {
   display: flex;
   flex-direction: column;
-  padding: 1.5rem;
-  flex: 2;
-  gap: 1.5rem;
-  justify-content: flex-start;
-  align-items: center;
+  align-items: flex-start;
   width: 100%;
+  max-width: 1500px;
+  gap: 1rem;
+  margin: auto;
 }
 
 .sectionContainer {

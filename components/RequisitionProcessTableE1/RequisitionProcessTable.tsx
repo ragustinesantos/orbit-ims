@@ -201,12 +201,10 @@ export default function RequisitionProcessTable() {
 
   return (
     <div className={classnames.rootMain}>
-      <Title order={5} classNames={{ root: classnames.heading }}>
-        Order Requisition Process
-      </Title>
+      <Text classNames={{ root: classnames.heading }}>Order Requisition Process</Text>
       {allOdor && allOrs && allRor ? (
         <div className={classnames.rootTableGroup}>
-          <Group className={classnames.group}>
+          <Group className={classnames.rootPaginationGroupRequisition}>
             {/** ROR process table for E1*/}
             <Table
               className={classnames.table}
@@ -219,16 +217,14 @@ export default function RequisitionProcessTable() {
               }}
             />
             {cleanedMappedRor && (
-              <div className={classnames.paginationContainer}>
-                <Pagination
-                  value={rorPagination.active}
-                  onChange={rorPagination.setPage}
-                  total={rorTotalPages}
-                />
-              </div>
+              <Pagination
+                value={rorPagination.active}
+                onChange={rorPagination.setPage}
+                total={rorTotalPages}
+              />
             )}
           </Group>
-          <Group className={classnames.group}>
+          <Group className={classnames.rootPaginationGroupRequisition}>
             {/** ODOR process table for E1*/}
             <Table
               className={classnames.table}
@@ -241,13 +237,11 @@ export default function RequisitionProcessTable() {
               }}
             />
             {cleanedMappedOdor && (
-              <div className={classnames.paginationContainer}>
-                <Pagination
-                  value={odorPagination.active}
-                  onChange={odorPagination.setPage}
-                  total={odorTotalPages}
-                />
-              </div>
+              <Pagination
+                value={odorPagination.active}
+                onChange={odorPagination.setPage}
+                total={odorTotalPages}
+              />
             )}
           </Group>
         </div>

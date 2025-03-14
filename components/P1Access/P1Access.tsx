@@ -673,8 +673,8 @@ export default function P1AccessPage() {
   };
 
   return (
-    <main>
-      <Text classNames={{ root: classnames.rootText }}>P1 Access</Text>
+    <main className={classnames.main}>
+      <Text classNames={{ root: classnames.rootText }}>Purchasing Level 1</Text>
       {allOdor && allOrs && allRor && allPo ? (
         <Group classNames={{ root: classnames.rootMainGroup }}>
           <Group classNames={{ root: classnames.rootSectionGroup }}>
