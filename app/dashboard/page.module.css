@@ -4,6 +4,7 @@
   align-items: flex-start;
   width: 100%;
   max-width: 1500px;
+  padding: 1rem 0rem 1rem 0rem;
   gap: 1rem;
   margin: auto;
 }
@@ -14,7 +15,7 @@
   align-items: flex-start;
   width: 100%;
   background-color: #ffffff;
-  padding: 1rem;
+  padding: 1.5rem;
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   transition: box-shadow 0.3s ease;
