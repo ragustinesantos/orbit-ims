@@ -92,9 +92,6 @@ export default function RequisitionProcessTable() {
   const filteredOdor = isE1Only ? allOdor?.filter((odor) => filteredOrs?.some((or) => or.requisitionTypeId === odor.odorId)) : allOdor;
 
 
-
-
-
   // Map through the desired list and return components only for active requisitions
   const mappedRor = filteredRor?.map((ror) => {
     // Cross-reference and retrieve a matching order requisition based on the requisitionId stored in the ror
@@ -228,14 +225,21 @@ export default function RequisitionProcessTable() {
                 thead: classnames.rootRequisitionThead,
               }}
             />
-            {cleanedMappedRor && (
+            {cleanedMappedRor.length>0? (cleanedMappedRor&&(
               <Pagination
                 value={rorPagination.active}
                 onChange={rorPagination.setPage}
                 total={rorTotalPages}
               />
+            )):(
+              <Table.Tr>
+                <Table.Td colSpan={6} className={classnames.noData}>
+                  <Text>No recent stock change</Text>
+                </Table.Td>
+              </Table.Tr>
             )}
           </Group>
+          
           <Group className={classnames.rootPaginationGroupRequisition}>
             {/** ODOR process table for E1*/}
             <Table
@@ -248,13 +252,17 @@ export default function RequisitionProcessTable() {
                 thead: classnames.rootRequisitionThead,
               }}
             />
-            {cleanedMappedOdor && (
+            {cleanedMappedOdor.length>0? cleanedMappedOdor && (
               <Pagination
                 value={odorPagination.active}
                 onChange={odorPagination.setPage}
                 total={odorTotalPages}
               />
-            )}
+            ):(<Table.Tr>
+              <Table.Td colSpan={6} className={classnames.noData}>
+                <Text>No recent stock change</Text>
+              </Table.Td>
+            </Table.Tr>)}
           </Group>
         </div>
       ) : (

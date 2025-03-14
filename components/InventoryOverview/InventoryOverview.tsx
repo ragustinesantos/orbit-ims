@@ -61,7 +61,7 @@ export default function InventoryOverview(){
       verticalSpacing={{ base: 'md', sm: 'xl' }}
       classNames={{ root: classnames.grid }}>
         
-        <div>
+        <div className="div-container">
           <Card shadow="lg" radius="lg" withBorder classNames={{ root:classnames.cardContainer }}>
               <Text size="md" classNames={{ root:classnames.cardText }}
               onClick = {handleTotalItemClick}>
@@ -73,7 +73,7 @@ export default function InventoryOverview(){
           </Card>
         </div>
 
-        <div>
+        <div className="div-container">
           <Card shadow="lg" radius="lg" withBorder classNames={{ root:classnames.cardContainer }}>
 
               <Text size="md" classNames={{ root:classnames.cardText }} onClick={open}>
