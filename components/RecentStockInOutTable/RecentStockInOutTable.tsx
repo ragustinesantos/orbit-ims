@@ -97,7 +97,8 @@ export default function RecentStockInOutTable() {
                </Table.Tr>
              </Table.Thead>
              <Table.Tbody>
-               {paginatedStockInOrders.map((stockInOrder) => {
+              {paginatedStockInOrders.length>0?(
+               paginatedStockInOrders.map((stockInOrder) => {
                  const { name, unit } = getItemDetails(stockInOrder.itemId);
                  return (
                    <Table.Tr key={stockInOrder.stockInId}>
@@ -113,7 +114,14 @@ export default function RecentStockInOutTable() {
                      <Table.Td>{stockInOrder.receivedBy}</Table.Td>
                    </Table.Tr>
                  );
-               })}
+               })
+              ):(
+                <Table.Tr>
+                  <Table.Td colSpan={6} className={classnames.noData}>
+                    <Text>No recent stock change</Text>
+                  </Table.Td>
+                </Table.Tr>
+              )}
              </Table.Tbody>
            </Table>
            <Pagination page={stockInPagination.active} onChange={stockInPagination.setPage} total={stockInTotalPages} mt="md" />
@@ -133,7 +141,7 @@ export default function RecentStockInOutTable() {
                </Table.Tr>
              </Table.Thead>
              <Table.Tbody>
-               {paginatedStockOutOrders.map((stockOutOrder) => {
+               {paginatedStockOutOrders.length > 0 ? (paginatedStockOutOrders.map((stockOutOrder) => {
                  const { name, unit } = getItemDetails(stockOutOrder.itemId);
                  return (
                    <Table.Tr key={stockOutOrder.stockOutId}>
@@ -149,7 +157,14 @@ export default function RecentStockInOutTable() {
                      <Table.Td>{stockOutOrder.dispatchedBy}</Table.Td>
                    </Table.Tr>
                  );
-               })}
+               })
+              ):(
+                <Table.Tr>
+                  <Table.Td colSpan={6} className={classnames.noData}>
+                    <Text>No recent stock change</Text>
+                  </Table.Td>
+                </Table.Tr>
+              )}
              </Table.Tbody>
            </Table>
            <Pagination page={stockOutPagination.active} onChange={stockOutPagination.setPage} total={stockOutTotalPages} mt="md" />

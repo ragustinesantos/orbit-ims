@@ -83,10 +83,22 @@ export default function RequisitionProcessTable() {
     setModalStateTracker((prev) => ({ ...prev, [odorId]: !prev[odorId] }));
   };
 
+  // Determine if the employee only has `E1` level
+  const isE1Only = currentEmployee?.employeeLevel === 'E1';
+
+  // Filter requisitions based on `E1` level access
+  const filteredOrs = isE1Only ? allOrs?.filter((or) => or.employeeId === currentEmployee?.employeeId) : allOrs;
+  const filteredRor = isE1Only ? allRor?.filter((ror) => filteredOrs?.some((or) => or.requisitionTypeId === ror.rorId)) : allRor;
+  const filteredOdor = isE1Only ? allOdor?.filter((odor) => filteredOrs?.some((or) => or.requisitionTypeId === odor.odorId)) : allOdor;
+
+
+
+
+
   // Map through the desired list and return components only for active requisitions
-  const mappedRor = allRor?.map((ror) => {
+  const mappedRor = filteredRor?.map((ror) => {
     // Cross-reference and retrieve a matching order requisition based on the requisitionId stored in the ror
-    const matchingOr = allOrs?.find((or) => or.requisitionTypeId === ror.rorId);
+    const matchingOr = filteredOrs?.find((or) => or.requisitionTypeId === ror.rorId);
     const matchingEmployee = employeeWithRequisitions.find(
       (emp) => emp.employeeId === matchingOr?.employeeId
     );
@@ -125,8 +137,8 @@ export default function RequisitionProcessTable() {
   });
 
   // Map through the desired list and return components only for active order requisitions
-  const mappedOdor = allOdor?.map((odor) => {
-    const matchingOr = allOrs?.find((or) => or.requisitionTypeId === odor.odorId);
+  const mappedOdor = filteredOdor?.map((odor) => {
+    const matchingOr = filteredOrs?.find((or) => or.requisitionTypeId === odor.odorId);
     const matchingEmployee = employeeWithRequisitions.find(
       (emp) => emp.employeeId === matchingOr?.employeeId
     );
