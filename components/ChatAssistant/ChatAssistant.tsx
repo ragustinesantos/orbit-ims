@@ -44,9 +44,9 @@ export default function ChatAssistant() {
       try {
         if (currentEmployee) {
           await addChats(currentEmployee.employeeId, chat, 'employee');
-          setAnimate(true)
           setChat('');
           setMessageKey((prev) => prev + 1);
+          setAnimate(true)
           // Show loading ducks
           setShowLoading(true);
         }
