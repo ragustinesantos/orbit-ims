@@ -101,7 +101,7 @@ export default function RecentStockInOutTable() {
                  const { name, unit } = getItemDetails(stockInOrder.itemId);
                  return (
                    <Table.Tr key={stockInOrder.stockInId}>
-                     <Table.Td>{stockInOrder.stockInId}</Table.Td>
+                     <Table.Td className={classnames.rootTextId}>{stockInOrder.stockInId}</Table.Td>
                      <Table.Td>{stockInOrder.stockInDate}</Table.Td>
                      <Table.Td>
                        <Text onClick={() => handleToggleModal(stockInOrder.itemId)} classNames={{ root: classnames.imgModalID }}>
@@ -137,7 +137,7 @@ export default function RecentStockInOutTable() {
                  const { name, unit } = getItemDetails(stockOutOrder.itemId);
                  return (
                    <Table.Tr key={stockOutOrder.stockOutId}>
-                     <Table.Td>{stockOutOrder.stockOutId}</Table.Td>
+                     <Table.Td className={classnames.rootTextId}>{stockOutOrder.stockOutId}</Table.Td>
                      <Table.Td>{stockOutOrder.stockOutDate}</Table.Td>
                      <Table.Td>
                        <Text onClick={() => handleToggleModal(stockOutOrder.itemId)} classNames={{ root: classnames.imgModalID }}>
