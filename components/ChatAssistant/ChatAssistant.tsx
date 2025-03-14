@@ -18,8 +18,10 @@ export default function ChatAssistant() {
   const [chat, setChat] = useState('');
   const [chatHistory, setChatHistory] = useState<Chat[]>([]);
   const [messageKey, setMessageKey] = useState(0);
+  const [animate, setAnimate] = useState<boolean>(false);
   const [assistantResponse, setAssistantResponse] = useState('');
   const [showLoading, setShowLoading] = useState<boolean>(false);
+  const [initialLoadComplete, setInitialLoadComplete] = useState(false);
   const { inventory, setRefresh, currentEmployee, supplierList } = useInventory();
 
   const handleChat = (newTxt: string) => setChat(newTxt);
@@ -42,9 +44,9 @@ export default function ChatAssistant() {
       try {
         if (currentEmployee) {
           await addChats(currentEmployee.employeeId, chat, 'employee');
+          setAnimate(true)
           setChat('');
           setMessageKey((prev) => prev + 1);
-
           // Show loading ducks
           setShowLoading(true);
         }
@@ -53,8 +55,10 @@ export default function ChatAssistant() {
       }
 
       try {
+
         if (currentEmployee) {
           const response = await queryAssistant(newAssistantQuery);
+          
           if (response) {
             await addChats(currentEmployee.employeeId, response, 'assistant');
             setAssistantResponse(response);
@@ -64,6 +68,7 @@ export default function ChatAssistant() {
             setShowLoading(false);
           }
         }
+
       } catch (error) {
         console.log(error);
       }
@@ -79,6 +84,12 @@ export default function ChatAssistant() {
   useEffect(() => {
     setRefresh((prev: number) => prev + 1);
   }, []);
+
+  useEffect(() => {
+    if (chatHistory.length && !initialLoadComplete) {
+      setInitialLoadComplete(true);
+    }
+  }, [chatHistory, initialLoadComplete]);
 
   useEffect(() => {
     const chatContainer = document.getElementById('chat-container');
@@ -110,6 +121,10 @@ export default function ChatAssistant() {
   };
 
   const mappedChats = chatHistory.map((chat, index) => {
+    const isNewMessage = index === chatHistory.length - 1;
+    const chatClass = isNewMessage && initialLoadComplete && animate
+      ? `${classnames.animate}`
+      : ''
     return (
       <div
         key={index}
@@ -119,6 +134,7 @@ export default function ChatAssistant() {
           width: '100%',
           alignSelf: 'flex-end',
         }}
+        className={chatClass}
       >
         <pre
           style={chat.type === 'employee' ? employeeChatStyle : assistantChatStyle}
