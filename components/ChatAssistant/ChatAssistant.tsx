@@ -46,7 +46,7 @@ export default function ChatAssistant() {
           await addChats(currentEmployee.employeeId, chat, 'employee');
           setChat('');
           setMessageKey((prev) => prev + 1);
-          setAnimate(true)
+          setAnimate(true);
           // Show loading ducks
           setShowLoading(true);
         }
@@ -55,10 +55,9 @@ export default function ChatAssistant() {
       }
 
       try {
-
         if (currentEmployee) {
           const response = await queryAssistant(newAssistantQuery);
-          
+
           if (response) {
             await addChats(currentEmployee.employeeId, response, 'assistant');
             setAssistantResponse(response);
@@ -68,7 +67,6 @@ export default function ChatAssistant() {
             setShowLoading(false);
           }
         }
-
       } catch (error) {
         console.log(error);
       }
@@ -122,9 +120,16 @@ export default function ChatAssistant() {
 
   const mappedChats = chatHistory.map((chat, index) => {
     const isNewMessage = index === chatHistory.length - 1;
-    const chatClass = isNewMessage && initialLoadComplete && animate
-      ? `${classnames.animate}`
-      : ''
+
+    let chatClass;
+    if (isNewMessage && initialLoadComplete && animate) {
+      chatClass = `${classnames.animate}`;
+    } else if (initialLoadComplete && !animate) {
+      chatClass = `${classnames.chat}`;
+    } else {
+      chatClass = '';
+    }
+
     return (
       <div
         key={index}
