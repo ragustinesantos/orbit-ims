@@ -1,15 +1,13 @@
+'use client';
+
 import '@mantine/core/styles.css';
 
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import { ColorSchemeScript, MantineProvider } from '@mantine/core';
 import { theme } from '../theme';
 import { AuthContextProvider } from './_utils/auth-context';
 import { InventoryContextProvider } from './_utils/inventory-context';
-
-export const metadata = {
-  title: 'Orbit IMS',
-  description: 'I am using Mantine with Next.js!',
-};
 
 export default function RootLayout({ children }: { children: any }) {
   return (
@@ -23,11 +21,11 @@ export default function RootLayout({ children }: { children: any }) {
         />
       </head>
       <body>
-        <MantineProvider theme={theme}>
-          <AuthContextProvider>
-            <InventoryContextProvider>{children}</InventoryContextProvider>
-          </AuthContextProvider>
-        </MantineProvider>
+          <MantineProvider theme={theme}>
+            <AuthContextProvider>
+              <InventoryContextProvider>{children}</InventoryContextProvider>
+            </AuthContextProvider>
+          </MantineProvider>
       </body>
     </html>
   );

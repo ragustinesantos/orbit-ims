@@ -1,51 +1,76 @@
 .rootText {
-  font-size: 48px;
-  font-weight: bold;
-  text-decoration: underline;
-  text-underline-offset: 8px;
-  padding-bottom: 32px;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 3px solid #3c96aa;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  width: 100%;
 }
 
 .rootSectionText {
-  font-size: 24px;
-  font-weight: bold;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 0.75rem;
 }
 
 .rootMainGroup {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 80vw;
-  gap: 20px;
+  width: 100%;
+  max-width: 1500px;
+  gap: 1rem;
+  margin: 0 auto;
 }
 
 .rootSectionGroup {
   display: flex;
-  flex: 2;
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
-  background-color: #f1f3f5;
-  padding: 16px;
-  border-radius: 20px;
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s ease;
+  transform: translateY(20px);
+  opacity: 0;
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rootSectionGroup:nth-child(1) {
+  animation-delay: 0.2s;
+}
+
+.rootSectionGroup:nth-child(2) {
+  animation-delay: 0.4s;
+}
+
+.rootSectionGroup:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
 .rootTableGroup {
   display: flex;
+  flex-direction: row;
   flex: 2;
-  justify-content: space-between;
-  align-items: flex-start;
   height: 30vh;
   width: 100%;
   overflow-y: scroll;
   scrollbar-width: none;
-}
-
-@media (max-width: 1024px) {
-  .rootTableGroup {
-    flex-direction: column;
-    justify-content: flex-start;
-  }
 }
 
 .rootPaginationGroupRequisition {
@@ -64,7 +89,7 @@
 }
 
 .rootRequisitionTable {
-  width: 38vw;
+  width: 35vw;
   overflow-y: scroll;
   min-width: 600px;
   margin-bottom: 20px;
@@ -72,28 +97,45 @@
 
 .rootRequisitionThead {
   color: white;
-  background-color: #242424;
+  background: linear-gradient(135deg, #2c3e50, #4a6572);
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.rootRequisitionThead th {
+  text-align: left;
+  font-size: 0.875rem;
+  letter-spacing: 0.5px;
+  border: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .rootRequisitionTd {
-  overflow-x: scroll;
-  scrollbar-width: none;
+  border-bottom: 1px solid #e9ecef;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.rootTextId {
+.rootTextId, .rootPoId {
   cursor: pointer;
-}
-
-.rootTextId:hover {
   color: #3c96aa;
+  font-weight: 500;
+  transition: color 0.2s ease, transform 0.2s ease;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  max-width: 100%;
 }
 
-.rootPoId {
-  cursor: pointer;
-}
-
-.rootPoId:hover {
-  color: #3c96aa;
+.rootTextId:hover, .rootPoId:hover {
+  color: #54d0ed;
+  transform: translateY(-1px);
 }
 
 .rootPoTable {
@@ -113,36 +155,48 @@
   width: 80vw;
 }
 
-.generatePoButton {
-  background-color: #54d0ed;
-  color: white;
+.generatePoButton, .generateSoButton, .closeTicketButton {
   border: none;
-  padding: 2px 18px;
+  height: 25px;
   text-align: center;
-  display: inline-block;
-  font-size: 14px;
+  font-size: 0.875rem;
+  font-weight: 500;
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+  align-self: center;
+}
+
+.generatePoButton {
+  background: #3c96aa;
+  color: white;
 }
 
 .generatePoButton:hover {
-  background-color: #3c96aa;
+  box-shadow: 0 4px 8px rgba(60, 150, 170, 0.3);
+  transform: translateY(-1px);
 }
 
 .generateSoButton {
-  background-color: #6d6875;
+  background: #5d5a66;
   color: white;
-  border: none;
-  padding: 2px 18px;
-  text-align: center;
-  display: inline-block;
-  font-size: 14px;
-  cursor: pointer;
-  border-radius: 4px;
 }
 
 .generateSoButton:hover {
-  background-color: #5e5a65;
+  box-shadow: 0 4px 8px rgba(109, 104, 117, 0.3);
+  transform: translateY(-1px);
+}
+
+.closeTicketButton {
+  background: #e89726;
+  color: white;
+}
+
+.closeTicketButton:hover {
+  box-shadow: 0 4px 8px rgba(255, 166, 43, 0.3);
+  transform: translateY(-1px);
 }
 
 .disabledButton {
@@ -152,7 +206,7 @@
 }
 
 .disabledButton:hover {
-  background-color: #6D6875;
+  background-color: #6d6875;
 }
 
 .notificationWrapper {
