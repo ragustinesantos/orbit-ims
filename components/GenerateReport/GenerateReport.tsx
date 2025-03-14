@@ -162,6 +162,7 @@ export default function GenerateReport() {
           <Divider my="md" />
           <Text size="lg" mt="md">Report for: {selectedItemName}</Text>
 
+          {/**recharts frame*/}
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={filteredData}>
               <XAxis dataKey="date" />
