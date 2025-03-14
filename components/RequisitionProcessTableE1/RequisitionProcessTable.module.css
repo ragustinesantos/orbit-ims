@@ -45,11 +45,11 @@
   }
 }
 
-.group:nth-child(1) {
+.rootPaginationGroupRequisition:nth-child(1) {
   animation-delay: 0.2s;
 }
 
-.group:nth-child(2) {
+.rootPaginationGroupRequisition:nth-child(2) {
   animation-delay: 0.5s;
 }
 
