@@ -67,3 +67,14 @@
     color: #95a5a6;
   }
 }
+
+.endbar{
+  display: flex;
+  align-items:center
+}
+
+
+.Notifications {
+  margin-left: 10px;
+  cursor: pointer;
+}
