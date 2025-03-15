@@ -10,6 +10,7 @@ import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
 import CustomNotification from '@/components/CustomNotification/CustomNotification';
 import classnames from './E2Access.module.css';
 import RorTemplateModal from '../RorTemplateModal/RorTemplateModal';
+import OdorModal from '../OdorModal/OdorModal';
 
 export default function E2AccessPage() {
 
@@ -76,6 +77,40 @@ export default function E2AccessPage() {
           'error',
           'Approval Error',
           `Failed to update Template ID ${templateId}.`,
+          setShowNotification
+        )
+      );
+    }
+    revealNotification();
+  };
+  
+  // Handle ODOR approval
+  const handleOdorApproval = async (message: string, odorId: string, status: string) => {
+    if (message === 'success') {
+      // Update the specific ODOR's approval status immediately in local state
+      setAllOrs((prevOrs) =>
+        prevOrs?.map((or) =>
+          or.requisitionTypeId === odorId
+            ? { ...or, isApprovedE2: status === 'APPROVED' }
+            : or
+        ) || null
+      );
+  
+      setNotificationMessage(
+        CustomNotification(
+          'success',
+          'ODOR Approval',
+          `ODOR ID ${odorId} was ${status}.`,
+          setShowNotification
+        )
+      );
+    } else if (message === 'error') {
+      console.error(Error);
+      setNotificationMessage(
+        CustomNotification(
+          'error',
+          'Approval Error',
+          `Failed to update ODOR ID ${odorId}.`,
           setShowNotification
         )
       );
@@ -201,6 +236,12 @@ export default function E2AccessPage() {
     if (matchingOr?.isActive) {
       return [
         <>
+          <OdorModal
+            onDemandOrder={odor}
+            isOpened={!!modalStateTracker[odor.odorId]}
+            isClosed={() => setModalStateTracker((prev) => ({ ...prev, [odor.odorId]: false }))}
+            handleApprovalActivity={handleOdorApproval}
+          />
           <Text
             key={`odor-${odor.odorId}`}
             className={classnames.odorTextId}
