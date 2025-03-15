@@ -16,8 +16,9 @@ export default function InventoryOverview(){
     const [totalItem, setTotalItem] = useState<number>(0);
     const [lowStock, setLowStock] = useState <number>(0);
     const [categoryData, setCategoryData] = useState<any[]>([]);
+    const [supplierData, setSupplierData] = useState<any[]>([]);
 
-    const {inventory, setCurrentSection} = useInventory();
+    const {inventory, supplierList, setCurrentSection} = useInventory();
     const[opened,{open,close}] = useDisclosure(false); 
     const router = useRouter();
 
@@ -70,6 +71,27 @@ export default function InventoryOverview(){
     setCategoryData(categoryChartData);
   }, [inventory]);
 
+    // Calculate supplier distribution
+    useEffect(() => {
+      if (!inventory || !supplierList) {return;}
+
+      const supplierMap: Record<string, number> = {};
+      inventory.forEach((item) => {
+          const supplier = supplierList.find(s => s.supplierId === item.supplierId)?.supplierName || "Unknown Supplier";
+          supplierMap[supplier] = (supplierMap[supplier] || 0) + 1;
+      });
+
+      const supplierChartData = Object.keys(supplierMap).map((supplier) => ({
+          name: supplier,
+          value: supplierMap[supplier],
+      }));
+
+      setSupplierData(supplierChartData);
+  }, [inventory, supplierList]);
+
+
+
+
   // Pie Chart Data for Stock Distribution
   const pieData = [
     { name: "Low Stock", value: lowStock },
@@ -92,7 +114,7 @@ export default function InventoryOverview(){
         <Group className={classnames.overviewContainer}>
 
         <SimpleGrid cols={{ base: 4, sm: 2, lg: 4 }} spacing={{ base: 10, sm: "xl" }} verticalSpacing={{ base: "md", sm: "xl" }} className={classnames.grid}>
-          <div className="div-container">
+          <Group classNames={{root:classnames.divContainer}}>
             <Card shadow="lg" radius="lg" withBorder className={classnames.cardContainer}>
               <Text size="md" className={classnames.cardText} onClick={() => router.push("/inventory/search-item")}>
                 Total Items
@@ -101,9 +123,7 @@ export default function InventoryOverview(){
                 {totalItem}
               </Text>
             </Card>
-          </div>
-
-          <div className="div-container">
+          
             <Card shadow="lg" radius="lg" withBorder className={classnames.cardContainer}>
               <Text size="md" className={classnames.cardText} onClick={open}>
                 Low Stock
@@ -113,7 +133,7 @@ export default function InventoryOverview(){
                 {lowStock}
               </Text>
             </Card>
-          </div>
+          </Group>
       
     
      {/* Stock Distribution Pie Chart */}
@@ -151,6 +171,27 @@ export default function InventoryOverview(){
           </PieChart>
         </ResponsiveContainer>
       </Card>
+
+      {/* Supplier Distribution Pie Chart */}
+      <Card className={classnames.chartCard}>
+        <Text size="md" className={classnames.chartTitle}>
+        Supplier Distribution
+        </Text>
+        <ResponsiveContainer width="100%" height={300} minHeight={200}>
+          <PieChart>
+            <Pie data={supplierData} cx="50%" cy="50%" startAngle={180} endAngle={0} outerRadius={80} dataKey="value" label>
+            {supplierData.map((_, index) => (
+            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            ))}
+            </Pie>
+            <Tooltip />
+            <Legend layout="vertical" align="center" verticalAlign="middle" wrapperStyle={{ marginTop: "20px" }} />
+          </PieChart>
+          </ResponsiveContainer>
+          </Card>
+
+
+
       </SimpleGrid>
 
     </Group>
