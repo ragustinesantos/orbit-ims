@@ -129,7 +129,7 @@ export default function InventoryOverview(){
               ))}
             </Pie>
             <Tooltip />
-            <Legend/>
+            <Legend layout="vertical" align="center" verticalAlign="middle" />
           </PieChart>
         </ResponsiveContainer>
       </Card>
@@ -147,7 +147,7 @@ export default function InventoryOverview(){
               ))}
             </Pie>
             <Tooltip />
-            <Legend/>
+            <Legend layout="vertical" align="center" verticalAlign="middle" />
           </PieChart>
         </ResponsiveContainer>
       </Card>
