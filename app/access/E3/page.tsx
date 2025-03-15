@@ -14,6 +14,7 @@ export default function P2Access() {
           justifyContent: 'flex-start',
           height: '100vh',
           padding: 32,
+          overflowY: 'scroll',
         }}
       >
         <E3AccessPage />

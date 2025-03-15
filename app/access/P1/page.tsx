@@ -14,7 +14,8 @@ export default function CreateRorTemplatePage() {
           justifyContent: 'flex-start',
           height: '100vh',
           padding: 32,
-          background: '#fafbfd'
+          background: '#fafbfd',
+          overflowY: 'scroll',
         }}
       >
         <P1AccessPage />
