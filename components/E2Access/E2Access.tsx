@@ -272,16 +272,16 @@ export default function E2AccessPage() {
       <Text className={classnames.rootText}>E2 Access</Text>
       <div className={classnames.rootMainGroup}>
       {loading ? (
-            <Group classNames={{ root: classnames.loadingContainer }}>
-            <img src="/assets/loading/Spin@1x-1.0s-200px-200px.gif" alt="Loading..." />
-          </Group>
-          ) : (
-        <div className={classnames.rootSectionGroup}>
-          <div style={{ width: '100%', marginBottom: '16px' }}>
-            <Text className={classnames.rootSectionText}>ROR Template</Text>
-          </div>
-          
-          
+        <Group classNames={{ root: classnames.loadingContainer }}>
+          <img src="/assets/loading/Spin@1x-1.0s-200px-200px.gif" alt="Loading..." />
+        </Group>
+      ) : (
+        <>
+          <div className={classnames.rootSectionGroup}>
+            <div style={{ width: '100%', marginBottom: '16px' }}>
+              <Text className={classnames.rootSectionText}>ROR Template</Text>
+            </div>
+            
             <div style={{ width: '100%', overflowX: 'auto' }}>
               <Table stickyHeader striped className={classnames.rootRequisitionTable}>
                 <Table.Thead  classNames={{
@@ -304,13 +304,8 @@ export default function E2AccessPage() {
                 </Table.Tbody>
               </Table>
             </div>
-        </div>)}
+          </div>
 
-        {loading ? (
-          <Group classNames={{ root: classnames.loadingContainer }}>
-            <img src="/assets/loading/Spin@1x-1.0s-200px-200px.gif" alt="Loading..." />
-          </Group>
-        ) : (
           <div className={classnames.rootSectionGroup} style={{ marginTop: '20px' }}>
             <div style={{ width: '100%', marginBottom: '16px' }}>
               <Text className={classnames.rootSectionText}>ODOR Requisitions</Text>
@@ -340,7 +335,8 @@ export default function E2AccessPage() {
               </Table>
             </div>
           </div>
-        )}
+        </>
+      )}
       </div>
       
       {showNotification && notificationMessage}
