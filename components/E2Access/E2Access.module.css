@@ -46,6 +46,11 @@
     cursor: pointer;
   }
   
+  .odorTextId:hover {
+    color: #3c96aa;
+    cursor: pointer;
+  }
+  
   @media (max-width: 1024px) {
     .rootTableGroup {
       flex-direction: column;

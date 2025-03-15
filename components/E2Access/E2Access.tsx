@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react';
 import { Group, Table, Text } from '@mantine/core';
 import { useInventory } from '@/app/_utils/inventory-context';
-import { Employee, RecurringOrderTemplate } from '@/app/_utils/schema';
+import { Employee, RecurringOrderTemplate, OnDemandOrder } from '@/app/_utils/schema';
 import { fetchEmployees, fetchRorTemplates } from '@/app/_utils/utility';
 import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
 import CustomNotification from '@/components/CustomNotification/CustomNotification';
@@ -15,6 +15,7 @@ export default function E2AccessPage() {
 
   // State for fetching data
   const [rorTemplates, setRorTemplates] = useState<RecurringOrderTemplate[]>([]);
+  const [odorList, setOdorList] = useState<OnDemandOrder[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   // State for modal tracking
   const [modalStateTracker, setModalStateTracker] = useState<Record<string, boolean>>({});
@@ -24,8 +25,6 @@ export default function E2AccessPage() {
   const [notificationMessage, setNotificationMessage] = useState(<div />);
   const [isE2PageView, setIsE2PageView] = useState(true);
 
-
-
   // Function to show notifications
   const revealNotification = () => {
     setShowNotification(true);
@@ -34,11 +33,15 @@ export default function E2AccessPage() {
     }, 3000);
   };
 
-  // Toggle modal state
+  // Toggle modal state for ROR templates
   const toggleModalState = (templateId: string) => {
     setModalStateTracker((prev) => ({ ...prev, [templateId]: !prev[templateId] }));
   };
 
+  // Toggle modal state for ODOR
+  const toggleOdorModalState = (odorId: string) => {
+    setModalStateTracker((prev) => ({ ...prev, [odorId]: !prev[odorId] }));
+  };
 
   const handleApproval = async (message: string, templateId: string, isApproved: boolean) => {
     if (message === 'success') {
@@ -88,9 +91,6 @@ export default function E2AccessPage() {
     fetchData();
   }, [refreshTrigger]); // 🔹 Re-run when refreshTrigger updates
   
-  
-
-
   // Map templates to table rows
   const mappedTemplates = rorTemplates.map((template) => [
     <>
@@ -120,6 +120,9 @@ export default function E2AccessPage() {
 />
 
   ]);
+
+  // temp placeholder for ODOR mapping
+  const mappedOdors: JSX.Element[][] = [];
 
   return (
     <main>
@@ -159,6 +162,42 @@ export default function E2AccessPage() {
               </Table>
             </div>
         </div>)}
+
+        {loading ? (
+          <Group classNames={{ root: classnames.loadingContainer }}>
+            <img src="/assets/loading/Spin@1x-1.0s-200px-200px.gif" alt="Loading..." />
+          </Group>
+        ) : (
+          <div className={classnames.rootSectionGroup} style={{ marginTop: '20px' }}>
+            <div style={{ width: '100%', marginBottom: '16px' }}>
+              <Text className={classnames.rootSectionText}>ODOR Template</Text>
+            </div>
+            
+            <div style={{ width: '100%', overflowX: 'auto' }}>
+              <Table stickyHeader striped className={classnames.rootRequisitionTable}>
+                <Table.Thead classNames={{
+                  thead: classnames.rootRequisitionThead,
+                }}>
+                  <Table.Tr>
+                    <Table.Th>ODOR ID</Table.Th>
+                    <Table.Th>Employee</Table.Th>
+                    <Table.Th>Date Submitted</Table.Th>
+                    <Table.Th>Status</Table.Th>
+                  </Table.Tr>
+                </Table.Thead>
+                <Table.Tbody>
+                  {mappedOdors.map((row, index) => (
+                    <Table.Tr key={index}>
+                      {row.map((cell, cellIndex) => (
+                        <Table.Td key={cellIndex}>{cell}</Table.Td>
+                      ))}
+                    </Table.Tr>
+                  ))}
+                </Table.Tbody>
+              </Table>
+            </div>
+          </div>
+        )}
       </div>
       
       {showNotification && notificationMessage}
