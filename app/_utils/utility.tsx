@@ -18,7 +18,9 @@ import {
   StockInOrder,
   StockOutOrder,
   Supplier,
+  ItemOrder,
 } from './schema';
+import { SendEmailODOR, SendEmailROR } from '../_services/email-service';
 
 // Fetch all inventory items
 export const fetchInventory = async (setInventory: (inventoryItems: Item[]) => void) => {
@@ -731,3 +733,22 @@ export const submitPurchaseOrder = async (purchaseOrderId: string) => {
     return false;
   }
 };
+
+
+export async function sendPOMsgRor (reqid:string, itemList: ItemOrder[], inventory: Item[]) {
+  try {
+    const returnmsg = await SendEmailROR(reqid,itemList,inventory);
+    return returnmsg;
+  }catch(error){
+    throw error;
+  }
+}
+
+export async function sendPOMsgOdor (reqid:string, itemList: ItemOrder[], inventory: Item[]) {
+  try {
+    const returnmsg = await SendEmailODOR(reqid,itemList,inventory);
+    return returnmsg;
+  }catch(error){
+    throw error;
+  }
+}

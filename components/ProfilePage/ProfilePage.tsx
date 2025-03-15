@@ -5,8 +5,9 @@ import { useInventory } from '@/app/_utils/inventory-context';
 import { useUserAuth } from '@/app/_utils/auth-context';
 import FormData from 'form-data';
 import Mailgun from 'mailgun.js';
+import { ItemOrder } from '@/app/_utils/schema';
 
-
+const { inventory } = useInventory();
 
 export default function ProfilePage () {
 
@@ -27,6 +28,11 @@ const { currentEmployee } = useInventory();
         window.location.replace("/")
     };
 
+
+
+
+
+    // We are hard coding email for now, because free APi only allows 1 Email. If we wanted to have specific email to send to we would have to update the params of this function.
     async function sendNewPOMsg(reqid : string) {
         const mailgun = new Mailgun(FormData);
         const mg = mailgun.client({
@@ -35,12 +41,32 @@ const { currentEmployee } = useInventory();
           // When you have an EU-domain, you must specify the endpoint:
           // url: "https://api.eu.mailgun.net/v3"
         });
+
+        function mapItemsToNamesAndQuantities(itemOrders: ItemOrder[]) {
+          return itemOrders.map(itemOrder => {
+            const matchedItem = inventory?.find(item => item.inventoryId === itemOrder.itemId);
+            
+            return {
+              itemId: itemOrder.itemId,
+              itemname: matchedItem ? matchedItem.itemName : 'Unknown Item',
+              orderQty: itemOrder.orderQty
+            };
+          });
+        }
+        //let formattedArray = mapItemsToNamesAndQuantities(itemList)
+
+        // let formattedString = formattedArray.map(item => {
+        //   return `\n ItemId: ${item.itemId}, Item Name: ${item.itemname}, Quantity: ${item.orderQty}`;
+        // }).join('');
+
+
         try {
           const data = await mg.messages.create("sandbox890f9fe65f974e4ca66405364dc99b84.mailgun.org", {
             from: "OrbitIMS@sandbox890f9fe65f974e4ca66405364dc99b84.mailgun.org",
-            to: ["orbit.imsystem@gmail.com","kyle_1990@outlook.com"],
+            //If we Paid for the service we would place all P1 emails, Or a specific P1 email in this to:[] array.
+            to: ["orbit.imsystem@gmail.com"],
             subject: "New Requisition Approval",
-            text: `Requisisitons ID# "${reqid}" has recieved E3 Approval and is ready for PO creation! \n\n Thank you.`,
+            text: `Requisisitons ID# "${reqid}" has been submitted and is ready for P1 Approval! \n\n The items in this ROR requisition:\n\n Thank you.`,
           });
       
           console.log(data); // logs response data

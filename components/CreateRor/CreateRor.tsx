@@ -8,13 +8,14 @@ import OrderRor from "../OrderRor/OrderRor";
 import { useDisclosure } from "@mantine/hooks";
 import CustomNotification from "../CustomNotification/CustomNotification";
 import { useInventory } from "@/app/_utils/inventory-context";
-import { patchOrderRequisition, postOrderRequisition, postRecurringOrderRequisition } from "@/app/_utils/utility";
+import { patchOrderRequisition, postOrderRequisition, postRecurringOrderRequisition, sendPOMsgOdor } from "@/app/_utils/utility";
 
 
 
 export default function CreateRor() {
 
     const { currentEmployee } = useInventory();
+    const { inventory } = useInventory();
     const [currentStep, setCurrentStep] = useState<number>(0);
     const [currentContent, setCurrentContent] = useState(<div />);
     const [recurringOrder, setrecurringOrder] = useState<RecurringOrderToEdit | null>(null)
@@ -22,6 +23,7 @@ export default function CreateRor() {
     const [showNotification, setShowNotification] = useState(false);
     const [notificationMessage, setNotificationMessage] = useState(<div />);
     const [showButton, setShowButton] = useState(true);
+    const [itemListEmail, setItemListEmail] = useState<ItemOrder[]>();
 
     // Confirmation Modal State
     const [opened, { close, open }] = useDisclosure(false);
@@ -56,6 +58,7 @@ export default function CreateRor() {
             itemOrders: itemList,
         }
         setrecurringOrder(orderObj)
+        
     };
 
     const handleSetRor = (paramRecurringOrder: RecurringOrderToEdit) => {
@@ -140,6 +143,7 @@ export default function CreateRor() {
                 requisitionDate: formattedDate,
                 employeeId: currentEmployee?.employeeId || '',
             };
+            
 
             // Create the requisition that would be linked with ROR vice versa
             const newOrdReqId = await postOrderRequisition(newOrderReqObj);
@@ -149,7 +153,7 @@ export default function CreateRor() {
                 ...recurringOrder,
                 requisitionId: newOrdReqId
             };
-
+            setItemListEmail(newRorObj.itemList);
             // Ensure POST is awaited and promise is resolved; store directly in a variable to avoid delays in states
             const newRorId = await postRecurringOrderRequisition(newRorObj);
 
@@ -167,6 +171,10 @@ export default function CreateRor() {
                     closeNotification
                 )
             );
+            if (itemListEmail && inventory){
+            sendPOMsgOdor(newOrdReqId,itemListEmail,inventory);
+            }
+            
 
         } catch (error) {
             console.log(error);
