@@ -1,14 +1,14 @@
 "use client";
-import { Group, Title, Text } from "@mantine/core";
+import { Title, Text } from "@mantine/core";
 import { useEffect, useState } from "react";
 import classnames from "./Bell.module.css";
 import { useInventory } from "@/app/_utils/inventory-context";
-import { Menu, Button, UnstyledButton, Indicator } from "@mantine/core";
-import { IconSettings, IconLogout, IconBell} from '@tabler/icons-react';
-import { useDisclosure } from "@mantine/hooks";
+import { Menu,Indicator } from "@mantine/core";
+import { IconBell} from '@tabler/icons-react';
+
 import { fetchOrderRequisitions } from "@/app/_utils/utility";
-import { Employee, OrderRequisition } from "@/app/_utils/schema";
-import { EmployeeToEdit } from "@/app/_utils/schema";
+import { OrderRequisition } from "@/app/_utils/schema";
+
 import { patchEmployee } from "@/app/_utils/utility";
 import { fetchEmployee } from "@/app/_utils/utility";
 
@@ -74,12 +74,8 @@ export default function Bell() {
     notifications: newReqIdArr5
     };
 
-    function toggle() {
-    setVisible(false)
-    }
- 
+    // update the employee notification array, if updated successfully remove bell red dot.
     async function clickBell () {
-        console.log("bell Clicked")
         if(currentEmployee){
         const response = await patchEmployee(currentEmployee?.employeeId, updatedEmployee)
         if(response.ok){
@@ -87,7 +83,8 @@ export default function Bell() {
         }
         }
       }
-
+      // on page load fetch current employee from database as currentEmployee doesnt load in fast enough
+      // stringfy the local notifcation array and selected employee notification array, if they are not equal render dot.
       useEffect(() => {
         const checkNotifications = async () => {
           if (currentEmployee?.employeeId) {
@@ -109,31 +106,6 @@ export default function Bell() {
         checkNotifications();
       }, [currentEmployee, newReqIdArr5]);
       
-
-    // useEffect(()=>{
-        
-    //     if(JSON.stringify(selectedEmployee.notifications) !== JSON.stringify(newReqIdArr5)){
-    //         setVisible(true);
-    //         }
-    // },[])
-
-    // function arraysEqual(arr1: string[], arr2: string[]) {
-    //     if (arr1.length !== arr2.length) return false;
-    //     for (let i = 0; i < arr1.length; i++) {
-    //       if (arr1[i] !== arr2[i]) return false;
-    //     }
-    //     return true;
-    //   }
-      
-    //   useEffect(() => {
-    //     if (!arraysEqual(currentEmployee?.notifications || [], newReqIdArr5)) {
-    //       setVisible(true);
-    //       console.log(currentEmployee?.notifications);
-    //       console.log(newReqIdArr5)
-    //       //console.log(currentEmployee)
-    //     }
-    //   }, [currentEmployee, newReqIdArr5]);
-    
     return (
         <>
             <Title className={classnames.Notifications}>
@@ -168,26 +140,8 @@ export default function Bell() {
               </Menu.Dropdown>
             </Menu>
           </Title>
-          <Button style={{marginLeft: "15px"}} onClick={toggle}></Button>
         </>
     )
-
-    
-            // Create employee to update
-            // if (currentEmployee){
-            //     const updatedEmployee: EmployeeToEdit = {
-            //         firstName: currentEmployee.firstName,
-            //         lastName: currentEmployee.lastName,
-            //         email: currentEmployee.email,
-            //         phone: currentEmployee.phone,
-            //         position: currentEmployee.position,
-            //         department: currentEmployee.department,
-            //         employeeLevel: currentEmployee.employeeLevel,
-            //         employeeWorkId: currentEmployee.employeeWorkId,
-            //         isActive: true,
-            //         notifications: newReqIdArr5,
-            //       };
-            // }
 }
 
 
