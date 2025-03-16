@@ -86,7 +86,10 @@ export interface Employee {
   department: string;
   employeeLevel: string[];
   isActive: boolean;
+  notifications?: string[];
 }
+
+export type EmployeeUpdate = Partial<Employee>;
 
 export interface EmployeeToEdit {
   employeeWorkId: string;

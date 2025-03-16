@@ -33,6 +33,7 @@ export async function PUT(request: Request, { params }: { params: any }) {
       department: z.string(),
       employeeLevel: z.array(z.string()),
       isActive: z.boolean(),
+      
     });
 
     const validatedEmployee = employeeSchema.parse(updatedEmployee);
@@ -60,13 +61,15 @@ export async function PATCH(request: Request, { params }: { params: any }) {
         department: z.string().optional(),
         employeeLevel: z.string().optional(),
         isActive: z.boolean().optional(),
+        //For notifications
+        notifications: z.array(z.string()),
       })
       .strict();
 
     const validatedEmployee = employeeSchema.parse(updatedEmployee);
 
     await dbUpdateEmployee(id, validatedEmployee);
-    return new Response(null, { status: 204 });
+    return new Response(JSON.stringify({ success: true }), { status: 200 });
   } catch (error) {
     return new Response(JSON.stringify({ error }), { status: 400 });
   }
