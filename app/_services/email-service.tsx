@@ -4,7 +4,7 @@ import { ItemOrder } from '@/app/_utils/schema';
 import { Item } from '@/app/_utils/schema';
 
 // provide Employee name Requisition ID#, item list and full inventory object.
-export async function SendEmailROR (reqid:string, itemList:ItemOrder[], inventory: Item[]) {
+export async function SendEmailROR (reqid:string, itemList:ItemOrder[], inventory: Item[], employeename: string) {
             const mailgun = new Mailgun(FormData);
             const mg = mailgun.client({
               username: "api",
@@ -37,7 +37,7 @@ export async function SendEmailROR (reqid:string, itemList:ItemOrder[], inventor
                 //If we Paid for the service we would place all P1 emails, Or a specific P1 email in this to:[] array.
                 to: ["orbit.imsystem@gmail.com"],
                 subject: "New Requisition Approval",
-                text: `Requisisitons ID# "${reqid}" has been submitted and is ready for P1 Approval! \n\n The items in this ROR requisition:\n ${formattedString}\n Thank you.`,
+                text: `Requisisitons ID# "${reqid}" has been submitted by employee: ${employeename} and is ready for P1 Approval! \n\nItems in this ROR requisition:\n${formattedString}\n\nThank you.`,
               });
               console.log(data); // logs response data
               return true;
@@ -47,7 +47,7 @@ export async function SendEmailROR (reqid:string, itemList:ItemOrder[], inventor
 
 }
 
-export async function SendEmailODOR (reqid:string, itemList:ItemOrder[], inventory: Item[]) {
+export async function SendEmailODOR (reqid:string, itemList:ItemOrder[], inventory: Item[], employeename: string) {
     const mailgun = new Mailgun(FormData);
     const mg = mailgun.client({
       username: "api",
@@ -80,7 +80,7 @@ export async function SendEmailODOR (reqid:string, itemList:ItemOrder[], invento
         //If we Paid for the service we would place all P1 emails, Or a specific P1 email in this to:[] array.
         to: ["orbit.imsystem@gmail.com"],
         subject: "New Requisition Approval",
-        text: `Requisisitons ID# "${reqid}" has been submitted and is ready for P1 Approval! \n\n The items in this ODOR requisition:\n ${formattedString}\n Thank you.`,
+        text: `Requisisitons ID# "${reqid}" has been submitted by employee: ${employeename} and is ready for P1 Approval! \n\n The items in this ODOR requisition:\n ${formattedString}\n Thank you.`,
       });
       console.log(data); // logs response data
       return true;

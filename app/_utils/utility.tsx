@@ -735,18 +735,18 @@ export const submitPurchaseOrder = async (purchaseOrderId: string) => {
 };
 
 
-export async function sendPOMsgRor (reqid:string, itemList: ItemOrder[], inventory: Item[]) {
+export async function sendPOMsgRor (reqid:string, itemList: ItemOrder[], inventory: Item[], employeename:string) {
   try {
-    const returnmsg = await SendEmailROR(reqid,itemList,inventory);
+    const returnmsg = await SendEmailROR(reqid,itemList,inventory,employeename);
     return returnmsg;
   }catch(error){
     throw error;
   }
 }
 
-export async function sendPOMsgOdor (reqid:string, itemList: ItemOrder[], inventory: Item[]) {
+export async function sendPOMsgOdor (reqid:string, itemList: ItemOrder[], inventory: Item[], employeename:string) {
   try {
-    const returnmsg = await SendEmailODOR(reqid,itemList,inventory);
+    const returnmsg = await SendEmailODOR(reqid,itemList,inventory, employeename);
     return returnmsg;
   }catch(error){
     throw error;

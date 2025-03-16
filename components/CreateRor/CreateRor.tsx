@@ -7,8 +7,8 @@ import { defaultOrderRequisitionToEdit, defaultRecurringOrderToEdit, ItemOrder, 
 import OrderRor from "../OrderRor/OrderRor";
 import { useDisclosure } from "@mantine/hooks";
 import CustomNotification from "../CustomNotification/CustomNotification";
-import { useInventory } from "@/app/_utils/inventory-context";
-import { patchOrderRequisition, postOrderRequisition, postRecurringOrderRequisition, sendPOMsgOdor } from "@/app/_utils/utility";
+import { useInventory, } from "@/app/_utils/inventory-context";
+import { patchOrderRequisition, postOrderRequisition, postRecurringOrderRequisition, sendPOMsgRor } from "@/app/_utils/utility";
 
 
 
@@ -153,7 +153,10 @@ export default function CreateRor() {
                 ...recurringOrder,
                 requisitionId: newOrdReqId
             };
-            setItemListEmail(newRorObj.itemList);
+            
+            //Email notification code
+            setItemListEmail(newRorObj.itemOrders);
+
             // Ensure POST is awaited and promise is resolved; store directly in a variable to avoid delays in states
             const newRorId = await postRecurringOrderRequisition(newRorObj);
 
@@ -171,8 +174,12 @@ export default function CreateRor() {
                     closeNotification
                 )
             );
+
+            //Email notification code
+            let empfullname = currentEmployee?.firstName + " " + currentEmployee?.lastName
             if (itemListEmail && inventory){
-            sendPOMsgOdor(newOrdReqId,itemListEmail,inventory);
+                // rememeber to use await for async functions always!!!
+                //await sendPOMsgRor(newOrdReqId,itemListEmail,inventory,empfullname);
             }
             
 
