@@ -1,14 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import {Container,Text, Button, Select, Table, TextInput, Paper, Divider, Notification, Flex} from "@mantine/core";
+import { Container, Text, Button, Select, Table, TextInput, Paper, Divider, Notification, Flex } from "@mantine/core";
 import {
   fetchStockInOrders,
   fetchStockOutOrders,
   fetchInventory,
 } from "@/app/_utils/utility";
 import { Item, StockInOrder, StockOutOrder } from "@/app/_utils/schema";
-import {BarChart, Bar, XAxis, YAxis,Tooltip, Legend, ResponsiveContainer} from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import classes from "./GenerateReport.module.css";
 
 export default function GenerateReport() {
@@ -109,25 +109,25 @@ export default function GenerateReport() {
 
   const getDateKey = (date: string, groupBy: string) => {
     const d = new Date(date);
-  
+
     if (groupBy === "day") {
-      return d.toISOString().split("T")[0]; 
+      return d.toISOString().split("T")[0];
     }
-  
+
     if (groupBy === "week") {
       const startOfWeek = new Date(d);
-      startOfWeek.setDate(d.getDate() - d.getDay() + 1); 
-  
+      startOfWeek.setDate(d.getDate() - d.getDay() + 1);
+
       const endOfWeek = new Date(startOfWeek);
-      endOfWeek.setDate(startOfWeek.getDate() + 6); 
-  
+      endOfWeek.setDate(startOfWeek.getDate() + 6);
+
       return `${startOfWeek.toISOString().split("T")[0]} - ${endOfWeek.toISOString().split("T")[0]}`;
     }
-  
+
     if (groupBy === "month") {
-      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`; 
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
     }
-  
+
     return date;
   };
 
@@ -148,7 +148,7 @@ export default function GenerateReport() {
           <Select label="Select Item" data={items.map((item) => ({ value: item.itemId, label: item.itemName }))} value={selectedItem} onChange={setSelectedItem} className={classes.select} />
           <TextInput label="From Date" value={startDate} onChange={(event) => setStartDate(event.target.value)} type="date" className={classes.input} />
           <TextInput label="To Date" value={endDate} onChange={(event) => setEndDate(event.target.value)} type="date" className={classes.input} />
-          <Select label="Group By" data={[{ value: "day", label: "Daily" }, { value: "week", label: "Weekly" }, { value: "month", label: "Monthly" }]} value={groupBy} onChange={setGroupBy} className={classes.select} />
+          <Select label="Group By" data={[{ value: "day", label: "Daily" }, { value: "week", label: "Weekly" }, { value: "month", label: "Monthly" }]} value={groupBy} onChange={(value) => value !== null && setGroupBy(value)} className={classes.select} />
         </Flex>
         <Button mt="md" fullWidth onClick={generateReport} color="blue">
           Generate Report
@@ -186,13 +186,13 @@ export default function GenerateReport() {
             </tbody>
           </Table>
           <Button
-          mt="md"
-          fullWidth
-          color="blue"
-          onClick={()=>window.print()}
-        >
-          Print
-        </Button>
+            mt="md"
+            fullWidth
+            color="blue"
+            onClick={() => window.print()}
+          >
+            Print
+          </Button>
         </>
       )}
     </Container>
