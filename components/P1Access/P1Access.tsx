@@ -116,6 +116,35 @@ export default function P1AccessPage() {
     revealNotification();
   };
 
+  const handleOdorApproval = async (message: string, odorId: string, isApproved: boolean) => {
+    if (message === 'success') {
+      setNotificationMessage(
+        CustomNotification(
+          'success',
+          'ODOR Approval',
+          `ODOR ID ${odorId} was ${isApproved ? 'APPROVED' : 'REJECTED'}.`,
+          setShowNotification
+        )
+      );
+      
+      // Trigger a refresh when an ODOR is approved to update the tables
+      if (isApproved) {
+        setRefreshTrigger(prev => prev + 1);
+      }
+    } else if (message === 'error') {
+      console.error(Error);
+      setNotificationMessage(
+        CustomNotification(
+          'error',
+          'Approval Error',
+          `Failed to update ODOR ID ${odorId}.`,
+          setShowNotification
+        )
+      );
+    }
+    revealNotification();
+  };
+
   // Function to reveal any triggered notification
   const revealNotification = () => {
     setShowNotification(true);
@@ -358,7 +387,7 @@ export default function P1AccessPage() {
             isOpened={!!modalStateTracker[odor.odorId]}
             // Close the modal by directly setting its opened state to false
             isClosed={() => setModalStateTracker((prev) => ({ ...prev, [odor.odorId]: false }))}
-            handleApprovalActivity={handleApprovalActivity}
+            handleApprovalP1={handleOdorApproval}
           />
 
           {/* When the ID text is clicked, this will toggle the state of the modal visibility.*/}
