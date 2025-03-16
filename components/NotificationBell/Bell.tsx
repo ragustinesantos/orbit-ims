@@ -28,23 +28,34 @@ export default function Bell() {
           console.log(allOrs);
         }, []);
 
-      
-
-    const req1 = "fjesuifhjui327"
-    const req2 = "fuihseuo32f2fnb"
-    const req3 = "hf7439qfh347784"
 
     //const sortedOrs = allOrs?.sort((a,b) => {return new Date(a.requisitionDate) - Number(b.requisitionDate)})
     const sortedOrs = allOrs?.sort((a, b) => {
         const dateA = new Date(a.requisitionDate);
         const dateB = new Date(b.requisitionDate);
       
-        if (isNaN(dateA.getTime()) || isNaN(dateB.getTime())) {
-          return 0; // Consider invalid dates equal
+        const isValidDateA = !isNaN(dateA.getTime());
+        const isValidDateB = !isNaN(dateB.getTime());
+      
+        // Both dates invalid
+        if (!isValidDateA && !isValidDateB) return 0; 
+      
+        // Only 'a' date invalid
+        if (!isValidDateA) return 1; 
+      
+        // Only 'b' date invalid
+        if (!isValidDateB) return -1; 
+      
+        // Activity check
+        if (a.isActive !== b.isActive) {
+          return a.isActive ? -1 : 1;
         }
       
-        return  dateB.getTime() - dateA.getTime() ; // Get the time in milliseconds
+        // Sort by date, most recent first
+        return dateB.getTime() - dateA.getTime();
       });
+
+
 
 
     function togglevis () {
@@ -53,7 +64,6 @@ export default function Bell() {
 
     return (
         <>
-        {currentEmployee?.employeeLevel.includes("P1") ?
             <Title className={classnames.Notifications}>
             <Menu position="bottom-end" shadow="md">
               <Menu.Target>
@@ -81,9 +91,9 @@ export default function Bell() {
                 </Menu.Item>
               </Menu.Dropdown>
             </Menu>
-          </Title> : <></>}
+          </Title>
           <Button style={{marginLeft: "15px"}} onClick={togglevis}></Button>
-          </>
+        </>
     )
 }
 
