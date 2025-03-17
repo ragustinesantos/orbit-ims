@@ -244,8 +244,8 @@ export interface RecurringOrderTemplate {
   itemList: string[];
   approvalE2: string;
   approvalE3: string;
-  isTemplateApprovedE2: boolean| null;
-  isTemplateApprovedE3: boolean| null;
+  isTemplateApprovedE2: boolean | null;
+  isTemplateApprovedE3: boolean | null;
 }
 
 export interface RecurringOrderTemplateToEdit {
@@ -253,8 +253,8 @@ export interface RecurringOrderTemplateToEdit {
   itemList: string[];
   approvalE2: string;
   approvalE3: string;
-  isTemplateApprovedE2: boolean| null;
-  isTemplateApprovedE3: boolean| null;
+  isTemplateApprovedE2: boolean | null;
+  isTemplateApprovedE3: boolean | null;
   [key: string]: any;
 }
 
@@ -373,11 +373,25 @@ export interface rorModalProps {
   handleApprovalActivity?: (message: string, rorId: string, status: string) => void;
 }
 
+export interface rorTemplateModalProps {
+  recurringOrderTemplate: RecurringOrderTemplate;
+  isOpened: boolean;
+  isClosed: () => void;
+  handleApprovalE2?: (message: string, templateId: string, isApproved: boolean) => Promise<void>;
+  handleApprovalE3?: (message: string, templateId: string, isApproved: boolean) => Promise<void>;
+  isE2Page?: boolean;
+  isE3Page?: boolean;
+}
+
 export interface odorModalProps {
   onDemandOrder: OnDemandOrder | null;
   isOpened: boolean;
   isClosed: () => void;
-  handleApprovalActivity?: (message: string, odorId: string, status: string) => void;
+  handleApprovalE2?: (message: string, odorId: string, isApproved: boolean) => void;
+  handleApprovalE3?: (message: string, odorId: string, isApproved: boolean) => void;
+  handleApprovalP1?: (message: string, odorId: string, isApproved: boolean) => void;
+  isE2Page?: boolean;
+  isE3Page?: boolean;
 }
 
 export interface poModalProps {
@@ -435,7 +449,9 @@ export const NAV_ITEMS: navCollection = {
     {
       label: 'Assistant',
       icon: IconMessage,
-      links: [{ label: 'Chat', link: '/assistant/chat' }],
+      links: [{ label: 'Chat', link: '/assistant/chat' },
+      { label: 'Generate Report', link: '/assistant/generate-report' },
+      ],
     },
     {
       label: 'ROR',

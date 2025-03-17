@@ -31,7 +31,11 @@ export default function OdorModal({
   onDemandOrder,
   isOpened,
   isClosed,
-  handleApprovalActivity,
+  handleApprovalE2,
+  handleApprovalE3,
+  handleApprovalP1,
+  isE2Page,
+  isE3Page,
 }: odorModalProps) {
   const { currentEmployee, inventory, supplierList, setRefresh } = useInventory();
 
@@ -39,6 +43,8 @@ export default function OdorModal({
   const [employee, setEmployee] = useState<Employee>({ ...defaultEmployee });
   const [currentOr, setCurrentOr] = useState<OrderRequisition | null>(null);
   const [p1Approver, setP1Approver] = useState<Employee>({ ...defaultEmployee });
+  const [e2Approver, setE2Approver] = useState<Employee>({ ...defaultEmployee });
+  const [e3Approver, setE3Approver] = useState<Employee>({ ...defaultEmployee });
   const [confirmation, setConfirmation] = useState<boolean>(false);
   const [orDate, setOrDate] = useState<string>('');
   const [approval, setApproval] = useState<boolean>(false);
@@ -77,26 +83,90 @@ export default function OdorModal({
     retrieveApproverP1ById();
   }, [currentOr]);
 
+  // Retrieve E2 approver information
+  useEffect(() => {
+    const retrieveApproverE2ById = async () => {
+      currentOr && setE2Approver(await fetchEmployee(currentOr?.approvalE2));
+    };
+    retrieveApproverE2ById();
+  }, [currentOr]);
+
+  // Retrieve E3 approver information
+  useEffect(() => {
+    const retrieveApproverE3ById = async () => {
+      currentOr && setE3Approver(await fetchEmployee(currentOr?.approvalE3));
+    };
+    retrieveApproverE3ById();
+  }, [currentOr]);
+
   const handleApproval = async (isApproved: boolean) => {
     // Set approval value to trigger order requisition retrieval useEffect
     setApproval((prev) => !prev);
 
-    // Send a request for approval update and provide feedback based on try-catch result
-    if (currentOr && currentEmployee && handleApprovalActivity) {
+    if (currentOr && currentEmployee) {
       try {
-        await patchOdorApproval(currentOr.requisitionId, isApproved, currentEmployee.employeeId);
-        handleApprovalActivity(
-          'success',
-          currentOr.requisitionTypeId,
-          isApproved ? 'APPROVED' : 'REJECTED'
-        );
+        // Determine which approval handler to use based on page
+        if (isE2Page && handleApprovalE2) {
+          await patchOdorApproval(
+            currentOr.requisitionId,
+            isApproved,
+            currentEmployee.employeeId,
+            true, // is E2 employee
+            false // is not E3 employee
+          );
+          handleApprovalE2(
+            'success',
+            currentOr.requisitionTypeId,
+            isApproved
+          );
+        } else if (isE3Page && handleApprovalE3) {
+          await patchOdorApproval(
+            currentOr.requisitionId,
+            isApproved,
+            currentEmployee.employeeId,
+            false,
+            true
+          );
+          handleApprovalE3(
+            'success',
+            currentOr.requisitionTypeId,
+            isApproved
+          );
+        } else if (handleApprovalP1) {
+          await patchOdorApproval(
+            currentOr.requisitionId,
+            isApproved,
+            currentEmployee.employeeId,
+            false, 
+            false 
+          );
+          handleApprovalP1(
+            'success',
+            currentOr.requisitionTypeId,
+            isApproved
+          );
+        }
       } catch (error) {
         console.log(error);
-        handleApprovalActivity(
-          'error',
-          currentOr.requisitionTypeId,
-          isApproved ? 'APPROVED' : 'REJECTED'
-        );
+        if (isE2Page && handleApprovalE2) {
+          handleApprovalE2(
+            'error',
+            currentOr.requisitionTypeId,
+            isApproved
+          );
+        } else if (isE3Page && handleApprovalE3) {
+          handleApprovalE3(
+            'error',
+            currentOr.requisitionTypeId,
+            isApproved
+          );
+        } else if (handleApprovalP1) {
+          handleApprovalP1(
+            'error',
+            currentOr.requisitionTypeId,
+            isApproved
+          );
+        }
       }
     }
 
@@ -161,7 +231,25 @@ export default function OdorModal({
     body: mappedNonInventoryItems,
   };
 
-  const approvalData: TableData = {
+  const e2ApprovalData: TableData = {
+    head: [
+      currentOr?.isApprovedE2 !== null
+        ? `${currentOr?.isApprovedE2 ? 'Approved' : 'Rejected'} By: ${e2Approver?.firstName} ${e2Approver?.lastName}`
+        : 'E2 Approval',
+    ],
+    body: [[currentOr && <ApprovalBadge isApproved={currentOr.isApprovedE2} />]],
+  };
+
+  const e3ApprovalData: TableData = {
+    head: [
+      currentOr?.isApprovedE3 !== null
+        ? `${currentOr?.isApprovedE3 ? 'Approved' : 'Rejected'} By: ${e3Approver?.firstName} ${e3Approver?.lastName}`
+        : 'E3 Approval',
+    ],
+    body: [[currentOr && <ApprovalBadge isApproved={currentOr.isApprovedE3} />]],
+  };
+
+  const p1ApprovalData: TableData = {
     head: [
       currentOr?.isApprovedP1 !== null
         ? `${currentOr?.isApprovedP1 ? 'Approved' : 'Rejected'} By: ${p1Approver?.firstName} ${p1Approver?.lastName}`
@@ -268,13 +356,29 @@ export default function OdorModal({
             </div>
           </Group>
           <Text classNames={{ root: classnames.rootHeaderTxt }}>Approvals:</Text>
-          <Table
-            withTableBorder
-            withColumnBorders
-            withRowBorders
-            classNames={{ table: classnames.rootApprovalTable, td: classnames.tableTd }}
-            data={approvalData}
-          />
+          <Group gap="xl">
+            <Table
+              withTableBorder
+              withColumnBorders
+              withRowBorders
+              classNames={{ table: classnames.rootApprovalTable, td: classnames.tableTd }}
+              data={e2ApprovalData}
+            />
+            <Table
+              withTableBorder
+              withColumnBorders
+              withRowBorders
+              classNames={{ table: classnames.rootApprovalTable, td: classnames.tableTd }}
+              data={e3ApprovalData}
+            />
+            <Table
+              withTableBorder
+              withColumnBorders
+              withRowBorders
+              classNames={{ table: classnames.rootApprovalTable, td: classnames.tableTd }}
+              data={p1ApprovalData}
+            />
+          </Group>
         </>
       ) : (
         <Group classNames={{ root: classnames.loadingContainer }}>
@@ -282,30 +386,80 @@ export default function OdorModal({
         </Group>
       )}
 
-          {currentEmployee?.employeeLevel.includes('P1') && currentOr?.isApprovedP1 == null && (
-            <Group classNames={{ root: classnames.rootBtnArea }}>
-              <Button
-                classNames={{ root: classnames.rootBtn }}
-                onClick={() => {
-                  setConfirmation(true);
-                  open();
-                }}
-                color="#1B4965"
-              >
-                Approve
-              </Button>
-              <Button
-                classNames={{ root: classnames.rootBtn }}
-                onClick={() => {
-                  setConfirmation(false);
-                  open();
-                }}
-                color="red"
-              >
-                Reject
-              </Button>
-            </Group>
-          )}
+      {currentEmployee?.employeeLevel.includes('P1') && !isE2Page && !isE3Page && currentOr?.isApprovedP1 == null && (
+        <Group classNames={{ root: classnames.rootBtnArea }}>
+          <Button
+            classNames={{ root: classnames.rootBtn }}
+            onClick={() => {
+              setConfirmation(true);
+              open();
+            }}
+            color="#1B4965"
+          >
+            Approve
+          </Button>
+          <Button
+            classNames={{ root: classnames.rootBtn }}
+            onClick={() => {
+              setConfirmation(false);
+              open();
+            }}
+            color="red"
+          >
+            Reject
+          </Button>
+        </Group>
+      )}
+
+      {currentEmployee?.employeeLevel.includes('E2') && isE2Page && currentOr?.isApprovedE2 == null && (
+        <Group classNames={{ root: classnames.rootBtnArea }}>
+          <Button
+            classNames={{ root: classnames.rootBtn }}
+            onClick={() => {
+              setConfirmation(true);
+              open();
+            }}
+            color="#1B4965"
+          >
+            Approve
+          </Button>
+          <Button
+            classNames={{ root: classnames.rootBtn }}
+            onClick={() => {
+              setConfirmation(false);
+              open();
+            }}
+            color="red"
+          >
+            Reject
+          </Button>
+        </Group>
+      )}
+
+      {currentEmployee?.employeeLevel.includes('E3') && isE3Page && currentOr?.isApprovedE3 == null && (
+        <Group classNames={{ root: classnames.rootBtnArea }}>
+          <Button
+            classNames={{ root: classnames.rootBtn }}
+            onClick={() => {
+              setConfirmation(true);
+              open();
+            }}
+            color="#1B4965"
+          >
+            Approve
+          </Button>
+          <Button
+            classNames={{ root: classnames.rootBtn }}
+            onClick={() => {
+              setConfirmation(false);
+              open();
+            }}
+            color="red"
+          >
+            Reject
+          </Button>
+        </Group>
+      )}
     </Modal>
   );
 }

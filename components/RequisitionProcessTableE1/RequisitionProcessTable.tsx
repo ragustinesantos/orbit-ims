@@ -5,23 +5,19 @@ import { Group, Pagination, Table, TableData, Text, Title } from '@mantine/core'
 import { usePagination } from '@mantine/hooks';
 import { useInventory } from '@/app/_utils/inventory-context';
 import { Employee, OnDemandOrder, OrderRequisition, RecurringOrder } from '@/app/_utils/schema';
-import {
-  fetchEmployees,
-  fetchOnDemandOrderRequisitions,
-  fetchOrderRequisitions,
-  fetchRecurringOrderRequisitions,
-} from '@/app/_utils/utility';
+import { fetchEmployees, fetchOnDemandOrderRequisitions, fetchOrderRequisitions, fetchRecurringOrderRequisitions } from '@/app/_utils/utility';
 import RorModal from '@/components/RorModal/RorModal';
-import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
+import OdorModal from "../OdorModal/OdorModal";
+import ApprovalBadge from "../ApprovalBadge/ApprovalBadge";
 import OdorModal from '../OdorModal/OdorModal';
 import classnames from './RequisitionProcessTable.module.css';
 
 export default function RequisitionProcessTable() {
   const { currentEmployee } = useInventory();
 
-  if (currentEmployee?.employeeLevel === 'SA' || currentEmployee?.employeeLevel === 'IA') {
+  if (currentEmployee?.employeeLevel.includes("SA") || currentEmployee?.employeeLevel.includes("IA")) {
     return null;
-  }
+  };
 
   const [modalStateTracker, setModalStateTracker] = useState<Record<string, boolean>>({});
 
@@ -90,7 +86,6 @@ export default function RequisitionProcessTable() {
   const filteredOrs = isE1Only ? allOrs?.filter((or) => or.employeeId === currentEmployee?.employeeId) : allOrs;
   const filteredRor = isE1Only ? allRor?.filter((ror) => filteredOrs?.some((or) => or.requisitionTypeId === ror.rorId)) : allRor;
   const filteredOdor = isE1Only ? allOdor?.filter((odor) => filteredOrs?.some((or) => or.requisitionTypeId === odor.odorId)) : allOdor;
-
 
   // Map through the desired list and return components only for active requisitions
   const mappedRor = filteredRor?.map((ror) => {

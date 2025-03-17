@@ -57,6 +57,7 @@ export default function PoModal({
   const [p1Approver, setP1Approver] = useState<Employee | null>(null);
   const [p2Approver, setP2Approver] = useState<Employee | null>(null);
   const [approval, setApproval] = useState<boolean>(false);
+  const [odorData, setOdorData] = useState<OnDemandOrder | null>(null);
 
   // Check if user is P2
   const isP2User = currentEmployee?.employeeLevel?.includes('P2');
@@ -133,6 +134,7 @@ export default function PoModal({
             let odorData = null;
             try {
               odorData = await fetchOnDemandOrderRequisition(requisitionData.requisitionTypeId);
+              setOdorData(odorData);
             } catch (error) {
               console.error("Error fetching ODOR data:", error);
             }
@@ -222,31 +224,46 @@ export default function PoModal({
   }, [purchaseOrder]);
 
   // Mapping through the requisition items to get data for the table body
-  const mappedOrderItems = requisitionItems.map((item) => {
-    const currentSupplier = supplierList?.find(
-      (supplier) => supplier.supplierId === item.supplierId
-    );
-    
-    // Finding the item in the purchase order to get the quantity
-    const poItem = purchaseOrder?.orderList?.find(poItem => poItem.itemId === item.itemId);
-    const quantity = poItem ? poItem.quantity : orderQtyMap[item.itemId] || 0;
-    
-    return [
-      <Text key={item.itemId}>
+  const mappedOrderItems = [
+    // Map inventory items
+    ...requisitionItems.map((item) => {
+      const currentSupplier = supplierList?.find(
+        (supplier) => supplier.supplierId === item.supplierId
+      );
+      
+      // Finding the item in the purchase order to get the quantity
+      const poItem = purchaseOrder?.orderList?.find(poItem => poItem.itemId === item.itemId);
+      const quantity = poItem ? poItem.quantity : orderQtyMap[item.itemId] || 0;
+      
+      return [
+        <Text key={item.itemId}>
+          {item.itemName}
+        </Text>,
+        item.category,
+        item.supplyUnit,
+        item.packageUnit,
+        currentSupplier?.supplierName,
+        quantity,
+      ];
+    }),
+    // Add non-inventory items if they exist in the ODOR
+    // '-' for fields that don't apply to non-inventory items
+    ...(odorData?.newItemOrders?.map((item: NewItemOrder) => [
+      <Text key={`new-${item.itemName}`}>
         {item.itemName}
       </Text>,
-      item.category,
-      item.supplyUnit,
-      item.packageUnit,
-      currentSupplier?.supplierName,
-      quantity,
-    ];
-  });
+      'Non-Inventory',
+      '-',
+      '-',
+      '-',
+      item.purchaseQty,
+    ]) || [])
+  ];
 
   const orderItemsData: TableData = {
     caption: 'End of List',
     head: ['Item', 'Category', 'Unit of Measurement', 'Package Unit', 'Supplier', 'Quantity'],
-    body: mappedOrderItems || [],
+    body: mappedOrderItems,
   };
 
   const p1ApprovalData: TableData = {
