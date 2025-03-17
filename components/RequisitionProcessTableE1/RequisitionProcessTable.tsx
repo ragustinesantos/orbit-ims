@@ -19,13 +19,6 @@ import classnames from './RequisitionProcessTable.module.css';
 export default function RequisitionProcessTable() {
   const { currentEmployee } = useInventory();
 
-  if (
-    currentEmployee?.employeeLevel.includes('SA') ||
-    currentEmployee?.employeeLevel.includes('IA')
-  ) {
-    return null;
-  }
-
   const [modalStateTracker, setModalStateTracker] = useState<Record<string, boolean>>({});
 
   // Sample states to store sample data to generate modals from
@@ -87,7 +80,9 @@ export default function RequisitionProcessTable() {
   };
 
   // Determine if the employee only has `E1` level
-  const isE1Only = currentEmployee?.employeeLevel === 'E1';
+  const isE1Only = Array.isArray(currentEmployee?.employeeLevel) 
+  ? currentEmployee.employeeLevel.includes('E1') && currentEmployee.employeeLevel.length === 1
+  : currentEmployee?.employeeLevel === 'E1';
 
   // Filter requisitions based on `E1` level access
   const filteredOrs = isE1Only
