@@ -682,15 +682,33 @@ export const fetchStockOutOrders = async (
 export const patchOdorApproval = async (
   requisitionId: string,
   isApproved: boolean,
-  approverId: string
+  approverId: string,
+  isE2User: boolean = false,
+  isE3User: boolean = false
 ) => {
   try {
-    const request = {
-      method: 'PATCH',
-      body: JSON.stringify({
+    // Update the approval fields based on the type of employee
+    let updateFields = {};
+    if (isE2User) {
+      updateFields = {
+        isApprovedE2: isApproved,
+        approvalE2: approverId,
+      };
+    } else if (isE3User) {
+      updateFields = {
+        isApprovedE3: isApproved,
+        approvalE3: approverId,
+      };
+    } else {
+      updateFields = {
         isApprovedP1: isApproved,
         approvalP1: approverId,
-      }),
+      };
+    }
+
+    const request = {
+      method: 'PATCH',
+      body: JSON.stringify(updateFields),
     };
 
     const response = await fetch(`/api/order-requisitions/${requisitionId}`, request);
