@@ -85,13 +85,13 @@ export default function E2AccessPage() {
   };
   
   // Handle ODOR approval
-  const handleOdorApproval = async (message: string, odorId: string, status: string) => {
+  const handleOdorApproval = async (message: string, odorId: string, isApproved: boolean) => {
     if (message === 'success') {
       // Update the specific ODOR's approval status immediately in local state
       setAllOrs((prevOrs) =>
         prevOrs?.map((or) =>
           or.requisitionTypeId === odorId
-            ? { ...or, isApprovedE2: status === 'APPROVED' }
+            ? { ...or, isApprovedE2: isApproved }
             : or
         ) || null
       );
@@ -100,7 +100,7 @@ export default function E2AccessPage() {
         CustomNotification(
           'success',
           'ODOR Approval',
-          `ODOR ID ${odorId} was ${status}.`,
+          `ODOR ID ${odorId} was ${isApproved ? 'APPROVED' : 'REJECTED'}.`,
           setShowNotification
         )
       );
@@ -240,7 +240,8 @@ export default function E2AccessPage() {
             onDemandOrder={odor}
             isOpened={!!modalStateTracker[odor.odorId]}
             isClosed={() => setModalStateTracker((prev) => ({ ...prev, [odor.odorId]: false }))}
-            handleApprovalActivity={handleOdorApproval}
+            handleApprovalE2={handleOdorApproval}
+            isE2Page={isE2PageView}
           />
           <Text
             key={`odor-${odor.odorId}`}
