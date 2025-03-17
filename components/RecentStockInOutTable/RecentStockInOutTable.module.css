@@ -96,7 +96,6 @@
     transform 0.2s ease;
   overflow: hidden;
   text-overflow: ellipsis;
-  display: block;
   max-width: 100%;
 }
 
