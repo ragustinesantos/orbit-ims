@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Group, Pagination, Table, TableData, Text } from '@mantine/core';
+import { Group, Pagination, Table, Text } from '@mantine/core';
 import { usePagination } from '@mantine/hooks';
 import { useInventory } from '@/app/_utils/inventory-context';
 import { Employee, OnDemandOrder, OrderRequisition, RecurringOrder } from '@/app/_utils/schema';
@@ -250,13 +250,8 @@ export default function RequisitionProcessTable() {
     odorPagination.active * requisitionSize
   );
 
-  console.log(mappedRor);
 
- 
-  const odorTableData: TableData = {
-    head: ['ODOR ID', 'Employee', 'Date Submitted', 'Status'],
-    body: paginatedOdor,
-  };
+
 
   return (
     <div className={classnames.rootMain}>
