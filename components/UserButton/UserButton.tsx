@@ -17,7 +17,7 @@ const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(
       ref={ref}
       style={{
         padding: 'var(--mantine-spacing-sm)',
-        color: 'var(--mantine-color-text)',
+        color: '#fafbfd',
         borderRadius: 'var(--mantine-radius-sm)',
       }}
       {...others}
@@ -30,7 +30,7 @@ const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(
             {name}
           </Text>
 
-          <Text c="dimmed" size="xs">
+          <Text size="xs">
             {email}
           </Text>
         </div>

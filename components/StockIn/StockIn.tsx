@@ -7,7 +7,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { defaultItem, Item, PurchaseOrder, StockInOrder } from '@/app/_utils/schema';
 import { fetchPurchaseOrders, fetchSupplier, postStockInOrder, putItem} from '@/app/_utils/utility';
 import CustomNotification from '../CustomNotification/CustomNotification';
-import classnames from './StockIn.module.css';
+import classnames from './Stockin.module.css';
 import { useInventory } from '@/app/_utils/inventory-context';
 
 export default function StockIn() {
@@ -274,11 +274,7 @@ export default function StockIn() {
           </Group>
         </Flex>
       </Modal>
-            <Text
-        classNames={{
-          root: classnames.rootText,
-        }}
-      >
+            <Text classNames={{ root: classnames.rootText }}>
         Stock In
       </Text>
       <Select
