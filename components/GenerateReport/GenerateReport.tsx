@@ -150,7 +150,7 @@ export default function GenerateReport() {
           <TextInput label="To Date" value={endDate} onChange={(event) => setEndDate(event.target.value)} type="date" className={classes.input} />
           <Select label="Group By" data={[{ value: "day", label: "Daily" }, { value: "week", label: "Weekly" }, { value: "month", label: "Monthly" }]} value={groupBy} onChange={(value) => value !== null && setGroupBy(value)} className={classes.select} />
         </Flex>
-        <Button mt="md" fullWidth onClick={generateReport} color="blue">
+        <Button mt="md" fullWidth onClick={generateReport} color="#1b4965">
           Generate Report
         </Button>
       </Paper>
@@ -188,7 +188,7 @@ export default function GenerateReport() {
           <Button
             mt="md"
             fullWidth
-            color="blue"
+            color="#1b4965"
             onClick={() => window.print()}
           >
             Print
