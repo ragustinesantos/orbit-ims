@@ -464,7 +464,7 @@ export const postPurchaseOrder = async (requisitionId: string) => {
     orderList: [],
     recipientCompanyName: '',
     recipientCompanyAddress: '',
-    purchaseOrderDate: new Date().toLocaleDateString(),
+    purchaseOrderDate: new Date().toLocaleString('en-us'),
     purchaseOrderDeliveryDate: '',
     subTotal: 0,
     taxRate: 0,
@@ -682,15 +682,33 @@ export const fetchStockOutOrders = async (
 export const patchOdorApproval = async (
   requisitionId: string,
   isApproved: boolean,
-  approverId: string
+  approverId: string,
+  isE2User: boolean = false,
+  isE3User: boolean = false
 ) => {
   try {
-    const request = {
-      method: 'PATCH',
-      body: JSON.stringify({
+    // Update the approval fields based on the type of employee
+    let updateFields = {};
+    if (isE2User) {
+      updateFields = {
+        isApprovedE2: isApproved,
+        approvalE2: approverId,
+      };
+    } else if (isE3User) {
+      updateFields = {
+        isApprovedE3: isApproved,
+        approvalE3: approverId,
+      };
+    } else {
+      updateFields = {
         isApprovedP1: isApproved,
         approvalP1: approverId,
-      }),
+      };
+    }
+
+    const request = {
+      method: 'PATCH',
+      body: JSON.stringify(updateFields),
     };
 
     const response = await fetch(`/api/order-requisitions/${requisitionId}`, request);
@@ -729,5 +747,28 @@ export const submitPurchaseOrder = async (purchaseOrderId: string) => {
   } catch (error) {
     console.log(error);
     return false;
+  }
+};
+
+export const patchCloseTicket = async (requisitionId: string) => {
+  try {
+    const response = await fetch(`/api/order-requisitions/${requisitionId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        isActive: false
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to close ticket');
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Error closing ticket:', error);
+    throw error;
   }
 };
