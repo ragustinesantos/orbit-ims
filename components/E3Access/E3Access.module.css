@@ -77,7 +77,8 @@
   
   .rootRequisitionThead {
     color: white;
-    background: linear-gradient(135deg, #2c3e50, #4a6572);    position: sticky;
+    background: linear-gradient(135deg, #2c3e50, #4a6572);    
+    position: sticky;
     top: 0;
     z-index: 1;
   }
