@@ -65,6 +65,56 @@ export default function RequisitionProcessTable() {
     retrieveEmployeeWithReq();
   }, [allOrs]);
 
+  useEffect(() => {
+    const sortRor = async () => {
+      try {
+        allRor?.sort((a, b) => {
+          const matchingOrA = allOrs?.find((or) => or.requisitionTypeId === a.rorId);
+          const matchingOrB = allOrs?.find((or) => or.requisitionTypeId === b.rorId);
+  
+          if (matchingOrA && matchingOrB) {
+            return (
+              new Date(matchingOrB.requisitionDate).getTime() -
+              new Date(matchingOrA.requisitionDate).getTime()
+            );
+          }
+  
+          return 0;
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  
+    sortRor();
+  }, [allRor]);
+
+  useEffect(() => {
+    const sortOdor = async () => {
+      try {
+        allOdor?.sort((a, b) => {
+          const matchingOrA = allOrs?.find((or) => or.requisitionTypeId === a.odorId);
+          const matchingOrB = allOrs?.find((or) => or.requisitionTypeId === b.odorId);
+  
+          if (matchingOrA && matchingOrB) {
+            return (
+              new Date(matchingOrB.requisitionDate).getTime() -
+              new Date(matchingOrA.requisitionDate).getTime()
+            );
+          }
+  
+          return 0;
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  
+    sortOdor();
+  }, [allOdor]);
+  
+  
+
   const formatDate = (dateString: any) => {
     const date = new Date(dateString);
     return date.toLocaleString('en-us');
