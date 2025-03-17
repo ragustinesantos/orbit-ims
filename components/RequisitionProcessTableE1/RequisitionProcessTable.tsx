@@ -202,12 +202,7 @@ export default function RequisitionProcessTable() {
 
   console.log(mappedRor);
 
-  // Sample table to contain line items that can generate the modal
-  const rorTableData: TableData = {
-    head: ['ROR ID', 'Employee', 'Date Submitted', 'Status'],
-    body: paginatedRor,
-  };
-
+ 
   const odorTableData: TableData = {
     head: ['ODOR ID', 'Employee', 'Date Submitted', 'Status'],
     body: paginatedOdor,
@@ -220,60 +215,94 @@ export default function RequisitionProcessTable() {
         <div className={classnames.rootTableGroup}>
           <Group className={classnames.rootPaginationGroupRequisition}>
             {/** ROR process table for E1*/}
-            <Table
-              className={classnames.table}
-              striped
-              data={rorTableData}
-              classNames={{
-                table: classnames.rootRequisitionTable,
-                td: classnames.rootRequisitionTd,
-                thead: classnames.rootRequisitionThead,
-              }}
-            />
-            {cleanedMappedRor.length > 0 ? (
-              cleanedMappedRor && (
-                <Pagination
-                  value={rorPagination.active}
-                  onChange={rorPagination.setPage}
-                  total={rorTotalPages}
-                />
-              )
+            
+
+             {/* Table Header */}
+            <Table className={classnames.rootRequisitionTable} striped>
+            <Table.Thead className={classnames.rootRequisitionThead}>
+              <Table.Tr>
+                <Table.Th>ROR ID</Table.Th>
+                <Table.Th>Employee</Table.Th>
+                <Table.Th>Date Submitted</Table.Th>
+                <Table.Th>Status</Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>
+            {paginatedRor.length > 0 ? (
+              paginatedRor.map((row, index) => (
+                <Table.Tr key={index}>
+                  {row.map((cell, i) => (
+                    <Table.Td key={i} className={classnames.rootRequisitionTd}>
+                      {cell}
+                    </Table.Td>
+                  ))}
+                </Table.Tr>
+              ))
             ) : (
               <Table.Tr>
-                <Table.Td colSpan={6} className={classnames.noData}>
+                <Table.Td colSpan={4} className={classnames.noData}>
                   <Text>No recent stock change</Text>
                 </Table.Td>
               </Table.Tr>
             )}
+          </Table.Tbody>
+          </Table>
+          
+          {cleanedMappedRor &&<Pagination
+                value={rorPagination.active}
+                onChange={rorPagination.setPage}
+                total={rorTotalPages}
+              />
+          }
           </Group>
 
           <Group className={classnames.rootPaginationGroupRequisition}>
             {/** ODOR process table for E1*/}
-            <Table
-              className={classnames.table}
-              striped
-              data={odorTableData}
-              classNames={{
-                table: classnames.rootRequisitionTable,
-                td: classnames.rootRequisitionTd,
-                thead: classnames.rootRequisitionThead,
-              }}
-            />
-            {cleanedMappedOdor.length > 0 ? (
-              cleanedMappedOdor && (
+          
+
+          <Table className={classnames.rootRequisitionTable} striped>
+              {/* Table Header */}
+              <Table.Thead className={classnames.rootRequisitionThead}>
+                <Table.Tr>
+                  <Table.Th>ODOR ID</Table.Th>
+                  <Table.Th>Employee</Table.Th>
+                  <Table.Th>Date Submitted</Table.Th>
+                  <Table.Th>Status</Table.Th>
+                </Table.Tr>
+              </Table.Thead>
+                  {/* Table Body */}
+              <Table.Tbody>
+                {paginatedOdor.length > 0 ? (
+                  paginatedOdor.map((row, index) => (
+                    <Table.Tr key={index}>
+                      {row.map((cell, i) => (
+                        <Table.Td key={i} className={classnames.rootRequisitionTd}>
+                          {cell}
+                        </Table.Td>
+                      ))}
+                    </Table.Tr>
+                  ))
+                ) : (
+                  <Table.Tr>
+                    <Table.Td colSpan={4} className={classnames.noData}>
+                      <Text>No recent stock change</Text>
+                    </Table.Td>
+                  </Table.Tr>
+                )}
+              </Table.Tbody>
+            </Table>
+
+
+
+            
+             { cleanedMappedOdor && (
                 <Pagination
                   value={odorPagination.active}
                   onChange={odorPagination.setPage}
                   total={odorTotalPages}
                 />
               )
-            ) : (
-              <Table.Tr>
-                <Table.Td colSpan={6} className={classnames.noData}>
-                  <Text>No recent stock change</Text>
-                </Table.Td>
-              </Table.Tr>
-            )}
+            }
           </Group>
         </div>
       ) : (
