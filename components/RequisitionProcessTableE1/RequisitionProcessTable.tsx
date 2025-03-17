@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Group, Pagination, Table, TableData, Text, Title } from '@mantine/core';
+import { Group, Pagination, Table, TableData, Text} from '@mantine/core';
 import { usePagination } from '@mantine/hooks';
 import { useInventory } from '@/app/_utils/inventory-context';
 import { Employee, OnDemandOrder, OrderRequisition, RecurringOrder } from '@/app/_utils/schema';
@@ -9,7 +9,6 @@ import { fetchEmployees, fetchOnDemandOrderRequisitions, fetchOrderRequisitions,
 import RorModal from '@/components/RorModal/RorModal';
 import OdorModal from "../OdorModal/OdorModal";
 import ApprovalBadge from "../ApprovalBadge/ApprovalBadge";
-import OdorModal from '../OdorModal/OdorModal';
 import classnames from './RequisitionProcessTable.module.css';
 
 export default function RequisitionProcessTable() {
