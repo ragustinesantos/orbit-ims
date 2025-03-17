@@ -24,6 +24,7 @@ import {
   patchOrderRequisitionPo,
   postPurchaseOrder,
   submitPurchaseOrder,
+  patchCloseTicket,
 } from '@/app/_utils/utility';
 import CustomNotification from '@/components/CustomNotification/CustomNotification';
 import RorModal from '@/components/RorModal/RorModal';
@@ -62,6 +63,8 @@ export default function P1AccessPage() {
   const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
 
   const [pendingPoId, setPendingPoId] = useState<string | null>(null);
+  const [closeTicketModalOpen, setCloseTicketModalOpen] = useState(false);
+  const [pendingCloseTicketId, setPendingCloseTicketId] = useState<string | null>(null);
 
   //open StockOutModal
   const handleStockOutModalOpen = (requisitionId: string) => {
@@ -479,7 +482,12 @@ export default function P1AccessPage() {
             + SO
           </Text>
         ),
-        <button className={classnames.closeTicketButton}>Close</button>,
+        <button 
+          className={classnames.closeTicketButton}
+          onClick={() => openCloseTicketModal(or.requisitionId)}
+        >
+          Close
+        </button>,
       ];
     }
 
@@ -642,6 +650,57 @@ export default function P1AccessPage() {
     if (pendingPoId) {
       handlePoSubmit(pendingPoId);
     }
+  };
+
+  // Open confirmation modal for closing ticket
+  const openCloseTicketModal = (requisitionId: string) => {
+    setPendingCloseTicketId(requisitionId);
+    setCloseTicketModalOpen(true);
+  };
+  
+  // Close confirmation modal without closing ticket
+  const closeCloseTicketModal = () => {
+    setPendingCloseTicketId(null);
+    setCloseTicketModalOpen(false);
+  };
+  
+  // Handle closing the ticket
+  const handleCloseTicket = async () => {
+    if (!pendingCloseTicketId) return;
+    
+    try {
+      await patchCloseTicket(pendingCloseTicketId);
+
+      // Show success notification
+      setNotificationMessage(
+        CustomNotification(
+          'success',
+          'Ticket Closed',
+          `Requisition ${pendingCloseTicketId} has been closed`,
+          setShowNotification
+        )
+      );
+      
+      // Close the modal
+      setCloseTicketModalOpen(false);
+      setPendingCloseTicketId(null);
+      
+      // Refresh the data
+      setRefreshTrigger(prev => prev + 1);
+    } catch (error) {
+      console.error('Error closing ticket:', error);
+      
+      // Show error notification
+      setNotificationMessage(
+        CustomNotification(
+          'error',
+          'Error',
+          'Failed to close ticket',
+          setShowNotification
+        )
+      );
+    }
+    revealNotification();
   };
 
   // Size or requisition pagination
@@ -825,6 +884,38 @@ export default function P1AccessPage() {
           <Button 
             classNames={{ root: classnames.rootBtn }} 
             onClick={closeConfirmationModal} 
+            color="red"
+          >
+            Cancel
+          </Button>
+        </Group>
+      </Modal>
+      
+      <Modal 
+        opened={closeTicketModalOpen} 
+        onClose={closeCloseTicketModal} 
+        title="Confirmation" 
+        centered
+        zIndex={1000}
+      >
+        <Text
+          classNames={{
+            root: classnames.rootConfirmationText,
+          }}
+        >
+          Are you sure you want to close this ticket? This action cannot be undone.
+        </Text>
+        <Group classNames={{ root: classnames.rootBtnArea }}>
+          <Button
+            classNames={{ root: classnames.rootBtn }}
+            onClick={handleCloseTicket}
+            color="#1B4965"
+          >
+            Close Ticket
+          </Button>
+          <Button 
+            classNames={{ root: classnames.rootBtn }} 
+            onClick={closeCloseTicketModal} 
             color="red"
           >
             Cancel

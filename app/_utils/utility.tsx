@@ -749,3 +749,26 @@ export const submitPurchaseOrder = async (purchaseOrderId: string) => {
     return false;
   }
 };
+
+export const patchCloseTicket = async (requisitionId: string) => {
+  try {
+    const response = await fetch(`/api/order-requisitions/${requisitionId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        isActive: false
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to close ticket');
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Error closing ticket:', error);
+    throw error;
+  }
+};
