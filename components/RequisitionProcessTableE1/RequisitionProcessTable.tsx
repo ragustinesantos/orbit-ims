@@ -19,13 +19,6 @@ import classnames from './RequisitionProcessTable.module.css';
 export default function RequisitionProcessTable() {
   const { currentEmployee } = useInventory();
 
-  if (
-    currentEmployee?.employeeLevel.includes('SA') ||
-    currentEmployee?.employeeLevel.includes('IA')
-  ) {
-    return null;
-  }
-
   const [modalStateTracker, setModalStateTracker] = useState<Record<string, boolean>>({});
 
   // Sample states to store sample data to generate modals from
