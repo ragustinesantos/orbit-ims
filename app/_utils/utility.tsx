@@ -464,7 +464,7 @@ export const postPurchaseOrder = async (requisitionId: string) => {
     orderList: [],
     recipientCompanyName: '',
     recipientCompanyAddress: '',
-    purchaseOrderDate: new Date().toLocaleDateString(),
+    purchaseOrderDate: new Date().toLocaleString('en-us'),
     purchaseOrderDeliveryDate: '',
     subTotal: 0,
     taxRate: 0,
