@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { Group, Pagination, Table, Text, Title } from '@mantine/core';
+import { usePagination } from '@mantine/hooks';
 import { useInventory } from '@/app/_utils/inventory-context';
 import { Item, StockInOrder, StockOutOrder } from '@/app/_utils/schema';
 import { fetchStockInOrders, fetchStockOutOrders } from '@/app/_utils/utility';
 import ImgModal from '../ImgModal/ImgModal';
 import classnames from './RecentStockInOutTable.module.css';
-import { usePagination } from '@mantine/hooks';
 
 export default function RecentStockInOutTable() {
   const [stockInOrders, setStockInOrders] = useState<StockInOrder[]>([]);
@@ -74,7 +74,10 @@ export default function RecentStockInOutTable() {
 
   const paginatedStockOutOrders = cleanedStockOutOrders
     .sort((a, b) => new Date(b.stockOutDate).getTime() - new Date(a.stockOutDate).getTime())
-    .slice((stockOutPagination.active - 1) * itemsPerPage, stockOutPagination.active * itemsPerPage);
+    .slice(
+      (stockOutPagination.active - 1) * itemsPerPage,
+      stockOutPagination.active * itemsPerPage
+    );
 
   return (
     <main className={classnames.main}>
@@ -85,7 +88,14 @@ export default function RecentStockInOutTable() {
       <div className={classnames.rootTableGroup}>
         {/* Stock In Table */}
         <Group classNames={{ root: classnames.rootPaginationGroupRequisition }}>
-          <Table classNames={{ table: classnames.rootRequisitionTable, td: classnames.rootRequisitionTd, thead: classnames.rootRequisitionThead }}>
+          <Table
+            classNames={{
+              table: classnames.rootRequisitionTable,
+              td: classnames.rootRequisitionTd,
+              thead: classnames.rootRequisitionThead,
+            }}
+            striped
+          >
             <Table.Thead>
               <Table.Tr>
                 <Table.Th>Stock In ID</Table.Th>
@@ -102,10 +112,15 @@ export default function RecentStockInOutTable() {
                   const { name, unit } = getItemDetails(stockInOrder.itemId);
                   return (
                     <Table.Tr key={stockInOrder.stockInId}>
-                      <Table.Td className={classnames.rootTextId}>{stockInOrder.stockInId}</Table.Td>
+                      <Table.Td className={classnames.rootTextId}>
+                        {stockInOrder.stockInId}
+                      </Table.Td>
                       <Table.Td>{stockInOrder.stockInDate}</Table.Td>
                       <Table.Td>
-                        <Text onClick={() => handleToggleModal(stockInOrder.itemId)} classNames={{ root: classnames.imgModalID }}>
+                        <Text
+                          onClick={() => handleToggleModal(stockInOrder.itemId)}
+                          classNames={{ root: classnames.imgModalID }}
+                        >
                           {name}
                         </Text>
                       </Table.Td>
@@ -124,12 +139,24 @@ export default function RecentStockInOutTable() {
               )}
             </Table.Tbody>
           </Table>
-          <Pagination value={stockInPagination.active} onChange={stockInPagination.setPage} total={stockInTotalPages} mt="md" />
+          <Pagination
+            page={stockInPagination.active}
+            onChange={stockInPagination.setPage}
+            total={stockInTotalPages}
+            mt="md"
+          />
         </Group>
 
         {/* Stock Out Table */}
         <Group classNames={{ root: classnames.rootPaginationGroupRequisition }}>
-          <Table classNames={{ table: classnames.rootRequisitionTable, td: classnames.rootRequisitionTd, thead: classnames.rootRequisitionThead }}>
+          <Table
+            classNames={{
+              table: classnames.rootRequisitionTable,
+              td: classnames.rootRequisitionTd,
+              thead: classnames.rootRequisitionThead,
+            }}
+            striped
+          >
             <Table.Thead>
               <Table.Tr>
                 <Table.Th>Stock Out ID</Table.Th>
@@ -141,23 +168,29 @@ export default function RecentStockInOutTable() {
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              {paginatedStockOutOrders.length > 0 ? (paginatedStockOutOrders.map((stockOutOrder) => {
-                const { name, unit } = getItemDetails(stockOutOrder.itemId);
-                return (
-                  <Table.Tr key={stockOutOrder.stockOutId}>
-                    <Table.Td className={classnames.rootTextId}>{stockOutOrder.stockOutId}</Table.Td>
-                    <Table.Td>{stockOutOrder.stockOutDate}</Table.Td>
-                    <Table.Td>
-                      <Text onClick={() => handleToggleModal(stockOutOrder.itemId)} classNames={{ root: classnames.imgModalID }}>
-                        {name}
-                      </Text>
-                    </Table.Td>
-                    <Table.Td>{stockOutOrder.stockOutQuantity}</Table.Td>
-                    <Table.Td>{unit}</Table.Td>
-                    <Table.Td>{stockOutOrder.dispatchedBy}</Table.Td>
-                  </Table.Tr>
-                );
-              })
+              {paginatedStockOutOrders.length > 0 ? (
+                paginatedStockOutOrders.map((stockOutOrder) => {
+                  const { name, unit } = getItemDetails(stockOutOrder.itemId);
+                  return (
+                    <Table.Tr key={stockOutOrder.stockOutId}>
+                      <Table.Td className={classnames.rootTextId}>
+                        {stockOutOrder.stockOutId}
+                      </Table.Td>
+                      <Table.Td>{stockOutOrder.stockOutDate}</Table.Td>
+                      <Table.Td>
+                        <Text
+                          onClick={() => handleToggleModal(stockOutOrder.itemId)}
+                          classNames={{ root: classnames.imgModalID }}
+                        >
+                          {name}
+                        </Text>
+                      </Table.Td>
+                      <Table.Td>{stockOutOrder.stockOutQuantity}</Table.Td>
+                      <Table.Td>{unit}</Table.Td>
+                      <Table.Td>{stockOutOrder.dispatchedBy}</Table.Td>
+                    </Table.Tr>
+                  );
+                })
               ) : (
                 <Table.Tr>
                   <Table.Td colSpan={6} className={classnames.noData}>
@@ -167,7 +200,12 @@ export default function RecentStockInOutTable() {
               )}
             </Table.Tbody>
           </Table>
-          <Pagination value={stockOutPagination.active} onChange={stockOutPagination.setPage} total={stockOutTotalPages} mt="md" />
+          <Pagination
+            page={stockOutPagination.active}
+            onChange={stockOutPagination.setPage}
+            total={stockOutTotalPages}
+            mt="md"
+          />
         </Group>
       </div>
 
