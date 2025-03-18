@@ -14,8 +14,7 @@ import { patchOrderRequisition, postOrderRequisition, postRecurringOrderRequisit
 
 export default function CreateRor() {
 
-    const { currentEmployee } = useInventory();
-    const { inventory } = useInventory();
+    const { inventory,currentEmployee } = useInventory();
     const [currentStep, setCurrentStep] = useState<number>(0);
     const [currentContent, setCurrentContent] = useState(<div />);
     const [recurringOrder, setrecurringOrder] = useState<RecurringOrderToEdit | null>(null)
@@ -39,7 +38,7 @@ export default function CreateRor() {
 
     // This would update the ROR template that would be used in later steps
     const handleSelectRORTemplate = (paramRorTemplate: RecurringOrderTemplate) => {
-        let itemList: ItemOrder[] = [];
+        let itemList: ItemOrder[] = [];  
 
         paramRorTemplate.itemList.forEach(item => {
             const newItemObj: ItemOrder = {
@@ -59,10 +58,14 @@ export default function CreateRor() {
         }
         setrecurringOrder(orderObj)
         
+        
+        
     };
 
     const handleSetRor = (paramRecurringOrder: RecurringOrderToEdit) => {
         setrecurringOrder(paramRecurringOrder);
+        //Email notification code
+        setItemListEmail(paramRecurringOrder.itemOrders);
     }
 
     // This is an array of content to display based on the current index
@@ -131,6 +134,8 @@ export default function CreateRor() {
     const handleSubmit = async () => {
         setShowButton(false);
 
+            
+
         try {
 
             let date: Date = new Date();
@@ -154,8 +159,7 @@ export default function CreateRor() {
                 requisitionId: newOrdReqId
             };
             
-            //Email notification code
-            setItemListEmail(newRorObj.itemOrders);
+            
 
             // Ensure POST is awaited and promise is resolved; store directly in a variable to avoid delays in states
             const newRorId = await postRecurringOrderRequisition(newRorObj);
@@ -179,7 +183,8 @@ export default function CreateRor() {
             let empfullname = currentEmployee?.firstName + " " + currentEmployee?.lastName
             if (itemListEmail && inventory){
                 // rememeber to use await for async functions always!!!
-                //await sendPOMsgRor(newOrdReqId,itemListEmail,inventory,empfullname);
+                await sendPOMsgRor(newOrdReqId,itemListEmail,inventory,empfullname);
+                
             }
             
 
