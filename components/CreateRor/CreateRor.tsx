@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useEffect, useState } from 'react';
 import { Button, Flex, Modal, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';

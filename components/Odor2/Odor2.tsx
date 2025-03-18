@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 'useclient';
 
 import { ChangeEvent, useEffect, useState } from 'react';

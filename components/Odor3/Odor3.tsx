@@ -1,7 +1,6 @@
 'useclient';
 
-import { useEffect, useState } from 'react';
-import { number } from 'zod';
+import { useState } from 'react';
 import { Group, Table, Text, Textarea, TextInput } from '@mantine/core';
 import { useInventory } from '@/app/_utils/inventory-context';
 import { Item, ItemOrder, NewItemOrder } from '@/app/_utils/schema';

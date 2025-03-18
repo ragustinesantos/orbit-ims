@@ -1,7 +1,5 @@
-/* eslint-disable no-console */
 'use client';
 
-import { useEffect, useState } from 'react';
 import {
   Button,
   Group,

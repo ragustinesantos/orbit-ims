@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { useEffect } from 'react';
 import { Group, Modal, Table, Text } from '@mantine/core';
 import { useInventory } from '@/app/_utils/inventory-context';

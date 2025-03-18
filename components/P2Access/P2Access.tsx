@@ -3,7 +3,6 @@
 
 import { useEffect, useState } from 'react';
 import { Table, TableData, Text } from '@mantine/core';
-import { useInventory } from '@/app/_utils/inventory-context';
 import { Employee, OrderRequisition, PurchaseOrder } from '@/app/_utils/schema';
 import { fetchEmployees, fetchOrderRequisition, fetchPurchaseOrders } from '@/app/_utils/utility';
 import CustomNotification from '@/components/CustomNotification/CustomNotification';
@@ -12,8 +11,6 @@ import PoModal from '../PoModal/PoModal';
 import classnames from './P2Access.module.css';
 
 export default function P2AccessPage() {
-  const { currentEmployee } = useInventory();
-
   const [allPo, setAllPo] = useState<PurchaseOrder[] | null>(null);
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
