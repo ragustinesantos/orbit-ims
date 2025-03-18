@@ -19,20 +19,19 @@ export default function WizardProgress(props: WizardProgressProps) {
     if (rendered) {
       return (
         <div key={index} style={progressBarWidth} className={classes.barContainer}>
-          <div className={classes.progressBar}></div>
-        </div>
-      );
-    } else {
-      return (
-        <div key={index} style={progressBarWidth} className={classes.barContainer}>
-          <div className={classes.awaitingBar}>|||||||||||||||||||||||||||||||||||||||</div>
+          <div className={classes.progressBar} />
         </div>
       );
     }
+    return (
+      <div key={index} style={progressBarWidth} className={classes.barContainer}>
+        <div className={classes.awaitingBar}>|||||||||||||||||||||||||||||||||||||||</div>
+      </div>
+    );
   };
 
   // This would determine if the step number if filled or empty
-  const stepType = (rendered: boolean, stepName: String, index: number, localIndex: number) => {
+  const stepType = (rendered: boolean, stepName: string, index: number, localIndex: number) => {
     if (rendered) {
       return (
         <div key={localIndex} className={classes.stepContainer}>
@@ -40,21 +39,20 @@ export default function WizardProgress(props: WizardProgressProps) {
           <div className={classes.stepTitle}>{stepName}</div>
         </div>
       );
-    } else {
-      return (
-        <div key={localIndex} className={classes.stepContainer}>
-          <div className={classes.awaitingCircle}>{index + 1}</div>
-          <div className={classes.stepTitle}>{stepName}</div>
-        </div>
-      );
     }
+    return (
+      <div key={localIndex} className={classes.stepContainer}>
+        <div className={classes.awaitingCircle}>{index + 1}</div>
+        <div className={classes.stepTitle}>{stepName}</div>
+      </div>
+    );
   };
 
   useEffect(() => {
     setProgressBar(
       <>
         {stepList.map((step, index) => {
-          let currentStepDisplay = [];
+          const currentStepDisplay = [];
           if (index > 0) {
             currentStepDisplay.push(progressBarType(index < currentStep, index));
           }

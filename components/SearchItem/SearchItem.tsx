@@ -23,7 +23,7 @@ export default function SearchItem() {
           item={item}
           isOpened={!!modalStateTracker[item.itemId]}
           isClosed={() => setModalStateTracker((prev) => ({ ...prev, [item.itemId]: false }))}
-        ></ImgModal>
+        />
         <Table.Td
           style={{ maxWidth: '20px', overflowX: 'scroll', scrollbarWidth: 'none', height: 'fit' }}
         >

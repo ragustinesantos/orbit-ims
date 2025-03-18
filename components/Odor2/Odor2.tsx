@@ -9,8 +9,8 @@ import classnames from './odor2.module.css';
 interface setpropstype {
   newItemOrders: NewItemOrder[];
   setNewItemOrders: React.Dispatch<React.SetStateAction<NewItemOrder[]>>;
-  totalCost: Number;
-  setTotalCost: React.Dispatch<React.SetStateAction<Number>>;
+  totalCost: number;
+  setTotalCost: React.Dispatch<React.SetStateAction<number>>;
   showTemplate: boolean;
   setShowTemplate: React.Dispatch<React.SetStateAction<boolean>>;
   nextPage: () => void;

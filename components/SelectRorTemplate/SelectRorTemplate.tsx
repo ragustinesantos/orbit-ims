@@ -17,8 +17,8 @@ export default function SelectRorTemplate(props: SelectRorTemplateProps) {
   );
 
   useEffect(() => {
-    const selectedRor = rorTemplates?.find((template) => template.rorTemplateId == radioValue);
-    if (selectedRor && selectedRor.rorTemplateId != props.recurringOrder?.rorTemplateId) {
+    const selectedRor = rorTemplates?.find((template) => template.rorTemplateId === radioValue);
+    if (selectedRor && selectedRor.rorTemplateId !== props.recurringOrder?.rorTemplateId) {
       props.handleSelectRor(selectedRor);
     }
   }, [radioValue]);
@@ -46,7 +46,7 @@ export default function SelectRorTemplate(props: SelectRorTemplateProps) {
                   name={template.templateName}
                   label={template.templateName}
                   value={template.rorTemplateId}
-                  checked={template.rorTemplateId == radioValue}
+                  checked={template.rorTemplateId === radioValue}
                   classNames={{
                     root: classnames.rorRadio,
                     label: classnames.radioLabel,

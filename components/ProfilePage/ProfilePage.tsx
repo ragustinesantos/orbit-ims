@@ -76,9 +76,8 @@ export default function ProfilePage() {
           <p className={classnames.rootText}>Profile</p>
           <img
             className={classnames.photo}
-            src={
-              'https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-8.png'
-            }
+            alt="avatar"
+            src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-8.png"
           />
         </div>
         <div className={classnames.simplegrid1}>
