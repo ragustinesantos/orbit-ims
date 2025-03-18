@@ -3,7 +3,6 @@
 import '@mantine/core/styles.css';
 
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
 import { ColorSchemeScript, MantineProvider } from '@mantine/core';
 import { theme } from '../theme';
 import { AuthContextProvider } from './_utils/auth-context';
