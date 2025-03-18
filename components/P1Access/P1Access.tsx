@@ -430,7 +430,59 @@ export default function P1AccessPage() {
         (or?.requisitionType === 'ror' && or?.isApprovedP1))
     ) {
       return [
-        <Text classNames={{ root: classnames.rootTextId }}>{or.requisitionId}</Text>,
+        <>
+          {(() => {
+            if (or.requisitionType === 'ror' && allRor) {
+              const matchingRor = allRor.find((ror) => ror.rorId === or.requisitionTypeId);
+              return (
+                matchingRor && (
+                  <>
+                    <RorModal
+                      recurringOrder={matchingRor}
+                      // Retrieve the actual state of the modal, !! will retrieve it's actual value because default is 'falsey'
+                      isOpened={!!modalStateTracker[matchingRor.rorId]}
+                      // Close the modal by setting its opened state to false
+                      isClosed={() =>
+                        setModalStateTracker((prev) => ({ ...prev, [matchingRor.rorId]: false }))
+                      }
+                      handleApprovalActivity={handleApprovalActivity}
+                    />
+                    <Text
+                      onClick={() => toggleModalState(matchingRor.rorId)}
+                      classNames={{ root: classnames.rootTextId }}
+                    >
+                      {or.requisitionId}
+                    </Text>
+                  </>
+                )
+              );
+            } else if (or.requisitionType === 'odor') {
+              const matchingOdor = allOdor?.find((odor) => odor.odorId === or.requisitionTypeId);
+              return (
+                matchingOdor && (
+                  <>
+                    <OdorModal
+                      onDemandOrder={matchingOdor}
+                      // Retrieve the actual state of the modal, !! will retrieve it's actual value because default is 'falsey'
+                      isOpened={!!modalStateTracker[matchingOdor.odorId]}
+                      // Close the modal by directly setting its opened state to false
+                      isClosed={() =>
+                        setModalStateTracker((prev) => ({ ...prev, [matchingOdor.odorId]: false }))
+                      }
+                      handleApprovalP1={handleOdorApproval}
+                    />
+                    <Text
+                      onClick={() => toggleModalState(matchingOdor.odorId)}
+                      classNames={{ root: classnames.rootTextId }}
+                    >
+                      {or.requisitionId}
+                    </Text>
+                  </>
+                )
+              );
+            }
+          })()}
+        </>,
         <Text>
           {matchingEmployee?.firstName} {matchingEmployee?.lastName}
         </Text>,
