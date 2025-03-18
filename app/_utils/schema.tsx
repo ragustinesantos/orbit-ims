@@ -387,7 +387,11 @@ export interface odorModalProps {
   onDemandOrder: OnDemandOrder | null;
   isOpened: boolean;
   isClosed: () => void;
-  handleApprovalActivity?: (message: string, odorId: string, status: string) => void;
+  handleApprovalE2?: (message: string, odorId: string, isApproved: boolean) => void;
+  handleApprovalE3?: (message: string, odorId: string, isApproved: boolean) => void;
+  handleApprovalP1?: (message: string, odorId: string, isApproved: boolean) => void;
+  isE2Page?: boolean;
+  isE3Page?: boolean;
 }
 
 export interface poModalProps {
@@ -465,7 +469,7 @@ export const NAV_ITEMS: navCollection = {
     {
       label: 'Inventory',
       icon: IconNotes,
-      links: [{ label: 'Search Item', link: '/' }],
+      links: [{ label: 'Search Item', link: '/inventory/search-item' }],
     },
   ],
   E2: [
@@ -518,7 +522,7 @@ export const NAV_ITEMS: navCollection = {
       icon: IconMessage,
       links: [
         { label: 'Chat', link: '/assistant/chat' },
-        { label: 'Generate Report', link: '/' },
+        { label: 'Generate Report', link: '/assistant/generate-report' },
       ],
     },
     {
