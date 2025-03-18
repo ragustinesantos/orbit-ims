@@ -27,9 +27,7 @@
 }
 
 .rootRequisitionTable {
-  width: 35vw;
   overflow-y: scroll;
-  min-width: 600px;
   margin-bottom: 20px;
 }
 
