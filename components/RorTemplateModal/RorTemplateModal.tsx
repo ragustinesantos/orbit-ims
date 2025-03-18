@@ -14,12 +14,7 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useInventory } from '@/app/_utils/inventory-context';
-import {
-  defaultEmployee,
-  Employee,
-  RecurringOrderTemplate,
-  rorTemplateModalProps,
-} from '@/app/_utils/schema';
+import { rorTemplateModalProps } from '@/app/_utils/schema';
 import { fetchEmployee, patchRorTemplateApproval } from '@/app/_utils/utility';
 import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
 import ImgModal from '../ImgModal/ImgModal';
@@ -194,7 +189,7 @@ export default function RorTemplateModal({
     fetchItemDetails();
   }, [recurringOrderTemplate, inventory]);
 
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
 
   const mappedItemList = (recurringOrderTemplate?.itemList ?? []).map((itemId: string) => {
     const currentItem = itemDetails[itemId] || {};
@@ -312,8 +307,8 @@ export default function RorTemplateModal({
 
       {(currentEmployee?.employeeLevel.includes('E2') &&
         recurringOrderTemplate.isTemplateApprovedE2 === null) ||
-      (currentEmployee?.employeeLevel.includes('E3') &&
-        recurringOrderTemplate.isTemplateApprovedE3 === null) ? (
+        (currentEmployee?.employeeLevel.includes('E3') &&
+          recurringOrderTemplate.isTemplateApprovedE3 === null) ? (
         <Group classNames={{ root: classnames.rootBtnArea }}>
           {/* E2 Approval */}
           {isE2Page &&

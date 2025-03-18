@@ -3,10 +3,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { string } from 'zod';
 import { Button, Group, Modal, Pagination, Table, TableData, Text } from '@mantine/core';
-import { useDisclosure, usePagination } from '@mantine/hooks';
-import { useInventory } from '@/app/_utils/inventory-context';
+import { usePagination } from '@mantine/hooks';
 import {
   Employee,
   OnDemandOrder,

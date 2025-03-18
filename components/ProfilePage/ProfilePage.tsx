@@ -2,17 +2,12 @@
 
 import { useState } from 'react';
 import {
-  Avatar,
   Button,
-  Flex,
   Group,
   Modal,
-  Select,
   SimpleGrid,
   Text,
-  TextInput,
 } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
 import { useUserAuth } from '@/app/_utils/auth-context';
 import { useInventory } from '@/app/_utils/inventory-context';
 import { sendResetEmail } from '@/app/_utils/utility';
