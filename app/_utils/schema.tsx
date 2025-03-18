@@ -469,7 +469,7 @@ export const NAV_ITEMS: navCollection = {
     {
       label: 'Inventory',
       icon: IconNotes,
-      links: [{ label: 'Search Item', link: '/' }],
+      links: [{ label: 'Search Item', link: '/inventory/search-item' }],
     },
   ],
   E2: [
@@ -522,7 +522,7 @@ export const NAV_ITEMS: navCollection = {
       icon: IconMessage,
       links: [
         { label: 'Chat', link: '/assistant/chat' },
-        { label: 'Generate Report', link: '/' },
+        { label: 'Generate Report', link: '/assistant/generate-report' },
       ],
     },
     {
