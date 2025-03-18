@@ -20,6 +20,11 @@ import {
   Supplier,
 } from './schema';
 
+import { getAuth } from 'firebase/auth';
+import { dbResetEmpPass } from '../_services/employees-service';
+
+const auth = getAuth();
+
 // Fetch all inventory items
 export const fetchInventory = async (setInventory: (inventoryItems: Item[]) => void) => {
   try {
@@ -160,6 +165,19 @@ export const putEmployee = async (employeeId: string, updatedEmployee: EmployeeT
     throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
   }
 };
+
+export async function sendResetEmail (email: string) {
+  try {
+   const returnmsg = await dbResetEmpPass(auth,email);
+
+   return returnmsg;
+   
+  } catch (error){
+    //console.error("An error occurred in sendResetEmail:", error);
+    throw error;
+  }
+
+}
 
 // Fetch all recurring order templates
 export const fetchRorTemplates = async (
