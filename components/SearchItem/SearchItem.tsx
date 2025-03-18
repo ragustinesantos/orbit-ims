@@ -3,28 +3,38 @@
 import { useEffect, useState } from 'react';
 import { Group, Select, Table, Text } from '@mantine/core';
 import { useInventory } from '@/app/_utils/inventory-context';
-import classnames from './SearchItem.module.css';
 import ImgModal from '../ImgModal/ImgModal';
+import classnames from './SearchItem.module.css';
 
 export default function SearchItem() {
   const [searchValue, setSearchValue] = useState<string | null>('');
   const { inventory, setCurrentPage, setCurrentSection } = useInventory();
   const [modalStateTracker, setModalStateTracker] = useState<Record<string, boolean>>({});
 
-
-    // Every time an ID is clicked this should run and set the state of modal visibility to the opposite of its previous value
-    const toggleImgModalState = (itemId: string) => {
-      setModalStateTracker((prev) => ({ ...prev, [itemId]: !prev[itemId] }));
-    };
+  // Every time an ID is clicked this should run and set the state of modal visibility to the opposite of its previous value
+  const toggleImgModalState = (itemId: string) => {
+    setModalStateTracker((prev) => ({ ...prev, [itemId]: !prev[itemId] }));
+  };
 
   const rows = inventory?.map((item) => {
     return item.itemName.includes(searchValue || '') ? (
       <Table.Tr key={item.itemId}>
-            <ImgModal item={item} isOpened={!!modalStateTracker[item.itemId]} isClosed={() => setModalStateTracker((prev) => ({ ...prev, [item.itemId]: false }))} ></ImgModal>
-            <Table.Td style={{ maxWidth: '20px', overflowX: 'scroll', scrollbarWidth: 'none', height:'fit'}}>
-            <Text onClick={() => toggleImgModalState(item.itemId)} classNames={{root:classnames.tableID}}>{item.itemId}</Text>
-            </Table.Td>
-            
+        <ImgModal
+          item={item}
+          isOpened={!!modalStateTracker[item.itemId]}
+          isClosed={() => setModalStateTracker((prev) => ({ ...prev, [item.itemId]: false }))}
+        ></ImgModal>
+        <Table.Td
+          style={{ maxWidth: '20px', overflowX: 'scroll', scrollbarWidth: 'none', height: 'fit' }}
+        >
+          <Text
+            onClick={() => toggleImgModalState(item.itemId)}
+            classNames={{ root: classnames.tableID }}
+          >
+            {item.itemId}
+          </Text>
+        </Table.Td>
+
         <Table.Td>{item.itemName}</Table.Td>
         <Table.Td>{item.currentStockInStoreRoom}</Table.Td>
         <Table.Td>{item.supplyUnit}</Table.Td>

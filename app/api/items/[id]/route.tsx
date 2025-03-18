@@ -30,7 +30,7 @@ export async function PUT(request: Request, { params }: { params: any }) {
       minPurchaseQty: z.number(),
       price: z.number(),
       isActive: z.boolean(),
-      picurl: z.string()
+      picurl: z.string(),
     });
 
     const validatedItem = itemSchema.parse(updatedItem);
@@ -61,7 +61,7 @@ export async function PATCH(request: Request, { params }: { params: any }) {
         minPurchaseQty: z.number().optional(),
         price: z.number().optional(),
         isActive: z.boolean().optional(),
-        picurl: z.string().optional()
+        picurl: z.string().optional(),
       })
       .strict();
 

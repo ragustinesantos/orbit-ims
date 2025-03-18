@@ -4,11 +4,11 @@
 import { useEffect, useState } from 'react';
 import { Button, Flex, Group, Modal, Select, SimpleGrid, Text, TextInput } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { useInventory } from '@/app/_utils/inventory-context';
 import { defaultItem, Item } from '@/app/_utils/schema';
 import { deleteItem, fetchSupplier } from '@/app/_utils/utility';
 import CustomNotification from '../CustomNotification/CustomNotification';
 import classnames from './DeleteItem.module.css';
-import { useInventory } from '@/app/_utils/inventory-context';
 
 export default function UpdateItem() {
   // Search and selected items from item search
@@ -41,7 +41,7 @@ export default function UpdateItem() {
   const [supplierId, setSupplierId] = useState<string | null>('');
 
   const { inventory, supplierList, categoryList, setRefresh, setCurrentPage, setCurrentSection } =
-      useInventory();
+    useInventory();
 
   // Handle delete submit
   const handleSubmit = async () => {
@@ -63,7 +63,6 @@ export default function UpdateItem() {
         setShowError(false);
       }, 3000);
     }
-
   };
 
   // Find item to search in inventory and set as selectedItem
@@ -105,7 +104,6 @@ export default function UpdateItem() {
 
     updateValues();
   }, [selectedItem]);
-
 
   useEffect(() => {
     setCurrentPage('Delete Item');
@@ -343,20 +341,8 @@ export default function UpdateItem() {
       >
         Delete
       </Button>
-      {showError &&
-        CustomNotification(
-          'error',
-          errorTitle,
-          errorMessage,
-          setShowError
-        )}
-      {showSuccess &&
-        CustomNotification(
-          'success',
-          'Item Deleted',
-          successMessage,
-          setShowSuccess
-        )}
+      {showError && CustomNotification('error', errorTitle, errorMessage, setShowError)}
+      {showSuccess && CustomNotification('success', 'Item Deleted', successMessage, setShowSuccess)}
     </Group>
   );
 }

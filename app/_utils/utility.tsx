@@ -1,5 +1,7 @@
 /* eslint-disable no-console */
+import { getAuth } from 'firebase/auth';
 import { marked } from 'marked';
+import { dbResetEmpPass } from '../_services/employees-service';
 import {
   Chat,
   ChatToEdit,
@@ -19,9 +21,6 @@ import {
   StockOutOrder,
   Supplier,
 } from './schema';
-
-import { getAuth } from 'firebase/auth';
-import { dbResetEmpPass } from '../_services/employees-service';
 
 const auth = getAuth();
 
@@ -70,25 +69,24 @@ export const fetchSupplier = async (supplierId: string) => {
   }
 };
 
-export const postItem = async (item : Item) => {
+export const postItem = async (item: Item) => {
   try {
     const request = {
       method: 'POST',
-      body: JSON.stringify(item)
-    }
+      body: JSON.stringify(item),
+    };
 
     const response = await fetch(`/api/items/`, request);
-    if(!response.ok){
-      const errorText = await response.text()
+    if (!response.ok) {
+      const errorText = await response.text();
       throw new Error(`HTTP Error: ${response.status} - ${response.statusText} - ${errorText}`);
     }
     return response;
-  }
-  catch (error) {
+  } catch (error) {
     console.log(error);
     return undefined;
   }
-}
+};
 
 // Update item through PUT
 export const putItem = async (itemId: string, updatedItem: ItemToEdit) => {
@@ -166,17 +164,15 @@ export const putEmployee = async (employeeId: string, updatedEmployee: EmployeeT
   }
 };
 
-export async function sendResetEmail (email: string) {
+export async function sendResetEmail(email: string) {
   try {
-   const returnmsg = await dbResetEmpPass(auth,email);
+    const returnmsg = await dbResetEmpPass(auth, email);
 
-   return returnmsg;
-   
-  } catch (error){
+    return returnmsg;
+  } catch (error) {
     //console.error("An error occurred in sendResetEmail:", error);
     throw error;
   }
-
 }
 
 // Fetch all recurring order templates
@@ -196,18 +192,20 @@ export const fetchRorTemplates = async (
 
 export const patchRorTemplateApproval = async (
   templateId: string,
-  isTemplateApprovedByE2: boolean | null,  
-  isTemplateApprovedByE3: boolean | null,  
-  approvalE2Id: string | "",
-  approvalE3Id: string | "",
+  isTemplateApprovedByE2: boolean | null,
+  isTemplateApprovedByE3: boolean | null,
+  approvalE2Id: string | '',
+  approvalE3Id: string | ''
 ) => {
-  console.log(`Approving Template ${templateId} as E2: ${isTemplateApprovedByE2}, E3: ${isTemplateApprovedByE3}`);
+  console.log(
+    `Approving Template ${templateId} as E2: ${isTemplateApprovedByE2}, E3: ${isTemplateApprovedByE3}`
+  );
 
   const requestBody: Record<string, any> = {
-    ...(isTemplateApprovedByE2 !== null && { isTemplateApprovedE2: isTemplateApprovedByE2 }), 
+    ...(isTemplateApprovedByE2 !== null && { isTemplateApprovedE2: isTemplateApprovedByE2 }),
     ...(isTemplateApprovedByE3 !== null && { isTemplateApprovedE3: isTemplateApprovedByE3 }),
-    ...(approvalE2Id && { approvalE2: approvalE2Id }), 
-    ...(approvalE3Id && { approvalE3: approvalE3Id }), 
+    ...(approvalE2Id && { approvalE2: approvalE2Id }),
+    ...(approvalE3Id && { approvalE3: approvalE3Id }),
   };
 
   Object.keys(requestBody).forEach(
@@ -215,9 +213,9 @@ export const patchRorTemplateApproval = async (
   );
 
   const request = {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify(requestBody),
   };
@@ -229,7 +227,6 @@ export const patchRorTemplateApproval = async (
     throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
   }
 };
-
 
 // Fetch all order requisitions and set to the provided state parameter
 export const fetchOrderRequisitions = async (
@@ -432,7 +429,6 @@ export const postOnDemandOrderRequisition = async (odorObj: OnDemandOrderToEdit)
 
 export const postRecurringOrderRequisition = async (rorObj: RecurringOrderToEdit) => {
   try {
-
     // Create a new request
     const request = new Request('/api/ror/', {
       method: 'POST',
@@ -451,7 +447,7 @@ export const postRecurringOrderRequisition = async (rorObj: RecurringOrderToEdit
   } catch (error) {
     console.log(error);
   }
-}
+};
 
 // Fetch all purchase orders
 export const fetchPurchaseOrders = async (
@@ -475,7 +471,6 @@ export const fetchPurchaseOrders = async (
 
 // Post a Purchase Order database entry
 export const postPurchaseOrder = async (requisitionId: string) => {
-
   // Create a purchase order object for persistence
   const purchaseOrder: PurchaseOrderToEdit = {
     requisitionId,
@@ -514,15 +509,19 @@ export const postPurchaseOrder = async (requisitionId: string) => {
   }
 };
 
-export const patchPurchaseOrder = async (purchaseOrderId: string, approvalP2: string, isApproved: boolean) => {
+export const patchPurchaseOrder = async (
+  purchaseOrderId: string,
+  approvalP2: string,
+  isApproved: boolean
+) => {
   const request = {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ 
-      approvalP2, 
-      isApproved 
+    body: JSON.stringify({
+      approvalP2,
+      isApproved,
     }),
   };
 
@@ -533,7 +532,7 @@ export const patchPurchaseOrder = async (purchaseOrderId: string, approvalP2: st
       const errorText = await response.text();
       throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
     }
-    
+
     return true;
   } catch (error) {
     console.log(error);
@@ -748,8 +747,8 @@ export const submitPurchaseOrder = async (purchaseOrderId: string) => {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ 
-      isSubmitted: true 
+    body: JSON.stringify({
+      isSubmitted: true,
     }),
   };
 
@@ -760,7 +759,7 @@ export const submitPurchaseOrder = async (purchaseOrderId: string) => {
       const errorText = await response.text();
       throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
     }
-    
+
     return true;
   } catch (error) {
     console.log(error);
@@ -776,7 +775,7 @@ export const patchCloseTicket = async (requisitionId: string) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        isActive: false
+        isActive: false,
       }),
     });
 

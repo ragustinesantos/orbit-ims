@@ -1,15 +1,22 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
-import { Container, Text, Button, Select, Table, TextInput, Paper, Divider, Notification, Flex } from "@mantine/core";
+import React, { useEffect, useState } from 'react';
+import { Bar, BarChart, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import {
-  fetchStockInOrders,
-  fetchStockOutOrders,
-  fetchInventory,
-} from "@/app/_utils/utility";
-import { Item, StockInOrder, StockOutOrder } from "@/app/_utils/schema";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import classes from "./GenerateReport.module.css";
+  Button,
+  Container,
+  Divider,
+  Flex,
+  Notification,
+  Paper,
+  Select,
+  Table,
+  Text,
+  TextInput,
+} from '@mantine/core';
+import { Item, StockInOrder, StockOutOrder } from '@/app/_utils/schema';
+import { fetchInventory, fetchStockInOrders, fetchStockOutOrders } from '@/app/_utils/utility';
+import classes from './GenerateReport.module.css';
 
 export default function GenerateReport() {
   const [items, setItems] = useState<Item[]>([]);
@@ -17,14 +24,18 @@ export default function GenerateReport() {
   const [selectedItemName, setSelectedItemName] = useState<string | null>(null);
   const [stockInData, setStockInData] = useState<StockInOrder[]>([]);
   const [stockOutData, setStockOutData] = useState<StockOutOrder[]>([]);
-  const [startDate, setStartDate] = useState<string>("");
-  const [endDate, setEndDate] = useState<string>("");
-  const [groupBy, setGroupBy] = useState<string>("day");
+  const [startDate, setStartDate] = useState<string>('');
+  const [endDate, setEndDate] = useState<string>('');
+  const [groupBy, setGroupBy] = useState<string>('day');
   const [filteredData, setFilteredData] = useState<any[]>([]);
-  const [notification, setNotification] = useState<{ show: boolean; message: string; color: string }>({
+  const [notification, setNotification] = useState<{
+    show: boolean;
+    message: string;
+    color: string;
+  }>({
     show: false,
-    message: "",
-    color: "red",
+    message: '',
+    color: 'red',
   });
 
   useEffect(() => {
@@ -41,7 +52,7 @@ export default function GenerateReport() {
 
   const generateReport = () => {
     if (!selectedItem || !startDate || !endDate) {
-      showNotification("⚠️ Please select an item and specify a valid date range.", "red");
+      showNotification('⚠️ Please select an item and specify a valid date range.', 'red');
       return;
     }
 
@@ -65,14 +76,17 @@ export default function GenerateReport() {
     );
 
     if (filteredIn.length === 0 && filteredOut.length === 0) {
-      showNotification("⚠️ No stock in or stock out records found for the selected item and date range.", "yellow");
+      showNotification(
+        '⚠️ No stock in or stock out records found for the selected item and date range.',
+        'yellow'
+      );
       return;
     }
 
     setFilteredData(aggregateData(filteredIn, filteredOut, groupBy));
 
     // Set selected item name
-    const itemName = items.find((item) => item.itemId === selectedItem)?.itemName || "Unknown Item";
+    const itemName = items.find((item) => item.itemId === selectedItem)?.itemName || 'Unknown Item';
     setSelectedItemName(itemName);
   };
 
@@ -103,29 +117,30 @@ export default function GenerateReport() {
     });
 
     return Object.values(dataMap).sort(
-      (a, b) => new Date(a.date.split(" - ")[0]).getTime() - new Date(b.date.split(" - ")[0]).getTime()
+      (a, b) =>
+        new Date(a.date.split(' - ')[0]).getTime() - new Date(b.date.split(' - ')[0]).getTime()
     );
   };
 
   const getDateKey = (date: string, groupBy: string) => {
     const d = new Date(date);
 
-    if (groupBy === "day") {
-      return d.toISOString().split("T")[0];
+    if (groupBy === 'day') {
+      return d.toISOString().split('T')[0];
     }
 
-    if (groupBy === "week") {
+    if (groupBy === 'week') {
       const startOfWeek = new Date(d);
       startOfWeek.setDate(d.getDate() - d.getDay() + 1);
 
       const endOfWeek = new Date(startOfWeek);
       endOfWeek.setDate(startOfWeek.getDate() + 6);
 
-      return `${startOfWeek.toISOString().split("T")[0]} - ${endOfWeek.toISOString().split("T")[0]}`;
+      return `${startOfWeek.toISOString().split('T')[0]} - ${endOfWeek.toISOString().split('T')[0]}`;
     }
 
-    if (groupBy === "month") {
-      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+    if (groupBy === 'month') {
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
     }
 
     return date;
@@ -133,9 +148,8 @@ export default function GenerateReport() {
 
   const showNotification = (message: string, color: string) => {
     setNotification({ show: true, message, color });
-    setTimeout(() => setNotification({ show: false, message: "", color: "red" }), 3000);
+    setTimeout(() => setNotification({ show: false, message: '', color: 'red' }), 3000);
   };
-
 
   return (
     <Container className={classes.container}>
@@ -145,22 +159,56 @@ export default function GenerateReport() {
 
       <Paper withBorder shadow="sm" p="md" className={classes.paper}>
         <Flex direction="row" justify="space-between" gap="md">
-          <Select label="Select Item" data={items.map((item) => ({ value: item.itemId, label: item.itemName }))} value={selectedItem} onChange={setSelectedItem} className={classes.select} />
-          <TextInput label="From Date" value={startDate} onChange={(event) => setStartDate(event.target.value)} type="date" className={classes.input} />
-          <TextInput label="To Date" value={endDate} onChange={(event) => setEndDate(event.target.value)} type="date" className={classes.input} />
-          <Select label="Group By" data={[{ value: "day", label: "Daily" }, { value: "week", label: "Weekly" }, { value: "month", label: "Monthly" }]} value={groupBy} onChange={(value) => value !== null && setGroupBy(value)} className={classes.select} />
+          <Select
+            label="Select Item"
+            data={items.map((item) => ({ value: item.itemId, label: item.itemName }))}
+            value={selectedItem}
+            onChange={setSelectedItem}
+            className={classes.select}
+          />
+          <TextInput
+            label="From Date"
+            value={startDate}
+            onChange={(event) => setStartDate(event.target.value)}
+            type="date"
+            className={classes.input}
+          />
+          <TextInput
+            label="To Date"
+            value={endDate}
+            onChange={(event) => setEndDate(event.target.value)}
+            type="date"
+            className={classes.input}
+          />
+          <Select
+            label="Group By"
+            data={[
+              { value: 'day', label: 'Daily' },
+              { value: 'week', label: 'Weekly' },
+              { value: 'month', label: 'Monthly' },
+            ]}
+            value={groupBy}
+            onChange={(value) => value !== null && setGroupBy(value)}
+            className={classes.select}
+          />
         </Flex>
         <Button mt="md" fullWidth onClick={generateReport} color="#1b4965">
           Generate Report
         </Button>
       </Paper>
 
-      {notification.show && <Notification color={notification.color} className={classes.notification}>{notification.message}</Notification>}
+      {notification.show && (
+        <Notification color={notification.color} className={classes.notification}>
+          {notification.message}
+        </Notification>
+      )}
 
       {filteredData.length > 0 && (
         <>
           <Divider my="md" />
-          <Text size="lg" mt="md">Report for: {selectedItemName}</Text>
+          <Text size="lg" mt="md">
+            Report for: {selectedItemName}
+          </Text>
 
           {/**recharts frame*/}
           <ResponsiveContainer width="100%" height={300}>
@@ -177,20 +225,25 @@ export default function GenerateReport() {
 
           <Table mt="md" className={classes.table}>
             <thead>
-              <tr><th>Date</th><th>Stock In</th><th>Stock Out</th><th>Net Stock Change</th></tr>
+              <tr>
+                <th>Date</th>
+                <th>Stock In</th>
+                <th>Stock Out</th>
+                <th>Net Stock Change</th>
+              </tr>
             </thead>
             <tbody>
               {filteredData.map((row, index) => (
-                <tr key={index}><td>{row.date}</td><td>{row.stockIn}</td><td>{row.stockOut}</td><td>{row.netStockChange}</td></tr>
+                <tr key={index}>
+                  <td>{row.date}</td>
+                  <td>{row.stockIn}</td>
+                  <td>{row.stockOut}</td>
+                  <td>{row.netStockChange}</td>
+                </tr>
               ))}
             </tbody>
           </Table>
-          <Button
-            mt="md"
-            fullWidth
-            color="#1b4965"
-            onClick={() => window.print()}
-          >
+          <Button mt="md" fullWidth color="#1b4965" onClick={() => window.print()}>
             Print
           </Button>
         </>

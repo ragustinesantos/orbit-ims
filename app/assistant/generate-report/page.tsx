@@ -1,6 +1,5 @@
 'use client';
 
-
 import GenerateReport from '@/components/GenerateReport/GenerateReport';
 import { NavbarNested } from '@/components/NavbarNested/NavbarNested';
 
@@ -15,10 +14,10 @@ export default function Assistant() {
           height: '100vh',
           padding: 10,
           justifyContent: 'space-between',
-          overflowY:'scroll',
+          overflowY: 'scroll',
         }}
       >
-        <GenerateReport/>
+        <GenerateReport />
       </div>
     </main>
   );

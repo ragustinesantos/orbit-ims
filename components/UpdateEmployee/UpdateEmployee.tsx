@@ -1,14 +1,24 @@
 'use client';
 
 import { FormEvent, useEffect, useState } from 'react';
-import { Button, Checkbox, Flex, Group, Modal, Select, SimpleGrid, Text, TextInput } from '@mantine/core';
+import {
+  Button,
+  Checkbox,
+  Flex,
+  Group,
+  Modal,
+  Select,
+  SimpleGrid,
+  Text,
+  TextInput,
+} from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { dbGetAllEmployees } from '@/app/_services/employees-service';
+import { useInventory } from '@/app/_utils/inventory-context';
 import { defaultEmployee, Employee, EmployeeToEdit } from '@/app/_utils/schema';
+import { putEmployee } from '@/app/_utils/utility';
 import CustomNotification from '../CustomNotification/CustomNotification';
 import classnames from './UpdateEmployee.module.css';
-import { useInventory } from '@/app/_utils/inventory-context';
-import { putEmployee } from '@/app/_utils/utility';
-import { dbGetAllEmployees } from '@/app/_services/employees-service';
 
 export default function UpdateEmployee() {
   // Search and selected employees from employee search
@@ -65,7 +75,6 @@ export default function UpdateEmployee() {
   // Handle update submit
   const handleSubmit = async () => {
     try {
-
       let employeeLevels = ['E1'];
       if (employeeLevel2) {
         employeeLevels.push('E2');
@@ -119,7 +128,7 @@ export default function UpdateEmployee() {
     }
   };
 
-  // Fetch employees from db 
+  // Fetch employees from db
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
@@ -156,37 +165,31 @@ export default function UpdateEmployee() {
 
       if (selectedEmployee.employeeLevel.includes('E2')) {
         setEmployeeLevel2(true);
-      }
-      else {
+      } else {
         setEmployeeLevel2(false);
       }
 
       if (selectedEmployee.employeeLevel.includes('E3')) {
         setEmployeeLevel3(true);
-      }
-      else {
+      } else {
         setEmployeeLevel3(false);
       }
 
       if (selectedEmployee.employeeLevel.includes('P1')) {
         setPurchaseAdminLevel1(true);
-      }
-      else {
+      } else {
         setPurchaseAdminLevel1(false);
       }
 
       if (selectedEmployee.employeeLevel.includes('P2')) {
         setPurchaseAdminLevel2(true);
-      }
-      else {
+      } else {
         setPurchaseAdminLevel2(false);
       }
 
-
       if (selectedEmployee.employeeLevel.includes('IA')) {
         setInventoryAdmin(true);
-      }
-      else {
+      } else {
         setInventoryAdmin(false);
       }
     };
@@ -200,36 +203,34 @@ export default function UpdateEmployee() {
   }, []);
 
   const updateEmployeeLevelList = () => {
-    let employeeLevelList = "E1";
+    let employeeLevelList = 'E1';
     if (employeeLevel2) {
-      employeeLevelList += ", E2"
+      employeeLevelList += ', E2';
     }
 
     if (employeeLevel3) {
-      employeeLevelList += ", E3"
+      employeeLevelList += ', E3';
     }
-
 
     if (purchaseAdminLevel1) {
-      employeeLevelList += ", P1"
+      employeeLevelList += ', P1';
     }
 
-
     if (purchaseAdminLevel2) {
-      employeeLevelList += ", P2"
+      employeeLevelList += ', P2';
     }
 
     if (inventoryAdmin) {
-      employeeLevelList += ", IA"
+      employeeLevelList += ', IA';
     }
 
     setEmployeeLevel(employeeLevelList);
-  }
+  };
 
   return (
     <main>
-      <form onSubmit={
-        async (event: FormEvent) => {
+      <form
+        onSubmit={async (event: FormEvent) => {
           event.preventDefault();
           if (!firstName || !lastName || !email || !phone || !position || !department) {
             setShowError(true);
@@ -240,8 +241,7 @@ export default function UpdateEmployee() {
             updateEmployeeLevelList();
             open();
           }
-        }
-      }
+        }}
       >
         <Group
           classNames={{
@@ -391,7 +391,7 @@ export default function UpdateEmployee() {
               classNames={{ root: classnames.txtItemName }}
               size="md"
               withAsterisk
-              type='email'
+              type="email"
               required
             />
             <TextInput
@@ -402,7 +402,7 @@ export default function UpdateEmployee() {
               classNames={{ root: classnames.txtItemName }}
               size="md"
               withAsterisk
-              type='number'
+              type="number"
               required
             />
             <TextInput
@@ -426,11 +426,10 @@ export default function UpdateEmployee() {
               required
             />
           </SimpleGrid>
-          <Text fw={500}>
-            Access Level
-          </Text>
+          <Text fw={500}>Access Level</Text>
           <Checkbox
-            disabled checked
+            disabled
+            checked
             label="Employee Level 1 (default)"
             classNames={{
               label: classnames.checkboxLabel,
@@ -461,13 +460,7 @@ export default function UpdateEmployee() {
             checked={inventoryAdmin}
             onChange={handleInventoryAdminChange}
           />
-          <Button
-            variant="filled"
-            color="#1B4965"
-            size="md"
-            mt="xl"
-            type='submit'
-          >
+          <Button variant="filled" color="#1B4965" size="md" mt="xl" type="submit">
             Submit
           </Button>
 

@@ -1,11 +1,6 @@
-import {
-    addDoc,
-    collection,
-    getDocs,
-    query,
-  } from 'firebase/firestore';
-  import { db } from '../_utils/firebase';
-  import { StockInOrder} from '../_utils/schema';
+import { addDoc, collection, getDocs, query } from 'firebase/firestore';
+import { db } from '../_utils/firebase';
+import { StockInOrder } from '../_utils/schema';
 
 export async function dbGetAllStockInOrders() {
   try {
@@ -26,8 +21,6 @@ export async function dbGetAllStockInOrders() {
   }
 }
 
-
-
 export async function dbStockInGenerate(stockInObj: StockInOrder) {
   try {
     const newStockInOrder = collection(db, 'stock-in-order');
@@ -35,7 +28,6 @@ export async function dbStockInGenerate(stockInObj: StockInOrder) {
     await addDoc(newStockInOrder, stockInObj);
 
     console.log('Item successfully added');
-
   } catch (error) {
     return console.log(`Error adding item: ${error}`);
   }

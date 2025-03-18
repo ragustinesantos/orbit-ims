@@ -15,7 +15,7 @@ export default function StockInPage() {
           height: '100vh',
           paddingLeft: 32,
           paddingTop: 4,
-          overflowY:'scroll',
+          overflowY: 'scroll',
         }}
       >
         <StockIn />

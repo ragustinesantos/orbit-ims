@@ -11,9 +11,9 @@ import {
   RecurringOrderTemplateToEdit,
 } from '@/app/_utils/schema';
 import CustomNotification from '@/components/CustomNotification/CustomNotification';
+import ImgModal from '../ImgModal/ImgModal';
 import TableDeleteBtn from '../TableDeleteBtn/TableDeleteBtn';
 import classnames from './CreateRorTemplate.module.css';
-import ImgModal from '../ImgModal/ImgModal';
 
 export default function CreateRorTemplate() {
   const { inventory, supplierList, setRefresh, rorTemplates } = useInventory();
@@ -158,7 +158,6 @@ export default function CreateRorTemplate() {
     setModalStateTracker((prev) => ({ ...prev, [itemId]: !prev[itemId] }));
   };
 
-
   // Map through the list of item id's to retrieve data for the template table body
   const mappedItemList = itemList.map((itemId) => {
     const currentItem = inventory?.find((invItem) => invItem.itemId === itemId);
@@ -166,13 +165,22 @@ export default function CreateRorTemplate() {
       (supplier) => supplier.supplierId === currentItem?.supplierId
     );
     return [
-      <Text onClick={() => toggleImgModalState(itemId)} classNames={{root:classnames.imgModalID}}>{currentItem?.itemName}</Text>,
+      <Text
+        onClick={() => toggleImgModalState(itemId)}
+        classNames={{ root: classnames.imgModalID }}
+      >
+        {currentItem?.itemName}
+      </Text>,
       currentItem?.category,
       currentItem?.supplyUnit,
       currentItem?.packageUnit,
       currentSupplier?.supplierName,
       <TableDeleteBtn itemId={currentItem?.itemId} handleDelete={handleDeleteFromItemList} />,
-      <ImgModal item={currentItem} isOpened={!!modalStateTracker[itemId]} isClosed={() => setModalStateTracker((prev) => ({ ...prev, [itemId]: false }))} ></ImgModal>
+      <ImgModal
+        item={currentItem}
+        isOpened={!!modalStateTracker[itemId]}
+        isClosed={() => setModalStateTracker((prev) => ({ ...prev, [itemId]: false }))}
+      ></ImgModal>,
     ];
   });
 

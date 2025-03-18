@@ -3,11 +3,15 @@
 import { useEffect, useState } from 'react';
 import { Button, Flex, Group, Modal, Select, SimpleGrid, Text, TextInput } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import {
+  dbDeleteEmployee,
+  dbGetAllEmployees,
+  dbUpdateEmployee,
+} from '@/app/_services/employees-service';
+import { useInventory } from '@/app/_utils/inventory-context';
 import { defaultEmployee, Employee } from '@/app/_utils/schema';
-import { dbDeleteEmployee, dbGetAllEmployees, dbUpdateEmployee } from '@/app/_services/employees-service';
 import CustomNotification from '../CustomNotification/CustomNotification';
 import classnames from './DeleteEmployee.module.css';
-import { useInventory } from '@/app/_utils/inventory-context';
 
 export default function DeleteEmployee() {
   // Search and selected employees from employee search
@@ -45,7 +49,7 @@ export default function DeleteEmployee() {
     try {
       // Set employee status to inactive rather than permanent deletion
       const updatedEmployee = {
-        isActive: false
+        isActive: false,
       };
       await dbUpdateEmployee(staticEmployeeId, updatedEmployee);
 
@@ -66,7 +70,7 @@ export default function DeleteEmployee() {
     }
   };
 
-  // Fetch employees from db 
+  // Fetch employees from db
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
@@ -101,11 +105,11 @@ export default function DeleteEmployee() {
       setDepartment(selectedEmployee.department || '');
 
       let employeeLevelList = '';
-      selectedEmployee.employeeLevel.forEach(employeeLevel => {
+      selectedEmployee.employeeLevel.forEach((employeeLevel) => {
         if (employeeLevelList) {
           employeeLevelList += ', ';
         }
-        employeeLevelList += employeeLevel
+        employeeLevelList += employeeLevel;
       });
       setEmployeeLevel(employeeLevelList);
     };
@@ -134,7 +138,9 @@ export default function DeleteEmployee() {
           title: classnames.modalTitle,
         }}
       >
-        <Text mb={20}>Are you sure you want to delete employee {firstName} {lastName}?</Text>
+        <Text mb={20}>
+          Are you sure you want to delete employee {firstName} {lastName}?
+        </Text>
         <Flex justify="center" align="center" direction="column" style={{ height: '100%' }}>
           <SimpleGrid
             cols={2}
@@ -260,7 +266,7 @@ export default function DeleteEmployee() {
           value={position}
           placeholder="Enter Position..."
           classNames={{ input: classnames.disabledText }}
-          size='md'
+          size="md"
           withAsterisk
           disabled
         />
@@ -303,21 +309,9 @@ export default function DeleteEmployee() {
       >
         Delete
       </Button>
-      {showError &&
-        CustomNotification(
-          'error',
-          errorTitle,
-          errorMessage,
-          setShowError
-        )}
+      {showError && CustomNotification('error', errorTitle, errorMessage, setShowError)}
       {showSuccess &&
-        CustomNotification(
-          'success',
-          'Employee Deleted',
-          successMessage,
-          setShowSuccess
-        )}
+        CustomNotification('success', 'Employee Deleted', successMessage, setShowSuccess)}
     </Group>
   );
-
 }

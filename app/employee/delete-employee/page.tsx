@@ -1,10 +1,9 @@
 'use client';
 
-import { NavbarNested } from '@/components/NavbarNested/NavbarNested';
 import DeleteEmployee from '@/components/DeleteEmployee/DeleteEmployee';
+import { NavbarNested } from '@/components/NavbarNested/NavbarNested';
 
 export default function DeleteEmployeePage() {
-
   return (
     <main style={{ display: 'flex', width: '100vw' }}>
       <NavbarNested />

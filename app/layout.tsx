@@ -20,11 +20,11 @@ export default function RootLayout({ children }: { children: any }) {
         />
       </head>
       <body>
-          <MantineProvider theme={theme}>
-            <AuthContextProvider>
-              <InventoryContextProvider>{children}</InventoryContextProvider>
-            </AuthContextProvider>
-          </MantineProvider>
+        <MantineProvider theme={theme}>
+          <AuthContextProvider>
+            <InventoryContextProvider>{children}</InventoryContextProvider>
+          </AuthContextProvider>
+        </MantineProvider>
       </body>
     </html>
   );

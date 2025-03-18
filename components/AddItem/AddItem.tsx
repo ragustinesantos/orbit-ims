@@ -5,9 +5,9 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { Button, Group, Select, SimpleGrid, Text, TextInput } from '@mantine/core';
 import { useInventory } from '@/app/_utils/inventory-context';
 import { defaultItem, Item } from '@/app/_utils/schema';
+import { postItem } from '@/app/_utils/utility';
 import CustomNotification from '@/components/CustomNotification/CustomNotification';
 import classnames from './AddItem.module.css';
-import { postItem } from '@/app/_utils/utility';
 
 export default function AddItem() {
   const [itemName, setItemName] = useState('');
@@ -59,7 +59,6 @@ export default function AddItem() {
       };
 
       try {
-
         const response = await postItem(newItemObj);
         // If it is successful provide feedback
         if (response && response.ok) {

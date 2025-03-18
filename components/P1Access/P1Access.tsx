@@ -20,10 +20,10 @@ import {
   fetchOrderRequisitions,
   fetchPurchaseOrders,
   fetchRecurringOrderRequisitions,
+  patchCloseTicket,
   patchOrderRequisitionPo,
   postPurchaseOrder,
   submitPurchaseOrder,
-  patchCloseTicket,
 } from '@/app/_utils/utility';
 import CustomNotification from '@/components/CustomNotification/CustomNotification';
 import RorModal from '@/components/RorModal/RorModal';
@@ -128,10 +128,10 @@ export default function P1AccessPage() {
           setShowNotification
         )
       );
-      
+
       // Trigger a refresh when an ODOR is approved to update the tables
       if (isApproved) {
-        setRefreshTrigger(prev => prev + 1);
+        setRefreshTrigger((prev) => prev + 1);
       }
     } else if (message === 'error') {
       console.error(Error);
@@ -481,7 +481,7 @@ export default function P1AccessPage() {
             + SO
           </Text>
         ),
-        <button 
+        <button
           className={classnames.closeTicketButton}
           onClick={() => openCloseTicketModal(or.requisitionId)}
         >
@@ -656,17 +656,17 @@ export default function P1AccessPage() {
     setPendingCloseTicketId(requisitionId);
     setCloseTicketModalOpen(true);
   };
-  
+
   // Close confirmation modal without closing ticket
   const closeCloseTicketModal = () => {
     setPendingCloseTicketId(null);
     setCloseTicketModalOpen(false);
   };
-  
+
   // Handle closing the ticket
   const handleCloseTicket = async () => {
     if (!pendingCloseTicketId) return;
-    
+
     try {
       await patchCloseTicket(pendingCloseTicketId);
 
@@ -679,24 +679,19 @@ export default function P1AccessPage() {
           setShowNotification
         )
       );
-      
+
       // Close the modal
       setCloseTicketModalOpen(false);
       setPendingCloseTicketId(null);
-      
+
       // Refresh the data
-      setRefreshTrigger(prev => prev + 1);
+      setRefreshTrigger((prev) => prev + 1);
     } catch (error) {
       console.error('Error closing ticket:', error);
-      
+
       // Show error notification
       setNotificationMessage(
-        CustomNotification(
-          'error',
-          'Error',
-          'Failed to close ticket',
-          setShowNotification
-        )
+        CustomNotification('error', 'Error', 'Failed to close ticket', setShowNotification)
       );
     }
     revealNotification();
@@ -831,7 +826,7 @@ export default function P1AccessPage() {
         </Group>
       ) : (
         <Group classNames={{ root: classnames.loadingContainer }}>
-          <img src="/assets/loading/Spin@1x-1.0s-200px-200px.gif" alt="Loading..."/>
+          <img src="/assets/loading/Spin@1x-1.0s-200px-200px.gif" alt="Loading..." />
         </Group>
       )}
       {showNotification && (
@@ -888,11 +883,11 @@ export default function P1AccessPage() {
           </Button>
         </Group>
       </Modal>
-      
-      <Modal 
-        opened={closeTicketModalOpen} 
-        onClose={closeCloseTicketModal} 
-        title="Confirmation" 
+
+      <Modal
+        opened={closeTicketModalOpen}
+        onClose={closeCloseTicketModal}
+        title="Confirmation"
         centered
         zIndex={1000}
       >
@@ -911,9 +906,9 @@ export default function P1AccessPage() {
           >
             Close Ticket
           </Button>
-          <Button 
-            classNames={{ root: classnames.rootBtn }} 
-            onClick={closeCloseTicketModal} 
+          <Button
+            classNames={{ root: classnames.rootBtn }}
+            onClick={closeCloseTicketModal}
             color="red"
           >
             Cancel

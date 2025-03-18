@@ -1,10 +1,9 @@
 'use client';
 
-import { NavbarNested } from '@/components/NavbarNested/NavbarNested';
 import DeleteItem from '@/components/DeleteItem/DeleteItem';
+import { NavbarNested } from '@/components/NavbarNested/NavbarNested';
 
 export default function DeleteItemPage() {
-
   return (
     <main style={{ display: 'flex', width: '100vw' }}>
       <NavbarNested />

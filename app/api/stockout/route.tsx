@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { dbGetAllStockOutOrders, dbStockOutGenerate} from '@/app/_services/stockout-service';
+import { dbGetAllStockOutOrders, dbStockOutGenerate } from '@/app/_services/stockout-service';
 
 export async function GET() {
   try {
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
       stockOutId: z.string(),
       itemId: z.string(),
       requisitionId: z.string(),
-      stockOutQuantity: z.number(), 
+      stockOutQuantity: z.number(),
       stockOutDate: z.string(),
       dispatchedBy: z.string(),
     });

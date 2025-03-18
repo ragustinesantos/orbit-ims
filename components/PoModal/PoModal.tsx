@@ -18,23 +18,23 @@ import {
   defaultEmployee,
   defaultOrderRequisition,
   Employee,
+  Item,
+  ItemOrder,
+  NewItemOrder,
+  OnDemandOrder,
   OrderRequisition,
   poModalProps,
   RecurringOrder,
-  OnDemandOrder,
-  ItemOrder,
-  NewItemOrder,
-  Item,
 } from '@/app/_utils/schema';
-import { 
-  fetchEmployee, 
-  fetchOrderRequisition, 
-  fetchRecurringOrderRequisition,
+import {
+  fetchEmployee,
   fetchOnDemandOrderRequisition,
-  patchPurchaseOrder
+  fetchOrderRequisition,
+  fetchRecurringOrderRequisition,
+  patchPurchaseOrder,
 } from '@/app/_utils/utility';
-import classnames from './PoModal.module.css';
 import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
+import classnames from './PoModal.module.css';
 
 export default function PoModal({
   purchaseOrder,
@@ -44,7 +44,7 @@ export default function PoModal({
   handleApprovalActivity,
 }: poModalProps) {
   const { currentEmployee, inventory, supplierList } = useInventory();
-  
+
   const [opened, { open, close }] = useDisclosure(false);
   const [employee, setEmployee] = useState<Employee>({ ...defaultEmployee });
   const [currentOr, setCurrentOr] = useState<OrderRequisition | null>(null);
@@ -64,9 +64,8 @@ export default function PoModal({
 
   // Handle approval or rejection of purchase order
   const handleApproval = async (approved: boolean) => {
-    
     setApproval((prev) => !prev);
-    
+
     if (purchaseOrder && currentEmployee) {
       setIsSubmitting(true);
       try {
@@ -75,7 +74,7 @@ export default function PoModal({
           currentEmployee.employeeId,
           approved
         );
-        
+
         if (result && handleApprovalActivity) {
           handleApprovalActivity(
             'success',
@@ -83,22 +82,22 @@ export default function PoModal({
             approved ? 'APPROVED' : 'REJECTED'
           );
         }
-        
+
         if (onSubmit) {
           onSubmit(purchaseOrder.purchaseOrderId);
         }
-        
+
         // Close the modal
         isClosed();
-        
+
         // Close the confirmation modal
         close();
-        
+
         setConfirmation(false);
         setIsSubmitting(false);
       } catch (error) {
-        console.error("Error updating purchase order:", error);
-        
+        console.error('Error updating purchase order:', error);
+
         if (handleApprovalActivity) {
           handleApprovalActivity(
             'error',
@@ -120,25 +119,25 @@ export default function PoModal({
           // Fetch the order requisition
           const requisitionData = await fetchOrderRequisition(purchaseOrder.requisitionId);
           setCurrentOr(requisitionData);
-          
+
           if (requisitionData) {
             // Fetch ROR data
             let rorData = null;
             try {
               rorData = await fetchRecurringOrderRequisition(requisitionData.requisitionTypeId);
             } catch (error) {
-              console.error("Error fetching ROR data:", error);
+              console.error('Error fetching ROR data:', error);
             }
-            
+
             // Fetch ODOR data
             let odorData = null;
             try {
               odorData = await fetchOnDemandOrderRequisition(requisitionData.requisitionTypeId);
               setOdorData(odorData);
             } catch (error) {
-              console.error("Error fetching ODOR data:", error);
+              console.error('Error fetching ODOR data:', error);
             }
-            
+
             // Determine which order to use
             let selectedOrder = null;
             if (rorData && rorData.itemOrders && rorData.itemOrders.length > 0) {
@@ -146,14 +145,14 @@ export default function PoModal({
             } else if (odorData && odorData.itemOrders) {
               selectedOrder = odorData;
             }
-            
+
             if (selectedOrder && selectedOrder.itemOrders) {
               // Create a mapping of item IDs to quantity
               const orderQtyMapping: Record<string, number> = {};
-              
+
               // Find the matching inventory items for each order item
               const matchedItems: Item[] = [];
-              
+
               for (const order of selectedOrder.itemOrders) {
                 if (inventory) {
                   for (const invItem of inventory) {
@@ -165,34 +164,34 @@ export default function PoModal({
                   }
                 }
               }
-              
+
               setOrderQtyMap(orderQtyMapping);
               setRequisitionItems(matchedItems);
             }
-            
+
             // Fetch P1 approval
             if (requisitionData.approvalP1) {
               try {
                 const p1ApproverData = await fetchEmployee(requisitionData.approvalP1);
                 setP1Approver(p1ApproverData);
               } catch (error) {
-                console.error("Error fetching P1 approver:", error);
+                console.error('Error fetching P1 approver:', error);
               }
             }
-            
+
             // Fetch P2 approval
             if (purchaseOrder.approvalP2) {
               try {
                 const p2ApproverData = await fetchEmployee(purchaseOrder.approvalP2);
                 setP2Approver(p2ApproverData);
               } catch (error) {
-                console.error("Error fetching P2 approver:", error);
+                console.error('Error fetching P2 approver:', error);
               }
             }
           }
           setLoading(false);
         } catch (error) {
-          console.error("Error fetching order requisition:", error);
+          console.error('Error fetching order requisition:', error);
           setLoading(false);
         }
       }
@@ -209,7 +208,7 @@ export default function PoModal({
           setEmployee(employeeData);
         }
       } catch (error) {
-        console.error("Error fetching employee:", error);
+        console.error('Error fetching employee:', error);
       }
     };
     retrieveEmployeeById();
@@ -230,15 +229,13 @@ export default function PoModal({
       const currentSupplier = supplierList?.find(
         (supplier) => supplier.supplierId === item.supplierId
       );
-      
+
       // Finding the item in the purchase order to get the quantity
-      const poItem = purchaseOrder?.orderList?.find(poItem => poItem.itemId === item.itemId);
+      const poItem = purchaseOrder?.orderList?.find((poItem) => poItem.itemId === item.itemId);
       const quantity = poItem ? poItem.quantity : orderQtyMap[item.itemId] || 0;
-      
+
       return [
-        <Text key={item.itemId}>
-          {item.itemName}
-        </Text>,
+        <Text key={item.itemId}>{item.itemName}</Text>,
         item.category,
         item.supplyUnit,
         item.packageUnit,
@@ -249,15 +246,13 @@ export default function PoModal({
     // Add non-inventory items if they exist in the ODOR
     // '-' for fields that don't apply to non-inventory items
     ...(odorData?.newItemOrders?.map((item: NewItemOrder) => [
-      <Text key={`new-${item.itemName}`}>
-        {item.itemName}
-      </Text>,
+      <Text key={`new-${item.itemName}`}>{item.itemName}</Text>,
       'Non-Inventory',
       '-',
       '-',
       '-',
       item.purchaseQty,
-    ]) || [])
+    ]) || []),
   ];
 
   const orderItemsData: TableData = {
@@ -305,7 +300,8 @@ export default function PoModal({
                 root: classnames.rootConfirmationText,
               }}
             >
-              Do you want to proceed with the {confirmation ? 'approval' : 'rejection'} of the Purchase Order?
+              Do you want to proceed with the {confirmation ? 'approval' : 'rejection'} of the
+              Purchase Order?
             </Text>
             <Group classNames={{ root: classnames.rootBtnArea }}>
               <Button
@@ -320,48 +316,49 @@ export default function PoModal({
               </Button>
             </Group>
           </Modal>
-          
-      <Text
-        classNames={{
-          root: classnames.rootText,
-        }}
-      >
-        Purchase Order
-      </Text>
 
-      <TextInput
-        disabled
-        label="Employee Name"
+          <Text
+            classNames={{
+              root: classnames.rootText,
+            }}
+          >
+            Purchase Order
+          </Text>
+
+          <TextInput
+            disabled
+            label="Employee Name"
             value={`${employee.firstName} ${employee.lastName}`}
-        size="md"
-        classNames={{ root: classnames.rootSection }}
-      />
+            size="md"
+            classNames={{ root: classnames.rootSection }}
+          />
 
-      <SimpleGrid cols={3} classNames={{ root: classnames.rootSection }}>
+          <SimpleGrid cols={3} classNames={{ root: classnames.rootSection }}>
             <TextInput disabled label="Employee ID" value={employee.employeeId} size="md" />
             <TextInput disabled label="Date" value={orDate} size="md" />
             <TextInput disabled label="Requisition ID" value={currentOr?.requisitionId} size="md" />
-      </SimpleGrid>
+          </SimpleGrid>
 
-      <SimpleGrid cols={2} classNames={{ root: classnames.rootSection }}>
-            <TextInput disabled label="Prepared By" value={`${currentEmployee?.firstName} ${currentEmployee?.lastName}`} size="md" />
+          <SimpleGrid cols={2} classNames={{ root: classnames.rootSection }}>
+            <TextInput
+              disabled
+              label="Prepared By"
+              value={`${currentEmployee?.firstName} ${currentEmployee?.lastName}`}
+              size="md"
+            />
             <TextInput disabled label="PO ID" value={purchaseOrder?.purchaseOrderId} size="md" />
-      </SimpleGrid>
+          </SimpleGrid>
 
           <Text classNames={{ root: classnames.rootHeaderTxt }}>Order Items</Text>
-      <Table
-        striped
-        classNames={{ table: classnames.rootTable }}
-            data={orderItemsData}
-      />
+          <Table striped classNames={{ table: classnames.rootTable }} data={orderItemsData} />
 
-      <Text classNames={{ root: classnames.rootHeaderTxt }}>Approvals:</Text>
+          <Text classNames={{ root: classnames.rootHeaderTxt }}>Approvals:</Text>
           <Group gap="xl">
-      <Table
-        withTableBorder
-        withColumnBorders
-        withRowBorders
-        classNames={{ table: classnames.rootApprovalTable, td: classnames.tableTd }}
+            <Table
+              withTableBorder
+              withColumnBorders
+              withRowBorders
+              classNames={{ table: classnames.rootApprovalTable, td: classnames.tableTd }}
               data={p1ApprovalData}
             />
 
@@ -400,21 +397,21 @@ export default function PoModal({
               </Button>
             </Group>
           ) : (
-      <div className={classnames.rootBtnArea}>
-        <Button 
-          classNames={{ root: classnames.rootBtn }}
+            <div className={classnames.rootBtnArea}>
+              <Button
+                classNames={{ root: classnames.rootBtn }}
                 onClick={() => {
                   // Call onSubmit callback if provided
                   if (onSubmit && purchaseOrder) {
                     onSubmit(purchaseOrder.purchaseOrderId);
                   }
                 }}
-          color="#1B4965"
+                color="#1B4965"
                 disabled={isSubmitting}
-        >
-          Submit
-        </Button>
-      </div>
+              >
+                Submit
+              </Button>
+            </div>
           )}
         </>
       )}

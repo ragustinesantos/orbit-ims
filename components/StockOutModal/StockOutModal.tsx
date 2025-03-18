@@ -1,13 +1,38 @@
-"use client"
-import { useEffect, useState } from 'react';
-import { Button, Modal, NumberInput, Select, SimpleGrid, Table, Text, TextInput } from '@mantine/core';
-import { useInventory } from '@/app/_utils/inventory-context';
-import classnames from './StockOutModal.module.css';
-import { defaultItem, Item, ItemOrder, OrderRequisition, StockOutOrder } from '@/app/_utils/schema';
-import { fetchOnDemandOrderRequisition, fetchOrderRequisition, fetchRecurringOrderRequisition, fetchStockOutOrders, postStockOutOrder, putItem } from '@/app/_utils/utility';
-import CustomNotification from '../CustomNotification/CustomNotification';
+'use client';
 
-export default function StockOutModal({ opened, close, requisitionId }: { opened: boolean; close: () => void; requisitionId: string }) {
+import { useEffect, useState } from 'react';
+import {
+  Button,
+  Modal,
+  NumberInput,
+  Select,
+  SimpleGrid,
+  Table,
+  Text,
+  TextInput,
+} from '@mantine/core';
+import { useInventory } from '@/app/_utils/inventory-context';
+import { defaultItem, Item, ItemOrder, OrderRequisition, StockOutOrder } from '@/app/_utils/schema';
+import {
+  fetchOnDemandOrderRequisition,
+  fetchOrderRequisition,
+  fetchRecurringOrderRequisition,
+  fetchStockOutOrders,
+  postStockOutOrder,
+  putItem,
+} from '@/app/_utils/utility';
+import CustomNotification from '../CustomNotification/CustomNotification';
+import classnames from './StockOutModal.module.css';
+
+export default function StockOutModal({
+  opened,
+  close,
+  requisitionId,
+}: {
+  opened: boolean;
+  close: () => void;
+  requisitionId: string;
+}) {
   const [searchValue, setSearchValue] = useState<string | null>(null);
   const [selectedItem, setSelectedItem] = useState<Item>(defaultItem);
   const [requisitionItems, setRequisitionItems] = useState<Item[]>([]);
@@ -18,7 +43,6 @@ export default function StockOutModal({ opened, close, requisitionId }: { opened
   const [showSuccess, setShowSuccess] = useState<boolean>(false);
   const [showUpdateError, setShowUpdateError] = useState<boolean>(false);
 
-
   const [stockOutQuantity, setStockOutQuantity] = useState<number>(0);
   const [stockOutDate, setStockOutDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [dispatchedBy, setDispatchedBy] = useState<string>('');
@@ -26,22 +50,17 @@ export default function StockOutModal({ opened, close, requisitionId }: { opened
   const [stockOutOrders, setStockOutOrders] = useState<StockOutOrder[]>([]);
   const [orderQtyMap, setOrderQtyMap] = useState<Record<string, number>>({});
 
-
   useEffect(() => {
     fetchStockOutOrders(setStockOutOrders);
   }, [stockOutOrders]);
 
-
-
   const getItemDetails = (itemId: string) => {
     const foundItem = inventory?.find((item) => item.itemId === itemId);
     return {
-      name: foundItem?.itemName || "Unknown Item",
-      unit: foundItem?.supplyUnit || "N/A",
+      name: foundItem?.itemName || 'Unknown Item',
+      unit: foundItem?.supplyUnit || 'N/A',
     };
   };
-
-
 
   useEffect(() => {
     const retrieveItemsInRO = async () => {
@@ -54,13 +73,15 @@ export default function StockOutModal({ opened, close, requisitionId }: { opened
 
         const selectedOrder = rorData?.itemOrders?.length ? rorData : odorData;
         const orderQtyMapping: Record<string, number> = {};
-        const matchedItems = selectedOrder.itemOrders.map((order: ItemOrder) => {
-          const inventoryItem = inventory?.find((invItem) => invItem.itemId === order.itemId);
-          if (inventoryItem) {
-            orderQtyMapping[order.itemId] = order.orderQty;
-          }
-          return inventoryItem;
-        }).filter(Boolean) as Item[];
+        const matchedItems = selectedOrder.itemOrders
+          .map((order: ItemOrder) => {
+            const inventoryItem = inventory?.find((invItem) => invItem.itemId === order.itemId);
+            if (inventoryItem) {
+              orderQtyMapping[order.itemId] = order.orderQty;
+            }
+            return inventoryItem;
+          })
+          .filter(Boolean) as Item[];
 
         setOrderQtyMap(orderQtyMapping);
         setRequisitionItems(matchedItems);
@@ -72,7 +93,9 @@ export default function StockOutModal({ opened, close, requisitionId }: { opened
     retrieveItemsInRO();
   }, [requisitionId, inventory]);
 
-  const relatedStockOutOrders = stockOutOrders.filter((order) => order.requisitionId === requisitionId);
+  const relatedStockOutOrders = stockOutOrders.filter(
+    (order) => order.requisitionId === requisitionId
+  );
 
   //stock out data
   const stockOutRows = relatedStockOutOrders.map((stockOutOrder) => {
@@ -88,8 +111,6 @@ export default function StockOutModal({ opened, close, requisitionId }: { opened
       </Table.Tr>
     );
   });
-
-
 
   useEffect(() => {
     if (!searchValue) {
@@ -128,7 +149,10 @@ export default function StockOutModal({ opened, close, requisitionId }: { opened
 
     try {
       await postStockOutOrder(newStockOutOrder);
-      await putItem(selectedItem.itemId, { ...selectedItem, currentStockInStoreRoom: selectedItem.currentStockInStoreRoom - stockOutQuantity });
+      await putItem(selectedItem.itemId, {
+        ...selectedItem,
+        currentStockInStoreRoom: selectedItem.currentStockInStoreRoom - stockOutQuantity,
+      });
 
       console.log('Stock out success');
       fetchStockOutOrders(setStockOutOrders);
@@ -169,25 +193,53 @@ export default function StockOutModal({ opened, close, requisitionId }: { opened
         }}
       />
 
-
       <SimpleGrid cols={2} spacing="xl" verticalSpacing="xl">
         <TextInput label="Item ID" disabled value={selectedItem.itemId} size="md" />
         <TextInput label="Package Unit" disabled value={selectedItem.packageUnit} size="md" />
         <TextInput label="Unit of Measurement" disabled value={selectedItem.supplyUnit} size="md" />
         <TextInput label="Category" disabled value={selectedItem.category} size="md" />
-        <TextInput label="Current Stock" disabled value={selectedItem.currentStockInStoreRoom} size="md" type="number" />
-        <NumberInput label="Stock Out Quantity" value={stockOutQuantity} onChange={(value) => handleStockOutQuantity(Number(value) || 0)} min={1} max={selectedItem.currentStockInStoreRoom || 0} size="md" withAsterisk />
-        <TextInput label="Stock Out Date" value={stockOutDate} onChange={(e) => setStockOutDate(e.target.value)} type="date" size="md" withAsterisk />
-        <TextInput label="Dispatched By" value={dispatchedBy} onChange={(e) => setDispatchedBy(e.target.value)} size="md" withAsterisk />
+        <TextInput
+          label="Current Stock"
+          disabled
+          value={selectedItem.currentStockInStoreRoom}
+          size="md"
+          type="number"
+        />
+        <NumberInput
+          label="Stock Out Quantity"
+          value={stockOutQuantity}
+          onChange={(value) => handleStockOutQuantity(Number(value) || 0)}
+          min={1}
+          max={selectedItem.currentStockInStoreRoom || 0}
+          size="md"
+          withAsterisk
+        />
+        <TextInput
+          label="Stock Out Date"
+          value={stockOutDate}
+          onChange={(e) => setStockOutDate(e.target.value)}
+          type="date"
+          size="md"
+          withAsterisk
+        />
+        <TextInput
+          label="Dispatched By"
+          value={dispatchedBy}
+          onChange={(e) => setDispatchedBy(e.target.value)}
+          size="md"
+          withAsterisk
+        />
       </SimpleGrid>
 
-      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "30px", marginTop: "30px" }}>
-        <Button
-          variant="filled"
-          color="blue"
-          size="md"
-          onClick={handleSubmit}
-        >
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          marginBottom: '30px',
+          marginTop: '30px',
+        }}
+      >
+        <Button variant="filled" color="blue" size="md" onClick={handleSubmit}>
           Generate SO
         </Button>
       </div>
@@ -217,7 +269,14 @@ export default function StockOutModal({ opened, close, requisitionId }: { opened
       {/*stock out list table */}
 
       <Text className={classnames.rootText}>Stock Out List</Text>
-      <Table stickyHeader stickyHeaderOffset={50} horizontalSpacing="xl" verticalSpacing="lg" style={{ width: "100%" }} classNames={{ thead: classnames.thead, td: classnames.td }}>
+      <Table
+        stickyHeader
+        stickyHeaderOffset={50}
+        horizontalSpacing="xl"
+        verticalSpacing="lg"
+        style={{ width: '100%' }}
+        classNames={{ thead: classnames.thead, td: classnames.td }}
+      >
         <Table.Thead>
           <Table.Tr>
             <Table.Th>Stock Out ID</Table.Th>

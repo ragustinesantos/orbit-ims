@@ -15,7 +15,7 @@ export default function StockOutPage() {
           height: '100vh',
           paddingLeft: 32,
           paddingTop: 4,
-          overflowY:'scroll',
+          overflowY: 'scroll',
         }}
       >
         <StockOut />
