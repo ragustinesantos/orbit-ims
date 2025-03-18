@@ -5,9 +5,9 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { Button, Group, Select, SimpleGrid, Text, TextInput } from '@mantine/core';
 import { useInventory } from '@/app/_utils/inventory-context';
 import { defaultItem, Item } from '@/app/_utils/schema';
+import { postItem } from '@/app/_utils/utility';
 import CustomNotification from '@/components/CustomNotification/CustomNotification';
 import classnames from './AddItem.module.css';
-import { postItem } from '@/app/_utils/utility';
 
 export default function AddItem() {
   const [itemName, setItemName] = useState('');
@@ -59,7 +59,6 @@ export default function AddItem() {
       };
 
       try {
-
         const response = await postItem(newItemObj);
         // If it is successful provide feedback
         if (response && response.ok) {
@@ -112,89 +111,101 @@ export default function AddItem() {
   }, []);
 
   return (
-    <main>
-      <Group
+    <main className={classnames.rootMain}>
+      <Text
         classNames={{
-          root: classnames.rootGroup,
+          root: classnames.rootText,
         }}
       >
-        <Text
-          classNames={{
-            root: classnames.rootText,
-          }}
-        >
-          Add
-        </Text>
-        <SimpleGrid cols={2} spacing="xl" verticalSpacing="xl">
-          <TextInput
-            label="Item Name"
-            withAsterisk
-            placeholder="Enter Item Name..."
-            value={itemName}
-            onChange={handleItemNameChange}
-          />
-          <TextInput label="Item ID" disabled />
-          <TextInput
-            label="Package Unit"
-            withAsterisk
-            placeholder="Enter Package Unit..."
-            value={packageUnit}
-            onChange={handlePackageUnitChange}
-          />
-          <TextInput
-            label="Unit of Measurement"
-            withAsterisk
-            placeholder="pc / kg / pounds / bottle / etc."
-            value={unitOfMeasurement}
-            onChange={handleUnitOfMeasurementChange}
-            size="md"
-          />
-          <Select
-            label="Supplier/Source"
-            withAsterisk
-            placeholder="Select Supplier"
-            data={
-              supplierList
-                ? supplierList.map((supplier) => ({
-                    value: supplier.supplierId,
-                    label: supplier.supplierName,
-                  }))
-                : []
-            }
-            size="md"
-            allowDeselect
-            value={supplier || null}
-            onChange={setSupplier}
-          />
-          <Select
-            label="Category"
-            withAsterisk
-            placeholder="Select Category"
-            data={
-              categoryList
-                ? categoryList.map((category) => {
-                    return category;
-                  })
-                : []
-            }
-            size="md"
-            allowDeselect
-            value={category || null}
-            onChange={setCategory}
-          />
-          <TextInput
-            label="Picture URL"
-            placeholder="Link to photo of the item..."
-            value={picurl}
-            onChange={handlePicurlChange}
-            size="md"
-          />
-        </SimpleGrid>
-        <Button variant="filled" color="#1B4965" size="md" mt="xl" onClick={handleAddItem}>
-          Submit
-        </Button>
-        {showNotification && notificationMessage}
+        Register Item
+      </Text>
+      <Group
+        classNames={{
+          root: classnames.rootMainGroup,
+        }}
+      >
+        {categoryList && supplierList ? (
+          <Group
+            classNames={{
+              root: classnames.rootGroup,
+            }}
+          >
+            <SimpleGrid cols={2} spacing="xl" verticalSpacing="xl">
+              <TextInput
+                label="Item Name"
+                withAsterisk
+                placeholder="Enter Item Name..."
+                value={itemName}
+                onChange={handleItemNameChange}
+              />
+              <TextInput label="Item ID" disabled />
+              <TextInput
+                label="Package Unit"
+                withAsterisk
+                placeholder="Enter Package Unit..."
+                value={packageUnit}
+                onChange={handlePackageUnitChange}
+              />
+              <TextInput
+                label="Unit of Measurement"
+                withAsterisk
+                placeholder="pc / kg / pounds / bottle / etc."
+                value={unitOfMeasurement}
+                onChange={handleUnitOfMeasurementChange}
+                size="md"
+              />
+              <Select
+                label="Supplier/Source"
+                withAsterisk
+                placeholder="Select Supplier"
+                data={
+                  supplierList
+                    ? supplierList.map((supplier) => ({
+                        value: supplier.supplierId,
+                        label: supplier.supplierName,
+                      }))
+                    : []
+                }
+                size="md"
+                allowDeselect
+                value={supplier || null}
+                onChange={setSupplier}
+              />
+              <Select
+                label="Category"
+                withAsterisk
+                placeholder="Select Category"
+                data={
+                  categoryList
+                    ? categoryList.map((category) => {
+                        return category;
+                      })
+                    : []
+                }
+                size="md"
+                allowDeselect
+                value={category || null}
+                onChange={setCategory}
+              />
+              <TextInput
+                label="Picture URL"
+                placeholder="Link to photo of the item..."
+                value={picurl}
+                onChange={handlePicurlChange}
+                size="md"
+              />
+            </SimpleGrid>
+            <Button variant="filled" color="#1B4965" size="md" mt="xl" onClick={handleAddItem}>
+              Submit
+            </Button>
+          </Group>
+        ) : (
+          <Group classNames={{ root: classnames.loadingContainer }}>
+            <img src="/assets/loading/Spin@1x-1.0s-200px-200px.gif" alt="Loading..." />
+          </Group>
+        )}
       </Group>
+      {showNotification && notificationMessage}
     </main>
   );
 }
