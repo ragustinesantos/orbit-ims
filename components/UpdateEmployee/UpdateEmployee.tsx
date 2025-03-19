@@ -229,6 +229,13 @@ export default function UpdateEmployee() {
 
   return (
     <main>
+      <Text
+        classNames={{
+          root: classnames.rootText,
+        }}
+      >
+        Update Employee Information
+      </Text>
       <form
         onSubmit={async (event: FormEvent) => {
           event.preventDefault();
@@ -245,7 +252,7 @@ export default function UpdateEmployee() {
       >
         <Group
           classNames={{
-            root: classnames.rootGroup,
+            root: classnames.rootMainGroup,
           }}
         >
           <Modal
@@ -322,148 +329,169 @@ export default function UpdateEmployee() {
               </Group>
             </Flex>
           </Modal>
-          <Text
-            classNames={{
-              root: classnames.rootText,
-            }}
-          >
-            Update
-          </Text>
-
-          <Select
-            label="Search Employee"
-            placeholder="Select an employee from the list..."
-            data={employees?.map((employee) => ({
-              value: employee.email,
-              label: `${employee.firstName} ${employee.lastName}`,
-            }))}
-            allowDeselect
-            searchable
-            value={searchValue || null}
-            onChange={setSearchValue}
-            classNames={{
-              root: classnames.selectRoot,
-            }}
-            size="md"
-            withAsterisk
-            required
-          />
-          <SimpleGrid
-            cols={2}
-            spacing="xl"
-            verticalSpacing="xl"
-            classNames={{ root: classnames.simpleGridRoot }}
-          >
-            <TextInput
-              label="First Name"
-              value={firstName}
-              onChange={(event) => handleFirstName(event.target.value)}
-              placeholder="Enter First Name..."
-              classNames={{ root: classnames.txtItemName }}
-              size="md"
-              withAsterisk
-              required
-            />
-            <TextInput
-              label="Last Name"
-              value={lastName}
-              onChange={(event) => handleLastName(event.target.value)}
-              placeholder="Enter Last Name..."
-              classNames={{ root: classnames.txtItemName }}
-              size="md"
-              withAsterisk
-              required
-            />
-            <TextInput
-              label="Employee ID"
-              value={employeeWorkId}
-              onChange={(event) => handleEmployeeWorkId(event.target.value)}
-              placeholder="Enter Employee ID..."
-              classNames={{ root: classnames.txtItemName }}
-              size="md"
-              withAsterisk
-            />
-            <TextInput
-              label="Email"
-              value={email}
-              onChange={(event) => handleEmail(event.target.value)}
-              placeholder="Enter Email..."
-              classNames={{ root: classnames.txtItemName }}
-              size="md"
-              withAsterisk
-              type="email"
-              required
-            />
-            <TextInput
-              label="Phone"
-              value={phone}
-              onChange={(event) => handlePhone(event.target.value)}
-              placeholder="Enter Phone..."
-              classNames={{ root: classnames.txtItemName }}
-              size="md"
-              withAsterisk
-              type="number"
-              required
-            />
-            <TextInput
-              label="Position"
-              value={position}
-              onChange={(event) => handlePosition(event.target.value)}
-              placeholder="Enter Position..."
-              classNames={{ root: classnames.txtItemName }}
-              size="md"
-              withAsterisk
-              required
-            />
-            <TextInput
-              label="Department"
-              value={department}
-              onChange={(event) => handleDepartment(event.target.value)}
-              placeholder="Enter Department..."
-              classNames={{ root: classnames.txtItemName }}
-              size="md"
-              withAsterisk
-              required
-            />
-          </SimpleGrid>
-          <Text fw={500}>Access Level</Text>
-          <Checkbox
-            disabled
-            checked
-            label="Employee Level 1 (default)"
-            classNames={{
-              label: classnames.checkboxLabel,
-            }}
-          />
-          <Checkbox
-            label="Employee Level 2"
-            checked={employeeLevel2}
-            onChange={handleEmployeeLevel2Change}
-          />
-          <Checkbox
-            label="Employee Level 3"
-            checked={employeeLevel3}
-            onChange={handleEmployeeLevel3Change}
-          />
-          <Checkbox
-            label="Purchase Admin Level 1"
-            checked={purchaseAdminLevel1}
-            onChange={handlePurchaseAdminLevel1Change}
-          />
-          <Checkbox
-            label="Purchase Admin Level 2"
-            checked={purchaseAdminLevel2}
-            onChange={handlePurchaseAdminLevel2Change}
-          />
-          <Checkbox
-            label="Inventory Admin"
-            checked={inventoryAdmin}
-            onChange={handleInventoryAdminChange}
-          />
-          <Button variant="filled" color="#1B4965" size="md" mt="xl" type="submit">
-            Submit
-          </Button>
-
+          {employees ? (
+            <Group
+              classNames={{
+                root: classnames.rootGroup,
+              }}
+            >
+              <Group
+                classNames={{
+                  root: classnames.form,
+                }}
+              >
+                <Group
+                  classNames={{
+                    root: classnames.formLeft,
+                  }}
+                >
+                  <Select
+                    label="Search Employee"
+                    placeholder="Select an employee from the list..."
+                    data={employees?.map((employee) => ({
+                      value: employee.email,
+                      label: `${employee.firstName} ${employee.lastName}`,
+                    }))}
+                    allowDeselect
+                    searchable
+                    value={searchValue || null}
+                    onChange={setSearchValue}
+                    classNames={{
+                      root: classnames.selectRoot,
+                    }}
+                    size="md"
+                    withAsterisk
+                    required
+                  />
+                  <SimpleGrid
+                    cols={2}
+                    spacing="xl"
+                    verticalSpacing="xl"
+                    classNames={{ root: classnames.simpleGridRoot }}
+                  >
+                    <TextInput
+                      label="First Name"
+                      value={firstName}
+                      onChange={(event) => handleFirstName(event.target.value)}
+                      placeholder="Enter First Name..."
+                      classNames={{ root: classnames.txtItemName }}
+                      size="md"
+                      withAsterisk
+                      required
+                    />
+                    <TextInput
+                      label="Last Name"
+                      value={lastName}
+                      onChange={(event) => handleLastName(event.target.value)}
+                      placeholder="Enter Last Name..."
+                      classNames={{ root: classnames.txtItemName }}
+                      size="md"
+                      withAsterisk
+                      required
+                    />
+                    <TextInput
+                      label="Employee ID"
+                      value={employeeWorkId}
+                      onChange={(event) => handleEmployeeWorkId(event.target.value)}
+                      placeholder="Enter Employee ID..."
+                      classNames={{ root: classnames.txtItemName }}
+                      size="md"
+                      withAsterisk
+                    />
+                    <TextInput
+                      label="Email"
+                      value={email}
+                      onChange={(event) => handleEmail(event.target.value)}
+                      placeholder="Enter Email..."
+                      classNames={{ root: classnames.txtItemName }}
+                      size="md"
+                      withAsterisk
+                      type="email"
+                      required
+                    />
+                    <TextInput
+                      label="Phone"
+                      value={phone}
+                      onChange={(event) => handlePhone(event.target.value)}
+                      placeholder="Enter Phone..."
+                      classNames={{ root: classnames.txtItemName }}
+                      size="md"
+                      withAsterisk
+                      type="number"
+                      required
+                    />
+                    <TextInput
+                      label="Position"
+                      value={position}
+                      onChange={(event) => handlePosition(event.target.value)}
+                      placeholder="Enter Position..."
+                      classNames={{ root: classnames.txtItemName }}
+                      size="md"
+                      withAsterisk
+                      required
+                    />
+                    <TextInput
+                      label="Department"
+                      value={department}
+                      onChange={(event) => handleDepartment(event.target.value)}
+                      placeholder="Enter Department..."
+                      classNames={{ root: classnames.txtItemName }}
+                      size="md"
+                      withAsterisk
+                      required
+                    />
+                  </SimpleGrid>
+                </Group>
+                <Group
+                  classNames={{
+                    root: classnames.formRight,
+                  }}
+                >
+                  <Text fw={500}>Access Level</Text>
+                  <Checkbox
+                    disabled
+                    checked
+                    label="Employee Level 1 (default)"
+                    classNames={{
+                      label: classnames.checkboxLabel,
+                    }}
+                  />
+                  <Checkbox
+                    label="Employee Level 2"
+                    checked={employeeLevel2}
+                    onChange={handleEmployeeLevel2Change}
+                  />
+                  <Checkbox
+                    label="Employee Level 3"
+                    checked={employeeLevel3}
+                    onChange={handleEmployeeLevel3Change}
+                  />
+                  <Checkbox
+                    label="Purchase Admin Level 1"
+                    checked={purchaseAdminLevel1}
+                    onChange={handlePurchaseAdminLevel1Change}
+                  />
+                  <Checkbox
+                    label="Purchase Admin Level 2"
+                    checked={purchaseAdminLevel2}
+                    onChange={handlePurchaseAdminLevel2Change}
+                  />
+                  <Checkbox
+                    label="Inventory Admin"
+                    checked={inventoryAdmin}
+                    onChange={handleInventoryAdminChange}
+                  />
+                </Group>
+              </Group>
+              <Button variant="filled" color="#1B4965" size="md" mt="xl" type="submit">
+                Submit
+              </Button>
+            </Group>
+          ) : (
+            <Group classNames={{ root: classnames.loadingContainer }}>
+              <img src="/assets/loading/Spin@1x-1.0s-200px-200px.gif" alt="Loading..." />
+            </Group>
+          )}
           {showError &&
             CustomNotification(
               'error',

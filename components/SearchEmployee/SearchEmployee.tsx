@@ -67,62 +67,73 @@ export default function SearchEmployee() {
   }, []);
 
   return (
-    <main>
-      <Group
+    <main className={classnames.rootMain}>
+      <Text
         classNames={{
-          root: classnames.rootGroup,
+          root: classnames.rootText,
         }}
       >
-        <Text
-          classNames={{
-            root: classnames.rootText,
-          }}
-        >
-          Search
-        </Text>
-
-        <Select
-          label="Search Employee"
-          placeholder="Select an employee from the list..."
-          data={employees?.map((employee) => ({
-            value: employee.firstName,
-            label: `${employee.firstName} ${employee.lastName}`,
-          }))}
-          allowDeselect
-          searchable
-          value={searchValue || null}
-          onChange={setSearchValue}
-          classNames={{
-            root: classnames.selectRoot,
-          }}
-          size="md"
-          withAsterisk
-        />
-
-        <div className={classnames.rootTable}>
-          <Table
-            stickyHeader
-            horizontalSpacing="xl"
-            verticalSpacing="lg"
+        Employee Records
+      </Text>
+      <Group
+        classNames={{
+          root: classnames.rootMainGroup,
+        }}
+      >
+        {employees ? (
+          <Group
             classNames={{
-              thead: classnames.thead,
-              td: classnames.td,
+              root: classnames.rootGroup,
             }}
           >
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Employee ID</Table.Th>
-                <Table.Th>Name</Table.Th>
-                <Table.Th>Phone</Table.Th>
-                <Table.Th>Email</Table.Th>
-                <Table.Th>Position</Table.Th>
-                <Table.Th>Department</Table.Th>
-                <Table.Th>Access Levels</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>{rows}</Table.Tbody>
-          </Table>
-        </div>
+            <Select
+              label="Search Employee"
+              placeholder="Select an employee from the list..."
+              data={employees?.map((employee) => ({
+                value: employee.firstName,
+                label: `${employee.firstName} ${employee.lastName}`,
+              }))}
+              allowDeselect
+              searchable
+              value={searchValue || null}
+              onChange={setSearchValue}
+              classNames={{
+                root: classnames.selectRoot,
+              }}
+              size="md"
+              withAsterisk
+            />
+
+            <div className={classnames.rootTable}>
+              <Table
+                stickyHeader
+                horizontalSpacing="xl"
+                verticalSpacing="lg"
+                classNames={{
+                  thead: classnames.thead,
+                  td: classnames.td,
+                }}
+              >
+                <Table.Thead>
+                  <Table.Tr>
+                    <Table.Th>Employee ID</Table.Th>
+                    <Table.Th>Name</Table.Th>
+                    <Table.Th>Phone</Table.Th>
+                    <Table.Th>Email</Table.Th>
+                    <Table.Th>Position</Table.Th>
+                    <Table.Th>Department</Table.Th>
+                    <Table.Th>Access Levels</Table.Th>
+                  </Table.Tr>
+                </Table.Thead>
+                <Table.Tbody>{rows}</Table.Tbody>
+              </Table>
+            </div>
+          </Group>
+        ) : (
+          <Group classNames={{ root: classnames.loadingContainer }}>
+            <img src="/assets/loading/Spin@1x-1.0s-200px-200px.gif" alt="Loading..." />
+          </Group>
+        )}
       </Group>
     </main>
   );

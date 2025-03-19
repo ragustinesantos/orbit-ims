@@ -13,8 +13,9 @@ export default function AddItemPage() {
           flex: 1,
           justifyContent: 'flex-start',
           height: '100vh',
-          paddingLeft: 32,
-          paddingTop: 4,
+          width: '100vw',
+          background: '#fafbfd',
+          padding: "1.5rem"
         }}
       >
         <AddItem />

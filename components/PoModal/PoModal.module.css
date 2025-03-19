@@ -1,7 +1,11 @@
 .rootText {
-  font-size: 28px;
-  font-weight: bold;
-  margin-bottom: 24px;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 3px solid #3c96aa;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  width: 100%;
 }
 
 .rootConfirmationText {
@@ -69,8 +73,7 @@
 
 .loadingContainer {
   display: flex;
-  width: 100%;
+  flex: 1;
   justify-content: center;
   align-items: center;
-  padding: 40px 0;
 }

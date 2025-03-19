@@ -55,3 +55,10 @@
   text-decoration: underline;
   cursor:pointer;
 }
+
+.loadingContainer {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+}

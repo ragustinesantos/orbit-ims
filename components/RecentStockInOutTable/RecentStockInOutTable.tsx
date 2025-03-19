@@ -94,6 +94,7 @@ export default function RecentStockInOutTable() {
               td: classnames.rootRequisitionTd,
               thead: classnames.rootRequisitionThead,
             }}
+            striped
           >
             <Table.Thead>
               <Table.Tr>
@@ -154,6 +155,7 @@ export default function RecentStockInOutTable() {
               td: classnames.rootRequisitionTd,
               thead: classnames.rootRequisitionThead,
             }}
+            striped
           >
             <Table.Thead>
               <Table.Tr>
