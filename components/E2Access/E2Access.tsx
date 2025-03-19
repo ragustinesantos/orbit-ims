@@ -229,7 +229,7 @@ export default function E2AccessPage() {
     // Cross-reference and retrieve a matching order requisition based on the requisitionId stored in the odor
     const matchingOr = allOrs?.find((or) => or.requisitionTypeId === odor.odorId);
     const matchingEmployee = employeeWithRequisitions.find(
-      (emp) => emp.employeeId === matchingOr?.employeeId
+      (emp) => emp && emp.employeeId === matchingOr?.employeeId
     );
 
     // Only show active requisitions
