@@ -3,7 +3,6 @@ import { Button, Group, Select, SimpleGrid, Text, TextInput, Avatar, Flex } from
 import  classnames  from './ProfilePage.module.css';
 import { useInventory } from '@/app/_utils/inventory-context';
 import { useUserAuth } from '@/app/_utils/auth-context';
-import { useDisclosure } from '@mantine/hooks';
 import { useState } from 'react';
 import { Modal } from '@mantine/core';
 import { sendResetEmail } from '@/app/_utils/utility';
@@ -80,58 +79,6 @@ export default function ProfilePage () {
         }, 3000);
       };
 
-
-    const showmodal = () => {
-        setModalshow(true);
-    }
-    function close () {
-        setModalshow(false);
-    }
-
-    const resetpass = async (email:string | undefined) => {
-        if(!email){
-        console.error("Email is undefined");
-        return;
-        }
-
-        try {
-        const response = await sendResetEmail(email);
-        if(response)
-        {
-            setNotificationMessage(
-                CustomNotification(
-                'success',
-                'Password reset email sent!',
-                ``,
-                setShowNotification
-                )
-            );
-            revealNotification();
-
-        }
-        } catch (error) {
-            //console.log(error);
-            setNotificationMessage(
-                CustomNotification(
-                    'error',
-                    'Error Encountered',
-                    'Unexpected Error encountered. Please try again.',
-                    setShowNotification
-                )
-            );
-            revealNotification();
-        }
-        close();
-    };
-
-    // Function to reveal any triggered notification
-    const revealNotification = () => {
-        setShowNotification(true);
-        setTimeout(() => {
-          setShowNotification(false);
-        }, 3000);
-      };
-
     return (
         
         <div className={classnames.externalLayout}>
@@ -155,7 +102,12 @@ export default function ProfilePage () {
                         <div className={classnames.title}>Department:</div>
                         <div>{currentEmployee?.department}</div>
                         <div className={classnames.title}>Access Level:</div>
-                        <div>{currentEmployee?.employeeLevel}</div>
+                        <div>{currentEmployee?.employeeLevel[0] ? currentEmployee?.employeeLevel[0] + ", " : ""} 
+                                 {currentEmployee?.employeeLevel[1] ? currentEmployee?.employeeLevel[1] + ", " : ""}  
+                                 {currentEmployee?.employeeLevel[2] ? currentEmployee?.employeeLevel[2] + ", " : ""} 
+                                 {currentEmployee?.employeeLevel[3] ? currentEmployee?.employeeLevel[3] + ", " : ""} 
+                                 {currentEmployee?.employeeLevel[4] ? currentEmployee?.employeeLevel[4] + ", " : ""} 
+                                 {currentEmployee?.employeeLevel[5] ? currentEmployee?.employeeLevel[5] : ""}</div>
                         
                     </SimpleGrid>
                     <div>

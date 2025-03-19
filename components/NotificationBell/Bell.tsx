@@ -116,9 +116,45 @@ export default function Bell() {
 
     // update the employee notification array, if updated successfully remove bell red dot.
     async function clickBell () {
-        if(currentEmployee){
-        const response = await patchEmployee(currentEmployee?.employeeId, updatedEmployee)
+      if (currentEmployee) {
+        try {
+          const selectedEmployee = await fetchEmployee(currentEmployee.employeeId); // Fetch the employee data
+          // Usage
+          if (areArraysEqual(selectedEmployee.notifications, newestNotificationArr)) {
+            setDisabled(true);
+          }else{
+            setDisabled(false);
+          }
+          if (currentEmployee.notifications != undefined){
+            for (let i = 0; i < 5; i++) {
+              console.log(selectedEmployee.notifications[i])
+              if (selectedEmployee.notifications.some((n:Notification)=> n?.reqId === newestNotificationArr[i]?.reqId)) {
+                switch (i) {
+                  case 0:
+                    setDisabled0(true);
+                    break;
+                  case 1:
+                    setDisabled1(true);
+                    break;
+                  case 2:
+                    setDisabled2(true);
+                    break;
+                  case 3:
+                    setDisabled3(true);
+                    break;
+                  case 4:
+                    setDisabled4(true);
+                    break;
+                }
+              }
+            }
+          }
+          
+          
+        } catch (error) {
+          console.error("Error fetching employee:", error);
         }
+      }
       }
 
       //compare objects to determine if employee has check notifications
@@ -162,8 +198,8 @@ export default function Bell() {
         const checkNotifications = async () => {
           if (currentEmployee) {
             try {
-              const selectedEmployee = await fetchEmployee(currentEmployee.employeeId); // Fetch the employee data
-
+               const selectedEmployee = await fetchEmployee(currentEmployee.employeeId); // Fetch the employee data
+              
               // Usage
               if (areArraysEqual(currentEmployee.notifications, newestNotificationArr)) {
                 setDisabled(true);
@@ -272,7 +308,7 @@ export default function Bell() {
             <Menu position="bottom-end" shadow="md">
               <Menu.Target>
                   <Indicator processing inline disabled={!!disabled} color="red" size={12}>
-                  <IconBell  size={35} stroke={1.5}/>
+                  <IconBell onClick={clickBell}  size={35} stroke={1.5}/>
                   </Indicator>      
               </Menu.Target>
               <Menu.Dropdown>
