@@ -1,13 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import {
-  Button,
-  Group,
-  Modal,
-  SimpleGrid,
-  Text,
-} from '@mantine/core';
+import { Button, Group, Modal, SimpleGrid, Text } from '@mantine/core';
 import { useUserAuth } from '@/app/_utils/auth-context';
 import { useInventory } from '@/app/_utils/inventory-context';
 import { sendResetEmail } from '@/app/_utils/utility';

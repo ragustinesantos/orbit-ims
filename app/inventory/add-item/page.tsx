@@ -15,7 +15,7 @@ export default function AddItemPage() {
           height: '100vh',
           width: '100vw',
           background: '#fafbfd',
-          padding: "1.5rem"
+          padding: '1.5rem',
         }}
       >
         <AddItem />

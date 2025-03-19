@@ -189,7 +189,7 @@ export default function RorTemplateModal({
     fetchItemDetails();
   }, [recurringOrderTemplate, inventory]);
 
-  useEffect(() => { }, []);
+  useEffect(() => {}, []);
 
   const mappedItemList = (recurringOrderTemplate?.itemList ?? []).map((itemId: string) => {
     const currentItem = itemDetails[itemId] || {};
@@ -307,8 +307,8 @@ export default function RorTemplateModal({
 
       {(currentEmployee?.employeeLevel.includes('E2') &&
         recurringOrderTemplate.isTemplateApprovedE2 === null) ||
-        (currentEmployee?.employeeLevel.includes('E3') &&
-          recurringOrderTemplate.isTemplateApprovedE3 === null) ? (
+      (currentEmployee?.employeeLevel.includes('E3') &&
+        recurringOrderTemplate.isTemplateApprovedE3 === null) ? (
         <Group classNames={{ root: classnames.rootBtnArea }}>
           {/* E2 Approval */}
           {isE2Page &&
