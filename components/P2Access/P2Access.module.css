@@ -29,7 +29,6 @@
   padding: 16px;
   border-radius: 20px;
   max-height: 55vh;
-  overflow-y: auto;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   transition: box-shadow 0.3s ease;
   transform: translateY(20px);
@@ -47,6 +46,13 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.rootPaginationGroupRequisition {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .rootTableGroup {
@@ -69,10 +75,8 @@
 
 .rootRequisitionTable {
   width: 100%;
-  overflow-y: scroll;
   min-width: 800px;
   margin-bottom: 20px;
-  max-height: 35vh;
 }
 
 .rootRequisitionThead {

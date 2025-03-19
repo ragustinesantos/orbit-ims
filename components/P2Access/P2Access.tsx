@@ -2,7 +2,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Table, TableData, Text } from '@mantine/core';
+import { Group, Pagination, Table, TableData, Text } from '@mantine/core';
+import { usePagination } from '@mantine/hooks';
 import { useInventory } from '@/app/_utils/inventory-context';
 import { Employee, OrderRequisition, PurchaseOrder } from '@/app/_utils/schema';
 import { fetchEmployees, fetchOrderRequisition, fetchPurchaseOrders } from '@/app/_utils/utility';
@@ -172,9 +173,20 @@ export default function P2AccessPage() {
     ];
   }) || [];
 
+  // Size for pagination
+  const pageSize = 5;
+
+  // PO Pagination
+  const poTotalPages = Math.ceil(mappedPo.length / pageSize);
+  const poPagination = usePagination({ total: poTotalPages, initialPage: 1 });
+  const paginatedPo = mappedPo.slice(
+    (poPagination.active - 1) * pageSize,
+    poPagination.active * pageSize
+  );
+
   const poTableData: TableData = {
     head: ['Requisition ID', 'Employee', 'Date Submitted', 'PO ID', 'PO Status'],
-    body: mappedPo,
+    body: paginatedPo,
   };
 
   return (
@@ -186,19 +198,30 @@ export default function P2AccessPage() {
             <Text classNames={{ root: classnames.rootSectionText }}>Purchase Orders</Text>
           </div>
           {loading ? (
-            <div></div>
+            <Group classNames={{ root: classnames.loadingContainer }}>
+              <img src="/assets/loading/Spin@1x-1.0s-200px-200px.gif" alt="Loading..." />
+            </Group>
           ) : (
-            <div style={{ width: '100%', overflowX: 'auto' }}>
-              <Table
-                stickyHeader
-                striped
-                data={poTableData}
-                classNames={{
-                  table: classnames.rootRequisitionTable,
-                  td: classnames.rootRequisitionTd,
-                  thead: classnames.rootRequisitionThead,
-                }}
-              />
+            <div style={{ width: '100%' }}>
+              <Group classNames={{ root: classnames.rootPaginationGroupRequisition }}>
+                <Table
+                  stickyHeader
+                  striped
+                  data={poTableData}
+                  classNames={{
+                    table: classnames.rootRequisitionTable,
+                    td: classnames.rootRequisitionTd,
+                    thead: classnames.rootRequisitionThead,
+                  }}
+                />
+                {mappedPo.length > 0 && (
+                  <Pagination
+                    value={poPagination.active}
+                    onChange={poPagination.setPage}
+                    total={poTotalPages}
+                  />
+                )}
+              </Group>
             </div>
           )}
         </div>
