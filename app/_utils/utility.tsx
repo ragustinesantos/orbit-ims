@@ -108,7 +108,7 @@ export const putItem = async (itemId: string, updatedItem: ItemToEdit) => {
 
 // Delete inventory item
 export const deleteItem = async (itemId: string) => {
-  const request = new Request(`http://localhost:3000/api/items/${itemId}`, {
+  const request = new Request(`/api/items/${itemId}`, {
     method: 'DELETE',
   });
 
