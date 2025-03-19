@@ -31,7 +31,7 @@ export async function POST(request: Request) {
       minPurchaseQty: z.number(),
       price: z.number(),
       isActive: z.boolean(),
-      picurl: z.string()
+      picurl: z.string(),
     });
 
     const validatedItem = itemSchema.parse(newItem);

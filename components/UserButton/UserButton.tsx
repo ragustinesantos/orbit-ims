@@ -1,7 +1,7 @@
-import { IconChevronRight } from '@tabler/icons-react';
-import { Group, Avatar, Text, Menu, UnstyledButton } from '@mantine/core';
-import classes from './UserButton.module.css';
 import { forwardRef } from 'react';
+import { IconChevronRight } from '@tabler/icons-react';
+import { Avatar, Group, Menu, Text, UnstyledButton } from '@mantine/core';
+import classes from './UserButton.module.css';
 
 interface UserButtonProps extends React.ComponentPropsWithoutRef<'button'> {
   image: string;
@@ -9,7 +9,6 @@ interface UserButtonProps extends React.ComponentPropsWithoutRef<'button'> {
   email: string;
   icon?: React.ReactNode;
 }
-
 
 const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(
   ({ image, name, email, icon, ...others }: UserButtonProps, ref) => (
@@ -30,17 +29,13 @@ const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(
             {name}
           </Text>
 
-          <Text size="xs">
-            {email}
-          </Text>
+          <Text size="xs">{email}</Text>
         </div>
 
         {icon || <IconChevronRight size="1rem" style={{}} />}
       </Group>
-      
     </UnstyledButton>
   )
 );
-
 
 export default UserButton;

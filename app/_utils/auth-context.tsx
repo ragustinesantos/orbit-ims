@@ -2,7 +2,13 @@
 'use client';
 
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, User } from 'firebase/auth';
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+  User,
+} from 'firebase/auth';
 import { auth } from './firebase';
 
 interface AuthContextType {
@@ -20,7 +26,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const createUserWithEmail = async (email: string, password: string): Promise<boolean> => {
     await createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed up 
+        // Signed up
         return true;
       })
       .catch((error) => {
@@ -31,8 +37,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
         return false;
       });
     return false;
-  }
-
+  };
 
   const signInWithEmail = async (email: string, password: string) => {
     try {

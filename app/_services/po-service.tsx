@@ -35,7 +35,7 @@ export async function dbAddPurchaseOrder(purchaseOrderObj: PurchaseOrderToEdit) 
   try {
     const newPurchaseOrderReference = collection(db, 'purchase-orders');
     const docRef = await addDoc(newPurchaseOrderReference, purchaseOrderObj);
-    return docRef.id
+    return docRef.id;
   } catch (error) {
     return console.log(error);
   }

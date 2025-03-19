@@ -39,7 +39,7 @@ export async function POST(request: Request) {
 
     const docId = await dbAddOrderRequisition(validatedOrderRequisition);
 
-    return new Response(JSON.stringify(docId),{ status: 201 },);
+    return new Response(JSON.stringify(docId), { status: 201 });
   } catch (error) {
     return new Response(JSON.stringify({ error }), { status: 401 });
   }

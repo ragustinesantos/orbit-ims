@@ -1,7 +1,7 @@
 'use client';
 
-import { NavbarNested } from '@/components/NavbarNested/NavbarNested';
 import E3AccessPage from '@/components/E3Access/E3Access';
+import { NavbarNested } from '@/components/NavbarNested/NavbarNested';
 
 export default function E3Access() {
   return (
@@ -22,4 +22,4 @@ export default function E3Access() {
       </div>
     </main>
   );
-} 
+}

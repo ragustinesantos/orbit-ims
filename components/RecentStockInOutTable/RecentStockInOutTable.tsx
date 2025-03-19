@@ -140,7 +140,7 @@ export default function RecentStockInOutTable() {
             </Table.Tbody>
           </Table>
           <Pagination
-            page={stockInPagination.active}
+            value={stockInPagination.active}
             onChange={stockInPagination.setPage}
             total={stockInTotalPages}
             mt="md"
@@ -201,7 +201,7 @@ export default function RecentStockInOutTable() {
             </Table.Tbody>
           </Table>
           <Pagination
-            page={stockOutPagination.active}
+            value={stockOutPagination.active}
             onChange={stockOutPagination.setPage}
             total={stockOutTotalPages}
             mt="md"
