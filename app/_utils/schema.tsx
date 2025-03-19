@@ -459,8 +459,9 @@ export const NAV_ITEMS: navCollection = {
     {
       label: 'Assistant',
       icon: IconMessage,
-      links: [{ label: 'Chat', link: '/assistant/chat' },
-      { label: 'Generate Report', link: '/assistant/generate-report' },
+      links: [
+        { label: 'Chat', link: '/assistant/chat' },
+        { label: 'Generate Report', link: '/assistant/generate-report' },
       ],
     },
     {

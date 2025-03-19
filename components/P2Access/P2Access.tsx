@@ -6,14 +6,14 @@ import { Table, TableData, Text } from '@mantine/core';
 import { useInventory } from '@/app/_utils/inventory-context';
 import { Employee, OrderRequisition, PurchaseOrder } from '@/app/_utils/schema';
 import { fetchEmployees, fetchOrderRequisition, fetchPurchaseOrders } from '@/app/_utils/utility';
-import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
 import CustomNotification from '@/components/CustomNotification/CustomNotification';
+import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
 import PoModal from '../PoModal/PoModal';
 import classnames from './P2Access.module.css';
 
 export default function P2AccessPage() {
   const { currentEmployee } = useInventory();
-  
+
   const [allPo, setAllPo] = useState<PurchaseOrder[] | null>(null);
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -21,7 +21,7 @@ export default function P2AccessPage() {
   const [modalStateTracker, setModalStateTracker] = useState<Record<string, boolean>>({});
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState(<div />);
-  
+
   // State to trigger data refresh
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
@@ -41,22 +41,22 @@ export default function P2AccessPage() {
   const toggleModalState = (id: string) => {
     setModalStateTracker((prev) => ({ ...prev, [id]: !prev[id] }));
   };
-  
+
   // Function to handle PO approval/rejection
   const handlePoAction = (purchaseOrderId: string, action: string) => {
     if (allPo) {
-      const updatedPo = allPo.map(po => {
+      const updatedPo = allPo.map((po) => {
         if (po.purchaseOrderId === purchaseOrderId) {
           return {
             ...po,
-            isApproved: action === 'approved'
+            isApproved: action === 'approved',
           };
         }
         return po;
       });
       setAllPo(updatedPo);
     }
-    
+
     // Show notification
     setNotificationMessage(
       CustomNotification(
@@ -67,9 +67,9 @@ export default function P2AccessPage() {
       )
     );
     revealNotification();
-    
+
     // Trigger a refresh of the data
-    setRefreshTrigger(prev => prev + 1);
+    setRefreshTrigger((prev) => prev + 1);
   };
 
   // Function to handle approval activity from PoModal
@@ -84,9 +84,9 @@ export default function P2AccessPage() {
       )
     );
     revealNotification();
-    
+
     // Trigger a refresh of the data
-    setRefreshTrigger(prev => prev + 1);
+    setRefreshTrigger((prev) => prev + 1);
   };
 
   // Fetch purchase orders and employees
@@ -105,14 +105,14 @@ export default function P2AccessPage() {
     };
 
     fetchData();
-  }, [refreshTrigger]); 
-  
+  }, [refreshTrigger]);
+
   // Fetch order requisitions for each purchase order
   useEffect(() => {
     const fetchOrderRequisitions = async () => {
       if (allPo && allPo.length > 0) {
         const requisitionsMap: Record<string, OrderRequisition> = {};
-        
+
         // Fetch requisitions
         for (const po of allPo) {
           try {
@@ -124,53 +124,58 @@ export default function P2AccessPage() {
             console.error(`Error fetching requisition for ${po.requisitionId}:`, error);
           }
         }
-        
+
         setOrderRequisitions(requisitionsMap);
       }
     };
-    
+
     if (allPo) {
       fetchOrderRequisitions();
     }
   }, [allPo]);
 
   // Map purchase orders to table rows
-  const mappedPo = allPo?.filter(po => po.isSubmitted).map(po => {
-    // Get the order requisition for the purchase order
-    const orderRequisition = orderRequisitions[po.requisitionId];
-    
-    // Find the employee who submitted the purchase order
-    const submittingEmployee = orderRequisition && employees.find(emp => 
-      emp.employeeId === orderRequisition.employeeId
-    );
+  const mappedPo =
+    allPo
+      ?.filter((po) => po.isSubmitted)
+      .map((po) => {
+        // Get the order requisition for the purchase order
+        const orderRequisition = orderRequisitions[po.requisitionId];
 
-    return [
-      <Text key={`req-${po.requisitionId}`}>{po.requisitionId}</Text>,
-      <Text key={`emp-${po.purchaseOrderId}`}>
-        {submittingEmployee 
-          ? `${submittingEmployee.firstName} ${submittingEmployee.lastName}` 
-          : ''}
-      </Text>,
-      <Text key={`date-${po.purchaseOrderId}`}>{formatDate(po.purchaseOrderDate)}</Text>,
-      <>
-        <Text 
-          key={`po-${po.purchaseOrderId}`}
-          onClick={() => toggleModalState(po.purchaseOrderId)}
-          className={classnames.rootPoId}
-        >
-          {po.purchaseOrderId}
-        </Text>
-        <PoModal
-          key={`modal-${po.purchaseOrderId}`}
-          purchaseOrder={po}
-          isOpened={!!modalStateTracker[po.purchaseOrderId]}
-          isClosed={() => setModalStateTracker((prev) => ({ ...prev, [po.purchaseOrderId]: false }))}
-          handleApprovalActivity={handleApprovalActivity}
-        />
-      </>,
-      <ApprovalBadge key={`status-${po.purchaseOrderId}`} isApproved={po.isApproved} />
-    ];
-  }) || [];
+        // Find the employee who submitted the purchase order
+        const submittingEmployee =
+          orderRequisition &&
+          employees.find((emp) => emp.employeeId === orderRequisition.employeeId);
+
+        return [
+          <Text key={`req-${po.requisitionId}`}>{po.requisitionId}</Text>,
+          <Text key={`emp-${po.purchaseOrderId}`}>
+            {submittingEmployee
+              ? `${submittingEmployee.firstName} ${submittingEmployee.lastName}`
+              : ''}
+          </Text>,
+          <Text key={`date-${po.purchaseOrderId}`}>{formatDate(po.purchaseOrderDate)}</Text>,
+          <>
+            <Text
+              key={`po-${po.purchaseOrderId}`}
+              onClick={() => toggleModalState(po.purchaseOrderId)}
+              className={classnames.rootPoId}
+            >
+              {po.purchaseOrderId}
+            </Text>
+            <PoModal
+              key={`modal-${po.purchaseOrderId}`}
+              purchaseOrder={po}
+              isOpened={!!modalStateTracker[po.purchaseOrderId]}
+              isClosed={() =>
+                setModalStateTracker((prev) => ({ ...prev, [po.purchaseOrderId]: false }))
+              }
+              handleApprovalActivity={handleApprovalActivity}
+            />
+          </>,
+          <ApprovalBadge key={`status-${po.purchaseOrderId}`} isApproved={po.isApproved} />,
+        ];
+      }) || [];
 
   const poTableData: TableData = {
     head: ['Requisition ID', 'Employee', 'Date Submitted', 'PO ID', 'PO Status'],
@@ -206,4 +211,4 @@ export default function P2AccessPage() {
       {showNotification && notificationMessage}
     </main>
   );
-} 
+}

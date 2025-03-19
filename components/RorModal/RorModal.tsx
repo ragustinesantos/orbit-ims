@@ -24,8 +24,8 @@ import {
 } from '@/app/_utils/schema';
 import { fetchEmployee, fetchOrderRequisition, patchRorApproval } from '@/app/_utils/utility';
 import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
-import classnames from './RorModal.module.css';
 import ImgModal from '../ImgModal/ImgModal';
+import classnames from './RorModal.module.css';
 
 export default function RorModal({
   recurringOrder,
@@ -125,13 +125,22 @@ export default function RorModal({
       (supplier) => supplier.supplierId === currentItem?.supplierId
     );
     return [
-      <Text onClick={()=> toggleImgModalState(item.itemId)} classNames={{root:classnames.imgModalID}}>{currentItem?.itemName}</Text>,
+      <Text
+        onClick={() => toggleImgModalState(item.itemId)}
+        classNames={{ root: classnames.imgModalID }}
+      >
+        {currentItem?.itemName}
+      </Text>,
       currentItem?.category,
       currentItem?.supplyUnit,
       currentItem?.packageUnit,
       currentSupplier?.supplierName,
       item.orderQty,
-      <ImgModal item={currentItem} isOpened={!!modalStateTracker[item.itemId]} isClosed={() => setModalStateTracker((prev) => ({ ...prev, [item.itemId]: false }))} ></ImgModal>
+      <ImgModal
+        item={currentItem}
+        isOpened={!!modalStateTracker[item.itemId]}
+        isClosed={() => setModalStateTracker((prev) => ({ ...prev, [item.itemId]: false }))}
+      ></ImgModal>,
     ];
   });
 
@@ -202,7 +211,7 @@ export default function RorModal({
             <TextInput disabled label="Requisition ID" value={currentOr?.requisitionId} size="md" />
           </SimpleGrid>
           <Table striped classNames={{ table: classnames.rootTable }} data={tableData} />
-          
+
           <Text classNames={{ root: classnames.rootHeaderTxt }}>Approvals:</Text>
           <Table
             withTableBorder

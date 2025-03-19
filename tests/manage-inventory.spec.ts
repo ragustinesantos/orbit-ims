@@ -1,5 +1,6 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import dotenv from 'dotenv';
+
 dotenv.config();
 
 const userlogin = process.env.EMAIL || '';
@@ -8,7 +9,6 @@ const password = process.env.PASSWORD || '';
 test.describe.configure({ mode: 'serial' });
 
 test('add item', async ({ page }) => {
-
   await page.goto('http://localhost:3000/');
   await page.getByRole('textbox', { name: 'Type Your Username' }).click();
   await page.getByRole('textbox', { name: 'Type Your Username' }).fill(userlogin);
@@ -42,11 +42,9 @@ test('add item', async ({ page }) => {
 
   // Check if the item was successfully added to database
   await expect(page.getByRole('cell', { name: 'Orbit Unique Item' })).toBeVisible();
-
 });
 
 test('update item', async ({ page }) => {
-
   await page.goto('http://localhost:3000/');
   await page.getByRole('textbox', { name: 'Type Your Username' }).click();
   await page.getByRole('textbox', { name: 'Type Your Username' }).fill(userlogin);
@@ -90,7 +88,7 @@ test('update item', async ({ page }) => {
   await page.getByRole('link', { name: 'Search Item' }).click();
   await page.waitForSelector(`text=${userlogin}`);
 
-  //Check that the Orbit Unique Item no longer exists since it was updated 
+  //Check that the Orbit Unique Item no longer exists since it was updated
   await expect(page.getByRole('cell', { name: 'Orbit Unique Item' })).toBeHidden;
   await page.getByRole('textbox', { name: 'Search Item' }).click();
   await page.getByRole('textbox', { name: 'Search Item' }).fill('wingkei');
@@ -104,7 +102,6 @@ test('update item', async ({ page }) => {
 });
 
 test('delete item', async ({ page }) => {
-
   await page.goto('http://localhost:3000/');
   await page.getByRole('textbox', { name: 'Type Your Username' }).click();
   await page.getByRole('textbox', { name: 'Type Your Username' }).fill(userlogin);
@@ -130,9 +127,13 @@ test('delete item', async ({ page }) => {
   await expect(unitOfMeasurement).toHaveValue('bottle');
   const currentStock = await page.getByRole('spinbutton', { name: 'Current Stock' });
   await expect(currentStock).toHaveValue('4');
-  const minimumPurchaseQuantity = await page.getByRole('spinbutton', { name: 'Minimum Purchase Quantity' });
+  const minimumPurchaseQuantity = await page.getByRole('spinbutton', {
+    name: 'Minimum Purchase Quantity',
+  });
   await expect(minimumPurchaseQuantity).toHaveValue('2');
-  const minimumStorageQuantity = await page.getByRole('spinbutton', { name: 'Minimum Storage Quantity' });
+  const minimumStorageQuantity = await page.getByRole('spinbutton', {
+    name: 'Minimum Storage Quantity',
+  });
   await expect(minimumStorageQuantity).toHaveValue('1');
   const supplierSource = await page.getByRole('textbox', { name: 'Supplier/Source' });
   await expect(supplierSource).toHaveValue('Eco Green Industries');
@@ -150,5 +151,4 @@ test('delete item', async ({ page }) => {
 
   //Check that the item no longer exists after deletion
   await expect(page.getByRole('cell', { name: 'Wingkei Important Item' })).toBeHidden;
-
 });

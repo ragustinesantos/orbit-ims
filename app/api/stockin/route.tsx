@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { dbGetAllStockInOrders, dbStockInGenerate} from '@/app/_services/stockin-service';
+import { dbGetAllStockInOrders, dbStockInGenerate } from '@/app/_services/stockin-service';
 
 export async function GET() {
   try {
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
       stockInId: z.string(),
       itemId: z.string(),
       purchaseOrderId: z.string(),
-      stockInQuantity: z.number(), 
+      stockInQuantity: z.number(),
       stockInDate: z.string(),
       receivedBy: z.string(),
     });

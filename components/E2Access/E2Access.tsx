@@ -4,16 +4,25 @@
 import { useEffect, useState } from 'react';
 import { Group, Table, Text } from '@mantine/core';
 import { useInventory } from '@/app/_utils/inventory-context';
-import { Employee, RecurringOrderTemplate, OnDemandOrder, OrderRequisition } from '@/app/_utils/schema';
-import { fetchEmployees, fetchRorTemplates, fetchOnDemandOrderRequisitions, fetchOrderRequisitions } from '@/app/_utils/utility';
-import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
+import {
+  Employee,
+  OnDemandOrder,
+  OrderRequisition,
+  RecurringOrderTemplate,
+} from '@/app/_utils/schema';
+import {
+  fetchEmployees,
+  fetchOnDemandOrderRequisitions,
+  fetchOrderRequisitions,
+  fetchRorTemplates,
+} from '@/app/_utils/utility';
 import CustomNotification from '@/components/CustomNotification/CustomNotification';
-import classnames from './E2Access.module.css';
-import RorTemplateModal from '../RorTemplateModal/RorTemplateModal';
+import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
 import OdorModal from '../OdorModal/OdorModal';
+import RorTemplateModal from '../RorTemplateModal/RorTemplateModal';
+import classnames from './E2Access.module.css';
 
 export default function E2AccessPage() {
-
   // State for fetching data
   const [rorTemplates, setRorTemplates] = useState<RecurringOrderTemplate[]>([]);
   const [allOdor, setAllOdor] = useState<OnDemandOrder[] | null>(null);
@@ -61,7 +70,7 @@ export default function E2AccessPage() {
             : template
         )
       );
-  
+
       setNotificationMessage(
         CustomNotification(
           'success',
@@ -83,19 +92,18 @@ export default function E2AccessPage() {
     }
     revealNotification();
   };
-  
+
   // Handle ODOR approval
   const handleOdorApproval = async (message: string, odorId: string, isApproved: boolean) => {
     if (message === 'success') {
       // Update the specific ODOR's approval status immediately in local state
-      setAllOrs((prevOrs) =>
-        prevOrs?.map((or) =>
-          or.requisitionTypeId === odorId
-            ? { ...or, isApprovedE2: isApproved }
-            : or
-        ) || null
+      setAllOrs(
+        (prevOrs) =>
+          prevOrs?.map((or) =>
+            or.requisitionTypeId === odorId ? { ...or, isApprovedE2: isApproved } : or
+          ) || null
       );
-  
+
       setNotificationMessage(
         CustomNotification(
           'success',
@@ -117,7 +125,7 @@ export default function E2AccessPage() {
     }
     revealNotification();
   };
-  
+
   // Use effect to store order requisitions for mapping
   useEffect(() => {
     const retrieveRequisition = async () => {
@@ -127,7 +135,7 @@ export default function E2AccessPage() {
         await fetchOnDemandOrderRequisitions(setAllOdor);
         await fetchOrderRequisitions(setAllOrs);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error('Error fetching data:', error);
       }
       setLoading(false);
     };
@@ -193,17 +201,19 @@ export default function E2AccessPage() {
 
     retrieveEmployeeWithReq();
   }, [allOrs]);
-  
+
   // Map templates to table rows
   const mappedTemplates = rorTemplates.map((template) => [
     <>
       <RorTemplateModal
-       recurringOrderTemplate = {template}
-       isOpened={!!modalStateTracker[template.rorTemplateId]}
-       isClosed={() => setModalStateTracker((prev) => ({ ...prev, [template.rorTemplateId]: false }))}
-       handleApprovalE2={handleApproval}
-       handleApprovalE3={undefined}
-       isE2Page={isE2PageView}
+        recurringOrderTemplate={template}
+        isOpened={!!modalStateTracker[template.rorTemplateId]}
+        isClosed={() =>
+          setModalStateTracker((prev) => ({ ...prev, [template.rorTemplateId]: false }))
+        }
+        handleApprovalE2={handleApproval}
+        handleApprovalE3={undefined}
+        isE2Page={isE2PageView}
       />
       {/* Open Modal when clicking the Template ID */}
       <Text
@@ -215,131 +225,134 @@ export default function E2AccessPage() {
       </Text>
     </>,
     <Text key={`name-${template.rorTemplateId}`}>{template.templateName}</Text>,
-    <ApprovalBadge 
-    key={`approval-${template.rorTemplateId}`} 
-    isApproved={
-    template.isTemplateApprovedE2
-  } 
-/>
-
+    <ApprovalBadge
+      key={`approval-${template.rorTemplateId}`}
+      isApproved={template.isTemplateApprovedE2}
+    />,
   ]);
 
   // Map ODOR data to table rows
-  const mappedOdors = allOdor?.map((odor) => {
-    // Cross-reference and retrieve a matching order requisition based on the requisitionId stored in the odor
-    const matchingOr = allOrs?.find((or) => or.requisitionTypeId === odor.odorId);
-    const matchingEmployee = employeeWithRequisitions.find(
-      (emp) => emp.employeeId === matchingOr?.employeeId
-    );
+  const mappedOdors =
+    allOdor
+      ?.map((odor) => {
+        // Cross-reference and retrieve a matching order requisition based on the requisitionId stored in the odor
+        const matchingOr = allOrs?.find((or) => or.requisitionTypeId === odor.odorId);
+        const matchingEmployee = employeeWithRequisitions.find(
+          (emp) => emp.employeeId === matchingOr?.employeeId
+        );
 
-    // Only show active requisitions
-    if (matchingOr?.isActive) {
-      return [
-        <>
-          <OdorModal
-            onDemandOrder={odor}
-            isOpened={!!modalStateTracker[odor.odorId]}
-            isClosed={() => setModalStateTracker((prev) => ({ ...prev, [odor.odorId]: false }))}
-            handleApprovalE2={handleOdorApproval}
-            isE2Page={isE2PageView}
-          />
-          <Text
-            key={`odor-${odor.odorId}`}
-            className={classnames.odorTextId}
-            onClick={() => toggleOdorModalState(odor.odorId)}
-          >
-            {odor.odorId}
-          </Text>
-        </>,
-        <Text key={`emp-${odor.odorId}`}>
-          {matchingEmployee ? `${matchingEmployee.firstName} ${matchingEmployee.lastName}` : 'Unknown'}
-        </Text>,
-        <Text key={`date-${odor.odorId}`}>
-          {matchingOr ? formatDate(matchingOr.requisitionDate) : 'Unknown'}
-        </Text>,
-        <ApprovalBadge 
-          key={`approval-${odor.odorId}`} 
-          isApproved={matchingOr?.isApprovedE2} 
-        />
-      ];
-    }
-    
-    // Return empty array for inactive requisitions
-    return [];
-  }).filter(row => row.length > 0) || [];
+        // Only show active requisitions
+        if (matchingOr?.isActive) {
+          return [
+            <>
+              <OdorModal
+                onDemandOrder={odor}
+                isOpened={!!modalStateTracker[odor.odorId]}
+                isClosed={() => setModalStateTracker((prev) => ({ ...prev, [odor.odorId]: false }))}
+                handleApprovalE2={handleOdorApproval}
+                isE2Page={isE2PageView}
+              />
+              <Text
+                key={`odor-${odor.odorId}`}
+                className={classnames.odorTextId}
+                onClick={() => toggleOdorModalState(odor.odorId)}
+              >
+                {odor.odorId}
+              </Text>
+            </>,
+            <Text key={`emp-${odor.odorId}`}>
+              {matchingEmployee
+                ? `${matchingEmployee.firstName} ${matchingEmployee.lastName}`
+                : 'Unknown'}
+            </Text>,
+            <Text key={`date-${odor.odorId}`}>
+              {matchingOr ? formatDate(matchingOr.requisitionDate) : 'Unknown'}
+            </Text>,
+            <ApprovalBadge key={`approval-${odor.odorId}`} isApproved={matchingOr?.isApprovedE2} />,
+          ];
+        }
+
+        // Return empty array for inactive requisitions
+        return [];
+      })
+      .filter((row) => row.length > 0) || [];
 
   return (
     <main>
       <Text className={classnames.rootText}>E2 Access</Text>
       <div className={classnames.rootMainGroup}>
-      {loading ? (
-        <Group classNames={{ root: classnames.loadingContainer }}>
-          <img src="/assets/loading/Spin@1x-1.0s-200px-200px.gif" alt="Loading..." />
-        </Group>
-      ) : (
-        <>
-          <div className={classnames.rootSectionGroup}>
-            <div style={{ width: '100%', marginBottom: '16px' }}>
-              <Text className={classnames.rootSectionText}>ROR Template</Text>
-            </div>
-            
-            <div style={{ width: '100%', overflowX: 'auto' }}>
-              <Table stickyHeader striped className={classnames.rootRequisitionTable}>
-                <Table.Thead  classNames={{
-                  thead: classnames.rootRequisitionThead,
-                }}>
-                  <Table.Tr>
-                    <Table.Th>Template ID</Table.Th>
-                    <Table.Th>Template Name</Table.Th>
-                    <Table.Th>Approval Status</Table.Th>
-                  </Table.Tr>
-                </Table.Thead>
-                <Table.Tbody>
-                  {mappedTemplates.map((row, index) => (
-                    <Table.Tr key={index}>
-                      {row.map((cell, cellIndex) => (
-                        <Table.Td key={cellIndex}>{cell}</Table.Td>
-                      ))}
-                    </Table.Tr>
-                  ))}
-                </Table.Tbody>
-              </Table>
-            </div>
-          </div>
+        {loading ? (
+          <Group classNames={{ root: classnames.loadingContainer }}>
+            <img src="/assets/loading/Spin@1x-1.0s-200px-200px.gif" alt="Loading..." />
+          </Group>
+        ) : (
+          <>
+            <div className={classnames.rootSectionGroup}>
+              <div style={{ width: '100%', marginBottom: '16px' }}>
+                <Text className={classnames.rootSectionText}>ROR Template</Text>
+              </div>
 
-          <div className={classnames.rootSectionGroup} style={{ marginTop: '20px' }}>
-            <div style={{ width: '100%', marginBottom: '16px' }}>
-              <Text className={classnames.rootSectionText}>ODOR Requisitions</Text>
-            </div>
-            
-            <div style={{ width: '100%', overflowX: 'auto' }}>
-              <Table stickyHeader striped className={classnames.rootRequisitionTable}>
-                <Table.Thead classNames={{
-                  thead: classnames.rootRequisitionThead,
-                }}>
-                  <Table.Tr>
-                    <Table.Th>ODOR ID</Table.Th>
-                    <Table.Th>Employee</Table.Th>
-                    <Table.Th>Date Submitted</Table.Th>
-                    <Table.Th>Status</Table.Th>
-                  </Table.Tr>
-                </Table.Thead>
-                <Table.Tbody>
-                  {mappedOdors.map((row, index) => (
-                    <Table.Tr key={index}>
-                      {row.map((cell, cellIndex) => (
-                        <Table.Td key={cellIndex}>{cell}</Table.Td>
-                      ))}
+              <div style={{ width: '100%', overflowX: 'auto' }}>
+                <Table stickyHeader striped className={classnames.rootRequisitionTable}>
+                  <Table.Thead
+                    classNames={{
+                      thead: classnames.rootRequisitionThead,
+                    }}
+                  >
+                    <Table.Tr>
+                      <Table.Th>Template ID</Table.Th>
+                      <Table.Th>Template Name</Table.Th>
+                      <Table.Th>Approval Status</Table.Th>
                     </Table.Tr>
-                  ))}
-                </Table.Tbody>
-              </Table>
+                  </Table.Thead>
+                  <Table.Tbody>
+                    {mappedTemplates.map((row, index) => (
+                      <Table.Tr key={index}>
+                        {row.map((cell, cellIndex) => (
+                          <Table.Td key={cellIndex}>{cell}</Table.Td>
+                        ))}
+                      </Table.Tr>
+                    ))}
+                  </Table.Tbody>
+                </Table>
+              </div>
             </div>
-          </div>
-        </>
-      )}
+
+            <div className={classnames.rootSectionGroup} style={{ marginTop: '20px' }}>
+              <div style={{ width: '100%', marginBottom: '16px' }}>
+                <Text className={classnames.rootSectionText}>ODOR Requisitions</Text>
+              </div>
+
+              <div style={{ width: '100%', overflowX: 'auto' }}>
+                <Table stickyHeader striped className={classnames.rootRequisitionTable}>
+                  <Table.Thead
+                    classNames={{
+                      thead: classnames.rootRequisitionThead,
+                    }}
+                  >
+                    <Table.Tr>
+                      <Table.Th>ODOR ID</Table.Th>
+                      <Table.Th>Employee</Table.Th>
+                      <Table.Th>Date Submitted</Table.Th>
+                      <Table.Th>Status</Table.Th>
+                    </Table.Tr>
+                  </Table.Thead>
+                  <Table.Tbody>
+                    {mappedOdors.map((row, index) => (
+                      <Table.Tr key={index}>
+                        {row.map((cell, cellIndex) => (
+                          <Table.Td key={cellIndex}>{cell}</Table.Td>
+                        ))}
+                      </Table.Tr>
+                    ))}
+                  </Table.Tbody>
+                </Table>
+              </div>
+            </div>
+          </>
+        )}
       </div>
-      
+
       {showNotification && notificationMessage}
     </main>
   );

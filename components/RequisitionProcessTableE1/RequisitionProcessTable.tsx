@@ -71,21 +71,21 @@ export default function RequisitionProcessTable() {
         allRor?.sort((a, b) => {
           const matchingOrA = allOrs?.find((or) => or.requisitionTypeId === a.rorId);
           const matchingOrB = allOrs?.find((or) => or.requisitionTypeId === b.rorId);
-  
+
           if (matchingOrA && matchingOrB) {
             return (
               new Date(matchingOrB.requisitionDate).getTime() -
               new Date(matchingOrA.requisitionDate).getTime()
             );
           }
-  
+
           return 0;
         });
       } catch (error) {
         console.log(error);
       }
     };
-  
+
     sortRor();
   }, [allRor]);
 
@@ -95,25 +95,23 @@ export default function RequisitionProcessTable() {
         allOdor?.sort((a, b) => {
           const matchingOrA = allOrs?.find((or) => or.requisitionTypeId === a.odorId);
           const matchingOrB = allOrs?.find((or) => or.requisitionTypeId === b.odorId);
-  
+
           if (matchingOrA && matchingOrB) {
             return (
               new Date(matchingOrB.requisitionDate).getTime() -
               new Date(matchingOrA.requisitionDate).getTime()
             );
           }
-  
+
           return 0;
         });
       } catch (error) {
         console.log(error);
       }
     };
-  
+
     sortOdor();
   }, [allOdor]);
-  
-  
 
   const formatDate = (dateString: any) => {
     const date = new Date(dateString);
@@ -130,9 +128,9 @@ export default function RequisitionProcessTable() {
   };
 
   // Determine if the employee only has `E1` level
-  const isE1Only = Array.isArray(currentEmployee?.employeeLevel) 
-  ? currentEmployee.employeeLevel.includes('E1') && currentEmployee.employeeLevel.length === 1
-  : currentEmployee?.employeeLevel === 'E1';
+  const isE1Only = Array.isArray(currentEmployee?.employeeLevel)
+    ? currentEmployee.employeeLevel.includes('E1') && currentEmployee.employeeLevel.length === 1
+    : currentEmployee?.employeeLevel === 'E1';
 
   // Filter requisitions based on `E1` level access
   const filteredOrs = isE1Only
@@ -250,9 +248,6 @@ export default function RequisitionProcessTable() {
     odorPagination.active * requisitionSize
   );
 
-
-
-
   return (
     <div className={classnames.rootMain}>
       <Text classNames={{ root: classnames.heading }}>Order Requisition Process</Text>
@@ -260,52 +255,51 @@ export default function RequisitionProcessTable() {
         <div className={classnames.rootTableGroup}>
           <Group className={classnames.rootPaginationGroupRequisition}>
             {/** ROR process table for E1*/}
-            
 
-             {/* Table Header */}
+            {/* Table Header */}
             <Table className={classnames.rootRequisitionTable} striped>
-            <Table.Thead className={classnames.rootRequisitionThead}>
-              <Table.Tr>
-                <Table.Th>ROR ID</Table.Th>
-                <Table.Th>Employee</Table.Th>
-                <Table.Th>Date Submitted</Table.Th>
-                <Table.Th>Status</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
-            {paginatedRor.length > 0 ? (
-              paginatedRor.map((row, index) => (
-                <Table.Tr key={index}>
-                  {row.map((cell, i) => (
-                    <Table.Td key={i} className={classnames.rootRequisitionTd}>
-                      {cell}
-                    </Table.Td>
-                  ))}
+              <Table.Thead className={classnames.rootRequisitionThead}>
+                <Table.Tr>
+                  <Table.Th>ROR ID</Table.Th>
+                  <Table.Th>Employee</Table.Th>
+                  <Table.Th>Date Submitted</Table.Th>
+                  <Table.Th>Status</Table.Th>
                 </Table.Tr>
-              ))
-            ) : (
-              <Table.Tr>
-                <Table.Td colSpan={4} className={classnames.noData}>
-                  <Text>No recent stock change</Text>
-                </Table.Td>
-              </Table.Tr>
-            )}
-          </Table.Tbody>
-          </Table>
-          
-          {cleanedMappedRor &&<Pagination
+              </Table.Thead>
+              <Table.Tbody>
+                {paginatedRor.length > 0 ? (
+                  paginatedRor.map((row, index) => (
+                    <Table.Tr key={index}>
+                      {row.map((cell, i) => (
+                        <Table.Td key={i} className={classnames.rootRequisitionTd}>
+                          {cell}
+                        </Table.Td>
+                      ))}
+                    </Table.Tr>
+                  ))
+                ) : (
+                  <Table.Tr>
+                    <Table.Td colSpan={4} className={classnames.noData}>
+                      <Text>No recent stock change</Text>
+                    </Table.Td>
+                  </Table.Tr>
+                )}
+              </Table.Tbody>
+            </Table>
+
+            {cleanedMappedRor && (
+              <Pagination
                 value={rorPagination.active}
                 onChange={rorPagination.setPage}
                 total={rorTotalPages}
               />
-          }
+            )}
           </Group>
 
           <Group className={classnames.rootPaginationGroupRequisition}>
             {/** ODOR process table for E1*/}
-          
 
-          <Table className={classnames.rootRequisitionTable} striped>
+            <Table className={classnames.rootRequisitionTable} striped>
               {/* Table Header */}
               <Table.Thead className={classnames.rootRequisitionThead}>
                 <Table.Tr>
@@ -315,7 +309,7 @@ export default function RequisitionProcessTable() {
                   <Table.Th>Status</Table.Th>
                 </Table.Tr>
               </Table.Thead>
-                  {/* Table Body */}
+              {/* Table Body */}
               <Table.Tbody>
                 {paginatedOdor.length > 0 ? (
                   paginatedOdor.map((row, index) => (
@@ -337,17 +331,13 @@ export default function RequisitionProcessTable() {
               </Table.Tbody>
             </Table>
 
-
-
-            
-             { cleanedMappedOdor && (
-                <Pagination
-                  value={odorPagination.active}
-                  onChange={odorPagination.setPage}
-                  total={odorTotalPages}
-                />
-              )
-            }
+            {cleanedMappedOdor && (
+              <Pagination
+                value={odorPagination.active}
+                onChange={odorPagination.setPage}
+                total={odorTotalPages}
+              />
+            )}
           </Group>
         </div>
       ) : (
