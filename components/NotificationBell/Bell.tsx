@@ -17,7 +17,7 @@ import { fetchEmployee } from "@/app/_utils/utility";
 
 export default function Bell() {
     const [allOrs, setAllOrs] = useState<OrderRequisition[]>([]);
-    const [disabled, setDisabled] = useState(false);
+    const [disabled, setDisabled] = useState(true);
     const [disabled0, setDisabled0] = useState(false);
     const [disabled1, setDisabled1] = useState(false);
     const [disabled2, setDisabled2] = useState(false);
@@ -176,29 +176,31 @@ export default function Bell() {
               }else{
                 setDisabled(false);
               }
-
-              for (let i = 0; i < selectedEmployee.notifications.length; i++) {
-                console.log(selectedEmployee.notifications[i])
-                if (selectedEmployee.notifications.some((n:Notification)=> n.reqId === newestNotificationArr[i]?.reqId)) {
-                  switch (i) {
-                    case 0:
-                      setDisabled0(true);
-                      break;
-                    case 1:
-                      setDisabled1(true);
-                      break;
-                    case 2:
-                      setDisabled2(true);
-                      break;
-                    case 3:
-                      setDisabled3(true);
-                      break;
-                    case 4:
-                      setDisabled4(true);
-                      break;
+              if (selectedEmployee.notifications != undefined){
+                for (let i = 0; i < selectedEmployee.notifications.length; i++) {
+                  console.log(selectedEmployee.notifications[i])
+                  if (selectedEmployee.notifications.some((n:Notification)=> n.reqId === newestNotificationArr[i]?.reqId)) {
+                    switch (i) {
+                      case 0:
+                        setDisabled0(true);
+                        break;
+                      case 1:
+                        setDisabled1(true);
+                        break;
+                      case 2:
+                        setDisabled2(true);
+                        break;
+                      case 3:
+                        setDisabled3(true);
+                        break;
+                      case 4:
+                        setDisabled4(true);
+                        break;
+                    }
                   }
                 }
               }
+              
               
             } catch (error) {
               console.error("Error fetching employee:", error);
@@ -225,15 +227,15 @@ export default function Bell() {
               const updatedEmployee = { notifications: updatedArr3 };
       
               const response = await patchEmployee(currentEmployee.employeeId, updatedEmployee);
-      
-              if (areArraysEqual(selectedEmployee.notifications, updatedArr3)) {
+              const selectedEmployee = await fetchEmployee(currentEmployee.employeeId);
+              if (areArraysEqual(newestNotificationArr, updatedArr3)) {
                 setDisabled(true);
               } else {
                 setDisabled(false);
               }
-      
+              if (selectedEmployee.notifications != undefined){
               for (let i = 0; i < selectedEmployee.notifications.length; i++) {
-                if (selectedEmployee.notifications[i]?.reqId !== updatedArr3[i]?.reqId) {
+                if (selectedEmployee.notifications.some((n:Notification)=> n.reqId === newestNotificationArr[i]?.reqId)) {
                   switch (i) {
                     case 0:
                       setDisabled0(true);
@@ -254,6 +256,7 @@ export default function Bell() {
                 }
               }
             }
+          }
           } catch (error) {
             console.error("Error fetching employee:", error);
           }    
@@ -261,7 +264,7 @@ export default function Bell() {
       }
       const getIndicatorColor = (requisitionType:string) => {
         if (requisitionType === 'odor') {
-          return 'rgba(0, 0, 255, 1)'; // Red for 'odor'
+          return '#228BE6'; // Red for 'odor'
         } else{
           return 'rgba(255, 0, 0, 1)'; // Blue for 'ror'
         }
@@ -274,7 +277,7 @@ export default function Bell() {
             <Menu position="bottom-end" shadow="md">
               <Menu.Target>
                   <Indicator processing inline disabled={!!disabled} color="red" size={12}>
-                  <IconBell  size={30} stroke={1.5}/>
+                  <IconBell  size={35} stroke={1.5}/>
                   </Indicator>      
               </Menu.Target>
               <Menu.Dropdown>
@@ -290,7 +293,7 @@ export default function Bell() {
                     </Indicator>
                       <Text className={classnames.reqIdText}>Requisition ID# {sortedOrs[0]?.requisitionId} has been created.</Text>
                     
-                    <Text className={classnames.OdorIndicatorText}>{sortedOrs[0]?.requisitionType} {sortedOrs[0]?.requisitionTypeId}</Text>
+                    <Text className={classnames.OdorIndicatorText}>{sortedOrs[0]?.requisitionType} ID# {sortedOrs[0]?.requisitionTypeId}</Text>
                   </div>
                 </div>
                 </MenuItem>
@@ -304,7 +307,7 @@ export default function Bell() {
                     <Indicator  offset={2} disabled={!!disabled1} color="red" size={6}>
                     </Indicator>
                       <Text className={classnames.reqIdText}>Requisition ID# {sortedOrs[1]?.requisitionId} has been created.</Text>                  
-                    <Text className={classnames.OdorIndicatorText}>{sortedOrs[1]?.requisitionType} {sortedOrs[1]?.requisitionTypeId}</Text>
+                    <Text className={classnames.OdorIndicatorText}>{sortedOrs[1]?.requisitionType} ID# {sortedOrs[1]?.requisitionTypeId}</Text>
                   </div>
                 </div>
                 </Menu.Item>
@@ -318,7 +321,7 @@ export default function Bell() {
                     <Indicator  offset={2} disabled={!!disabled2} color="red" size={6}>
                     </Indicator>
                       <Text className={classnames.reqIdText}>Requisition ID# {sortedOrs[2]?.requisitionId} has been created.</Text>                    
-                    <Text className={classnames.OdorIndicatorText}>{sortedOrs[2]?.requisitionType} {sortedOrs[2]?.requisitionTypeId}</Text>
+                    <Text className={classnames.OdorIndicatorText}>{sortedOrs[2]?.requisitionType} ID# {sortedOrs[2]?.requisitionTypeId}</Text>
                   </div>
                 </div>
                 </Menu.Item>
@@ -332,7 +335,7 @@ export default function Bell() {
                     <Indicator  offset={2} disabled={!!disabled3} color="red" size={6}>
                     </Indicator>
                       <Text className={classnames.reqIdText}>Requisition ID# {sortedOrs[3]?.requisitionId} has been created.</Text>        
-                    <Text className={classnames.OdorIndicatorText}>{sortedOrs[3]?.requisitionType} {sortedOrs[3]?.requisitionTypeId}</Text>
+                    <Text className={classnames.OdorIndicatorText}>{sortedOrs[3]?.requisitionType} ID# {sortedOrs[3]?.requisitionTypeId}</Text>
                   </div>
                 </div>
                 </Menu.Item>
@@ -346,7 +349,7 @@ export default function Bell() {
                     <Indicator  offset={2} disabled={!!disabled4} color="red" size={6}>
                     </Indicator>
                       <Text className={classnames.reqIdText}>Requisition ID# {sortedOrs[4]?.requisitionId} has been created.</Text>                   
-                    <Text className={classnames.OdorIndicatorText}>{sortedOrs[4]?.requisitionType} {sortedOrs[4]?.requisitionTypeId}</Text>
+                    <Text className={classnames.OdorIndicatorText}>{sortedOrs[4]?.requisitionType} ID# {sortedOrs[4]?.requisitionTypeId}</Text>
                   </div>
                 </div>
                 </Menu.Item>
