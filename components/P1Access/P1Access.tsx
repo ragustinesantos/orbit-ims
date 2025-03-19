@@ -335,7 +335,7 @@ export default function P1AccessPage() {
     // Cross-reference and retrieve a matching order requisition based on the requisitionId stored in the ror
     const matchingOr = allOrs?.find((or) => or.requisitionTypeId === ror.rorId);
     const matchingEmployee = employeeWithRequisitions.find(
-      (emp) => emp.employeeId === matchingOr?.employeeId
+      (emp) => emp && emp.employeeId === matchingOr?.employeeId
     );
 
     // If the matching order requisition is active, generate a table line containing the modal
@@ -376,7 +376,7 @@ export default function P1AccessPage() {
     // Cross-reference and retrieve a matching order requisition based on the requisitionId stored in the ror
     const matchingOr = allOrs?.find((or) => or.requisitionTypeId === odor.odorId);
     const matchingEmployee = employeeWithRequisitions.find(
-      (emp) => emp.employeeId === matchingOr?.employeeId
+      (emp) => emp && emp.employeeId === matchingOr?.employeeId
     );
 
     // If the matching order requisition is active, generate a table line containing the modal
@@ -416,7 +416,7 @@ export default function P1AccessPage() {
   const mappedOr = allOrs?.map((or) => {
     // Cross-reference and retrieve a matching employee based on the requisitionId stored in the ror
     const matchingEmployee = employeeWithRequisitions.find(
-      (emp) => emp.employeeId === or?.employeeId
+      (emp) => emp && emp.employeeId === or?.employeeId
     );
     const matchingPo = allPo?.find((po) => po.purchaseOrderId === or.purchaseOrderId);
 
@@ -490,7 +490,12 @@ export default function P1AccessPage() {
         <ApprovalBadge isApproved={or.isApprovedP1} />,
         matchingPo ? (
           matchingPo.isSubmitted || poModalOpen[matchingPo.purchaseOrderId] ? (
-            <Text classNames={{ root: classnames.rootPoId }}>{matchingPo.purchaseOrderId}</Text>
+            <Text
+              classNames={{ root: classnames.rootPoId }}
+              onClick={() => toggleModalState(matchingPo.purchaseOrderId)}
+            >
+              {matchingPo.purchaseOrderId}
+            </Text>
           ) : (
             <>
               <button
@@ -595,50 +600,6 @@ export default function P1AccessPage() {
       // Toggle Notification
       revealNotification();
       return null;
-    }
-  };
-
-  // Generate a purchase order for a requisition
-  const generatePo = async (requisitionId: string) => {
-    try {
-      // Create a purchase order
-      const generatedPoId = await createPo(requisitionId);
-
-      if (generatedPoId) {
-        // Update the UI to show the PO ID instead of the button
-        setPoModalOpen((prev) => ({ ...prev, [generatedPoId]: true }));
-
-        // Trigger a refresh to update the data
-        setRefreshTrigger((prev) => prev + 1);
-
-        // Show success notification
-        setNotificationMessage(
-          CustomNotification(
-            'success',
-            'PO Generated',
-            `Purchase Order ${generatedPoId} has been generated`,
-            setShowNotification
-          )
-        );
-
-        // Trigger notification
-        revealNotification();
-      }
-    } catch (error) {
-      console.error('Error generating PO:', error);
-
-      // Show error notification
-      setNotificationMessage(
-        CustomNotification(
-          'error',
-          'Error',
-          'Failed to generate Purchase Order',
-          setShowNotification
-        )
-      );
-
-      // Trigger notification
-      revealNotification();
     }
   };
 
