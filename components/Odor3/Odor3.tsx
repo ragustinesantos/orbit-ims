@@ -132,8 +132,8 @@ export default function OdorComponent3({
         >
           {item?.purposeForPurchase}
         </Table.Td>
-        <Table.Td>{'$' + item?.unitPrice} </Table.Td>
-        <Table.Td>{'$' + Math.round(item?.unitPrice * item?.purchaseQty * 100) / 100}</Table.Td>
+        <Table.Td>{`$${item?.unitPrice}`}</Table.Td>
+        <Table.Td>{`$${Math.round(item?.unitPrice * item?.purchaseQty * 100) / 100}`}</Table.Td>
         <Table.Td>
           <span style={{ width: '30px', textAlign: 'center', display: 'inline-block' }}>
             {item.purchaseQty}
@@ -221,7 +221,7 @@ export default function OdorComponent3({
           {newItemOrders.length > 0 && (
             <div>
               <Text classNames={{ root: classnames.orderTotalLabel }}>Total Cost</Text>
-              <Text classNames={{ root: classnames.orderTotalText }}>{'$' + totalCost}</Text>
+              <Text classNames={{ root: classnames.orderTotalText }}>{`$${totalCost}`}</Text>
             </div>
           )}
         </Group>

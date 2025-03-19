@@ -203,7 +203,7 @@ export default function OdorComponent2({
         />
         <div>
           <Text classNames={{ root: classnames.orderTotalLabel }}>Total Cost</Text>
-          <Text classNames={{ root: classnames.orderTotalText }}>{'$' + totalCost}</Text>
+          <Text classNames={{ root: classnames.orderTotalText }}>{`$${totalCost}`}</Text>
         </div>
         <TextInput
           label="Purpose For Purchase"
@@ -270,8 +270,8 @@ export default function OdorComponent2({
         >
           {item?.purposeForPurchase}
         </Table.Td>
-        <Table.Td>{'$' + item?.unitPrice} </Table.Td>
-        <Table.Td>{'$' + Math.round(item?.unitPrice * item?.purchaseQty * 100) / 100}</Table.Td>
+        <Table.Td>{`$${item?.unitPrice}`}</Table.Td>
+        <Table.Td>{`$${Math.round(item?.unitPrice * item?.purchaseQty * 100) / 100}`}</Table.Td>
         <Table.Td>
           <Button
             classNames={{ root: `${classnames.buttonDecrement} ${classnames.button}` }}

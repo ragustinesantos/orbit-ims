@@ -11,7 +11,7 @@ export default function WizardProgress(props: WizardProgressProps) {
   let localIndex = 3;
   // Adjust spacing based on number of steps
   const progressBarWidth = {
-    width: 720 / stepList.length + 'px',
+    width: `${720 / stepList.length}px`,
   };
 
   // This would return the type of bar in between the steps
