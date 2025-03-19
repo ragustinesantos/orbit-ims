@@ -62,7 +62,14 @@ export async function PATCH(request: Request, { params }: { params: any }) {
         employeeLevel: z.string().optional(),
         isActive: z.boolean().optional(),
         //For notifications
-        notifications: z.array(z.string()).optional(),
+        notifications: z.array(
+          z.object({
+            reqId: z.string(),
+            reqType: z.string(),
+            reqTypeId: z.string(),
+            requisitionDate: z.string(),
+          })
+        ).optional(),
       })
       .strict();
 

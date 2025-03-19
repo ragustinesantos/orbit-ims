@@ -36,13 +36,16 @@ export default function DashboardTitle() {
         </Title>
         <Text className={classnames.subText}>Welcome back! Here’s what’s happening today.</Text>
       </div>
+      <Title order={5} className={classnames.date}>
+        {formattedDate} | {formattedTime}
+      </Title>
 
-      <div className={classnames.endbar}>
+      {/* <div className={classnames.endbar}>
       <Title order={5} className={classnames.date}>
         {formattedDate} | {formattedTime}  
       </Title>
-      <Bell></Bell>
-      </div>
+      
+      </div> */}
 
          
     </Group>

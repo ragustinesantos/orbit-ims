@@ -1,4 +1,28 @@
 .Notifications {
-    margin-left: 10px;
     cursor: pointer;
+  }
+
+  .MenuItem:hover {
+    background-color: rgb(227, 227, 227);
+  }
+
+  .outerNotifyDiv {
+    display: flex;
+  }
+
+  .odorIDDiv{
+    margin-left: 20px;
+  }
+
+  .reqIdText {
+    margin-right: 5px;
+  }
+
+  .OdorIndicatorText{
+    font-size: small;
+
+  }
+
+  .OdorIndicator{
+    margin-left: 10px;
   }

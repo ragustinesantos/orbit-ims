@@ -7,6 +7,8 @@ import RecentStockInOutTable from "@/components/RecentStockInOutTable/RecentStoc
 import RequisitionProcessTable from "@/components/RequisitionProcessTableE1/RequisitionProcessTable";
 import { Group } from "@mantine/core";
 import classnames from "./page.module.css";
+import Bell from "@/components/NotificationBell/Bell";
+import { Stack } from "@mantine/core";
 
 
 export default function DashBoard(){
@@ -23,7 +25,9 @@ export default function DashBoard(){
                 overflowY: 'scroll',
                 }}
             >
-                <DashboardTitle />
+                <div className={classnames.div1}><DashboardTitle/>
+                <Bell></Bell></div>
+                
                 <Group classNames={{root:classnames.responsiveLayout}}>
                     <InventoryOverview />
                     <RequisitionProcessTable />
