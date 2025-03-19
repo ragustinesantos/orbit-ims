@@ -1,18 +1,17 @@
 'useclient';
 
 import { useState } from 'react';
-import { Group, Table, Text, Textarea, TextInput } from '@mantine/core';
+import { Group, Table, Text, TextInput } from '@mantine/core';
 import { useInventory } from '@/app/_utils/inventory-context';
-import { Item, ItemOrder, NewItemOrder } from '@/app/_utils/schema';
-import CustomNotification from '../CustomNotification/CustomNotification';
+import { ItemOrder, NewItemOrder } from '@/app/_utils/schema';
 import ImgModal from '../ImgModal/ImgModal';
 import classnames from './odor3.module.css';
 
 interface setpropstype {
   itemOrders: ItemOrder[];
   newItemOrders: NewItemOrder[];
-  totalCost: Number;
-  orderTotal: Number;
+  totalCost: number;
+  orderTotal: number;
   remarks: string;
   setRemarks: React.Dispatch<React.SetStateAction<string>>;
   recipientName: string;
@@ -50,7 +49,7 @@ export default function OdorComponent3({
           item={odorItem}
           isOpened={!!modalStateTracker[item.itemId]}
           isClosed={() => setModalStateTracker((prev) => ({ ...prev, [item.itemId]: false }))}
-        ></ImgModal>
+        />
         <Table.Td
           style={{
             maxWidth: '100px',
@@ -177,7 +176,7 @@ export default function OdorComponent3({
         {itemOrders.length > 0 && (
           <div>
             <Text className={classnames.templateHeading}>Inventory Items</Text>
-            <Table striped={true}>
+            <Table striped>
               <Table.Thead>
                 <Table.Tr>
                   <Table.Th>Item ID</Table.Th>
@@ -196,7 +195,7 @@ export default function OdorComponent3({
         {newItemOrders.length > 0 && (
           <div>
             <Text className={classnames.templateHeading}>Non-Inventory Items</Text>
-            <Table striped={true}>
+            <Table striped>
               <Table.Thead>
                 <Table.Tr>
                   <Table.Th>Item Name</Table.Th>

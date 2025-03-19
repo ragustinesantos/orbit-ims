@@ -188,7 +188,7 @@ export default function P2AccessPage() {
             <Text classNames={{ root: classnames.rootSectionText }}>Purchase Orders</Text>
           </div>
           {loading ? (
-            <div></div>
+            <div />
           ) : (
             <div style={{ width: '100%', overflowX: 'auto' }}>
               <Table

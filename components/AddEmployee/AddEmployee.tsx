@@ -46,7 +46,7 @@ export default function AddEmployee() {
   const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>) =>
     setPassword(event.target.value);
   const handleConfirmPasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value != password) {
+    if (event.target.value !== password) {
       setPasswordConfirmError('Passwords do not match');
     } else if (passwordConfirmError) {
       setPasswordConfirmError('');
@@ -81,7 +81,7 @@ export default function AddEmployee() {
         )
       );
     } else {
-      let employeeLevels = ['E1'];
+      const employeeLevels = ['E1'];
       if (employeeLevel2) {
         employeeLevels.push('E2');
       }
@@ -100,13 +100,13 @@ export default function AddEmployee() {
 
       const newEmployeeObj: Employee = {
         ...defaultEmployee,
-        firstName: firstName,
-        lastName: lastName,
+        firstName,
+        lastName,
         employeeWorkId: employeeId,
-        email: email,
-        phone: phone,
-        position: position,
-        department: department,
+        email,
+        phone,
+        position,
+        department,
         employeeLevel: employeeLevels,
       };
 

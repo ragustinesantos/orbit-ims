@@ -25,7 +25,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
   const createUserWithEmail = async (email: string, password: string): Promise<boolean> => {
     await createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then((_userCredential) => {
         // Signed up
         return true;
       })

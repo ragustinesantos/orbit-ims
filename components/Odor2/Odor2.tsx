@@ -64,13 +64,13 @@ export default function OdorComponent2({
     console.log('handle add item pressed');
 
     if (
-      newItemName == '' ||
-      newItemDescription == '' ||
-      newItemProductCode == '' ||
-      newItemPurchaseQTY == '' ||
-      newItemUnitPrice == '' ||
-      disposalPlan == '' ||
-      purposeForPurchase == ''
+      newItemName === '' ||
+      newItemDescription === '' ||
+      newItemProductCode === '' ||
+      newItemPurchaseQTY === '' ||
+      newItemUnitPrice === '' ||
+      disposalPlan === '' ||
+      purposeForPurchase === ''
     ) {
       setNotificationMessage(
         CustomNotification(
@@ -86,8 +86,8 @@ export default function OdorComponent2({
         itemName: newItemName,
         itemDescription: newItemDescription,
         productCode: newItemProductCode,
-        disposalPlan: disposalPlan,
-        purposeForPurchase: purposeForPurchase,
+        disposalPlan,
+        purposeForPurchase,
         purchaseQty: Number(newItemPurchaseQTY),
         unitPrice: Number(newItemUnitPrice),
         itemSubtotal: Number(newItemPurchaseQTY) * Number(newItemUnitPrice),
@@ -113,10 +113,10 @@ export default function OdorComponent2({
 
   // Everytime NewItemOrders is modified re calculate the total Cost
   useEffect(() => {
-    setTimeout(function () {
+    setTimeout(() => {
       let holder: number = 0;
-      for (let item of newItemOrders) {
-        holder = holder + item.purchaseQty * item.unitPrice;
+      for (const item of newItemOrders) {
+        holder += item.purchaseQty * item.unitPrice;
       }
       setTotalCost(Math.round(holder * 100) / 100);
     }, 200);
@@ -167,7 +167,8 @@ export default function OdorComponent2({
           <Button
             classNames={{ root: classnames.cancel }}
             onClick={() => {
-              setShowTemplate(false), cancelOrder();
+              setShowTemplate(false);
+              cancelOrder();
             }}
             color="red"
           >
@@ -338,7 +339,7 @@ export default function OdorComponent2({
   }
 
   function handleRemoveItem(item: NewItemOrder) {
-    let position = newItemOrders.indexOf(item);
+    const position = newItemOrders.indexOf(item);
     newItemOrders.splice(position, 1);
     setNewItemOrders([...newItemOrders]);
   }
@@ -365,7 +366,7 @@ export default function OdorComponent2({
         <div>
           {showTemplate ? (
             newItemOrders.length > 0 && (
-              <Table striped={true}>
+              <Table striped>
                 <Table.Thead>
                   <Table.Tr>
                     <Table.Th>Item Name</Table.Th>

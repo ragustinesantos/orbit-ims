@@ -40,10 +40,6 @@ export default function InventoryOverview() {
     setCurrentSection('Dashboard');
   }, []);
 
-  const handleTotalItemClick = () => {
-    router.push('/inventory/search-item');
-  };
-
   // Calculate category distribution
   useEffect(() => {
     if (!inventory) {
@@ -153,7 +149,7 @@ export default function InventoryOverview() {
                   dataKey="value"
                   label
                 >
-                  {pieData.map((entry, index) => (
+                  {pieData.map((_entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>

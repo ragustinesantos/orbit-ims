@@ -274,7 +274,7 @@ export const patchOrderRequisition = async (requisitionId: string, requisitionTy
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ requisitionTypeId: requisitionTypeId }),
+    body: JSON.stringify({ requisitionTypeId }),
   };
 
   const response = await fetch(`/api/order-requisitions/${requisitionId}`, request);
@@ -292,7 +292,7 @@ export const patchOrderRequisitionPo = async (requisitionId: string, purchaseOrd
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ purchaseOrderId: purchaseOrderId }),
+    body: JSON.stringify({ purchaseOrderId }),
   };
 
   const response = await fetch(`/api/order-requisitions/${requisitionId}`, request);
