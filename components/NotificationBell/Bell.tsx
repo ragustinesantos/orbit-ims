@@ -287,7 +287,6 @@ export default function Bell() {
                     <Indicator  offset={2} disabled={!!disabled0} color="red" size={6}>
                     </Indicator>
                       <Text className={classnames.reqIdText}>Requisition ID# {sortedOrs[0]?.requisitionId} has been created.</Text>
-                    
                     <Text className={classnames.OdorIndicatorText}>{sortedOrs[0]?.requisitionType} ID# {sortedOrs[0]?.requisitionTypeId}</Text>
                   </div>
                 </div>
