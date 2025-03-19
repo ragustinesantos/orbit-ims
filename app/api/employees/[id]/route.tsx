@@ -72,7 +72,6 @@ export async function PATCH(request: Request, { params }: { params: any }) {
         ).optional(),
       })
       .strict();
-
     const validatedEmployee = employeeSchema.parse(updatedEmployee);
 
     await dbUpdateEmployee(id, validatedEmployee);
