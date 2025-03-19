@@ -140,241 +140,253 @@ export default function UpdateItem() {
   }, []);
 
   return (
-    <main>
-      <Group
+    <main className={classnames.rootMain}>
+      <Text
         classNames={{
-          root: classnames.rootGroup,
+          root: classnames.rootText,
         }}
       >
-        <Modal
-          centered
-          opened={opened}
-          onClose={close}
-          size="xl"
-          title="Confirmation"
-          classNames={{
-            title: classnames.modalTitle,
-          }}
-        >
-          <Text mb={20}>Do you want to proceed with the changes?</Text>
-          <Flex justify="center" align="center" direction="column" style={{ height: '100%' }}>
+        Update Item Information
+      </Text>
+      <Group
+        classNames={{
+          root: classnames.rootMainGroup,
+        }}
+      >
+        {inventory && supplierList && categoryList ? (
+          <Group
+            classNames={{
+              root: classnames.rootGroup,
+            }}
+          >
+            <Modal
+              centered
+              opened={opened}
+              onClose={close}
+              size="xl"
+              title="Confirmation"
+              classNames={{
+                title: classnames.modalTitle,
+              }}
+            >
+              <Text mb={20}>Do you want to proceed with the changes?</Text>
+              <Flex justify="center" align="center" direction="column" style={{ height: '100%' }}>
+                <SimpleGrid
+                  cols={2}
+                  spacing="xl"
+                  verticalSpacing="xs"
+                  classNames={{ root: classnames.simpleGridRoot }}
+                >
+                  <Text>
+                    Item Name:{' '}
+                    <Text fw={700} td="underline" component="span" ml={5}>
+                      {itemName}
+                    </Text>
+                  </Text>
+                  <Text>
+                    Supplier:{' '}
+                    <Text fw={700} td="underline" component="span" ml={5}>
+                      {supplierName}
+                    </Text>
+                  </Text>
+                  <Text>
+                    Package Unit:{' '}
+                    <Text fw={700} td="underline" component="span" ml={5}>
+                      {packageUnit}
+                    </Text>
+                  </Text>
+                  <Text>
+                    Supply Unit:{' '}
+                    <Text fw={700} td="underline" component="span" ml={5}>
+                      {supplyUnit}
+                    </Text>
+                  </Text>
+                  <Text>
+                    Category:{' '}
+                    <Text fw={700} td="underline" component="span" ml={5}>
+                      {category}
+                    </Text>
+                  </Text>
+                  <Text>
+                    Current Stock:{' '}
+                    <Text fw={700} td="underline" component="span" ml={5}>
+                      {currentStockInStoreRoom}
+                    </Text>
+                  </Text>
+                  <Text>
+                    Minimum Purchase Qty:{' '}
+                    <Text fw={700} td="underline" component="span" ml={5}>
+                      {minPurchaseQty}
+                    </Text>
+                  </Text>
+                  <Text>
+                    Minimum Storage Qty:{' '}
+                    <Text fw={700} td="underline" component="span" ml={5}>
+                      {minStorageQty}
+                    </Text>
+                  </Text>
+                  <Text>
+                    Picture URL:{' '}
+                    <Text fw={700} td="underline" component="span" ml={5}>
+                      {picurl}
+                    </Text>
+                  </Text>
+                </SimpleGrid>
+                <Group mt="xl">
+                  <Button
+                    onClick={() => {
+                      handleSubmit();
+                      close();
+                    }}
+                    color="#1B4965"
+                  >
+                    Confirm
+                  </Button>
+                </Group>
+              </Flex>
+            </Modal>
+            <Select
+              label="Search Item"
+              placeholder="Select an item from the list..."
+              data={inventory?.map((item) => ({
+                value: item.itemName,
+                label: item.itemName,
+              }))}
+              allowDeselect
+              searchable
+              value={searchValue || null}
+              onChange={setSearchValue}
+              classNames={{
+                root: classnames.selectRoot,
+              }}
+              size="md"
+              withAsterisk
+            />
             <SimpleGrid
               cols={2}
               spacing="xl"
-              verticalSpacing="xs"
+              verticalSpacing="xl"
               classNames={{ root: classnames.simpleGridRoot }}
             >
-              <Text>
-                Item Name:{' '}
-                <Text fw={700} td="underline" component="span" ml={5}>
-                  {itemName}
-                </Text>
-              </Text>
-              <Text>
-                Supplier:{' '}
-                <Text fw={700} td="underline" component="span" ml={5}>
-                  {supplierName}
-                </Text>
-              </Text>
-              <Text>
-                Package Unit:{' '}
-                <Text fw={700} td="underline" component="span" ml={5}>
-                  {packageUnit}
-                </Text>
-              </Text>
-              <Text>
-                Supply Unit:{' '}
-                <Text fw={700} td="underline" component="span" ml={5}>
-                  {supplyUnit}
-                </Text>
-              </Text>
-              <Text>
-                Category:{' '}
-                <Text fw={700} td="underline" component="span" ml={5}>
-                  {category}
-                </Text>
-              </Text>
-              <Text>
-                Current Stock:{' '}
-                <Text fw={700} td="underline" component="span" ml={5}>
-                  {currentStockInStoreRoom}
-                </Text>
-              </Text>
-              <Text>
-                Minimum Purchase Qty:{' '}
-                <Text fw={700} td="underline" component="span" ml={5}>
-                  {minPurchaseQty}
-                </Text>
-              </Text>
-              <Text>
-                Minimum Storage Qty:{' '}
-                <Text fw={700} td="underline" component="span" ml={5}>
-                  {minStorageQty}
-                </Text>
-              </Text>
-              <Text>
-                Picture URL:{' '}
-                <Text fw={700} td="underline" component="span" ml={5}>
-                  {picurl}
-                </Text>
-              </Text>
+              <TextInput
+                label="Item Name"
+                value={itemName}
+                onChange={(event) => handleItemName(event.target.value)}
+                placeholder="Enter Item Name..."
+                classNames={{ root: classnames.txtItemName }}
+                size="md"
+                withAsterisk
+              />
+              <TextInput
+                label="Item ID"
+                disabled
+                value={staticItemId}
+                placeholder="Enter Item Name..."
+                classNames={{ root: classnames.txtItemName }}
+                size="md"
+              />
+              <TextInput
+                label="Package Unit"
+                value={packageUnit}
+                onChange={(event) => handlePackageUnit(event.target.value)}
+                placeholder="Enter Package Unit..."
+                withAsterisk
+              />
+              <TextInput
+                label="Unit of Measurement"
+                value={supplyUnit}
+                onChange={(event) => handleSupplyUnit(event.target.value)}
+                placeholder="pc / kg / pounds / bottle / etc."
+                size="md"
+                withAsterisk
+              />
+              <TextInput
+                label="Current Stock"
+                value={currentStockInStoreRoom}
+                onChange={(event) => handleCurrentStockInStoreRoom(event.target.value)}
+                placeholder="Enter quantity in storage..."
+                size="md"
+                type="number"
+                withAsterisk
+              />
+              <TextInput
+                label="Minimum Purchase Quantity"
+                value={minPurchaseQty}
+                onChange={(event) => handleMinPurchaseQty(event.target.value)}
+                placeholder="Enter minimum purchase quantity..."
+                size="md"
+                type="number"
+                withAsterisk
+              />
+              <TextInput
+                label="Minimum Storage Quantity"
+                value={minStorageQty}
+                onChange={(event) => handleMinStorageQty(event.target.value)}
+                placeholder="Enter minimum storage quantity..."
+                size="md"
+                type="number"
+                withAsterisk
+              />
+              <Select
+                label="Supplier/Source"
+                placeholder="Select a supplier from the list..."
+                searchable
+                data={supplierList?.map((supplier) => ({
+                  value: supplier.supplierId,
+                  label: supplier.supplierName,
+                }))}
+                allowDeselect
+                value={supplierId || null}
+                onChange={setSupplierId}
+                size="md"
+                withAsterisk
+              />
+              <Select
+                label="Category"
+                searchable
+                placeholder="Select a category from the list..."
+                data={categoryList?.map((category) => ({
+                  value: category,
+                  label: category,
+                }))}
+                allowDeselect
+                value={category || null}
+                onChange={setCategory}
+                size="md"
+                withAsterisk
+              />
+              <TextInput
+                label="Picture URL"
+                value={picurl}
+                onChange={(event) => handlePicurl(event.target.value)}
+                placeholder="Link to photo of the item..."
+                size="md"
+              />
             </SimpleGrid>
-            <Group mt="xl">
-              <Button
-                onClick={() => {
-                  handleSubmit();
-                  close();
-                }}
-                color="#1B4965"
-              >
-                Confirm
-              </Button>
-            </Group>
-          </Flex>
-        </Modal>
-        <Text
-          classNames={{
-            root: classnames.rootText,
-          }}
-        >
-          Update
-        </Text>
-        <Select
-          label="Search Item"
-          placeholder="Select an item from the list..."
-          data={inventory?.map((item) => ({
-            value: item.itemName,
-            label: item.itemName,
-          }))}
-          allowDeselect
-          searchable
-          value={searchValue || null}
-          onChange={setSearchValue}
-          classNames={{
-            root: classnames.selectRoot,
-          }}
-          size="md"
-          withAsterisk
-        />
-        <SimpleGrid
-          cols={2}
-          spacing="xl"
-          verticalSpacing="xl"
-          classNames={{ root: classnames.simpleGridRoot }}
-        >
-          <TextInput
-            label="Item Name"
-            value={itemName}
-            onChange={(event) => handleItemName(event.target.value)}
-            placeholder="Enter Item Name..."
-            classNames={{ root: classnames.txtItemName }}
-            size="md"
-            withAsterisk
-          />
-          <TextInput
-            label="Item ID"
-            disabled
-            value={staticItemId}
-            placeholder="Enter Item Name..."
-            classNames={{ root: classnames.txtItemName }}
-            size="md"
-          />
-          <TextInput
-            label="Package Unit"
-            value={packageUnit}
-            onChange={(event) => handlePackageUnit(event.target.value)}
-            placeholder="Enter Package Unit..."
-            withAsterisk
-          />
-          <TextInput
-            label="Unit of Measurement"
-            value={supplyUnit}
-            onChange={(event) => handleSupplyUnit(event.target.value)}
-            placeholder="pc / kg / pounds / bottle / etc."
-            size="md"
-            withAsterisk
-          />
-          <TextInput
-            label="Current Stock"
-            value={currentStockInStoreRoom}
-            onChange={(event) => handleCurrentStockInStoreRoom(event.target.value)}
-            placeholder="Enter quantity in storage..."
-            size="md"
-            type="number"
-            withAsterisk
-          />
-          <TextInput
-            label="Minimum Purchase Quantity"
-            value={minPurchaseQty}
-            onChange={(event) => handleMinPurchaseQty(event.target.value)}
-            placeholder="Enter minimum purchase quantity..."
-            size="md"
-            type="number"
-            withAsterisk
-          />
-          <TextInput
-            label="Minimum Storage Quantity"
-            value={minStorageQty}
-            onChange={(event) => handleMinStorageQty(event.target.value)}
-            placeholder="Enter minimum storage quantity..."
-            size="md"
-            type="number"
-            withAsterisk
-          />
-          <Select
-            label="Supplier/Source"
-            placeholder="Select a supplier from the list..."
-            searchable
-            data={supplierList?.map((supplier) => ({
-              value: supplier.supplierId,
-              label: supplier.supplierName,
-            }))}
-            allowDeselect
-            value={supplierId || null}
-            onChange={setSupplierId}
-            size="md"
-            withAsterisk
-          />
-          <Select
-            label="Category"
-            searchable
-            placeholder="Select a category from the list..."
-            data={categoryList?.map((category) => ({
-              value: category,
-              label: category,
-            }))}
-            allowDeselect
-            value={category || null}
-            onChange={setCategory}
-            size="md"
-            withAsterisk
-          />
-          <TextInput
-            label="Picture URL"
-            value={picurl}
-            onChange={(event) => handlePicurl(event.target.value)}
-            placeholder="Link to photo of the item..."
-            size="md"
-          />
-        </SimpleGrid>
-        <Button
-          variant="filled"
-          color="#1B4965"
-          size="md"
-          mt="xl"
-          onClick={async () => {
-            if (!itemName || !packageUnit || !supplyUnit || !category || !supplierId) {
-              setShowError(true);
-              setTimeout(() => {
-                setShowError(false);
-              }, 3000);
-            } else {
-              open();
-            }
-          }}
-        >
-          Submit
-        </Button>
+            <Button
+              variant="filled"
+              color="#1B4965"
+              size="md"
+              mt="xl"
+              onClick={async () => {
+                if (!itemName || !packageUnit || !supplyUnit || !category || !supplierId) {
+                  setShowError(true);
+                  setTimeout(() => {
+                    setShowError(false);
+                  }, 3000);
+                } else {
+                  open();
+                }
+              }}
+            >
+              Submit
+            </Button>
+          </Group>
+        ) : (
+          <Group classNames={{ root: classnames.loadingContainer }}>
+            <img src="/assets/loading/Spin@1x-1.0s-200px-200px.gif" alt="Loading..." />
+          </Group>
+        )}
         {showError &&
           CustomNotification(
             'error',

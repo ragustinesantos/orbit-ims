@@ -174,145 +174,167 @@ export default function AddEmployee() {
   };
 
   return (
-    <main>
+    <main className={classnames.rootMain}>
+      <Text
+        classNames={{
+          root: classnames.rootText,
+        }}
+      >
+        Enroll Employee
+      </Text>
       <form onSubmit={handleSubmit}>
         <Group
           classNames={{
-            root: classnames.rootGroup,
+            root: classnames.rootMainGroup,
           }}
         >
-          <Text
+          <Group
             classNames={{
-              root: classnames.rootText,
+              root: classnames.rootGroup,
             }}
           >
-            Add
-          </Text>
-
-          <SimpleGrid cols={2} spacing="xl" verticalSpacing="xl">
-            <TextInput
-              label="First Name"
-              withAsterisk
-              required
-              placeholder="First Name"
-              size="md"
-              value={firstName}
-              onChange={handleFirstNameChange}
-            />
-            <TextInput
-              label="Last Name"
-              withAsterisk
-              required
-              placeholder="Last Name"
-              size="md"
-              value={lastName}
-              onChange={handleLastNameChange}
-            />
-            <TextInput
-              label="Employee ID"
-              withAsterisk
-              required
-              placeholder="Employee ID"
-              size="md"
-              value={employeeId}
-              onChange={handleEmployeeIdChange}
-            />
-            <TextInput
-              label="Email"
-              withAsterisk
-              required
-              placeholder="Email"
-              type="email"
-              size="md"
-              value={email}
-              onChange={handleEmailChange}
-            />
-            <TextInput
-              label="Phone"
-              withAsterisk
-              required
-              placeholder="Phone"
-              size="md"
-              value={phone}
-              onChange={handlePhoneChange}
-              type="number"
-            />
-            <TextInput
-              label="Department"
-              withAsterisk
-              required
-              placeholder="Department"
-              size="md"
-              value={department}
-              onChange={handleDepartmentChange}
-            />
-            <TextInput
-              label="Position"
-              withAsterisk
-              required
-              placeholder="Position"
-              size="md"
-              value={position}
-              onChange={handlePositionChange}
-            />
-            <PasswordInput
-              label="Password"
-              required
-              size="md"
-              value={password}
-              onChange={handlePasswordChange}
-              visible={visible}
-              onVisibilityChange={toggle}
-            />
-            <PasswordInput
-              label="Confirm Password"
-              required
-              size="md"
-              value={confirmPassword}
-              onChange={handleConfirmPasswordChange}
-              visible={visible}
-              error={passwordConfirmError}
-              onVisibilityChange={toggle}
-            />
-          </SimpleGrid>
-
-          <Text fw={500}>Access Level</Text>
-          <Checkbox
-            disabled
-            checked
-            label="Employee Level 1 (default)"
-            classNames={{
-              label: classnames.checkboxLabel,
-            }}
-          />
-          <Checkbox
-            label="Employee Level 2"
-            checked={employeeLevel2}
-            onChange={handleEmployeeLevel2Change}
-          />
-          <Checkbox
-            label="Employee Level 3"
-            checked={employeeLevel3}
-            onChange={handleEmployeeLevel3Change}
-          />
-          <Checkbox
-            label="Purchase Admin Level 1"
-            checked={purchaseAdminLevel1}
-            onChange={handlePurchaseAdminLevel1Change}
-          />
-          <Checkbox
-            label="Purchase Admin Level 2"
-            checked={purchaseAdminLevel2}
-            onChange={handlePurchaseAdminLevel2Change}
-          />
-          <Checkbox
-            label="Inventory Admin"
-            checked={inventoryAdmin}
-            onChange={handleInventoryAdminChange}
-          />
-          <Button type="submit" variant="filled" color="#1B4965" size="md" mt="xl">
-            Create
-          </Button>
+            <Group
+              classNames={{
+                root: classnames.form,
+              }}
+            >
+              <Group
+                classNames={{
+                  root: classnames.formLeft,
+                }}
+              >
+                <SimpleGrid cols={2} spacing="xl" verticalSpacing="xl">
+                  <TextInput
+                    label="First Name"
+                    withAsterisk
+                    required
+                    placeholder="First Name"
+                    size="md"
+                    value={firstName}
+                    onChange={handleFirstNameChange}
+                  />
+                  <TextInput
+                    label="Last Name"
+                    withAsterisk
+                    required
+                    placeholder="Last Name"
+                    size="md"
+                    value={lastName}
+                    onChange={handleLastNameChange}
+                  />
+                  <TextInput
+                    label="Employee ID"
+                    withAsterisk
+                    required
+                    placeholder="Employee ID"
+                    size="md"
+                    value={employeeId}
+                    onChange={handleEmployeeIdChange}
+                  />
+                  <TextInput
+                    label="Email"
+                    withAsterisk
+                    required
+                    placeholder="Email"
+                    type="email"
+                    size="md"
+                    value={email}
+                    onChange={handleEmailChange}
+                  />
+                  <TextInput
+                    label="Phone"
+                    withAsterisk
+                    required
+                    placeholder="Phone"
+                    size="md"
+                    value={phone}
+                    onChange={handlePhoneChange}
+                    type="number"
+                  />
+                  <TextInput
+                    label="Department"
+                    withAsterisk
+                    required
+                    placeholder="Department"
+                    size="md"
+                    value={department}
+                    onChange={handleDepartmentChange}
+                  />
+                  <TextInput
+                    label="Position"
+                    withAsterisk
+                    required
+                    placeholder="Position"
+                    size="md"
+                    value={position}
+                    onChange={handlePositionChange}
+                  />
+                  <PasswordInput
+                    label="Password"
+                    required
+                    size="md"
+                    value={password}
+                    onChange={handlePasswordChange}
+                    visible={visible}
+                    onVisibilityChange={toggle}
+                  />
+                  <PasswordInput
+                    label="Confirm Password"
+                    required
+                    size="md"
+                    value={confirmPassword}
+                    onChange={handleConfirmPasswordChange}
+                    visible={visible}
+                    error={passwordConfirmError}
+                    onVisibilityChange={toggle}
+                  />
+                </SimpleGrid>
+              </Group>
+              <Group
+                classNames={{
+                  root: classnames.formRight,
+                }}
+              >
+                <Text fw={500}>Access Level</Text>
+                <Checkbox
+                  disabled
+                  checked
+                  label="Employee Level 1 (default)"
+                  classNames={{
+                    label: classnames.checkboxLabel,
+                  }}
+                />
+                <Checkbox
+                  label="Employee Level 2"
+                  checked={employeeLevel2}
+                  onChange={handleEmployeeLevel2Change}
+                />
+                <Checkbox
+                  label="Employee Level 3"
+                  checked={employeeLevel3}
+                  onChange={handleEmployeeLevel3Change}
+                />
+                <Checkbox
+                  label="Purchase Admin Level 1"
+                  checked={purchaseAdminLevel1}
+                  onChange={handlePurchaseAdminLevel1Change}
+                />
+                <Checkbox
+                  label="Purchase Admin Level 2"
+                  checked={purchaseAdminLevel2}
+                  onChange={handlePurchaseAdminLevel2Change}
+                />
+                <Checkbox
+                  label="Inventory Admin"
+                  checked={inventoryAdmin}
+                  onChange={handleInventoryAdminChange}
+                />
+              </Group>
+            </Group>
+            <Button type="submit" variant="filled" color="#1B4965" size="md" mt="xl">
+              Enroll
+            </Button>
+          </Group>
           {showNotification && notificationMessage}
         </Group>
       </form>
