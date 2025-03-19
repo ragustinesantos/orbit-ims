@@ -86,7 +86,17 @@ export interface Employee {
   department: string;
   employeeLevel: string[];
   isActive: boolean;
+  notifications?: Notification[];
 }
+
+export interface Notification{
+  reqId: string;
+  reqType: string;
+  reqTypeId: string;
+  requisitionDate: string;
+}
+
+export type EmployeeUpdate = Partial<Employee>;
 
 export interface EmployeeToEdit {
   employeeWorkId: string;

@@ -9,6 +9,7 @@ export default function DashboardTitle() {
   const { currentEmployee } = useInventory();
 
   const [currentTime, setCurrentTime] = useState<Date | null>(null);
+  
 
   useEffect(() => {
     setCurrentTime(new Date());
@@ -56,6 +57,8 @@ export default function DashboardTitle() {
       <Title order={5} className={classnames.date}>
         {formattedDate} | {formattedTime}
       </Title>
+         
     </Group>
+    
   );
 }
