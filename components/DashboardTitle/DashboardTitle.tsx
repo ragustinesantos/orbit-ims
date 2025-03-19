@@ -3,15 +3,9 @@ import { Group, Title, Text } from "@mantine/core";
 import { useEffect, useState } from "react";
 import classnames from "./DashboardTitle.module.css";
 import { useInventory } from "@/app/_utils/inventory-context";
-import { Menu, Button, UnstyledButton, Indicator } from "@mantine/core";
-import { IconSettings, IconLogout, IconBell} from '@tabler/icons-react';
-import { useDisclosure } from "@mantine/hooks";
-import Bell from "../NotificationBell/Bell";
 
 export default function DashboardTitle() {
   const { currentEmployee } = useInventory();
-
-  const [visible, { toggle }] = useDisclosure();
   const [currentTime, setCurrentTime] = useState<Date | null>(null);
   
 
@@ -44,14 +38,6 @@ export default function DashboardTitle() {
       <Title order={5} className={classnames.date}>
         {formattedDate} | {formattedTime}
       </Title>
-
-      {/* <div className={classnames.endbar}>
-      <Title order={5} className={classnames.date}>
-        {formattedDate} | {formattedTime}  
-      </Title>
-      
-      </div> */}
-
          
     </Group>
     

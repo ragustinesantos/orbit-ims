@@ -34,7 +34,6 @@ export default function Bell() {
           
     }, []);
 
-    //const sortedOrs = allOrs?.sort((a,b) => {return new Date(a.requisitionDate) - Number(b.requisitionDate)})
     const sortedOrs = sortOrders(allOrs);
     
     function sortOrders (reqOrders: OrderRequisition[]): OrderRequisition[] {
@@ -109,10 +108,6 @@ export default function Bell() {
     }
     //use map function to take Notfication properties only and put in a new array
     let newestNotificationArr = mapReqId(notificationArr5);
-
-    const updatedEmployee = {
-    notifications: newestNotificationArr
-    };
 
     // update the employee notification array, if updated successfully remove bell red dot.
     async function clickBell () {
@@ -240,9 +235,8 @@ export default function Bell() {
       
         checkNotifications();
       }, [currentEmployee]);
-      //[currentEmployee, newestNotificationArr]);
 
-      async function menuItemClick(reqId: string, newNotificationObj: Notification, index: number) {
+      async function menuItemClick(reqId: string, newNotificationObj: Notification,) {
         console.log(reqId);
         if (currentEmployee) {
           try {
@@ -315,7 +309,7 @@ export default function Bell() {
               <Menu.Label><Text size="lg">Notifications</Text></Menu.Label>
               
                 {sortedOrs ? <> 
-                <MenuItem onClick={()=>menuItemClick(sortedOrs[0].requisitionId,newestNotificationArr[0],0)} className={classnames.MenuItem}>
+                <MenuItem onClick={()=>menuItemClick(sortedOrs[0].requisitionId,newestNotificationArr[0])} className={classnames.MenuItem}>
                 <div className={classnames.outerNotifyDiv}>
                   <Indicator offset={15} position="top-center" color={getIndicatorColor(sortedOrs[0]?.requisitionType)} size={13} className={classnames.OdorIndicator}>
                   </Indicator>
@@ -329,7 +323,7 @@ export default function Bell() {
                 </MenuItem>
                 <Divider />
 
-                <Menu.Item onClick={()=>menuItemClick(sortedOrs[1].requisitionId,newestNotificationArr[1],1)} className={classnames.MenuItem}>
+                <Menu.Item onClick={()=>menuItemClick(sortedOrs[1].requisitionId,newestNotificationArr[1])} className={classnames.MenuItem}>
                 <div className={classnames.outerNotifyDiv}>
                   <Indicator offset={15} position="top-center" color={getIndicatorColor(sortedOrs[1]?.requisitionType)} size={13} className={classnames.OdorIndicator}>
                   </Indicator>
@@ -343,7 +337,7 @@ export default function Bell() {
                 </Menu.Item>
                 <Divider />
 
-                <Menu.Item onClick={()=>menuItemClick(sortedOrs[2].requisitionId,newestNotificationArr[2],2)} className={classnames.MenuItem}>
+                <Menu.Item onClick={()=>menuItemClick(sortedOrs[2].requisitionId,newestNotificationArr[2])} className={classnames.MenuItem}>
                 <div className={classnames.outerNotifyDiv}>
                   <Indicator offset={15} position="top-center" color={getIndicatorColor(sortedOrs[2]?.requisitionType)} size={13} className={classnames.OdorIndicator}>
                   </Indicator>
@@ -357,7 +351,7 @@ export default function Bell() {
                 </Menu.Item>
                 <Divider />
 
-                <Menu.Item onClick={()=>menuItemClick(sortedOrs[3].requisitionId,newestNotificationArr[3],3)} className={classnames.MenuItem}>
+                <Menu.Item onClick={()=>menuItemClick(sortedOrs[3].requisitionId,newestNotificationArr[3])} className={classnames.MenuItem}>
                 <div className={classnames.outerNotifyDiv}>
                   <Indicator offset={15} position="top-center" color={getIndicatorColor(sortedOrs[3]?.requisitionType)} size={13} className={classnames.OdorIndicator}>
                   </Indicator>
@@ -371,7 +365,7 @@ export default function Bell() {
                 </Menu.Item>
                 <Divider />
 
-                <Menu.Item onClick={()=>menuItemClick(sortedOrs[4].requisitionId,newestNotificationArr[4],4)} className={classnames.MenuItem}>
+                <Menu.Item onClick={()=>menuItemClick(sortedOrs[4].requisitionId,newestNotificationArr[4])} className={classnames.MenuItem}>
                 <div className={classnames.outerNotifyDiv}>
                   <Indicator offset={15} position="top-center" color={getIndicatorColor(sortedOrs[4]?.requisitionType)} size={13} className={classnames.OdorIndicator}>
                   </Indicator>
