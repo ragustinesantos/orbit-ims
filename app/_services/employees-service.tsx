@@ -64,7 +64,7 @@ export async function dbGetEmployee(employeeId: string) {
 
 export async function dbUpdateEmployee(
   employeeId: string,
-  updatedEmployeeObject: { [key: string]: any | null | undefined }
+  updatedEmployeeObject: { [key: string]: any }
 ) {
   try {
     const employeeReference = doc(db, 'employees', employeeId);
