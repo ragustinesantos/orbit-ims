@@ -6,7 +6,6 @@ import {
   dbUpdateSupplier,
 } from '@/app/_services/suppliers-service';
 
-
 export async function GET(request: Request, { params }: { params: any }) {
   try {
     const { id } = await params;

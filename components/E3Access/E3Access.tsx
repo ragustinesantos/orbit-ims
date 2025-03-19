@@ -5,16 +5,25 @@ import { useEffect, useState } from 'react';
 import { Group, Pagination, Table, Text } from '@mantine/core';
 import { usePagination } from '@mantine/hooks';
 import { useInventory } from '@/app/_utils/inventory-context';
-import { Employee, RecurringOrderTemplate, OnDemandOrder, OrderRequisition } from '@/app/_utils/schema';
-import { fetchEmployees, fetchRorTemplates, fetchOnDemandOrderRequisitions, fetchOrderRequisitions } from '@/app/_utils/utility';
-import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
+import {
+  Employee,
+  OnDemandOrder,
+  OrderRequisition,
+  RecurringOrderTemplate,
+} from '@/app/_utils/schema';
+import {
+  fetchEmployees,
+  fetchOnDemandOrderRequisitions,
+  fetchOrderRequisitions,
+  fetchRorTemplates,
+} from '@/app/_utils/utility';
 import CustomNotification from '@/components/CustomNotification/CustomNotification';
-import classnames from './E3Access.module.css';
-import RorTemplateModal from '../RorTemplateModal/RorTemplateModal';
+import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
 import OdorModal from '../OdorModal/OdorModal';
+import RorTemplateModal from '../RorTemplateModal/RorTemplateModal';
+import classnames from './E3Access.module.css';
 
 export default function E3AccessPage() {
-
   // State for fetching data
   const [rorTemplates, setRorTemplates] = useState<RecurringOrderTemplate[]>([]);
   const [allOdor, setAllOdor] = useState<OnDemandOrder[] | null>(null);
@@ -26,12 +35,10 @@ export default function E3AccessPage() {
   const [modalStateTracker, setModalStateTracker] = useState<Record<string, boolean>>({});
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
-
   // Notification states
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState(<div />);
   const [isE3PageView, setIsE3PageView] = useState(true);
-
 
   useEffect(() => {
     // Fetch Templates, ODORs, Order Requisitions & Employees
@@ -42,7 +49,7 @@ export default function E3AccessPage() {
         await fetchOnDemandOrderRequisitions(setAllOdor);
         await fetchOrderRequisitions(setAllOrs);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error('Error fetching data:', error);
       }
       setLoading(false);
     };
@@ -110,9 +117,9 @@ export default function E3AccessPage() {
         )
       );
       if (isApproved) {
-        setRefreshTrigger(prev => prev + 1);
+        setRefreshTrigger((prev) => prev + 1);
       }
-    }else if (message === 'error') {
+    } else if (message === 'error') {
       console.error(Error);
       setNotificationMessage(
         CustomNotification(
@@ -128,12 +135,11 @@ export default function E3AccessPage() {
 
   const handleOdorApproval = async (message: string, odorId: string, isApproved: boolean) => {
     if (message === 'success') {
-      setAllOrs((prevOrs) =>
-        prevOrs?.map((or) =>
-          or.requisitionTypeId === odorId
-            ? { ...or, isApprovedE3: isApproved }
-            : or
-        ) || null
+      setAllOrs(
+        (prevOrs) =>
+          prevOrs?.map((or) =>
+            or.requisitionTypeId === odorId ? { ...or, isApprovedE3: isApproved } : or
+          ) || null
       );
 
       setNotificationMessage(
@@ -145,7 +151,7 @@ export default function E3AccessPage() {
         )
       );
       if (isApproved) {
-        setRefreshTrigger(prev => prev + 1);
+        setRefreshTrigger((prev) => prev + 1);
       }
     } else if (message === 'error') {
       console.error(Error);
@@ -161,18 +167,22 @@ export default function E3AccessPage() {
     revealNotification();
   };
 
-  const filteredTemplates = rorTemplates.filter(template => template.isTemplateApprovedE2 === true);
+  const filteredTemplates = rorTemplates.filter(
+    (template) => template.isTemplateApprovedE2 === true
+  );
 
   // Map templates to table rows
   const mappedTemplates = filteredTemplates.map((template) => [
     <>
       <RorTemplateModal
-       recurringOrderTemplate = {template}
-       isOpened={!!modalStateTracker[template.rorTemplateId]}
-       isClosed={() => setModalStateTracker((prev) => ({ ...prev, [template.rorTemplateId]: false }))}
-       handleApprovalE2={undefined}
-       handleApprovalE3={handleApprovalE3}
-       isE3Page={isE3PageView}
+        recurringOrderTemplate={template}
+        isOpened={!!modalStateTracker[template.rorTemplateId]}
+        isClosed={() =>
+          setModalStateTracker((prev) => ({ ...prev, [template.rorTemplateId]: false }))
+        }
+        handleApprovalE2={undefined}
+        handleApprovalE3={handleApprovalE3}
+        isE3Page={isE3PageView}
       />
       {/* Open Modal when clicking the Template ID */}
       <Text
@@ -187,69 +197,52 @@ export default function E3AccessPage() {
     <ApprovalBadge
       key={`approval-${template.rorTemplateId}`}
       isApproved={template.isTemplateApprovedE3}
-    />
+    />,
   ]);
 
   // Map ODOR data to table rows
-  const mappedOdors = allOdor?.map((odor) => {
-    // Cross-reference and retrieve a matching order requisition based on the requisitionId stored in the odor
-    const matchingOr = allOrs?.find((or) => or.requisitionTypeId === odor.odorId);
-    const matchingEmployee = employeeWithRequisitions.find(
-      (emp) => emp && emp.employeeId === matchingOr?.employeeId
-    );
+  const mappedOdors =
+    allOdor
+      ?.map((odor) => {
+        // Cross-reference and retrieve a matching order requisition based on the requisitionId stored in the odor
+        const matchingOr = allOrs?.find((or) => or.requisitionTypeId === odor.odorId);
+        const matchingEmployee = employeeWithRequisitions.find(
+          (emp) => emp.employeeId === matchingOr?.employeeId
+        );
 
-    // Only show active requisitions that have been approved by E2
-    if (matchingOr?.isActive && matchingOr?.isApprovedE2 === true) {
-      return [
-        <>
-          <OdorModal
-            onDemandOrder={odor}
-            isOpened={!!modalStateTracker[odor.odorId]}
-            isClosed={() => setModalStateTracker((prev) => ({ ...prev, [odor.odorId]: false }))}
-            handleApprovalE3={handleOdorApproval}
-            isE3Page={isE3PageView}
-          />
-          <Text
-            key={`odor-${odor.odorId}`}
-            className={classnames.templateTextId}
-            onClick={() => toggleOdorModalState(odor.odorId)}
-          >
-            {odor.odorId}
-          </Text>
-        </>,
-        <Text key={`emp-${odor.odorId}`}>
-          {matchingEmployee ? `${matchingEmployee.firstName} ${matchingEmployee.lastName}` : 'Unknown'}
-        </Text>,
-        <Text key={`date-${odor.odorId}`}>
-          {matchingOr ? formatDate(matchingOr.requisitionDate) : ''}
-        </Text>,
-        <ApprovalBadge
-          key={`approval-${odor.odorId}`}
-          isApproved={matchingOr?.isApprovedE3}
-        />
-      ];
-    }
-    return [];
-  }).filter(row => row.length > 0) || [];
-
-  // Size for pagination
-  const pageSize = 5;
-
-  // Template Pagination
-  const templateTotalPages = Math.ceil(mappedTemplates.length / pageSize);
-  const templatePagination = usePagination({ total: templateTotalPages, initialPage: 1 });
-  const paginatedTemplates = mappedTemplates.slice(
-    (templatePagination.active - 1) * pageSize,
-    templatePagination.active * pageSize
-  );
-
-  // ODOR Pagination
-  const odorTotalPages = Math.ceil(mappedOdors.length / pageSize);
-  const odorPagination = usePagination({ total: odorTotalPages, initialPage: 1 });
-  const paginatedOdors = mappedOdors.slice(
-    (odorPagination.active - 1) * pageSize,
-    odorPagination.active * pageSize
-  );
+        // Only show active requisitions that have been approved by E2
+        if (matchingOr?.isActive && matchingOr?.isApprovedE2 === true) {
+          return [
+            <>
+              <OdorModal
+                onDemandOrder={odor}
+                isOpened={!!modalStateTracker[odor.odorId]}
+                isClosed={() => setModalStateTracker((prev) => ({ ...prev, [odor.odorId]: false }))}
+                handleApprovalE3={handleOdorApproval}
+                isE3Page={isE3PageView}
+              />
+              <Text
+                key={`odor-${odor.odorId}`}
+                className={classnames.templateTextId}
+                onClick={() => toggleOdorModalState(odor.odorId)}
+              >
+                {odor.odorId}
+              </Text>
+            </>,
+            <Text key={`emp-${odor.odorId}`}>
+              {matchingEmployee
+                ? `${matchingEmployee.firstName} ${matchingEmployee.lastName}`
+                : 'Unknown'}
+            </Text>,
+            <Text key={`date-${odor.odorId}`}>
+              {matchingOr ? formatDate(matchingOr.requisitionDate) : ''}
+            </Text>,
+            <ApprovalBadge key={`approval-${odor.odorId}`} isApproved={matchingOr?.isApprovedE3} />,
+          ];
+        }
+        return [];
+      })
+      .filter((row) => row.length > 0) || [];
 
   return (
     <main>
@@ -344,7 +337,7 @@ export default function E3AccessPage() {
           </>
         )}
       </div>
-      
+
       {showNotification && notificationMessage}
     </main>
   );

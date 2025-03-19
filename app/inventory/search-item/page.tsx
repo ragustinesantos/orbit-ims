@@ -14,7 +14,7 @@ export default function SearchItemPage() {
           justifyContent: 'flex-start',
           height: '100vh',
           width: '100vw',
-          padding: "1.5rem"
+          padding: '1.5rem',
         }}
       >
         <SearchItem />

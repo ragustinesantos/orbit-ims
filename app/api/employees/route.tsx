@@ -31,8 +31,6 @@ export async function POST(request: Request) {
 
     //TODO: Add code that would create the authentication
 
-
-
     await dbAddEmployee(validatedEmployee);
 
     return new Response(JSON.stringify(validatedEmployee), { status: 201 });

@@ -5,7 +5,7 @@ export default function TableDeleteBtn({
   handleDelete,
 }: {
   itemId: any;
-  handleDelete: (itemId: string) => void
+  handleDelete: (itemId: string) => void;
 }) {
   return (
     <Button
