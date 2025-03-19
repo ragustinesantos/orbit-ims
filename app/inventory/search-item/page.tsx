@@ -13,8 +13,8 @@ export default function SearchItemPage() {
           flex: 1,
           justifyContent: 'flex-start',
           height: '100vh',
-          paddingLeft: 32,
-          paddingTop: 4,
+          width: '100vw',
+          padding: "1.5rem"
         }}
       >
         <SearchItem />

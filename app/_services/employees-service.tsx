@@ -11,6 +11,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../_utils/firebase';
 import { Employee, EmployeeToEdit } from '../_utils/schema';
+import { Auth, sendPasswordResetEmail } from 'firebase/auth';
 
 export async function dbGetAllEmployees() {
   try {
@@ -87,4 +88,18 @@ export async function dbDeleteEmployee(employeeId: string) {
   } catch (error) {
     return console.log(`Error deleting employee: ${error}`);
   }
+}
+
+export async function dbResetEmpPass (auth: Auth, email:string) {
+  try { 
+    await sendPasswordResetEmail(auth,email);
+
+    return true;
+
+  } catch(error){
+    //console.error("An error occurred in dbResetEmpPass:", error);
+    throw error;
+
+  }
+
 }

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Button, Modal, NumberInput, Select, SimpleGrid, Table, Text, TextInput } from '@mantine/core';
 import { useInventory } from '@/app/_utils/inventory-context';
 import classnames from './StockOutModal.module.css';
-import { defaultItem, Item, StockOutOrder } from '@/app/_utils/schema';
+import { defaultItem, Item, ItemOrder, OrderRequisition, StockOutOrder } from '@/app/_utils/schema';
 import { fetchOnDemandOrderRequisition, fetchOrderRequisition, fetchRecurringOrderRequisition, fetchStockOutOrders, postStockOutOrder, putItem } from '@/app/_utils/utility';
 import CustomNotification from '../CustomNotification/CustomNotification';
 
@@ -13,56 +13,56 @@ export default function StockOutModal({ opened, close, requisitionId }: { opened
   const [requisitionItems, setRequisitionItems] = useState<Item[]>([]);
   const { inventory } = useInventory();
 
-    // Notification State
-    const [showError, setShowError] = useState<boolean>(false);
-    const [showSuccess, setShowSuccess] = useState<boolean>(false);
-    const [showUpdateError, setShowUpdateError] = useState<boolean>(false);
+  // Notification State
+  const [showError, setShowError] = useState<boolean>(false);
+  const [showSuccess, setShowSuccess] = useState<boolean>(false);
+  const [showUpdateError, setShowUpdateError] = useState<boolean>(false);
 
 
   const [stockOutQuantity, setStockOutQuantity] = useState<number>(0);
   const [stockOutDate, setStockOutDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [dispatchedBy, setDispatchedBy] = useState<string>('');
 
-  const [stockOutOrders, setStockOutOrders] = useState<StockOutOrder[]>([]); 
-  const [orderQtyMap, setOrderQtyMap] = useState<Record<string, number>>({}); 
-
-  
-   useEffect(() => {
-      fetchStockOutOrders(setStockOutOrders);
-   }, [stockOutOrders]);
+  const [stockOutOrders, setStockOutOrders] = useState<StockOutOrder[]>([]);
+  const [orderQtyMap, setOrderQtyMap] = useState<Record<string, number>>({});
 
 
-  
+  useEffect(() => {
+    fetchStockOutOrders(setStockOutOrders);
+  }, [stockOutOrders]);
+
+
+
   const getItemDetails = (itemId: string) => {
     const foundItem = inventory?.find((item) => item.itemId === itemId);
     return {
-        name: foundItem?.itemName || "Unknown Item",
-        unit: foundItem?.supplyUnit || "N/A",
+      name: foundItem?.itemName || "Unknown Item",
+      unit: foundItem?.supplyUnit || "N/A",
     };
-};
+  };
 
 
 
   useEffect(() => {
     const retrieveItemsInRO = async () => {
       try {
-        const requisitionData = await fetchOrderRequisition(requisitionId);
+        const requisitionData: OrderRequisition = await fetchOrderRequisition(requisitionId);
         const [rorData, odorData] = await Promise.all([
           fetchRecurringOrderRequisition(requisitionData.requisitionTypeId),
           fetchOnDemandOrderRequisition(requisitionData.requisitionTypeId),
         ]);
 
         const selectedOrder = rorData?.itemOrders?.length ? rorData : odorData;
-        const orderQtyMapping : Record<string,number> = {};
-        const matchedItems = selectedOrder.itemOrders.map((order) => {
-          const inventoryItem = inventory.find((invItem) => invItem.itemId === order.itemId);
+        const orderQtyMapping: Record<string, number> = {};
+        const matchedItems = selectedOrder.itemOrders.map((order: ItemOrder) => {
+          const inventoryItem = inventory?.find((invItem) => invItem.itemId === order.itemId);
           if (inventoryItem) {
-            orderQtyMapping[order.itemId] = order.orderQty; 
+            orderQtyMapping[order.itemId] = order.orderQty;
           }
           return inventoryItem;
         }).filter(Boolean) as Item[];
 
-        setOrderQtyMap(orderQtyMapping); 
+        setOrderQtyMap(orderQtyMapping);
         setRequisitionItems(matchedItems);
       } catch (error) {
         console.error('Error fetching requisition items:', error);
@@ -112,9 +112,9 @@ export default function StockOutModal({ opened, close, requisitionId }: { opened
       console.log('Error: Missing required fields');
       setShowError(true);
       setTimeout(() => {
-      setShowError(false);
-    }, 3000);
-    return;
+        setShowError(false);
+      }, 3000);
+      return;
     }
 
     const newStockOutOrder: StockOutOrder = {
@@ -156,7 +156,7 @@ export default function StockOutModal({ opened, close, requisitionId }: { opened
         placeholder="Select an item from the list..."
         data={requisitionItems.map((item) => ({
           value: item.itemName,
-          label: `${item.itemName} (Request Qty: ${orderQtyMap[item.itemId] || 0})`, 
+          label: `${item.itemName} (Request Qty: ${orderQtyMap[item.itemId] || 0})`,
         }))}
         allowDeselect
         searchable
@@ -176,60 +176,60 @@ export default function StockOutModal({ opened, close, requisitionId }: { opened
         <TextInput label="Unit of Measurement" disabled value={selectedItem.supplyUnit} size="md" />
         <TextInput label="Category" disabled value={selectedItem.category} size="md" />
         <TextInput label="Current Stock" disabled value={selectedItem.currentStockInStoreRoom} size="md" type="number" />
-        <NumberInput label="Stock Out Quantity" value={stockOutQuantity} onChange={(value) => handleStockOutQuantity(Number(value)||0)} min={1} max={selectedItem.currentStockInStoreRoom || 0} size="md" withAsterisk />
+        <NumberInput label="Stock Out Quantity" value={stockOutQuantity} onChange={(value) => handleStockOutQuantity(Number(value) || 0)} min={1} max={selectedItem.currentStockInStoreRoom || 0} size="md" withAsterisk />
         <TextInput label="Stock Out Date" value={stockOutDate} onChange={(e) => setStockOutDate(e.target.value)} type="date" size="md" withAsterisk />
         <TextInput label="Dispatched By" value={dispatchedBy} onChange={(e) => setDispatchedBy(e.target.value)} size="md" withAsterisk />
       </SimpleGrid>
 
-      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "30px", marginTop:"30px" }}>
-        <Button 
-          variant="filled" 
-          color="blue" 
-          size="md" 
+      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "30px", marginTop: "30px" }}>
+        <Button
+          variant="filled"
+          color="blue"
+          size="md"
           onClick={handleSubmit}
         >
           Generate SO
         </Button>
       </div>
 
-            {showError &&
-              CustomNotification(
-                'error',
-                'Incomplete Fields',
-                'Please fill up all required fields before submitting.',
-                setShowError
-              )}
-            {showSuccess &&
-              CustomNotification(
-                'success',
-                'Item Stock Out',
-                'The item has been successfully managed to stock out',
-                setShowSuccess
-              )}
-            {showUpdateError &&
-              CustomNotification(
-                'error',
-                'Item Stock Out Failed',
-                'Item failed to update due to a server error',
-                setShowUpdateError
-              )}
-      <hr/>
+      {showError &&
+        CustomNotification(
+          'error',
+          'Incomplete Fields',
+          'Please fill up all required fields before submitting.',
+          setShowError
+        )}
+      {showSuccess &&
+        CustomNotification(
+          'success',
+          'Item Stock Out',
+          'The item has been successfully managed to stock out',
+          setShowSuccess
+        )}
+      {showUpdateError &&
+        CustomNotification(
+          'error',
+          'Item Stock Out Failed',
+          'Item failed to update due to a server error',
+          setShowUpdateError
+        )}
+      <hr />
       {/*stock out list table */}
 
       <Text className={classnames.rootText}>Stock Out List</Text>
       <Table stickyHeader stickyHeaderOffset={50} horizontalSpacing="xl" verticalSpacing="lg" style={{ width: "100%" }} classNames={{ thead: classnames.thead, td: classnames.td }}>
-                <Table.Thead>
-                    <Table.Tr>
-                        <Table.Th>Stock Out ID</Table.Th>
-                        <Table.Th>Date</Table.Th>
-                        <Table.Th>Item Name</Table.Th>
-                        <Table.Th>Quantity</Table.Th>
-                        <Table.Th>Unit</Table.Th>
-                        <Table.Th>Dispatched By</Table.Th>
-                    </Table.Tr>
-                </Table.Thead>
-                <Table.Tbody>{stockOutRows}</Table.Tbody>
-            </Table>
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th>Stock Out ID</Table.Th>
+            <Table.Th>Date</Table.Th>
+            <Table.Th>Item Name</Table.Th>
+            <Table.Th>Quantity</Table.Th>
+            <Table.Th>Unit</Table.Th>
+            <Table.Th>Dispatched By</Table.Th>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>{stockOutRows}</Table.Tbody>
+      </Table>
     </Modal>
   );
 }

@@ -1,13 +1,12 @@
+/* eslint-disable react/button-has-type */
 /* eslint-disable no-console */
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Group, Pagination, Table, TableData, Text, Modal, Button } from '@mantine/core';
-import { usePagination } from '@mantine/hooks';
-import { useDisclosure } from '@mantine/hooks';
-import { useInventory } from '@/app/_utils/inventory-context';
 import { string } from 'zod';
-
+import { Button, Group, Modal, Pagination, Table, TableData, Text } from '@mantine/core';
+import { useDisclosure, usePagination } from '@mantine/hooks';
+import { useInventory } from '@/app/_utils/inventory-context';
 import {
   Employee,
   OnDemandOrder,
@@ -21,6 +20,7 @@ import {
   fetchOrderRequisitions,
   fetchPurchaseOrders,
   fetchRecurringOrderRequisitions,
+  patchCloseTicket,
   patchOrderRequisitionPo,
   postPurchaseOrder,
   submitPurchaseOrder,
@@ -44,7 +44,7 @@ export default function P1AccessPage() {
   const [allPo, setAllPo] = useState<PurchaseOrder[] | null>(null);
   const [employeeWithRequisitions, setEmployeeWithRequisitions] = useState<Employee[]>([]);
   const [selectedRequisitionId, setSelectedRequisitionId] = useState<string | null>(null);
-  
+
   // Refresh trigger for data updates
   const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
 
@@ -57,11 +57,13 @@ export default function P1AccessPage() {
 
   //State for StockOutModal
   const [openedStockOutModal, setOpenedStockOutModal] = useState(false);
-  
+
   // State for confirmation modal
   const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
 
   const [pendingPoId, setPendingPoId] = useState<string | null>(null);
+  const [closeTicketModalOpen, setCloseTicketModalOpen] = useState(false);
+  const [pendingCloseTicketId, setPendingCloseTicketId] = useState<string | null>(null);
 
   //open StockOutModal
   const handleStockOutModalOpen = (requisitionId: string) => {
@@ -98,10 +100,10 @@ export default function P1AccessPage() {
           setShowNotification
         )
       );
-      
+
       // Trigger a refresh when an ROR is approved to update the purchase orders table
       if (status === 'APPROVED') {
-        setRefreshTrigger(prev => prev + 1);
+        setRefreshTrigger((prev) => prev + 1);
       }
     } else if (message === 'error') {
       setNotificationMessage(
@@ -109,6 +111,35 @@ export default function P1AccessPage() {
           'error',
           'Error Encountered',
           `Unexpected Error encountered. ROR ID ${rorId} was not ${status}. Please try again.`,
+          setShowNotification
+        )
+      );
+    }
+    revealNotification();
+  };
+
+  const handleOdorApproval = async (message: string, odorId: string, isApproved: boolean) => {
+    if (message === 'success') {
+      setNotificationMessage(
+        CustomNotification(
+          'success',
+          'ODOR Approval',
+          `ODOR ID ${odorId} was ${isApproved ? 'APPROVED' : 'REJECTED'}.`,
+          setShowNotification
+        )
+      );
+
+      // Trigger a refresh when an ODOR is approved to update the tables
+      if (isApproved) {
+        setRefreshTrigger((prev) => prev + 1);
+      }
+    } else if (message === 'error') {
+      console.error(Error);
+      setNotificationMessage(
+        CustomNotification(
+          'error',
+          'Approval Error',
+          `Failed to update ODOR ID ${odorId}.`,
           setShowNotification
         )
       );
@@ -290,7 +321,7 @@ export default function P1AccessPage() {
   useEffect(() => {
     if (allPo) {
       const newPoModalOpen = { ...poModalOpen };
-      allPo.forEach(po => {
+      allPo.forEach((po) => {
         if (po.isSubmitted) {
           newPoModalOpen[po.purchaseOrderId] = true;
         }
@@ -304,7 +335,7 @@ export default function P1AccessPage() {
     // Cross-reference and retrieve a matching order requisition based on the requisitionId stored in the ror
     const matchingOr = allOrs?.find((or) => or.requisitionTypeId === ror.rorId);
     const matchingEmployee = employeeWithRequisitions.find(
-      (emp) => emp.employeeId === matchingOr?.employeeId
+      (emp) => emp && emp.employeeId === matchingOr?.employeeId
     );
 
     // If the matching order requisition is active, generate a table line containing the modal
@@ -345,7 +376,7 @@ export default function P1AccessPage() {
     // Cross-reference and retrieve a matching order requisition based on the requisitionId stored in the ror
     const matchingOr = allOrs?.find((or) => or.requisitionTypeId === odor.odorId);
     const matchingEmployee = employeeWithRequisitions.find(
-      (emp) => emp.employeeId === matchingOr?.employeeId
+      (emp) => emp && emp.employeeId === matchingOr?.employeeId
     );
 
     // If the matching order requisition is active, generate a table line containing the modal
@@ -358,7 +389,7 @@ export default function P1AccessPage() {
             isOpened={!!modalStateTracker[odor.odorId]}
             // Close the modal by directly setting its opened state to false
             isClosed={() => setModalStateTracker((prev) => ({ ...prev, [odor.odorId]: false }))}
-            handleApprovalActivity={handleApprovalActivity}
+            handleApprovalP1={handleOdorApproval}
           />
 
           {/* When the ID text is clicked, this will toggle the state of the modal visibility.*/}
@@ -385,7 +416,7 @@ export default function P1AccessPage() {
   const mappedOr = allOrs?.map((or) => {
     // Cross-reference and retrieve a matching employee based on the requisitionId stored in the ror
     const matchingEmployee = employeeWithRequisitions.find(
-      (emp) => emp.employeeId === or?.employeeId
+      (emp) => emp && emp.employeeId === or?.employeeId
     );
     const matchingPo = allPo?.find((po) => po.purchaseOrderId === or.purchaseOrderId);
 
@@ -399,7 +430,59 @@ export default function P1AccessPage() {
         (or?.requisitionType === 'ror' && or?.isApprovedP1))
     ) {
       return [
-        <Text classNames={{ root: classnames.rootTextId }}>{or.requisitionId}</Text>,
+        <>
+          {(() => {
+            if (or.requisitionType === 'ror' && allRor) {
+              const matchingRor = allRor.find((ror) => ror.rorId === or.requisitionTypeId);
+              return (
+                matchingRor && (
+                  <>
+                    <RorModal
+                      recurringOrder={matchingRor}
+                      // Retrieve the actual state of the modal, !! will retrieve it's actual value because default is 'falsey'
+                      isOpened={!!modalStateTracker[matchingRor.rorId]}
+                      // Close the modal by setting its opened state to false
+                      isClosed={() =>
+                        setModalStateTracker((prev) => ({ ...prev, [matchingRor.rorId]: false }))
+                      }
+                      handleApprovalActivity={handleApprovalActivity}
+                    />
+                    <Text
+                      onClick={() => toggleModalState(matchingRor.rorId)}
+                      classNames={{ root: classnames.rootTextId }}
+                    >
+                      {or.requisitionId}
+                    </Text>
+                  </>
+                )
+              );
+            } else if (or.requisitionType === 'odor') {
+              const matchingOdor = allOdor?.find((odor) => odor.odorId === or.requisitionTypeId);
+              return (
+                matchingOdor && (
+                  <>
+                    <OdorModal
+                      onDemandOrder={matchingOdor}
+                      // Retrieve the actual state of the modal, !! will retrieve it's actual value because default is 'falsey'
+                      isOpened={!!modalStateTracker[matchingOdor.odorId]}
+                      // Close the modal by directly setting its opened state to false
+                      isClosed={() =>
+                        setModalStateTracker((prev) => ({ ...prev, [matchingOdor.odorId]: false }))
+                      }
+                      handleApprovalP1={handleOdorApproval}
+                    />
+                    <Text
+                      onClick={() => toggleModalState(matchingOdor.odorId)}
+                      classNames={{ root: classnames.rootTextId }}
+                    >
+                      {or.requisitionId}
+                    </Text>
+                  </>
+                )
+              );
+            }
+          })()}
+        </>,
         <Text>
           {matchingEmployee?.firstName} {matchingEmployee?.lastName}
         </Text>,
@@ -407,7 +490,12 @@ export default function P1AccessPage() {
         <ApprovalBadge isApproved={or.isApprovedP1} />,
         matchingPo ? (
           matchingPo.isSubmitted || poModalOpen[matchingPo.purchaseOrderId] ? (
-            <Text classNames={{ root: classnames.rootPoId }}>{matchingPo.purchaseOrderId}</Text>
+            <Text
+              classNames={{ root: classnames.rootPoId }}
+              onClick={() => toggleModalState(matchingPo.purchaseOrderId)}
+            >
+              {matchingPo.purchaseOrderId}
+            </Text>
           ) : (
             <>
               <button
@@ -450,7 +538,12 @@ export default function P1AccessPage() {
             + SO
           </Text>
         ),
-        <button className={classnames.closeTicketButton}>Close</button>,
+        <button
+          className={classnames.closeTicketButton}
+          onClick={() => openCloseTicketModal(or.requisitionId)}
+        >
+          Close
+        </button>,
       ];
     }
 
@@ -468,13 +561,13 @@ export default function P1AccessPage() {
 
         // Reference the generated PO's ID in the order requisition
         await patchOrderRequisitionPo(requisitionId, generatedPoId);
-        
+
         // Open the PO modal for the newly created PO
         setModalStateTracker((prev) => ({ ...prev, [generatedPoId]: true }));
-        
+
         // Trigger a refresh to update the purchase orders table
-        setRefreshTrigger(prev => prev + 1);
-        
+        setRefreshTrigger((prev) => prev + 1);
+
         return generatedPoId;
       } catch (error) {
         console.log(error);
@@ -510,63 +603,19 @@ export default function P1AccessPage() {
     }
   };
 
-  // Generate a purchase order for a requisition
-  const generatePo = async (requisitionId: string) => {
-    try {
-      // Create a purchase order
-      const generatedPoId = await createPo(requisitionId);
-      
-      if (generatedPoId) {
-        // Update the UI to show the PO ID instead of the button
-        setPoModalOpen((prev) => ({ ...prev, [generatedPoId]: true }));
-        
-        // Trigger a refresh to update the data
-        setRefreshTrigger(prev => prev + 1);
-        
-        // Show success notification
-        setNotificationMessage(
-          CustomNotification(
-            'success',
-            'PO Generated',
-            `Purchase Order ${generatedPoId} has been generated`,
-            setShowNotification
-          )
-        );
-        
-        // Trigger notification
-        revealNotification();
-      }
-    } catch (error) {
-      console.error('Error generating PO:', error);
-      
-      // Show error notification
-      setNotificationMessage(
-        CustomNotification(
-          'error',
-          'Error',
-          'Failed to generate Purchase Order',
-          setShowNotification
-        )
-      );
-      
-      // Trigger notification
-      revealNotification();
-    }
-  };
-
   // Handle purchase order submission
   const handlePoSubmit = async (purchaseOrderId: string) => {
     try {
       // Update the purchase order's isSubmitted status
       await submitPurchaseOrder(purchaseOrderId);
-      
+
       // Update the poModalOpen state to show the PO ID instead of the button
       setPoModalOpen((prev) => ({ ...prev, [purchaseOrderId]: true }));
-      
+
       // Close both modals
       setModalStateTracker((prev) => ({ ...prev, [purchaseOrderId]: false }));
       setConfirmationModalOpen(false);
-      
+
       setNotificationMessage(
         CustomNotification(
           'success',
@@ -575,14 +624,14 @@ export default function P1AccessPage() {
           setShowNotification
         )
       );
-      
+
       revealNotification();
-      
+
       // Trigger a refresh to update the purchase orders table
-      setRefreshTrigger(prev => prev + 1);
+      setRefreshTrigger((prev) => prev + 1);
     } catch (error) {
-      console.error("Error submitting purchase order:", error);
-      
+      console.error('Error submitting purchase order:', error);
+
       setNotificationMessage(
         CustomNotification(
           'error',
@@ -591,7 +640,7 @@ export default function P1AccessPage() {
           setShowNotification
         )
       );
-      
+
       revealNotification();
     }
   };
@@ -601,13 +650,13 @@ export default function P1AccessPage() {
     setPendingPoId(purchaseOrderId);
     setConfirmationModalOpen(true);
   };
-  
+
   // Close confirmation modal without submitting
   const closeConfirmationModal = () => {
     setPendingPoId(null);
     setConfirmationModalOpen(false);
   };
-  
+
   // Confirm PO submission
   const confirmPoSubmission = () => {
     if (pendingPoId) {
@@ -615,9 +664,54 @@ export default function P1AccessPage() {
     }
   };
 
+  // Open confirmation modal for closing ticket
+  const openCloseTicketModal = (requisitionId: string) => {
+    setPendingCloseTicketId(requisitionId);
+    setCloseTicketModalOpen(true);
+  };
+
+  // Close confirmation modal without closing ticket
+  const closeCloseTicketModal = () => {
+    setPendingCloseTicketId(null);
+    setCloseTicketModalOpen(false);
+  };
+
+  // Handle closing the ticket
+  const handleCloseTicket = async () => {
+    if (!pendingCloseTicketId) return;
+
+    try {
+      await patchCloseTicket(pendingCloseTicketId);
+
+      // Show success notification
+      setNotificationMessage(
+        CustomNotification(
+          'success',
+          'Ticket Closed',
+          `Requisition ${pendingCloseTicketId} has been closed`,
+          setShowNotification
+        )
+      );
+
+      // Close the modal
+      setCloseTicketModalOpen(false);
+      setPendingCloseTicketId(null);
+
+      // Refresh the data
+      setRefreshTrigger((prev) => prev + 1);
+    } catch (error) {
+      console.error('Error closing ticket:', error);
+
+      // Show error notification
+      setNotificationMessage(
+        CustomNotification('error', 'Error', 'Failed to close ticket', setShowNotification)
+      );
+    }
+    revealNotification();
+  };
+
   // Size or requisition pagination
   const requisitionSize = 5;
-
 
   // Clean mapped items to remove blank rows
   const cleanedMappedRor = (mappedRor ?? []).filter((row) => row.length > 0);
@@ -675,8 +769,8 @@ export default function P1AccessPage() {
   };
 
   return (
-    <main>
-      <Text classNames={{ root: classnames.rootText }}>P1 Access</Text>
+    <main className={classnames.main}>
+      <Text classNames={{ root: classnames.rootText }}>Purchasing Level 1</Text>
       {allOdor && allOrs && allRor && allPo ? (
         <Group classNames={{ root: classnames.rootMainGroup }}>
           <Group classNames={{ root: classnames.rootSectionGroup }}>
@@ -708,6 +802,7 @@ export default function P1AccessPage() {
                   classNames={{
                     table: classnames.rootRequisitionTable,
                     thead: classnames.rootRequisitionThead,
+                    td: classnames.rootRequisitionTd,
                   }}
                 />
                 {cleanedMappedOdor && (
@@ -729,6 +824,7 @@ export default function P1AccessPage() {
                 data={poTableData}
                 classNames={{
                   thead: classnames.rootRequisitionThead,
+                  td: classnames.rootRequisitionTd,
                 }}
               />
               {cleanedMappedOr && (
@@ -747,9 +843,7 @@ export default function P1AccessPage() {
         </Group>
       )}
       {showNotification && (
-        <div className={classnames.notificationWrapper}>
-          {notificationMessage}
-        </div>
+        <div className={classnames.notificationWrapper}>{notificationMessage}</div>
       )}
       {selectedRequisitionId && (
         <StockOutModal
@@ -770,11 +864,11 @@ export default function P1AccessPage() {
           onSubmit={openConfirmationModal}
         />
       ))}
-      
-      <Modal 
-        opened={confirmationModalOpen} 
-        onClose={closeConfirmationModal} 
-        title="Confirmation" 
+
+      <Modal
+        opened={confirmationModalOpen}
+        onClose={closeConfirmationModal}
+        title="Confirmation"
         centered
         zIndex={1000}
       >
@@ -793,9 +887,41 @@ export default function P1AccessPage() {
           >
             Proceed
           </Button>
-          <Button 
-            classNames={{ root: classnames.rootBtn }} 
-            onClick={closeConfirmationModal} 
+          <Button
+            classNames={{ root: classnames.rootBtn }}
+            onClick={closeConfirmationModal}
+            color="red"
+          >
+            Cancel
+          </Button>
+        </Group>
+      </Modal>
+
+      <Modal
+        opened={closeTicketModalOpen}
+        onClose={closeCloseTicketModal}
+        title="Confirmation"
+        centered
+        zIndex={1000}
+      >
+        <Text
+          classNames={{
+            root: classnames.rootConfirmationText,
+          }}
+        >
+          Are you sure you want to close this ticket? This action cannot be undone.
+        </Text>
+        <Group classNames={{ root: classnames.rootBtnArea }}>
+          <Button
+            classNames={{ root: classnames.rootBtn }}
+            onClick={handleCloseTicket}
+            color="#1B4965"
+          >
+            Close Ticket
+          </Button>
+          <Button
+            classNames={{ root: classnames.rootBtn }}
+            onClick={closeCloseTicketModal}
             color="red"
           >
             Cancel

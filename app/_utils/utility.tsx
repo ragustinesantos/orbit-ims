@@ -21,7 +21,10 @@ import {
   EmployeeUpdate
 } from './schema';
 
+import { getAuth } from 'firebase/auth';
+import { dbResetEmpPass } from '../_services/employees-service';
 
+const auth = getAuth();
 
 // Fetch all inventory items
 export const fetchInventory = async (setInventory: (inventoryItems: Item[]) => void) => {
@@ -108,7 +111,7 @@ export const putItem = async (itemId: string, updatedItem: ItemToEdit) => {
 
 // Delete inventory item
 export const deleteItem = async (itemId: string) => {
-  const request = new Request(`http://localhost:3000/api/items/${itemId}`, {
+  const request = new Request(`/api/items/${itemId}`, {
     method: 'DELETE',
   });
 
@@ -163,6 +166,19 @@ export const putEmployee = async (employeeId: string, updatedEmployee: EmployeeT
     throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
   }
 };
+
+export async function sendResetEmail (email: string) {
+  try {
+   const returnmsg = await dbResetEmpPass(auth,email);
+
+   return returnmsg;
+   
+  } catch (error){
+    //console.error("An error occurred in sendResetEmail:", error);
+    throw error;
+  }
+
+}
 
 export const patchEmployee = async (employeeId: string, updatedEmployee: EmployeeUpdate) => {
   const request = {
@@ -484,7 +500,7 @@ export const postPurchaseOrder = async (requisitionId: string) => {
     orderList: [],
     recipientCompanyName: '',
     recipientCompanyAddress: '',
-    purchaseOrderDate: new Date().toLocaleDateString(),
+    purchaseOrderDate: new Date().toLocaleString('en-us'),
     purchaseOrderDeliveryDate: '',
     subTotal: 0,
     taxRate: 0,
@@ -702,15 +718,33 @@ export const fetchStockOutOrders = async (
 export const patchOdorApproval = async (
   requisitionId: string,
   isApproved: boolean,
-  approverId: string
+  approverId: string,
+  isE2User: boolean = false,
+  isE3User: boolean = false
 ) => {
   try {
-    const request = {
-      method: 'PATCH',
-      body: JSON.stringify({
+    // Update the approval fields based on the type of employee
+    let updateFields = {};
+    if (isE2User) {
+      updateFields = {
+        isApprovedE2: isApproved,
+        approvalE2: approverId,
+      };
+    } else if (isE3User) {
+      updateFields = {
+        isApprovedE3: isApproved,
+        approvalE3: approverId,
+      };
+    } else {
+      updateFields = {
         isApprovedP1: isApproved,
         approvalP1: approverId,
-      }),
+      };
+    }
+
+    const request = {
+      method: 'PATCH',
+      body: JSON.stringify(updateFields),
     };
 
     const response = await fetch(`/api/order-requisitions/${requisitionId}`, request);
@@ -749,5 +783,28 @@ export const submitPurchaseOrder = async (purchaseOrderId: string) => {
   } catch (error) {
     console.log(error);
     return false;
+  }
+};
+
+export const patchCloseTicket = async (requisitionId: string) => {
+  try {
+    const response = await fetch(`/api/order-requisitions/${requisitionId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        isActive: false
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to close ticket');
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Error closing ticket:', error);
+    throw error;
   }
 };

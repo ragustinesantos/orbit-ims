@@ -1,12 +1,28 @@
 /* eslint-disable no-console */
 'use client';
 
+import { useEffect, useState } from 'react';
+import { redirect } from 'next/navigation';
+import { onAuthStateChanged } from 'firebase/auth';
 import Login from '@/components/Login/Login';
 import { useUserAuth } from './_utils/auth-context';
-import DashBoard from './dashboard/page';
+import { auth } from './_utils/firebase';
 
 export default function HomePage() {
   const { user, signInWithEmail } = useUserAuth() || {};
+
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      setIsLoading(false);
+      if (firebaseUser) {
+        redirect('/dashboard');
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const handleLogin = async (username: string, pass: string, err: (hasError: boolean) => void) => {
     if (signInWithEmail) {
@@ -26,10 +42,6 @@ export default function HomePage() {
   };
 
   return (
-    <main className="h-screen">
-      {!user ? (<Login handleLogin={handleLogin} /> ): (
-      <DashBoard/>
-      )}
-    </main>
+    <main className="h-screen">{!isLoading && !user && <Login handleLogin={handleLogin} />}</main>
   );
 }

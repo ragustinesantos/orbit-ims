@@ -29,7 +29,7 @@ export default function Login({
         <div className={classes.loginContainer}>
             <div className={classes.loginBox}>
                 <Image 
-                    src="/assets/logo/orbit_logo.png"
+                    src="/assets/logo/1.png"
                     alt="Orbit Logo"
                     width={300}
                     height={150}

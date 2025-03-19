@@ -1,119 +1,125 @@
+/* Main container to center everything */
 .container {
-  margin: 20px;
-  padding: 20px;
   display: flex;
-  flex-direction: column; 
-  width:30%;
-  border:1px solid #e1e1e1;
-  border-radius: 8px;
+  flex-direction: column;
+  width: 100%;
+  padding: 20px;
+  background-color: #ffffff;
+  margin:auto;
 }
 
-
+/* Title Styling */
 .heading {
+  font-size: 1.25rem;
   font-weight: 700;
-  margin: 20px;
-  text-align: center;
+  color: #333;
+  margin-bottom: 0.75rem;
 }
 
+/* Overview container for all sections */
+.overviewContainer {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 1200px;
+  gap: 20px;
+}
+
+/* Card Styling */
 .cardContainer {
+  display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-content: center;
-  margin:10px auto;
-  margin-bottom: 50px;
-  transition: all 0.3s ease-in-out;
+  align-items: center;
+  text-align: center;
+  height: 100px; 
+  width: 100%;
   border-radius: 12px;
   background: white;
   border: 1px solid #e1e1e1;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
 }
-
 
 .cardContainer:hover {
   transform: translateY(-5px);
   box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.12);
-  
 }
 
-
+/* Text inside cards */
 .cardText {
-  text-align: center;
   font-weight: 600;
-  margin-bottom: 20px;
-  padding-top:15px;
-  padding-left: 10px;
-  padding-right: 10px;
+  margin-bottom: 5px;
 }
 
 .cardText:hover {
-  cursor: pointer;
-  text-decoration: underline;
   color: #007bff;
 }
 
 .cardNumber {
-  text-align: center;
+  font-size: 1.5rem;
   font-weight: 900;
-  padding-bottom:15px;
+  color: #007bff;
 }
 
-@media(max-width:1463px){
-  .container {
-    align-items: center; 
-    text-align: center;
-    flex-direction: column;  
+/* Pie Chart Cards */
+.chartCard {
+  flex: 1;
+  max-width: 350px;
+  height: 230px; /* Fixed height to match the stat cards */
+  padding: 15px;
+  border-radius: 12px;
+  background: white;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease-in-out;
+  text-align: center;
+  overflow-y:scroll;
+  scrollbar-width: none;  
+  scrollbar-color: transparent transparent; 
+}
+
+.chartCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.12);
+}
+
+/* Chart Title */
+.chartTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #444;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+  .overviewContainer {
+    flex-direction: column;
     align-items: center;
-    gap:20px;
-    width:100%;
   }
 
-  .cardContainer {
-    width:100%;
+  .statCardsContainer {
+    width: 100%;
+    flex-direction: row;
+    gap: 15px;
+  }
+
+  .chartCard {
+    width: 100%;
+    max-width: 100%;
   }
 }
 
-
-@media (max-width: 1338px) {
-  .grid {
-    width: 100%; 
-  }
-
-  .container {
-    align-items: center; 
-    text-align: center;
-    flex-direction: column;  
+@media (max-width: 768px) {
+  .statCardsContainer {
+    flex-direction: column;
     align-items: center;
-    gap:20px;
-    width:100%;
   }
 
-  .heading {
-    text-align: center; 
-    margin-bottom: 20px;
-  }
-
-  .cardContainer {
-    max-width: 300px;
-    margin-bottom: 10px; 
-  }
-
-  .cardText {
-    text-align: center;
-    font-weight: 600;
-    margin: 20px;
-  }
-}
-
-@media (max-width: 786px) {
-  .container {
-    gap: 15px; 
-    padding: 10px;
-  }
-
-  .cardContainer {
-    margin-bottom: 15px;
-  }
-
-  .cardText {
-    margin-bottom: 15px; 
+  .chartCard {
+    width: 100%;
   }
 }

@@ -12,17 +12,22 @@ export default function DashboardTitle() {
   const { currentEmployee } = useInventory();
 
   const [visible, { toggle }] = useDisclosure();
-  const [currentTime, setCurrentTime] = useState(new Date());
+  const [currentTime, setCurrentTime] = useState<Date | null>(null);
   
 
- 
   useEffect(() => {
+    setCurrentTime(new Date());
+
     const timer = setInterval(() => {
-      setCurrentTime(new Date()); 
+      setCurrentTime(new Date());
     }, 1000);
 
-    return () => clearInterval(timer); 
+    return () => clearInterval(timer);
   }, []);
+
+  if (!currentTime) {
+    return null;
+  }
 
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const formattedDate = `${months[currentTime.getMonth()]} ${currentTime.getDate()}, ${currentTime.getFullYear()}`;
@@ -34,7 +39,7 @@ export default function DashboardTitle() {
         <Title order={2} className={classnames.heading}>
           Hello, <span className={classnames.name}>{currentEmployee?.firstName} {currentEmployee?.lastName}</span>!
         </Title>
-        <Text className={classnames.subText}>Welcome back! Here’s what’s happening today.</Text>
+        <Text className={classnames.subText}>Welcome back! Here's what's happening today.</Text>
       </div>
       <Title order={5} className={classnames.date}>
         {formattedDate} | {formattedTime}
