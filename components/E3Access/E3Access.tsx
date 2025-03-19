@@ -207,7 +207,7 @@ export default function E3AccessPage() {
         // Cross-reference and retrieve a matching order requisition based on the requisitionId stored in the odor
         const matchingOr = allOrs?.find((or) => or.requisitionTypeId === odor.odorId);
         const matchingEmployee = employeeWithRequisitions.find(
-          (emp) => emp.employeeId === matchingOr?.employeeId
+          (emp) => emp && emp.employeeId === matchingOr?.employeeId
         );
 
         // Only show active requisitions that have been approved by E2
@@ -243,6 +243,25 @@ export default function E3AccessPage() {
         return [];
       })
       .filter((row) => row.length > 0) || [];
+
+  // Size for pagination
+  const pageSize = 5;
+
+  // Template Pagination
+  const templateTotalPages = Math.ceil(mappedTemplates.length / pageSize);
+  const templatePagination = usePagination({ total: templateTotalPages, initialPage: 1 });
+  const paginatedTemplates = mappedTemplates.slice(
+    (templatePagination.active - 1) * pageSize,
+    templatePagination.active * pageSize
+  );
+
+  // ODOR Pagination
+  const odorTotalPages = Math.ceil(mappedOdors.length / pageSize);
+  const odorPagination = usePagination({ total: odorTotalPages, initialPage: 1 });
+  const paginatedOdors = mappedOdors.slice(
+    (odorPagination.active - 1) * pageSize,
+    odorPagination.active * pageSize
+  );
 
   return (
     <main>

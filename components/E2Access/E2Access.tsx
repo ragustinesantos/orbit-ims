@@ -239,7 +239,7 @@ export default function E2AccessPage() {
         // Cross-reference and retrieve a matching order requisition based on the requisitionId stored in the odor
         const matchingOr = allOrs?.find((or) => or.requisitionTypeId === odor.odorId);
         const matchingEmployee = employeeWithRequisitions.find(
-          (emp) => emp.employeeId === matchingOr?.employeeId
+          (emp) => emp && emp.employeeId === matchingOr?.employeeId
         );
 
         // Only show active requisitions
@@ -277,6 +277,25 @@ export default function E2AccessPage() {
         return [];
       })
       .filter((row) => row.length > 0) || [];
+      
+  // Size for pagination
+  const pageSize = 5;
+
+  // Template Pagination
+  const templateTotalPages = Math.ceil(mappedTemplates.length / pageSize);
+  const templatePagination = usePagination({ total: templateTotalPages, initialPage: 1 });
+  const paginatedTemplates = mappedTemplates.slice(
+    (templatePagination.active - 1) * pageSize,
+    templatePagination.active * pageSize
+  );
+
+  // ODOR Pagination
+  const odorTotalPages = Math.ceil(mappedOdors.length / pageSize);
+  const odorPagination = usePagination({ total: odorTotalPages, initialPage: 1 });
+  const paginatedOdors = mappedOdors.slice(
+    (odorPagination.active - 1) * pageSize,
+    odorPagination.active * pageSize
+  );
 
   return (
     <main>
@@ -293,29 +312,38 @@ export default function E2AccessPage() {
                 <Text className={classnames.rootSectionText}>ROR Template</Text>
               </div>
 
-              <div style={{ width: '100%', overflowX: 'auto' }}>
-                <Table stickyHeader striped className={classnames.rootRequisitionTable}>
-                  <Table.Thead
-                    classNames={{
-                      thead: classnames.rootRequisitionThead,
-                    }}
-                  >
-                    <Table.Tr>
-                      <Table.Th>Template ID</Table.Th>
-                      <Table.Th>Template Name</Table.Th>
-                      <Table.Th>Approval Status</Table.Th>
-                    </Table.Tr>
-                  </Table.Thead>
-                  <Table.Tbody>
-                    {mappedTemplates.map((row, index) => (
-                      <Table.Tr key={index}>
-                        {row.map((cell, cellIndex) => (
-                          <Table.Td key={cellIndex}>{cell}</Table.Td>
-                        ))}
+              <div style={{ width: '100%' }}>
+                <Group classNames={{ root: classnames.rootPaginationGroupRequisition }}>
+                  <Table stickyHeader striped className={classnames.rootRequisitionTable}>
+                    <Table.Thead
+                      classNames={{
+                        thead: classnames.rootRequisitionThead,
+                      }}
+                    >
+                      <Table.Tr>
+                        <Table.Th>Template ID</Table.Th>
+                        <Table.Th>Template Name</Table.Th>
+                        <Table.Th>Approval Status</Table.Th>
                       </Table.Tr>
-                    ))}
-                  </Table.Tbody>
-                </Table>
+                    </Table.Thead>
+                    <Table.Tbody>
+                      {paginatedTemplates.map((row, index) => (
+                        <Table.Tr key={index}>
+                          {row.map((cell, cellIndex) => (
+                            <Table.Td key={cellIndex}>{cell}</Table.Td>
+                          ))}
+                        </Table.Tr>
+                      ))}
+                    </Table.Tbody>
+                  </Table>
+                  {mappedTemplates.length > 0 && (
+                    <Pagination
+                      value={templatePagination.active}
+                      onChange={templatePagination.setPage}
+                      total={templateTotalPages}
+                    />
+                  )}
+                </Group>
               </div>
             </div>
 
@@ -324,30 +352,39 @@ export default function E2AccessPage() {
                 <Text className={classnames.rootSectionText}>ODOR Requisitions</Text>
               </div>
 
-              <div style={{ width: '100%', overflowX: 'auto' }}>
-                <Table stickyHeader striped className={classnames.rootRequisitionTable}>
-                  <Table.Thead
-                    classNames={{
-                      thead: classnames.rootRequisitionThead,
-                    }}
-                  >
-                    <Table.Tr>
-                      <Table.Th>ODOR ID</Table.Th>
-                      <Table.Th>Employee</Table.Th>
-                      <Table.Th>Date Submitted</Table.Th>
-                      <Table.Th>Status</Table.Th>
-                    </Table.Tr>
-                  </Table.Thead>
-                  <Table.Tbody>
-                    {mappedOdors.map((row, index) => (
-                      <Table.Tr key={index}>
-                        {row.map((cell, cellIndex) => (
-                          <Table.Td key={cellIndex}>{cell}</Table.Td>
-                        ))}
+              <div style={{ width: '100%' }}>
+                <Group classNames={{ root: classnames.rootPaginationGroupRequisition }}>
+                  <Table stickyHeader striped className={classnames.rootRequisitionTable}>
+                    <Table.Thead
+                      classNames={{
+                        thead: classnames.rootRequisitionThead,
+                      }}
+                    >
+                      <Table.Tr>
+                        <Table.Th>ODOR ID</Table.Th>
+                        <Table.Th>Employee</Table.Th>
+                        <Table.Th>Date Submitted</Table.Th>
+                        <Table.Th>Status</Table.Th>
                       </Table.Tr>
-                    ))}
-                  </Table.Tbody>
-                </Table>
+                    </Table.Thead>
+                    <Table.Tbody>
+                      {paginatedOdors.map((row, index) => (
+                        <Table.Tr key={index}>
+                          {row.map((cell, cellIndex) => (
+                            <Table.Td key={cellIndex}>{cell}</Table.Td>
+                          ))}
+                        </Table.Tr>
+                      ))}
+                    </Table.Tbody>
+                  </Table>
+                  {mappedOdors.length > 0 && (
+                    <Pagination
+                      value={odorPagination.active}
+                      onChange={odorPagination.setPage}
+                      total={odorTotalPages}
+                    />
+                  )}
+                </Group>
               </div>
             </div>
           </>
