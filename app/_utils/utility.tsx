@@ -20,6 +20,7 @@ import {
   StockInOrder,
   StockOutOrder,
   Supplier,
+  EmployeeUpdate
 } from './schema';
 
 const auth = getAuth();
@@ -174,6 +175,23 @@ export async function sendResetEmail(email: string) {
     throw error;
   }
 }
+
+export const patchEmployee = async (employeeId: string, updatedEmployee: EmployeeUpdate) => {
+  const request = {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(updatedEmployee),
+  };
+
+  const response = await fetch(`/api/employees/${employeeId}`, request);
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+  }
+  return response;
+};
 
 // Fetch all recurring order templates
 export const fetchRorTemplates = async (
