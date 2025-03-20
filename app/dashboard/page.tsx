@@ -1,6 +1,6 @@
 'use client';
 
-import { Group, Stack } from '@mantine/core';
+import { Group } from '@mantine/core';
 import DashboardTitle from '@/components/DashboardTitle/DashboardTitle';
 import InventoryOverview from '@/components/InventoryOverview/InventoryOverview';
 import { NavbarNested } from '@/components/NavbarNested/NavbarNested';
@@ -25,7 +25,7 @@ export default function DashBoard() {
       >
         <div className={classnames.div1}>
           <DashboardTitle />
-          <Bell></Bell>
+          <Bell />
         </div>
         <Group classNames={{ root: classnames.responsiveLayout }}>
           <div className={classnames.sectionContainer}>

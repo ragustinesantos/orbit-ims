@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -40,13 +41,19 @@ export default function Bell() {
       const isValidDateB = !isNaN(dateB.getTime());
 
       // Both dates invalid they are equal
-      if (!isValidDateA && !isValidDateB) return 0;
+      if (!isValidDateA && !isValidDateB) {
+        return 0;
+      }
 
       // Only 'a' date invalid, return 1, B is shifted toward start of array
-      if (!isValidDateA) return 1;
+      if (!isValidDateA) {
+        return 1;
+      }
 
       // Only 'b' date invalid,  return -1, A is shifted toward start of array
-      if (!isValidDateB) return -1;
+      if (!isValidDateB) {
+        return -1;
+      }
 
       // if a and b are not the same, is A active true? then move A toward start of array else move b
       if (a.isActive !== b.isActive) {
@@ -72,13 +79,19 @@ export default function Bell() {
       const isValidDateB = !isNaN(dateB.getTime());
 
       // Both dates invalid they are equal
-      if (!isValidDateA && !isValidDateB) return 0;
+      if (!isValidDateA && !isValidDateB) {
+        return 0;
+      }
 
       // Only 'a' date invalid, return 1, B is shifted toward start of array
-      if (!isValidDateA) return 1;
+      if (!isValidDateA) {
+        return 1;
+      }
 
       // Only 'b' date invalid,  return -1, A is shifted toward start of array
-      if (!isValidDateB) return -1;
+      if (!isValidDateB) {
+        return -1;
+      }
 
       // Sort by date, most recent first
       // if b-a is positive, move b towards start of array
@@ -101,7 +114,7 @@ export default function Bell() {
     }));
   }
   //use map function to take Notfication properties only and put in a new array
-  let newestNotificationArr = mapReqId(notificationArr5);
+  const newestNotificationArr = mapReqId(notificationArr5);
 
   // update the employee notification array, if updated successfully remove bell red dot.
   async function clickBell() {
@@ -114,7 +127,7 @@ export default function Bell() {
         } else {
           setDisabled(false);
         }
-        if (currentEmployee.notifications != undefined) {
+        if (currentEmployee.notifications !== undefined) {
           for (let i = 0; i < 5; i++) {
             console.log(selectedEmployee.notifications[i]);
             if (
@@ -154,7 +167,9 @@ export default function Bell() {
     const keys1 = Object.keys(obj1);
     const keys2 = Object.keys(obj2);
 
-    if (keys1.length !== keys2.length) return false;
+    if (keys1.length !== keys2.length) {
+      return false;
+    }
 
     for (const key of keys1) {
       //This is known as bracket notation, which allows us to dynamically access the property value of an object using a string variable.
@@ -176,11 +191,15 @@ export default function Bell() {
       console.log(arr2);
       return false;
     }
-    if (arr1.length !== arr2.length) return false;
+    if (arr1.length !== arr2.length) {
+      return false;
+    }
 
     for (let i = 0; i < arr1.length; i++) {
       // if deep equal returns false, then return false
-      if (!deepEqual(arr1[i], arr2[i])) return false;
+      if (!deepEqual(arr1[i], arr2[i])) {
+        return false;
+      }
     }
 
     return true;
@@ -199,7 +218,7 @@ export default function Bell() {
           } else {
             setDisabled(false);
           }
-          if (selectedEmployee.notifications != undefined) {
+          if (selectedEmployee.notifications !== undefined) {
             for (let i = 0; i < 5; i++) {
               console.log(selectedEmployee.notifications[i]);
               if (
@@ -241,7 +260,7 @@ export default function Bell() {
     if (currentEmployee) {
       try {
         const selectedEmployee = await fetchEmployee(currentEmployee.employeeId);
-        let currentEmpArray = selectedEmployee.notifications || [];
+        const currentEmpArray = selectedEmployee.notifications || [];
 
         if (!currentEmpArray.some((n: Notification) => n.reqId === newNotificationObj.reqId)) {
           const updatedArr1: Notification[] = [...currentEmpArray, newNotificationObj];
@@ -250,14 +269,14 @@ export default function Bell() {
 
           const updatedEmployee = { notifications: updatedArr3 };
 
-          const response = await patchEmployee(currentEmployee.employeeId, updatedEmployee);
+          await patchEmployee(currentEmployee.employeeId, updatedEmployee);
           const selectedEmployee = await fetchEmployee(currentEmployee.employeeId);
           if (areArraysEqual(newestNotificationArr, updatedArr3)) {
             setDisabled(true);
           } else {
             setDisabled(false);
           }
-          if (selectedEmployee.notifications != undefined) {
+          if (selectedEmployee.notifications !== undefined) {
             for (let i = 0; i < 5; i++) {
               if (
                 selectedEmployee.notifications.some(
@@ -294,9 +313,9 @@ export default function Bell() {
   const getIndicatorColor = (requisitionType: string) => {
     if (requisitionType === 'odor') {
       return '#228BE6'; // Red for 'odor'
-    } else {
-      return 'rgba(255, 0, 0, 1)'; // Blue for 'ror'
     }
+
+    return 'rgba(255, 0, 0, 1)'; // Blue for 'ror'
   };
 
   return (
@@ -328,9 +347,9 @@ export default function Bell() {
                       color={getIndicatorColor(sortedOrs[0]?.requisitionType)}
                       size={13}
                       className={classnames.OdorIndicator}
-                    ></Indicator>
+                    />
                     <div className={classnames.odorIDDiv}>
-                      <Indicator offset={2} disabled={!!disabled0} color="red" size={6}></Indicator>
+                      <Indicator offset={2} disabled={!!disabled0} color="red" size={6} />
                       <Text className={classnames.reqIdText}>
                         Requisition ID# {sortedOrs[0]?.requisitionId} has been created.
                       </Text>
@@ -355,9 +374,9 @@ export default function Bell() {
                       color={getIndicatorColor(sortedOrs[1]?.requisitionType)}
                       size={13}
                       className={classnames.OdorIndicator}
-                    ></Indicator>
+                    />
                     <div className={classnames.odorIDDiv}>
-                      <Indicator offset={2} disabled={!!disabled1} color="red" size={6}></Indicator>
+                      <Indicator offset={2} disabled={!!disabled1} color="red" size={6} />
                       <Text className={classnames.reqIdText}>
                         Requisition ID# {sortedOrs[1]?.requisitionId} has been created.
                       </Text>
@@ -382,9 +401,9 @@ export default function Bell() {
                       color={getIndicatorColor(sortedOrs[2]?.requisitionType)}
                       size={13}
                       className={classnames.OdorIndicator}
-                    ></Indicator>
+                    />
                     <div className={classnames.odorIDDiv}>
-                      <Indicator offset={2} disabled={!!disabled2} color="red" size={6}></Indicator>
+                      <Indicator offset={2} disabled={!!disabled2} color="red" size={6} />
                       <Text className={classnames.reqIdText}>
                         Requisition ID# {sortedOrs[2]?.requisitionId} has been created.
                       </Text>
@@ -409,9 +428,9 @@ export default function Bell() {
                       color={getIndicatorColor(sortedOrs[3]?.requisitionType)}
                       size={13}
                       className={classnames.OdorIndicator}
-                    ></Indicator>
+                    />
                     <div className={classnames.odorIDDiv}>
-                      <Indicator offset={2} disabled={!!disabled3} color="red" size={6}></Indicator>
+                      <Indicator offset={2} disabled={!!disabled3} color="red" size={6} />
                       <Text className={classnames.reqIdText}>
                         Requisition ID# {sortedOrs[3]?.requisitionId} has been created.
                       </Text>
@@ -436,9 +455,9 @@ export default function Bell() {
                       color={getIndicatorColor(sortedOrs[4]?.requisitionType)}
                       size={13}
                       className={classnames.OdorIndicator}
-                    ></Indicator>
+                    />
                     <div className={classnames.odorIDDiv}>
-                      <Indicator offset={2} disabled={!!disabled4} color="red" size={6}></Indicator>
+                      <Indicator offset={2} disabled={!!disabled4} color="red" size={6} />
                       <Text className={classnames.reqIdText}>
                         Requisition ID# {sortedOrs[4]?.requisitionId} has been created.
                       </Text>
@@ -450,7 +469,7 @@ export default function Bell() {
                 </Menu.Item>
               </>
             ) : (
-              <Text></Text>
+              <Text />
             )}
           </Menu.Dropdown>
         </Menu>

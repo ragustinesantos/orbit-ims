@@ -166,14 +166,9 @@ export const putEmployee = async (employeeId: string, updatedEmployee: EmployeeT
 };
 
 export async function sendResetEmail(email: string) {
-  try {
-    const returnmsg = await dbResetEmpPass(auth, email);
+  const returnmsg = await dbResetEmpPass(auth, email);
 
-    return returnmsg;
-  } catch (error) {
-    //console.error("An error occurred in sendResetEmail:", error);
-    throw error;
-  }
+  return returnmsg;
 }
 
 export const patchEmployee = async (employeeId: string, updatedEmployee: EmployeeUpdate) => {

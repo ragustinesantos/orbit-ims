@@ -4,7 +4,6 @@
 import { useEffect, useState } from 'react';
 import { Group, Pagination, Table, Text } from '@mantine/core';
 import { usePagination } from '@mantine/hooks';
-import { useInventory } from '@/app/_utils/inventory-context';
 import {
   Employee,
   OnDemandOrder,

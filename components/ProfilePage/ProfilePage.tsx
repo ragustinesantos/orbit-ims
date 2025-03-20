@@ -97,11 +97,11 @@ export default function ProfilePage() {
             <div>{currentEmployee?.department}</div>
             <div className={classnames.title}>Access Level:</div>
             <div>
-              {currentEmployee?.employeeLevel[0] ? currentEmployee?.employeeLevel[0] + ', ' : ''}
-              {currentEmployee?.employeeLevel[1] ? currentEmployee?.employeeLevel[1] + ', ' : ''}
-              {currentEmployee?.employeeLevel[2] ? currentEmployee?.employeeLevel[2] + ', ' : ''}
-              {currentEmployee?.employeeLevel[3] ? currentEmployee?.employeeLevel[3] + ', ' : ''}
-              {currentEmployee?.employeeLevel[4] ? currentEmployee?.employeeLevel[4] + ', ' : ''}
+              {currentEmployee?.employeeLevel[0] ? `${currentEmployee.employeeLevel[0]}, ` : ''}
+              {currentEmployee?.employeeLevel[1] ? `${currentEmployee.employeeLevel[1]}, ` : ''}
+              {currentEmployee?.employeeLevel[2] ? `${currentEmployee.employeeLevel[2]}, ` : ''}
+              {currentEmployee?.employeeLevel[3] ? `${currentEmployee.employeeLevel[3]}, ` : ''}
+              {currentEmployee?.employeeLevel[4] ? `${currentEmployee.employeeLevel[4]}, ` : ''}
               {currentEmployee?.employeeLevel[5] ? currentEmployee?.employeeLevel[5] : ''}
             </div>
           </SimpleGrid>
