@@ -68,17 +68,17 @@
 
 .scrollableContainer::-webkit-scrollbar {
     width: 1rem;
-    /*height: 1rem;*/
+    /* height: 1rem; */
   }
 
   .scrollableContainer::-webkit-scrollbar-track {
-    background: #ffffff;
+    background: #fff;
   }
 
   .scrollableContainer::-webkit-scrollbar-thumb {
     background: #9da9b0;
     border-radius: 100vw;
-    border: 0.20rem solid #ffffff;
+    border: 0.20rem solid #fff;
   }
 
 
