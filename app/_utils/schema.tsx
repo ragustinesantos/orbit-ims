@@ -89,7 +89,7 @@ export interface Employee {
   notifications?: Notification[];
 }
 
-export interface Notification{
+export interface Notification {
   reqId: string;
   reqType: string;
   reqTypeId: string;

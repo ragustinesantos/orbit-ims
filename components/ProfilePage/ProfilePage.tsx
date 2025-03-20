@@ -96,12 +96,14 @@ export default function ProfilePage() {
             <div className={classnames.title}>Department:</div>
             <div>{currentEmployee?.department}</div>
             <div className={classnames.title}>Access Level:</div>
-            <div>{currentEmployee?.employeeLevel[0] ? currentEmployee?.employeeLevel[0] + ", " : ""} 
-                                 {currentEmployee?.employeeLevel[1] ? currentEmployee?.employeeLevel[1] + ", " : ""}  
-                                 {currentEmployee?.employeeLevel[2] ? currentEmployee?.employeeLevel[2] + ", " : ""} 
-                                 {currentEmployee?.employeeLevel[3] ? currentEmployee?.employeeLevel[3] + ", " : ""} 
-                                 {currentEmployee?.employeeLevel[4] ? currentEmployee?.employeeLevel[4] + ", " : ""} 
-                                 {currentEmployee?.employeeLevel[5] ? currentEmployee?.employeeLevel[5] : ""}</div>
+            <div>
+              {currentEmployee?.employeeLevel[0] ? currentEmployee?.employeeLevel[0] + ', ' : ''}
+              {currentEmployee?.employeeLevel[1] ? currentEmployee?.employeeLevel[1] + ', ' : ''}
+              {currentEmployee?.employeeLevel[2] ? currentEmployee?.employeeLevel[2] + ', ' : ''}
+              {currentEmployee?.employeeLevel[3] ? currentEmployee?.employeeLevel[3] + ', ' : ''}
+              {currentEmployee?.employeeLevel[4] ? currentEmployee?.employeeLevel[4] + ', ' : ''}
+              {currentEmployee?.employeeLevel[5] ? currentEmployee?.employeeLevel[5] : ''}
+            </div>
           </SimpleGrid>
           <div>
             <Button variant="filled" onClick={showmodal} classNames={{ root: classnames.button }}>

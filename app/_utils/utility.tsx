@@ -6,6 +6,7 @@ import {
   Chat,
   ChatToEdit,
   EmployeeToEdit,
+  EmployeeUpdate,
   Item,
   ItemToEdit,
   OnDemandOrder,
@@ -20,7 +21,6 @@ import {
   StockInOrder,
   StockOutOrder,
   Supplier,
-  EmployeeUpdate
 } from './schema';
 
 const auth = getAuth();
