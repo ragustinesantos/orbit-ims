@@ -92,4 +92,5 @@ export async function dbDeleteEmployee(employeeId: string) {
 
 export async function dbResetEmpPass(auth: Auth, email: string) {
   await sendPasswordResetEmail(auth, email);
+  return true;
 }
