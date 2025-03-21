@@ -676,7 +676,9 @@ export default function P1AccessPage() {
 
   // Handle closing the ticket
   const handleCloseTicket = async () => {
-    if (!pendingCloseTicketId) return;
+    if (!pendingCloseTicketId) {
+      return;
+    }
 
     try {
       await patchCloseTicket(pendingCloseTicketId);

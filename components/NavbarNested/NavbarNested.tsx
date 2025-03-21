@@ -24,7 +24,7 @@ export function NavbarNested() {
         } else {
           navItems.splice(3, 1);
         }
-        navItems = navItems.concat(NAV_ITEMS.MI);
+        return [...navItems, ...NAV_ITEMS.MI];
       }
       return navItems;
     };

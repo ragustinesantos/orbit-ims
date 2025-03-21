@@ -1,13 +1,10 @@
+/* eslint-disable no-console */
 'use client';
 
 import { useEffect, useState } from 'react';
 import { Button, Flex, Group, Modal, Select, SimpleGrid, Text, TextInput } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import {
-  dbDeleteEmployee,
-  dbGetAllEmployees,
-  dbUpdateEmployee,
-} from '@/app/_services/employees-service';
+import { dbGetAllEmployees, dbUpdateEmployee } from '@/app/_services/employees-service';
 import { useInventory } from '@/app/_utils/inventory-context';
 import { defaultEmployee, Employee } from '@/app/_utils/schema';
 import CustomNotification from '../CustomNotification/CustomNotification';

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 'useclient';
 
 import { useEffect, useState } from 'react';
@@ -92,7 +93,7 @@ export default function OdorComponent({ itemOrders, setitemOrders }: setpropstyp
   }
 
   function handleRemoveItem(item: ItemOrder) {
-    let position = itemOrders.indexOf(item);
+    const position = itemOrders.indexOf(item);
     itemOrders.splice(position, 1);
     setitemOrders([...itemOrders]);
   }
@@ -111,7 +112,7 @@ export default function OdorComponent({ itemOrders, setitemOrders }: setpropstyp
           item={odorItem}
           isOpened={!!modalStateTracker[item.itemId]}
           isClosed={() => setModalStateTracker((prev) => ({ ...prev, [item.itemId]: false }))}
-        ></ImgModal>
+        />
         <Table.Td style={{ maxWidth: '100px', overflowX: 'scroll', scrollbarWidth: 'none' }}>
           <Text
             onClick={() => toggleImgModalState(item.itemId)}
@@ -201,7 +202,7 @@ export default function OdorComponent({ itemOrders, setitemOrders }: setpropstyp
         </Group>
         <div>
           {itemOrders.length > 0 && (
-            <Table striped={true}>
+            <Table striped>
               <Table.Thead>
                 <Table.Tr>
                   <Table.Th>Item ID</Table.Th>

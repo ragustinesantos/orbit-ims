@@ -1,19 +1,17 @@
 'useclient';
 
-import { useEffect, useState } from 'react';
-import { number } from 'zod';
-import { Group, Table, Text, Textarea, TextInput } from '@mantine/core';
+import { useState } from 'react';
+import { Group, Table, Text, TextInput } from '@mantine/core';
 import { useInventory } from '@/app/_utils/inventory-context';
-import { Item, ItemOrder, NewItemOrder } from '@/app/_utils/schema';
-import CustomNotification from '../CustomNotification/CustomNotification';
+import { ItemOrder, NewItemOrder } from '@/app/_utils/schema';
 import ImgModal from '../ImgModal/ImgModal';
 import classnames from './odor3.module.css';
 
 interface setpropstype {
   itemOrders: ItemOrder[];
   newItemOrders: NewItemOrder[];
-  totalCost: Number;
-  orderTotal: Number;
+  totalCost: number;
+  orderTotal: number;
   remarks: string;
   setRemarks: React.Dispatch<React.SetStateAction<string>>;
   recipientName: string;
@@ -51,7 +49,7 @@ export default function OdorComponent3({
           item={odorItem}
           isOpened={!!modalStateTracker[item.itemId]}
           isClosed={() => setModalStateTracker((prev) => ({ ...prev, [item.itemId]: false }))}
-        ></ImgModal>
+        />
         <Table.Td
           style={{
             maxWidth: '100px',
@@ -134,8 +132,8 @@ export default function OdorComponent3({
         >
           {item?.purposeForPurchase}
         </Table.Td>
-        <Table.Td>{'$' + item?.unitPrice} </Table.Td>
-        <Table.Td>{'$' + Math.round(item?.unitPrice * item?.purchaseQty * 100) / 100}</Table.Td>
+        <Table.Td>{`$${item?.unitPrice}`}</Table.Td>
+        <Table.Td>{`$${Math.round(item?.unitPrice * item?.purchaseQty * 100) / 100}`}</Table.Td>
         <Table.Td>
           <span style={{ width: '30px', textAlign: 'center', display: 'inline-block' }}>
             {item.purchaseQty}
@@ -178,7 +176,7 @@ export default function OdorComponent3({
         {itemOrders.length > 0 && (
           <div>
             <Text className={classnames.templateHeading}>Inventory Items</Text>
-            <Table striped={true}>
+            <Table striped>
               <Table.Thead>
                 <Table.Tr>
                   <Table.Th>Item ID</Table.Th>
@@ -197,7 +195,7 @@ export default function OdorComponent3({
         {newItemOrders.length > 0 && (
           <div>
             <Text className={classnames.templateHeading}>Non-Inventory Items</Text>
-            <Table striped={true}>
+            <Table striped>
               <Table.Thead>
                 <Table.Tr>
                   <Table.Th>Item Name</Table.Th>
@@ -223,7 +221,7 @@ export default function OdorComponent3({
           {newItemOrders.length > 0 && (
             <div>
               <Text classNames={{ root: classnames.orderTotalLabel }}>Total Cost</Text>
-              <Text classNames={{ root: classnames.orderTotalText }}>{'$' + totalCost}</Text>
+              <Text classNames={{ root: classnames.orderTotalText }}>{`$${totalCost}`}</Text>
             </div>
           )}
         </Group>

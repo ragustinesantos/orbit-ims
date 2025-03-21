@@ -1,27 +1,13 @@
-/* eslint-disable no-console */
 'use client';
 
-import { useEffect, useState } from 'react';
-import {
-  Button,
-  Group,
-  Image,
-  Modal,
-  ScrollArea,
-  SimpleGrid,
-  Table,
-  TableData,
-  Text,
-  TextInput,
-} from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import { Image, Modal, ScrollArea, Text } from '@mantine/core';
 import { useInventory } from '@/app/_utils/inventory-context';
 import { imgModalProps } from '@/app/_utils/schema';
 import classnames from './ImgModal.module.css';
 
 //Pass in either a
 export default function ImgModal({ item, isOpened, isClosed, itemid }: imgModalProps) {
-  const { inventory, supplierList } = useInventory();
+  const { inventory } = useInventory();
   //const [opened, { open, close }] = useDisclosure(false);
 
   const currentItem = inventory?.find((invItem) => invItem.itemId === item?.itemId);

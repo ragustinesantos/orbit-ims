@@ -39,7 +39,6 @@ export default function StockOut() {
   const [packageUnit, setPackageUnit] = useState<string>('');
   const [supplyUnit, setSupplyUnit] = useState<string>('');
   const [supplierName, setSupplierName] = useState<string>('');
-  const [itemId, setItemId] = useState<string>('');
   const [stockOutQuantity, setStockOutQuantity] = useState<number>(0);
   const [currentStockInStoreRoom, setCurrentStockInStoreRoom] = useState<string>('');
   const [stockOutDate, setStockOutDate] = useState<string>(new Date().toISOString().split('T')[0]);
@@ -150,10 +149,6 @@ export default function StockOut() {
     };
 
     stockOutOrder();
-  }, [selectedItem]);
-
-  useEffect(() => {
-    setItemId(selectedItem.itemId || '');
   }, [selectedItem]);
 
   useEffect(() => {

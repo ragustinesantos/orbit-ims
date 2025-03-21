@@ -91,12 +91,6 @@ export async function dbDeleteEmployee(employeeId: string) {
 }
 
 export async function dbResetEmpPass(auth: Auth, email: string) {
-  try {
-    await sendPasswordResetEmail(auth, email);
-
-    return true;
-  } catch (error) {
-    //console.error("An error occurred in dbResetEmpPass:", error);
-    throw error;
-  }
+  await sendPasswordResetEmail(auth, email);
+  return true;
 }

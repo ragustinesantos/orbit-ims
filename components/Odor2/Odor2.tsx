@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 'useclient';
 
 import { ChangeEvent, useEffect, useState } from 'react';
@@ -9,8 +10,8 @@ import classnames from './odor2.module.css';
 interface setpropstype {
   newItemOrders: NewItemOrder[];
   setNewItemOrders: React.Dispatch<React.SetStateAction<NewItemOrder[]>>;
-  totalCost: Number;
-  setTotalCost: React.Dispatch<React.SetStateAction<Number>>;
+  totalCost: number;
+  setTotalCost: React.Dispatch<React.SetStateAction<number>>;
   showTemplate: boolean;
   setShowTemplate: React.Dispatch<React.SetStateAction<boolean>>;
   nextPage: () => void;
@@ -63,13 +64,13 @@ export default function OdorComponent2({
     console.log('handle add item pressed');
 
     if (
-      newItemName == '' ||
-      newItemDescription == '' ||
-      newItemProductCode == '' ||
-      newItemPurchaseQTY == '' ||
-      newItemUnitPrice == '' ||
-      disposalPlan == '' ||
-      purposeForPurchase == ''
+      newItemName === '' ||
+      newItemDescription === '' ||
+      newItemProductCode === '' ||
+      newItemPurchaseQTY === '' ||
+      newItemUnitPrice === '' ||
+      disposalPlan === '' ||
+      purposeForPurchase === ''
     ) {
       setNotificationMessage(
         CustomNotification(
@@ -85,8 +86,8 @@ export default function OdorComponent2({
         itemName: newItemName,
         itemDescription: newItemDescription,
         productCode: newItemProductCode,
-        disposalPlan: disposalPlan,
-        purposeForPurchase: purposeForPurchase,
+        disposalPlan,
+        purposeForPurchase,
         purchaseQty: Number(newItemPurchaseQTY),
         unitPrice: Number(newItemUnitPrice),
         itemSubtotal: Number(newItemPurchaseQTY) * Number(newItemUnitPrice),
@@ -112,10 +113,10 @@ export default function OdorComponent2({
 
   // Everytime NewItemOrders is modified re calculate the total Cost
   useEffect(() => {
-    setTimeout(function () {
+    setTimeout(() => {
       let holder: number = 0;
-      for (let item of newItemOrders) {
-        holder = holder + item.purchaseQty * item.unitPrice;
+      for (const item of newItemOrders) {
+        holder += item.purchaseQty * item.unitPrice;
       }
       setTotalCost(Math.round(holder * 100) / 100);
     }, 200);
@@ -166,7 +167,8 @@ export default function OdorComponent2({
           <Button
             classNames={{ root: classnames.cancel }}
             onClick={() => {
-              setShowTemplate(false), cancelOrder();
+              setShowTemplate(false);
+              cancelOrder();
             }}
             color="red"
           >
@@ -201,7 +203,7 @@ export default function OdorComponent2({
         />
         <div>
           <Text classNames={{ root: classnames.orderTotalLabel }}>Total Cost</Text>
-          <Text classNames={{ root: classnames.orderTotalText }}>{'$' + totalCost}</Text>
+          <Text classNames={{ root: classnames.orderTotalText }}>{`$${totalCost}`}</Text>
         </div>
         <TextInput
           label="Purpose For Purchase"
@@ -268,8 +270,8 @@ export default function OdorComponent2({
         >
           {item?.purposeForPurchase}
         </Table.Td>
-        <Table.Td>{'$' + item?.unitPrice} </Table.Td>
-        <Table.Td>{'$' + Math.round(item?.unitPrice * item?.purchaseQty * 100) / 100}</Table.Td>
+        <Table.Td>{`$${item?.unitPrice}`}</Table.Td>
+        <Table.Td>{`$${Math.round(item?.unitPrice * item?.purchaseQty * 100) / 100}`}</Table.Td>
         <Table.Td>
           <Button
             classNames={{ root: `${classnames.buttonDecrement} ${classnames.button}` }}
@@ -337,7 +339,7 @@ export default function OdorComponent2({
   }
 
   function handleRemoveItem(item: NewItemOrder) {
-    let position = newItemOrders.indexOf(item);
+    const position = newItemOrders.indexOf(item);
     newItemOrders.splice(position, 1);
     setNewItemOrders([...newItemOrders]);
   }
@@ -364,7 +366,7 @@ export default function OdorComponent2({
         <div>
           {showTemplate ? (
             newItemOrders.length > 0 && (
-              <Table striped={true}>
+              <Table striped>
                 <Table.Thead>
                   <Table.Tr>
                     <Table.Th>Item Name</Table.Th>

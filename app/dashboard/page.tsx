@@ -4,11 +4,10 @@ import { Group } from '@mantine/core';
 import DashboardTitle from '@/components/DashboardTitle/DashboardTitle';
 import InventoryOverview from '@/components/InventoryOverview/InventoryOverview';
 import { NavbarNested } from '@/components/NavbarNested/NavbarNested';
+import Bell from '@/components/NotificationBell/Bell';
 import RecentStockInOutTable from '@/components/RecentStockInOutTable/RecentStockInOutTable';
 import RequisitionProcessTable from '@/components/RequisitionProcessTableE1/RequisitionProcessTable';
 import classnames from './page.module.css';
-import Bell from '@/components/NotificationBell/Bell';
-import { Stack } from '@mantine/core';
 
 export default function DashBoard() {
   return (
@@ -24,10 +23,9 @@ export default function DashBoard() {
           background: '#fafbfd',
         }}
       >
-        
         <div className={classnames.div1}>
-        <DashboardTitle />
-        <Bell></Bell>
+          <DashboardTitle />
+          <Bell />
         </div>
         <Group classNames={{ root: classnames.responsiveLayout }}>
           <div className={classnames.sectionContainer}>

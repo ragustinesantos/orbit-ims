@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -39,7 +40,6 @@ export default function RorTemplateModal({
   const [approvalSelection, setApprovalSelection] = useState<boolean | null>(null);
   const [approvingE2, setApprovingE2] = useState<boolean>(false);
   const [approvingE3, setApprovingE3] = useState<boolean>(false);
-  const [confirmation, setConfirmation] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchApproverNames = async () => {
@@ -56,64 +56,6 @@ export default function RorTemplateModal({
     };
     fetchApproverNames();
   }, [recurringOrderTemplate]);
-
-  const handleApproval = async (isApprovedE2: boolean, isApprovedE3: boolean) => {
-    try {
-      if (recurringOrderTemplate && currentEmployee) {
-        const isE2 = currentEmployee.employeeLevel.includes('E2');
-        const isE3 = currentEmployee.employeeLevel.includes('E3');
-
-        if (!isE2 && !isE3) {
-          console.error('User does not have approval permissions.');
-          return;
-        }
-
-        const updatedE2 = isE2 ? isApprovedE2 : recurringOrderTemplate.isTemplateApprovedE2;
-        const updatedE3 = isE3 ? isApprovedE3 : recurringOrderTemplate.isTemplateApprovedE3;
-
-        const updatedE2Approver = isE2
-          ? currentEmployee.employeeId
-          : recurringOrderTemplate.approvalE2;
-        const updatedE3Approver = isE3
-          ? currentEmployee.employeeId
-          : recurringOrderTemplate.approvalE3;
-
-        await patchRorTemplateApproval(
-          recurringOrderTemplate.rorTemplateId,
-          updatedE2,
-          updatedE3,
-          updatedE2Approver,
-          updatedE3Approver
-        );
-
-        if (isE2 && handleApprovalE2) {
-          handleApprovalE2('success', recurringOrderTemplate.rorTemplateId, isApprovedE2);
-          setApprovalNameE2(`${currentEmployee.firstName} ${currentEmployee.lastName}`);
-          recurringOrderTemplate.isTemplateApprovedE2 = isApprovedE2;
-        }
-        if (isE3 && handleApprovalE3) {
-          handleApprovalE3('success', recurringOrderTemplate.rorTemplateId, isApprovedE3);
-          setApprovalNameE3(`${currentEmployee.firstName} ${currentEmployee.lastName}`);
-          recurringOrderTemplate.isTemplateApprovedE3 = isApprovedE3;
-        }
-
-        setRefresh((prev: number) => prev + 1);
-      }
-    } catch (error) {
-      console.error('Approval error:', error);
-    }
-
-    // Close the main modal
-    isClosed();
-
-    //Close the confirmation modal
-    close();
-
-    // Return confirmation value to default
-    setConfirmation(false);
-
-    setRefresh((prev: number) => prev + 1);
-  };
 
   // Execute approval after confirmation
   const confirmApproval = async () => {

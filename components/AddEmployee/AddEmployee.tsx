@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { Button, Checkbox, Group, PasswordInput, SimpleGrid, Text, TextInput } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
@@ -45,22 +46,22 @@ export default function AddEmployee() {
   const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>) =>
     setPassword(event.target.value);
   const handleConfirmPasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value != password) {
+    if (event.target.value !== password) {
       setPasswordConfirmError('Passwords do not match');
     } else if (passwordConfirmError) {
       setPasswordConfirmError('');
     }
     setConfirmPassword(event.target.value);
   };
-  const handleEmployeeLevel2Change = (event: ChangeEvent<HTMLInputElement>) =>
+  const handleEmployeeLevel2Change = (_event: ChangeEvent<HTMLInputElement>) =>
     setEmployeeLevel2(!employeeLevel2);
-  const handleEmployeeLevel3Change = (event: ChangeEvent<HTMLInputElement>) =>
+  const handleEmployeeLevel3Change = (_event: ChangeEvent<HTMLInputElement>) =>
     setEmployeeLevel3(!employeeLevel3);
-  const handlePurchaseAdminLevel1Change = (event: ChangeEvent<HTMLInputElement>) =>
+  const handlePurchaseAdminLevel1Change = (_event: ChangeEvent<HTMLInputElement>) =>
     setPurchaseAdminLevel1(!purchaseAdminLevel1);
-  const handlePurchaseAdminLevel2Change = (event: ChangeEvent<HTMLInputElement>) =>
+  const handlePurchaseAdminLevel2Change = (_event: ChangeEvent<HTMLInputElement>) =>
     setPurchaseAdminLevel2(!purchaseAdminLevel2);
-  const handleInventoryAdminChange = (event: ChangeEvent<HTMLInputElement>) =>
+  const handleInventoryAdminChange = (_event: ChangeEvent<HTMLInputElement>) =>
     setInventoryAdmin(!inventoryAdmin);
 
   const { createUserWithEmail } = useUserAuth() || {};
@@ -80,7 +81,7 @@ export default function AddEmployee() {
         )
       );
     } else {
-      let employeeLevels = ['E1'];
+      const employeeLevels = ['E1'];
       if (employeeLevel2) {
         employeeLevels.push('E2');
       }
@@ -99,13 +100,13 @@ export default function AddEmployee() {
 
       const newEmployeeObj: Employee = {
         ...defaultEmployee,
-        firstName: firstName,
-        lastName: lastName,
+        firstName,
+        lastName,
         employeeWorkId: employeeId,
-        email: email,
-        phone: phone,
-        position: position,
-        department: department,
+        email,
+        phone,
+        position,
+        department,
         employeeLevel: employeeLevels,
       };
 

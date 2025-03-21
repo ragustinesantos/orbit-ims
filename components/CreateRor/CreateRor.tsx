@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useEffect, useState } from 'react';
 import { Button, Flex, Modal, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
@@ -36,7 +37,7 @@ export default function CreateRor() {
 
   // These are the titles of the steps and their respective headers
   const steps: string[] = ['Template', 'Order', 'Confirmation', 'Summary'];
-  const stepHeaders: String[] = [
+  const stepHeaders: string[] = [
     'Select Template',
     'Enter Quantity',
     'Order Review',
@@ -45,7 +46,7 @@ export default function CreateRor() {
 
   // This would update the ROR template that would be used in later steps
   const handleSelectRORTemplate = (paramRorTemplate: RecurringOrderTemplate) => {
-    let itemList: ItemOrder[] = [];
+    const itemList: ItemOrder[] = [];
 
     paramRorTemplate.itemList.forEach((item) => {
       const newItemObj: ItemOrder = {
@@ -58,7 +59,7 @@ export default function CreateRor() {
       itemList.push(newItemObj);
     });
 
-    let orderObj: RecurringOrderToEdit = {
+    const orderObj: RecurringOrderToEdit = {
       ...defaultRecurringOrderToEdit,
       rorTemplateId: paramRorTemplate.rorTemplateId,
       itemOrders: itemList,
@@ -73,16 +74,16 @@ export default function CreateRor() {
   // This is an array of content to display based on the current index
   const stepContent: JSX.Element[] = [
     <SelectRorTemplate recurringOrder={recurringOrder} handleSelectRor={handleSelectRORTemplate} />,
-    <OrderRor recurringOrder={recurringOrder} setRor={handleSetRor} adjustQuantity={true} />,
+    <OrderRor recurringOrder={recurringOrder} setRor={handleSetRor} adjustQuantity />,
     <OrderRor recurringOrder={recurringOrder} setRor={handleSetRor} adjustQuantity={false} />,
     <OrderRor recurringOrder={recurringOrder} setRor={handleSetRor} adjustQuantity={false} />,
   ];
 
   useEffect(() => {
     setCurrentContent(stepContent[currentStep]);
-    if (currentStep + 1 == stepContent.length) {
+    if (currentStep + 1 === stepContent.length) {
       setButtonName('Finish');
-    } else if (currentStep + 2 == stepContent.length) {
+    } else if (currentStep + 2 === stepContent.length) {
       setButtonName('Confirm');
     } else {
       setButtonName('Next');
@@ -120,7 +121,7 @@ export default function CreateRor() {
     setShowButton(false);
 
     try {
-      let date: Date = new Date();
+      const date: Date = new Date();
       const formattedDate: string = date.toLocaleString();
       // Create new order object
       const newOrderReqObj: OrderRequisitionToEdit = {
@@ -198,7 +199,7 @@ export default function CreateRor() {
             Do you want to submit this Recurring Order Requisiton?
           </Text>
         </Flex>
-        <Flex justify="center" align="center" direction="row" gap={'xl'}>
+        <Flex justify="center" align="center" direction="row" gap="xl">
           <Button
             onClick={() => {
               close();
@@ -265,7 +266,7 @@ export default function CreateRor() {
             variant="filled"
             color="#1B4965"
             onClick={() => {
-              if (currentStep + 3 == stepContent.length && !checkQuantity()) {
+              if (currentStep + 3 === stepContent.length && !checkQuantity()) {
                 return;
               }
 
@@ -273,12 +274,12 @@ export default function CreateRor() {
                 setCurrentStep(currentStep + 1);
               }
 
-              if (currentStep + 2 == stepContent.length) {
+              if (currentStep + 2 === stepContent.length) {
                 open();
               }
 
               // This is the summary page and resets it after clicking finish
-              if (currentStep + 1 == stepContent.length) {
+              if (currentStep + 1 === stepContent.length) {
                 resetPage();
               }
             }}

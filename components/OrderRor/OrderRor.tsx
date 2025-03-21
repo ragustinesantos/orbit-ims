@@ -19,7 +19,7 @@ export default function OrderRor(props: OrderRorProps) {
   };
   const rows = itemOrders
     ? itemOrders.map((orderItem) => {
-        const itemFound = inventory?.find((item) => item.itemId == orderItem.itemId);
+        const itemFound = inventory?.find((item) => item.itemId === orderItem.itemId);
         if (itemFound) {
           return (
             <TableTr key={orderItem.itemId}>
@@ -29,7 +29,7 @@ export default function OrderRor(props: OrderRorProps) {
                 isClosed={() =>
                   setModalStateTracker((prev) => ({ ...prev, [itemFound.itemId]: false }))
                 }
-              ></ImgModal>
+              />
               <Table.Td>
                 <Text
                   onClick={() => toggleImgModalState(itemFound.itemId)}
@@ -78,6 +78,7 @@ export default function OrderRor(props: OrderRorProps) {
             </TableTr>
           );
         }
+        return <div />;
       })
     : [];
 
@@ -103,7 +104,7 @@ export default function OrderRor(props: OrderRorProps) {
 
   useEffect(() => {
     if (recurringOrder) {
-      const tempRor: RecurringOrderToEdit = { ...recurringOrder, itemOrders: itemOrders };
+      const tempRor: RecurringOrderToEdit = { ...recurringOrder, itemOrders };
       setRor(tempRor);
     }
   }, [itemOrders]);

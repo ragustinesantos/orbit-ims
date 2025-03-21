@@ -180,7 +180,7 @@ export default function CreateRorTemplate() {
         item={currentItem}
         isOpened={!!modalStateTracker[itemId]}
         isClosed={() => setModalStateTracker((prev) => ({ ...prev, [itemId]: false }))}
-      ></ImgModal>,
+      />,
     ];
   });
 

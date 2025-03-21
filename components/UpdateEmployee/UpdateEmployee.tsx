@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 'use client';
 
 import { FormEvent, useEffect, useState } from 'react';
@@ -75,7 +76,7 @@ export default function UpdateEmployee() {
   // Handle update submit
   const handleSubmit = async () => {
     try {
-      let employeeLevels = ['E1'];
+      const employeeLevels = ['E1'];
       if (employeeLevel2) {
         employeeLevels.push('E2');
       }

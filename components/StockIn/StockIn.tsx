@@ -44,7 +44,6 @@ export default function StockIn() {
   const [packageUnit, setPackageUnit] = useState<string>('');
   const [supplyUnit, setSupplyUnit] = useState<string>('');
   const [supplierName, setSupplierName] = useState<string>('');
-  const [itemId, setItemId] = useState<string>('');
   const [stockInQuantity, setStockInQuantity] = useState<number>(0);
   const [purchaseOrderId, setPurchaseOrderId] = useState<string | null>('');
   const [currentStockInStoreRoom, setCurrentStockInStoreRoom] = useState<string>('');
@@ -173,10 +172,6 @@ export default function StockIn() {
     };
 
     stockInOrder();
-  }, [selectedItem]);
-
-  useEffect(() => {
-    setItemId(selectedItem.itemId || '');
   }, [selectedItem]);
 
   useEffect(() => {

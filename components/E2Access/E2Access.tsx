@@ -4,7 +4,6 @@
 import { useEffect, useState } from 'react';
 import { Group, Pagination, Table, Text } from '@mantine/core';
 import { usePagination } from '@mantine/hooks';
-import { useInventory } from '@/app/_utils/inventory-context';
 import {
   Employee,
   OnDemandOrder,
@@ -32,11 +31,11 @@ export default function E2AccessPage() {
   const [loading, setLoading] = useState<boolean>(true);
   // State for modal tracking
   const [modalStateTracker, setModalStateTracker] = useState<Record<string, boolean>>({});
-  const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const refreshTrigger = 0;
   // Notification states
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState(<div />);
-  const [isE2PageView, setIsE2PageView] = useState(true);
+  const isE2PageView = true;
 
   // Function to show notifications
   const revealNotification = () => {
@@ -277,7 +276,7 @@ export default function E2AccessPage() {
         return [];
       })
       .filter((row) => row.length > 0) || [];
-      
+
   // Size for pagination
   const pageSize = 5;
 

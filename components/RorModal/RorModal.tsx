@@ -15,13 +15,7 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useInventory } from '@/app/_utils/inventory-context';
-import {
-  defaultEmployee,
-  defaultOrderRequisition,
-  Employee,
-  OrderRequisition,
-  rorModalProps,
-} from '@/app/_utils/schema';
+import { defaultEmployee, Employee, OrderRequisition, rorModalProps } from '@/app/_utils/schema';
 import { fetchEmployee, fetchOrderRequisition, patchRorApproval } from '@/app/_utils/utility';
 import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
 import ImgModal from '../ImgModal/ImgModal';
@@ -140,7 +134,7 @@ export default function RorModal({
         item={currentItem}
         isOpened={!!modalStateTracker[item.itemId]}
         isClosed={() => setModalStateTracker((prev) => ({ ...prev, [item.itemId]: false }))}
-      ></ImgModal>,
+      />,
     ];
   });
 

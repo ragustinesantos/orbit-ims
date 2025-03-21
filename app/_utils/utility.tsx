@@ -6,6 +6,7 @@ import {
   Chat,
   ChatToEdit,
   EmployeeToEdit,
+  EmployeeUpdate,
   Item,
   ItemToEdit,
   OnDemandOrder,
@@ -20,7 +21,6 @@ import {
   StockInOrder,
   StockOutOrder,
   Supplier,
-  EmployeeUpdate
 } from './schema';
 
 const auth = getAuth();
@@ -166,14 +166,9 @@ export const putEmployee = async (employeeId: string, updatedEmployee: EmployeeT
 };
 
 export async function sendResetEmail(email: string) {
-  try {
-    const returnmsg = await dbResetEmpPass(auth, email);
+  const returnmsg = await dbResetEmpPass(auth, email);
 
-    return returnmsg;
-  } catch (error) {
-    //console.error("An error occurred in sendResetEmail:", error);
-    throw error;
-  }
+  return returnmsg;
 }
 
 export const patchEmployee = async (employeeId: string, updatedEmployee: EmployeeUpdate) => {
@@ -292,7 +287,7 @@ export const patchOrderRequisition = async (requisitionId: string, requisitionTy
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ requisitionTypeId: requisitionTypeId }),
+    body: JSON.stringify({ requisitionTypeId }),
   };
 
   const response = await fetch(`/api/order-requisitions/${requisitionId}`, request);
@@ -310,7 +305,7 @@ export const patchOrderRequisitionPo = async (requisitionId: string, purchaseOrd
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ purchaseOrderId: purchaseOrderId }),
+    body: JSON.stringify({ purchaseOrderId }),
   };
 
   const response = await fetch(`/api/order-requisitions/${requisitionId}`, request);

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { addDoc, collection, getDocs, query } from 'firebase/firestore';
 import { db } from '../_utils/firebase';
 import { StockOutOrder } from '../_utils/schema';

@@ -4,7 +4,6 @@
 import { useEffect, useState } from 'react';
 import { Group, Pagination, Table, Text } from '@mantine/core';
 import { usePagination } from '@mantine/hooks';
-import { useInventory } from '@/app/_utils/inventory-context';
 import {
   Employee,
   OnDemandOrder,
@@ -38,7 +37,7 @@ export default function E3AccessPage() {
   // Notification states
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState(<div />);
-  const [isE3PageView, setIsE3PageView] = useState(true);
+  const isE3PageView = true;
 
   useEffect(() => {
     // Fetch Templates, ODORs, Order Requisitions & Employees

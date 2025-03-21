@@ -1,10 +1,7 @@
-/* eslint-disable no-console */
 'use client';
 
-import { useState } from 'react';
 import CreateRor from '@/components/CreateRor/CreateRor';
 import { NavbarNested } from '@/components/NavbarNested/NavbarNested';
-import WizardProgress from '@/components/WizardProgress/WizardProgress';
 
 export default function CreateRORPage() {
   return (

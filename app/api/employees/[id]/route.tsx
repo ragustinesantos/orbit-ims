@@ -33,7 +33,6 @@ export async function PUT(request: Request, { params }: { params: any }) {
       department: z.string(),
       employeeLevel: z.array(z.string()),
       isActive: z.boolean(),
-      
     });
 
     const validatedEmployee = employeeSchema.parse(updatedEmployee);
@@ -62,14 +61,16 @@ export async function PATCH(request: Request, { params }: { params: any }) {
         employeeLevel: z.string().optional(),
         isActive: z.boolean().optional(),
         //For notifications
-        notifications: z.array(
-          z.object({
-            reqId: z.string(),
-            reqType: z.string(),
-            reqTypeId: z.string(),
-            requisitionDate: z.string(),
-          })
-        ).optional(),
+        notifications: z
+          .array(
+            z.object({
+              reqId: z.string(),
+              reqType: z.string(),
+              reqTypeId: z.string(),
+              requisitionDate: z.string(),
+            })
+          )
+          .optional(),
       })
       .strict();
     const validatedEmployee = employeeSchema.parse(updatedEmployee);

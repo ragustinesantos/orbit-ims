@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -27,7 +28,7 @@ import classnames from './odorpage.module.css';
 export default function OdorPage() {
   const [itemOrders, setitemOrders] = useState<ItemOrder[]>([]);
   const [newItemOrders, setNewItemOrders] = useState<NewItemOrder[]>([]);
-  const [totalCost, setTotalCost] = useState<Number>(0);
+  const [totalCost, setTotalCost] = useState<number>(0);
   const [showTemplate, setShowTemplate] = useState<boolean>(false);
   const [pageNumber, setPageNumber] = useState<number>(0);
   const [orderTotal, setOrderTotal] = useState<number>(0);
@@ -38,7 +39,7 @@ export default function OdorPage() {
   const [remarks, setRemarks] = useState('');
   const stepList = ['Inventory Items', 'Non-Inventory Items', 'Order Review'];
 
-  const { currentEmployee, setRefresh } = useInventory();
+  const { currentEmployee } = useInventory();
 
   const handleAddItem = async () => {
     if (recipientName === '' || recipientLocation === '') {
@@ -52,7 +53,7 @@ export default function OdorPage() {
       );
     } else {
       try {
-        let date: Date = new Date();
+        const date: Date = new Date();
         const formattedDate: string = date.toLocaleString();
         // Create new order object
         const newOrderObj: OrderRequisitionToEdit = {
@@ -132,7 +133,7 @@ export default function OdorPage() {
   };
 
   const nav_array = [
-    <OdorComponent itemOrders={itemOrders} setitemOrders={setitemOrders}></OdorComponent>,
+    <OdorComponent itemOrders={itemOrders} setitemOrders={setitemOrders} />,
     <OdorComponent2
       totalCost={totalCost}
       setTotalCost={setTotalCost}
@@ -141,7 +142,7 @@ export default function OdorPage() {
       setShowTemplate={setShowTemplate}
       showTemplate={showTemplate}
       nextPage={nextPage}
-    ></OdorComponent2>,
+    />,
     <OdorComponent3
       itemOrders={itemOrders}
       newItemOrders={newItemOrders}
@@ -153,11 +154,11 @@ export default function OdorPage() {
       setRecipientName={setRecipientName}
       recipientLocation={recipientLocation}
       setRecipientLocation={setRecipientLocation}
-    ></OdorComponent3>,
+    />,
   ];
 
   function nextPage() {
-    if (itemOrders.length == 0 && newItemOrders.length == 0 && pageNumber == 1) {
+    if (itemOrders.length === 0 && newItemOrders.length === 0 && pageNumber === 1) {
       setNotificationMessage(
         CustomNotification(
           'error',
@@ -201,12 +202,12 @@ export default function OdorPage() {
               marginBottom: '2vh',
             }}
           >
-            <WizardProgress stepList={stepList} currentStep={pageNumber + 1}></WizardProgress>
+            <WizardProgress stepList={stepList} currentStep={pageNumber + 1} />
           </div>
           {nav_array[pageNumber]}
         </div>
         <Group justify="flex-end">
-          {pageNumber == 0 ? (
+          {pageNumber === 0 ? (
             <></>
           ) : (
             <Button
@@ -220,7 +221,7 @@ export default function OdorPage() {
               Previous
             </Button>
           )}
-          {pageNumber == 2 ? (
+          {pageNumber === 2 ? (
             <></>
           ) : (
             <Button
@@ -234,7 +235,7 @@ export default function OdorPage() {
               Next
             </Button>
           )}
-          {pageNumber == 2 ? (
+          {pageNumber === 2 ? (
             <Button
               classNames={{ root: classnames.navbutton }}
               onClick={handleAddItem}

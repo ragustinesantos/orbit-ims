@@ -4,7 +4,6 @@
 import { useEffect, useState } from 'react';
 import { Group, Pagination, Table, TableData, Text } from '@mantine/core';
 import { usePagination } from '@mantine/hooks';
-import { useInventory } from '@/app/_utils/inventory-context';
 import { Employee, OrderRequisition, PurchaseOrder } from '@/app/_utils/schema';
 import { fetchEmployees, fetchOrderRequisition, fetchPurchaseOrders } from '@/app/_utils/utility';
 import CustomNotification from '@/components/CustomNotification/CustomNotification';
@@ -13,8 +12,6 @@ import PoModal from '../PoModal/PoModal';
 import classnames from './P2Access.module.css';
 
 export default function P2AccessPage() {
-  const { currentEmployee } = useInventory();
-
   const [allPo, setAllPo] = useState<PurchaseOrder[] | null>(null);
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -41,36 +38,6 @@ export default function P2AccessPage() {
 
   const toggleModalState = (id: string) => {
     setModalStateTracker((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
-
-  // Function to handle PO approval/rejection
-  const handlePoAction = (purchaseOrderId: string, action: string) => {
-    if (allPo) {
-      const updatedPo = allPo.map((po) => {
-        if (po.purchaseOrderId === purchaseOrderId) {
-          return {
-            ...po,
-            isApproved: action === 'approved',
-          };
-        }
-        return po;
-      });
-      setAllPo(updatedPo);
-    }
-
-    // Show notification
-    setNotificationMessage(
-      CustomNotification(
-        action === 'approved' ? 'success' : 'error',
-        'PO Status Updated',
-        `PO ID ${purchaseOrderId} was ${action}.`,
-        setShowNotification
-      )
-    );
-    revealNotification();
-
-    // Trigger a refresh of the data
-    setRefreshTrigger((prev) => prev + 1);
   };
 
   // Function to handle approval activity from PoModal
