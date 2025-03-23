@@ -1,11 +1,7 @@
-import {
-    addDoc,
-    collection,
-    getDocs,
-    query,
-  } from 'firebase/firestore';
-  import { db } from '../_utils/firebase';
-  import { StockOutOrder} from '../_utils/schema';
+/* eslint-disable no-console */
+import { addDoc, collection, getDocs, query } from 'firebase/firestore';
+import { db } from '../_utils/firebase';
+import { StockOutOrder } from '../_utils/schema';
 
 export async function dbGetAllStockOutOrders() {
   try {
@@ -26,8 +22,6 @@ export async function dbGetAllStockOutOrders() {
   }
 }
 
-
-
 export async function dbStockOutGenerate(stockOutObj: StockOutOrder) {
   try {
     const newStockOutOrder = collection(db, 'stock-out-order');
@@ -35,7 +29,6 @@ export async function dbStockOutGenerate(stockOutObj: StockOutOrder) {
     await addDoc(newStockOutOrder, stockOutObj);
 
     console.log('Item successfully added');
-
   } catch (error) {
     return console.log(`Error adding item: ${error}`);
   }

@@ -60,13 +60,23 @@ export async function PATCH(request: Request, { params }: { params: any }) {
         department: z.string().optional(),
         employeeLevel: z.string().optional(),
         isActive: z.boolean().optional(),
+        //For notifications
+        notifications: z
+          .array(
+            z.object({
+              reqId: z.string(),
+              reqType: z.string(),
+              reqTypeId: z.string(),
+              requisitionDate: z.string(),
+            })
+          )
+          .optional(),
       })
       .strict();
-
     const validatedEmployee = employeeSchema.parse(updatedEmployee);
 
     await dbUpdateEmployee(id, validatedEmployee);
-    return new Response(null, { status: 204 });
+    return new Response(JSON.stringify({ success: true }), { status: 200 });
   } catch (error) {
     return new Response(JSON.stringify({ error }), { status: 400 });
   }

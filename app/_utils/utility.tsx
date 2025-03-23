@@ -1,9 +1,12 @@
 /* eslint-disable no-console */
+import { getAuth } from 'firebase/auth';
 import { marked } from 'marked';
+import { dbResetEmpPass } from '../_services/employees-service';
 import {
   Chat,
   ChatToEdit,
   EmployeeToEdit,
+  EmployeeUpdate,
   Item,
   ItemToEdit,
   OnDemandOrder,
@@ -21,6 +24,8 @@ import {
   ItemOrder,
 } from './schema';
 import { SendEmailODOR, SendEmailROR } from '../_services/email-service';
+
+const auth = getAuth();
 
 // Fetch all inventory items
 export const fetchInventory = async (setInventory: (inventoryItems: Item[]) => void) => {
@@ -67,25 +72,24 @@ export const fetchSupplier = async (supplierId: string) => {
   }
 };
 
-export const postItem = async (item : Item) => {
+export const postItem = async (item: Item) => {
   try {
     const request = {
       method: 'POST',
-      body: JSON.stringify(item)
-    }
+      body: JSON.stringify(item),
+    };
 
     const response = await fetch(`/api/items/`, request);
-    if(!response.ok){
-      const errorText = await response.text()
+    if (!response.ok) {
+      const errorText = await response.text();
       throw new Error(`HTTP Error: ${response.status} - ${response.statusText} - ${errorText}`);
     }
     return response;
-  }
-  catch (error) {
+  } catch (error) {
     console.log(error);
     return undefined;
   }
-}
+};
 
 // Update item through PUT
 export const putItem = async (itemId: string, updatedItem: ItemToEdit) => {
@@ -107,7 +111,7 @@ export const putItem = async (itemId: string, updatedItem: ItemToEdit) => {
 
 // Delete inventory item
 export const deleteItem = async (itemId: string) => {
-  const request = new Request(`http://localhost:3000/api/items/${itemId}`, {
+  const request = new Request(`/api/items/${itemId}`, {
     method: 'DELETE',
   });
 
@@ -163,6 +167,29 @@ export const putEmployee = async (employeeId: string, updatedEmployee: EmployeeT
   }
 };
 
+export async function sendResetEmail(email: string) {
+  const returnmsg = await dbResetEmpPass(auth, email);
+
+  return returnmsg;
+}
+
+export const patchEmployee = async (employeeId: string, updatedEmployee: EmployeeUpdate) => {
+  const request = {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(updatedEmployee),
+  };
+
+  const response = await fetch(`/api/employees/${employeeId}`, request);
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+  }
+  return response;
+};
+
 // Fetch all recurring order templates
 export const fetchRorTemplates = async (
   setRorTemplates: (rorTemplates: RecurringOrderTemplate[]) => void
@@ -180,18 +207,20 @@ export const fetchRorTemplates = async (
 
 export const patchRorTemplateApproval = async (
   templateId: string,
-  isTemplateApprovedByE2: boolean | null,  
-  isTemplateApprovedByE3: boolean | null,  
-  approvalE2Id: string | "",
-  approvalE3Id: string | "",
+  isTemplateApprovedByE2: boolean | null,
+  isTemplateApprovedByE3: boolean | null,
+  approvalE2Id: string | '',
+  approvalE3Id: string | ''
 ) => {
-  console.log(`Approving Template ${templateId} as E2: ${isTemplateApprovedByE2}, E3: ${isTemplateApprovedByE3}`);
+  console.log(
+    `Approving Template ${templateId} as E2: ${isTemplateApprovedByE2}, E3: ${isTemplateApprovedByE3}`
+  );
 
   const requestBody: Record<string, any> = {
-    ...(isTemplateApprovedByE2 !== null && { isTemplateApprovedE2: isTemplateApprovedByE2 }), 
+    ...(isTemplateApprovedByE2 !== null && { isTemplateApprovedE2: isTemplateApprovedByE2 }),
     ...(isTemplateApprovedByE3 !== null && { isTemplateApprovedE3: isTemplateApprovedByE3 }),
-    ...(approvalE2Id && { approvalE2: approvalE2Id }), 
-    ...(approvalE3Id && { approvalE3: approvalE3Id }), 
+    ...(approvalE2Id && { approvalE2: approvalE2Id }),
+    ...(approvalE3Id && { approvalE3: approvalE3Id }),
   };
 
   Object.keys(requestBody).forEach(
@@ -199,9 +228,9 @@ export const patchRorTemplateApproval = async (
   );
 
   const request = {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify(requestBody),
   };
@@ -213,7 +242,6 @@ export const patchRorTemplateApproval = async (
     throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
   }
 };
-
 
 // Fetch all order requisitions and set to the provided state parameter
 export const fetchOrderRequisitions = async (
@@ -261,7 +289,7 @@ export const patchOrderRequisition = async (requisitionId: string, requisitionTy
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ requisitionTypeId: requisitionTypeId }),
+    body: JSON.stringify({ requisitionTypeId }),
   };
 
   const response = await fetch(`/api/order-requisitions/${requisitionId}`, request);
@@ -279,7 +307,7 @@ export const patchOrderRequisitionPo = async (requisitionId: string, purchaseOrd
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ purchaseOrderId: purchaseOrderId }),
+    body: JSON.stringify({ purchaseOrderId }),
   };
 
   const response = await fetch(`/api/order-requisitions/${requisitionId}`, request);
@@ -416,7 +444,6 @@ export const postOnDemandOrderRequisition = async (odorObj: OnDemandOrderToEdit)
 
 export const postRecurringOrderRequisition = async (rorObj: RecurringOrderToEdit) => {
   try {
-
     // Create a new request
     const request = new Request('/api/ror/', {
       method: 'POST',
@@ -435,7 +462,7 @@ export const postRecurringOrderRequisition = async (rorObj: RecurringOrderToEdit
   } catch (error) {
     console.log(error);
   }
-}
+};
 
 // Fetch all purchase orders
 export const fetchPurchaseOrders = async (
@@ -459,14 +486,13 @@ export const fetchPurchaseOrders = async (
 
 // Post a Purchase Order database entry
 export const postPurchaseOrder = async (requisitionId: string) => {
-
   // Create a purchase order object for persistence
   const purchaseOrder: PurchaseOrderToEdit = {
     requisitionId,
     orderList: [],
     recipientCompanyName: '',
     recipientCompanyAddress: '',
-    purchaseOrderDate: new Date().toLocaleDateString(),
+    purchaseOrderDate: new Date().toLocaleString('en-us'),
     purchaseOrderDeliveryDate: '',
     subTotal: 0,
     taxRate: 0,
@@ -498,15 +524,19 @@ export const postPurchaseOrder = async (requisitionId: string) => {
   }
 };
 
-export const patchPurchaseOrder = async (purchaseOrderId: string, approvalP2: string, isApproved: boolean) => {
+export const patchPurchaseOrder = async (
+  purchaseOrderId: string,
+  approvalP2: string,
+  isApproved: boolean
+) => {
   const request = {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ 
-      approvalP2, 
-      isApproved 
+    body: JSON.stringify({
+      approvalP2,
+      isApproved,
     }),
   };
 
@@ -517,7 +547,7 @@ export const patchPurchaseOrder = async (purchaseOrderId: string, approvalP2: st
       const errorText = await response.text();
       throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
     }
-    
+
     return true;
   } catch (error) {
     console.log(error);
@@ -684,15 +714,33 @@ export const fetchStockOutOrders = async (
 export const patchOdorApproval = async (
   requisitionId: string,
   isApproved: boolean,
-  approverId: string
+  approverId: string,
+  isE2User: boolean = false,
+  isE3User: boolean = false
 ) => {
   try {
-    const request = {
-      method: 'PATCH',
-      body: JSON.stringify({
+    // Update the approval fields based on the type of employee
+    let updateFields = {};
+    if (isE2User) {
+      updateFields = {
+        isApprovedE2: isApproved,
+        approvalE2: approverId,
+      };
+    } else if (isE3User) {
+      updateFields = {
+        isApprovedE3: isApproved,
+        approvalE3: approverId,
+      };
+    } else {
+      updateFields = {
         isApprovedP1: isApproved,
         approvalP1: approverId,
-      }),
+      };
+    }
+
+    const request = {
+      method: 'PATCH',
+      body: JSON.stringify(updateFields),
     };
 
     const response = await fetch(`/api/order-requisitions/${requisitionId}`, request);
@@ -714,8 +762,8 @@ export const submitPurchaseOrder = async (purchaseOrderId: string) => {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ 
-      isSubmitted: true 
+    body: JSON.stringify({
+      isSubmitted: true,
     }),
   };
 
@@ -726,11 +774,34 @@ export const submitPurchaseOrder = async (purchaseOrderId: string) => {
       const errorText = await response.text();
       throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
     }
-    
+
     return true;
   } catch (error) {
     console.log(error);
     return false;
+  }
+};
+
+export const patchCloseTicket = async (requisitionId: string) => {
+  try {
+    const response = await fetch(`/api/order-requisitions/${requisitionId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        isActive: false,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to close ticket');
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Error closing ticket:', error);
+    throw error;
   }
 };
 

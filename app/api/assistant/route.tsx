@@ -1,4 +1,3 @@
-
 import OpenAI from 'openai';
 import { z } from 'zod';
 import { chatCompletion } from '@/app/_services/assistant-service';
@@ -6,7 +5,6 @@ import { chatCompletion } from '@/app/_services/assistant-service';
 export async function POST(request: Request) {
   try {
     const newChat = await request.json();
-    
 
     const chatSchema = z.object({
       messages: z.array(

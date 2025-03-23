@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { dbGetAllChats } from "@/app/_services/chat-service";
+import { dbGetAllChats } from '@/app/_services/chat-service';
 
 export async function GET(request: Request, { params }: { params: any }) {
   try {

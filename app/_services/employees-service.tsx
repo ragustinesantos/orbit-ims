@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+import { Auth, sendPasswordResetEmail } from 'firebase/auth';
 import {
   addDoc,
   collection,
@@ -87,4 +88,9 @@ export async function dbDeleteEmployee(employeeId: string) {
   } catch (error) {
     return console.log(`Error deleting employee: ${error}`);
   }
+}
+
+export async function dbResetEmpPass(auth: Auth, email: string) {
+  await sendPasswordResetEmail(auth, email);
+  return true;
 }

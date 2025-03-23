@@ -1,3 +1,5 @@
+'use client';
+
 import '@mantine/core/styles.css';
 
 import React from 'react';
@@ -5,11 +7,6 @@ import { ColorSchemeScript, MantineProvider } from '@mantine/core';
 import { theme } from '../theme';
 import { AuthContextProvider } from './_utils/auth-context';
 import { InventoryContextProvider } from './_utils/inventory-context';
-
-export const metadata = {
-  title: 'Orbit IMS',
-  description: 'I am using Mantine with Next.js!',
-};
 
 export default function RootLayout({ children }: { children: any }) {
   return (

@@ -1,279 +1,193 @@
 .rootText {
-    font-size: 48px;
-    font-weight: bold;
-    text-decoration: underline;
-    text-underline-offset: 8px;
-    padding-bottom: 32px;
-  }
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 3px solid #3c96aa;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  width: 100%;
+}
   
-  .rootSectionText {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 16px;
-    display: block;
-  }
+.rootSectionText {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 16px;
+  display: block;
+}
   
-  .rootMainGroup {
-    display: flex;
-    flex-direction: column;
-    width: 80vw;
-  }
+.rootMainGroup {
+  display: flex;
+  flex-direction: column;
+  width: 80vw;
+}
   
-  .rootSectionGroup {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    background-color: #f1f3f5;
-    padding: 16px;
-    border-radius: 20px;
-    max-height: 55vh;
-    overflow-y: auto;
-  }
+.rootSectionGroup {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: #ffffff;
+  padding: 16px;
+  border-radius: 20px;
+  max-height: 55vh;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s ease;
+    transform: translateY(20px);
+  transform: translateY(20px);
+  opacity: 0;
+  animation: fadeInUp 0.5s ease-out forwards;
+}
   
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rootPaginationGroupRequisition {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+}
+  
+.rootTableGroup {
+  display: flex;
+  flex: 2;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: 30vh;
+  width: 100%;
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+  
+@media (max-width: 1024px) {
   .rootTableGroup {
-    display: flex;
-    flex: 2;
-    justify-content: space-between;
-    align-items: flex-start;
-    height: 30vh;
-    width: 100%;
-    overflow-y: scroll;
-    scrollbar-width: none;
+    flex-direction: column;
+    justify-content: flex-start;
   }
+}
   
-  @media (max-width: 1024px) {
-    .rootTableGroup {
-      flex-direction: column;
-      justify-content: flex-start;
-    }
-  }
+.rootRequisitionTable {
+  width: 100%;
+  min-width: 800px;
+  margin-bottom: 20px;
+}
   
-  .rootRequisitionTable {
-    width: 100%;
-    overflow-y: scroll;
-    min-width: 800px;
-    margin-bottom: 20px;
-    max-height: 35vh;
-  }
+.rootRequisitionThead {
+  color: white;
+  background: linear-gradient(135deg, #2c3e50, #4a6572);    
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
   
-  .rootRequisitionThead {
-    color: white;
-    background-color: #242424;
-    position: sticky;
-    top: 0;
-    z-index: 1;
-  }
+.rootRequisitionTd {
+  overflow-x: scroll;
+  scrollbar-width: none;
+  white-space: nowrap;
+}
   
-  .rootRequisitionTd {
-    overflow-x: scroll;
-    scrollbar-width: none;
-    white-space: nowrap;
-  }
+.rootTextId {
+  cursor: pointer;
+}
   
-  .rootTextId {
-    cursor: pointer;
-  }
+.rootTextId:hover {
+  color: #3c96aa;
+}
   
-  .rootTextId:hover {
-    color: #3c96aa;
-  }
+.rootPoId {
+  cursor: pointer;
+}
   
-  .rootPoId {
-    cursor: pointer;
-  }
+.rootPoId:hover {
+  color: #3c96aa;
+}
   
-  .rootPoId:hover {
-    color: #3c96aa;
-  }
+.rootPoTable {
+  height: 30vh;
+  width: 100%;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  gap: 40px;
+}
   
-  .rootPoTable {
-    height: 30vh;
-    width: 100%;
-    overflow-y: scroll;
-    scrollbar-width: none;
-    gap: 40px;
-  }
+.loadingContainer {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  height: 65vh;
+  width: 80vw;
+}
   
-  .loadingContainer {
-    display: flex;
-    flex: 1;
-    justify-content: center;
-    align-items: center;
-    height: 65vh;
-    width: 80vw;
-  }
+.approveButton {
+  background-color: #54D0ED;
+  color: white;
+  border: none;
+  padding: 2px 18px;
+  text-align: center;
+  display: inline-block;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+}
   
-  .approveButton {
-    background-color: #54D0ED;
-    color: white;
-    border: none;
-    padding: 2px 18px;
-    text-align: center;
-    display: inline-block;
-    font-size: 14px;
-    cursor: pointer;
-    border-radius: 4px;
-  }
+.approveButton:hover {
+  background-color: #3c96aa;
+}
   
-  .approveButton:hover {
-    background-color: #3c96aa;
-  }
+.rejectButton {
+  background-color: #6D6875;
+  color: white;
+  border: none;
+  padding: 2px 18px;
+  text-align: center;
+  display: inline-block;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+}
   
-  .rejectButton {
-    background-color: #6D6875;
-    color: white;
-    border: none;
-    padding: 2px 18px;
-    text-align: center;
-    display: inline-block;
-    font-size: 14px;
-    cursor: pointer;
-    border-radius: 4px;
-  }
+.rejectButton:hover {
+  background-color: #5e5a65;
+}
   
-  .rejectButton:hover {
-    background-color: #5e5a65;
-  }
+.closeTicketButton {
+  background-color: #FFA62B;
+  color: white;
+  border: none;
+  padding: 2px 18px;
+  text-align: center;
+  display: inline-block;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+}
   
-  .closeTicketButton {
-    background-color: #FFA62B;
-    color: white;
-    border: none;
-    padding: 2px 18px;
-    text-align: center;
-    display: inline-block;
-    font-size: 14px;
-    cursor: pointer;
-    border-radius: 4px;
-  }
-  
-  .closeTicketButton:hover {
-    background-color: #e89726;
-  }
+.closeTicketButton:hover {
+  background-color: #e89726;
+}
 
-  .noTemplatesText {
-    text-align: center;
-    font-size: 18px;
-    font-weight: 500;
-    color: #888;
-    margin-top: 20px;
-    padding: 10px;
-    border: 1px dashed #ccc;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-  }
+.noTemplatesText {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+  color: #888;
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px dashed #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
 
-  .templateTextId:hover{
-    color: #3c96aa;
-    cursor: pointer;
-  }
+.templateTextId:hover{
+  color: #3c96aa;
+  cursor: pointer;
+}  
   
-  @media (max-width: 1024px) {
-    .rootTableGroup {
-      flex-direction: column;
-      justify-content: flex-start;
-    }
-  }
-  
-  .rootRequisitionTable {
-    width: 100%;
-    overflow-y: scroll;
-    min-width: 800px;
-    margin-bottom: 20px;
-    max-height: 35vh;
-  }
-  
-  .rootRequisitionThead {
-    color: white;
-    background-color: #242424;
-    position: sticky;
-    top: 0;
-    z-index: 1;
-  }
-  
-  .rootRequisitionTd {
-    overflow-x: scroll;
-    scrollbar-width: none;
-    white-space: nowrap;
-  }
-  
-  .rootTextId {
-    cursor: pointer;
-  }
-  
-  .rootTextId:hover {
-    color: #3c96aa;
-  }
-  
-  .rootPoId {
-    cursor: pointer;
-  }
-  
-  .rootPoId:hover {
-    color: #3c96aa;
-  }
-  
-  .rootPoTable {
-    height: 30vh;
-    width: 100%;
-    overflow-y: scroll;
-    scrollbar-width: none;
-    gap: 40px;
-  }
-  
-  .loadingContainer {
-    display: flex;
-    flex: 1;
-    justify-content: center;
-    align-items: center;
-    height: 65vh;
-    width: 80vw;
-  }
-  
-  .approveButton {
-    background-color: #54D0ED;
-    color: white;
-    border: none;
-    padding: 2px 18px;
-    text-align: center;
-    display: inline-block;
-    font-size: 14px;
-    cursor: pointer;
-    border-radius: 4px;
-  }
-  
-  .approveButton:hover {
-    background-color: #3c96aa;
-  }
-  
-  .rejectButton {
-    background-color: #6D6875;
-    color: white;
-    border: none;
-    padding: 2px 18px;
-    text-align: center;
-    display: inline-block;
-    font-size: 14px;
-    cursor: pointer;
-    border-radius: 4px;
-  }
-  
-  .rejectButton:hover {
-    background-color: #5e5a65;
-  }
-  
-  .closeTicketButton {
-    background-color: #FFA62B;
-    color: white;
-    border: none;
-    padding: 2px 18px;
-    text-align: center;
-    display: inline-block;
-    font-size: 14px;
-    cursor: pointer;
-    border-radius: 4px;
-  }
-  
-  .closeTicketButton:hover {
-    background-color: #e89726;
-  }

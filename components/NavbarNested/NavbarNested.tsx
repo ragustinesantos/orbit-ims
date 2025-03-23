@@ -1,38 +1,33 @@
 import Image from 'next/image';
+import Link from 'next/link';
+import { IconLogout, IconSettings } from '@tabler/icons-react';
+import { Group, Menu, ScrollArea } from '@mantine/core';
 import { useUserAuth } from '@/app/_utils/auth-context';
 import { useInventory } from '@/app/_utils/inventory-context';
 import { NAV_ITEMS, NavFormat } from '@/app/_utils/schema';
 import { LinksGroup } from '../NavbarLinksGroup/NavbarLinksGroup';
 import UserButton from '../UserButton/UserButton';
 import classes from './NavbarNested.module.css';
-import { Menu, Group, ScrollArea } from '@mantine/core';
-import {
-  IconSettings,
-  IconLogout
-} from '@tabler/icons-react';
-import Link from "next/link";
 
 export function NavbarNested() {
   const { firebaseSignOut } = useUserAuth();
   const { currentEmployee } = useInventory();
 
   const navMenu = () => {
-
-    // Remove default E1 inventory nav before adding manage inventory 
+    // Remove default E1 inventory nav before adding manage inventory
     const manageInventoryNavigation = (navItems: NavFormat[]) => {
       // Check if it already has manage inventory added from other roles
-      if (!navItems.some(e => e.label === 'Manage Inventory')) {
+      if (!navItems.some((e) => e.label === 'Manage Inventory')) {
         // Manage employees would change the index of Assistant and in turn change the inventory index
-        if (!navItems.some(e => e.label === 'Manage Employees')) {
+        if (!navItems.some((e) => e.label === 'Manage Employees')) {
           navItems.splice(4, 1);
-        }
-        else {
+        } else {
           navItems.splice(3, 1);
         }
-        navItems= navItems.concat(NAV_ITEMS.MI);
+        return [...navItems, ...NAV_ITEMS.MI];
       }
       return navItems;
-    }
+    };
 
     let navItems: NavFormat[] = [];
 
@@ -59,7 +54,7 @@ export function NavbarNested() {
           case 'IA':
           case 'SA':
             // Check if manage employee has been added by another role (IA/SA)
-            if (!navItems.some(e => e.label === 'Manage Employees')) {
+            if (!navItems.some((e) => e.label === 'Manage Employees')) {
               // Assistant nav would be replaced with more access
               navItems.splice(1, 1);
               navItems = navItems.concat(NAV_ITEMS.IA_SA);
@@ -78,7 +73,7 @@ export function NavbarNested() {
   const handleLogout = async () => {
     if (firebaseSignOut) {
       await firebaseSignOut();
-      window.location.replace("/")
+      window.location.replace('/');
     }
   };
 
@@ -105,8 +100,10 @@ export function NavbarNested() {
           <Menu.Target>
             <UserButton
               image="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-8.png"
-              name={(currentEmployee) ? `${currentEmployee.firstName  } ${  currentEmployee.lastName}` : ""}
-              email={(currentEmployee) ? currentEmployee.email : ""}
+              name={
+                currentEmployee ? `${currentEmployee.firstName} ${currentEmployee.lastName}` : ''
+              }
+              email={currentEmployee ? currentEmployee.email : ''}
             />
           </Menu.Target>
           <Menu.Dropdown>
@@ -116,7 +113,9 @@ export function NavbarNested() {
                 Account settings
               </Menu.Item>
             </Link>
-            <Menu.Item onClick={handleLogout} leftSection={<IconLogout size={16} stroke={1.5} />}>Logout</Menu.Item>
+            <Menu.Item onClick={handleLogout} leftSection={<IconLogout size={16} stroke={1.5} />}>
+              Logout
+            </Menu.Item>
           </Menu.Dropdown>
         </Menu>
       </div>

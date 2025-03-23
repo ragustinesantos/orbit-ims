@@ -1,9 +1,11 @@
 .rootText {
-  font-size: 48px;
-  font-weight: bold;
-  text-decoration: underline;
-  text-underline-offset: 8px;
-  padding-bottom: 32px;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 3px solid #3c96aa;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  width: 100%;
 }
 
 .rootSectionText {
@@ -23,11 +25,34 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  background-color: #f1f3f5;
+  background-color: #ffffff;
   padding: 16px;
   border-radius: 20px;
   max-height: 55vh;
-  overflow-y: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s ease;
+  transform: translateY(20px);
+  transform: translateY(20px);
+  opacity: 0;
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rootPaginationGroupRequisition {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .rootTableGroup {
@@ -50,15 +75,13 @@
 
 .rootRequisitionTable {
   width: 100%;
-  overflow-y: scroll;
   min-width: 800px;
   margin-bottom: 20px;
-  max-height: 35vh;
 }
 
 .rootRequisitionThead {
   color: white;
-  background-color: #242424;
+  background: linear-gradient(135deg, #2c3e50, #4a6572);  
   position: sticky;
   top: 0;
   z-index: 1;

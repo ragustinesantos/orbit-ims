@@ -13,6 +13,7 @@ export default function P2Access() {
           flex: 1,
           justifyContent: 'flex-start',
           height: '100vh',
+          background: '#fafbfd',
           padding: 32,
         }}
       >
@@ -20,4 +21,4 @@ export default function P2Access() {
       </div>
     </main>
   );
-} 
+}

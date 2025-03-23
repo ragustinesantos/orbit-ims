@@ -86,7 +86,17 @@ export interface Employee {
   department: string;
   employeeLevel: string[];
   isActive: boolean;
+  notifications?: Notification[];
 }
+
+export interface Notification {
+  reqId: string;
+  reqType: string;
+  reqTypeId: string;
+  requisitionDate: string;
+}
+
+export type EmployeeUpdate = Partial<Employee>;
 
 export interface EmployeeToEdit {
   employeeWorkId: string;
@@ -244,8 +254,8 @@ export interface RecurringOrderTemplate {
   itemList: string[];
   approvalE2: string;
   approvalE3: string;
-  isTemplateApprovedE2: boolean| null;
-  isTemplateApprovedE3: boolean| null;
+  isTemplateApprovedE2: boolean | null;
+  isTemplateApprovedE3: boolean | null;
 }
 
 export interface RecurringOrderTemplateToEdit {
@@ -253,8 +263,8 @@ export interface RecurringOrderTemplateToEdit {
   itemList: string[];
   approvalE2: string;
   approvalE3: string;
-  isTemplateApprovedE2: boolean| null;
-  isTemplateApprovedE3: boolean| null;
+  isTemplateApprovedE2: boolean | null;
+  isTemplateApprovedE3: boolean | null;
   [key: string]: any;
 }
 
@@ -373,11 +383,25 @@ export interface rorModalProps {
   handleApprovalActivity?: (message: string, rorId: string, status: string) => void;
 }
 
+export interface rorTemplateModalProps {
+  recurringOrderTemplate: RecurringOrderTemplate;
+  isOpened: boolean;
+  isClosed: () => void;
+  handleApprovalE2?: (message: string, templateId: string, isApproved: boolean) => Promise<void>;
+  handleApprovalE3?: (message: string, templateId: string, isApproved: boolean) => Promise<void>;
+  isE2Page?: boolean;
+  isE3Page?: boolean;
+}
+
 export interface odorModalProps {
   onDemandOrder: OnDemandOrder | null;
   isOpened: boolean;
   isClosed: () => void;
-  handleApprovalActivity?: (message: string, odorId: string, status: string) => void;
+  handleApprovalE2?: (message: string, odorId: string, isApproved: boolean) => void;
+  handleApprovalE3?: (message: string, odorId: string, isApproved: boolean) => void;
+  handleApprovalP1?: (message: string, odorId: string, isApproved: boolean) => void;
+  isE2Page?: boolean;
+  isE3Page?: boolean;
 }
 
 export interface poModalProps {
@@ -435,8 +459,9 @@ export const NAV_ITEMS: navCollection = {
     {
       label: 'Assistant',
       icon: IconMessage,
-      links: [{ label: 'Chat', link: '/assistant/chat' },
-              { label: 'Generate Report', link: '/assistant/generate-report' },
+      links: [
+        { label: 'Chat', link: '/assistant/chat' },
+        { label: 'Generate Report', link: '/assistant/generate-report' },
       ],
     },
     {
@@ -455,7 +480,7 @@ export const NAV_ITEMS: navCollection = {
     {
       label: 'Inventory',
       icon: IconNotes,
-      links: [{ label: 'Search Item', link: '/' }],
+      links: [{ label: 'Search Item', link: '/inventory/search-item' }],
     },
   ],
   E2: [
@@ -478,10 +503,10 @@ export const NAV_ITEMS: navCollection = {
       label: 'Manage Inventory',
       icon: IconNotes,
       links: [
-        { label: 'Search Item', link: '/inventory/search-item' },
-        { label: 'Add Item', link: '/inventory/add-item' },
-        { label: 'Update Item', link: '/inventory/update-item' },
-        { label: 'Delete Item', link: '/inventory/delete-item' },
+        { label: 'Search Inventory', link: '/inventory/search-item' },
+        { label: 'Register Item', link: '/inventory/add-item' },
+        { label: 'Update Item Information', link: '/inventory/update-item' },
+        { label: 'Archive Item', link: '/inventory/delete-item' },
         { label: 'Stock In', link: '/inventory/stock-in' },
         { label: 'Stock Out', link: '/inventory/stock-out' },
       ],
@@ -508,17 +533,17 @@ export const NAV_ITEMS: navCollection = {
       icon: IconMessage,
       links: [
         { label: 'Chat', link: '/assistant/chat' },
-        { label: 'Generate Report', link: '/' },
+        { label: 'Generate Report', link: '/assistant/generate-report' },
       ],
     },
     {
       label: 'Manage Employees',
       icon: IconUsers,
       links: [
-        { label: 'Search Employee', link: '/employee/search-employee' },
-        { label: 'Add Employee', link: '/employee/add-employee' },
-        { label: 'Update Employee', link: '/employee/update-employee' },
-        { label: 'Delete Employee', link: '/employee/delete-employee' },
+        { label: 'Employee Records', link: '/employee/search-employee' },
+        { label: 'Enroll Employee', link: '/employee/add-employee' },
+        { label: 'Update Employee Information', link: '/employee/update-employee' },
+        { label: 'Archive Employee', link: '/employee/delete-employee' },
       ],
     },
   ],

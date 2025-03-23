@@ -1,9 +1,9 @@
 'use client';
 
-import { NavbarNested } from '@/components/NavbarNested/NavbarNested';
 import E2AccessPage from '@/components/E2Access/E2Access';
+import { NavbarNested } from '@/components/NavbarNested/NavbarNested';
 
-export default function P2Access() {
+export default function E2Access() {
   return (
     <main style={{ display: 'flex', width: '100vw' }}>
       <NavbarNested />
@@ -14,10 +14,12 @@ export default function P2Access() {
           justifyContent: 'flex-start',
           height: '100vh',
           padding: 32,
+          background: '#fafbfd',
+          overflowY: 'scroll',
         }}
       >
         <E2AccessPage />
       </div>
     </main>
   );
-} 
+}

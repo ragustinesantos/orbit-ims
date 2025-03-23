@@ -8,11 +8,11 @@ interface LinksGroupProps {
   label: string;
   initiallyOpened?: boolean;
   links?: { label: string; link: string }[];
-  link?:string;  //dashboard single link
+  link?: string; //dashboard single link
 }
 
 export function LinksGroup({ icon: Icon, label, initiallyOpened, links, link }: LinksGroupProps) {
-  const hasLinks = Array.isArray(links) && links.length>0;
+  const hasLinks = Array.isArray(links) && links.length > 0;
   const [opened, setOpened] = useState(initiallyOpened || false);
   const items = (hasLinks ? links : []).map((link) => (
     <Text<'a'> component="a" className={classes.link} href={link.link} key={link.label}>
@@ -36,7 +36,7 @@ export function LinksGroup({ icon: Icon, label, initiallyOpened, links, link }: 
         <Group justify="space-between" gap={0}>
           <Box style={{ display: 'flex', alignItems: 'center' }}>
             <ThemeIcon variant="light" size={30}>
-              <Icon size={18} />
+              <Icon size={18} color="#fafbfd" />
             </ThemeIcon>
             <Box ml="md">{label}</Box>
           </Box>

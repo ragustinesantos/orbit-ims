@@ -4,11 +4,11 @@
 import { useEffect, useState } from 'react';
 import { Button, Flex, Group, Modal, Select, SimpleGrid, Text, TextInput } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { useInventory } from '@/app/_utils/inventory-context';
 import { defaultItem, Item } from '@/app/_utils/schema';
 import { deleteItem, fetchSupplier } from '@/app/_utils/utility';
 import CustomNotification from '../CustomNotification/CustomNotification';
 import classnames from './DeleteItem.module.css';
-import { useInventory } from '@/app/_utils/inventory-context';
 
 export default function UpdateItem() {
   // Search and selected items from item search
@@ -41,7 +41,7 @@ export default function UpdateItem() {
   const [supplierId, setSupplierId] = useState<string | null>('');
 
   const { inventory, supplierList, categoryList, setRefresh, setCurrentPage, setCurrentSection } =
-      useInventory();
+    useInventory();
 
   // Handle delete submit
   const handleSubmit = async () => {
@@ -63,7 +63,6 @@ export default function UpdateItem() {
         setShowError(false);
       }, 3000);
     }
-
   };
 
   // Find item to search in inventory and set as selectedItem
@@ -106,257 +105,259 @@ export default function UpdateItem() {
     updateValues();
   }, [selectedItem]);
 
-
   useEffect(() => {
     setCurrentPage('Delete Item');
     setCurrentSection('inventory');
   }, []);
 
   return (
-    <Group
-      classNames={{
-        root: classnames.rootGroup,
-      }}
-    >
-      <Modal
-        centered
-        opened={opened}
-        onClose={close}
-        size="xl"
-        title="Confirmation"
-        classNames={{
-          title: classnames.modalTitle,
-        }}
-      >
-        <Text mb={20}>Are you sure you want to delete item {itemName}?</Text>
-        <Flex justify="center" align="center" direction="column" style={{ height: '100%' }}>
-          <SimpleGrid
-            cols={2}
-            spacing="xl"
-            verticalSpacing="xs"
-            classNames={{ root: classnames.simpleGridRoot }}
-          >
-            <Text>
-              Item Name:{' '}
-              <Text fw={700} td="underline" component="span" ml={5}>
-                {itemName}
-              </Text>
-            </Text>
-            <Text>
-              Supplier:{' '}
-              <Text fw={700} td="underline" component="span" ml={5}>
-                {supplierName}
-              </Text>
-            </Text>
-            <Text>
-              Package Unit:{' '}
-              <Text fw={700} td="underline" component="span" ml={5}>
-                {packageUnit}
-              </Text>
-            </Text>
-            <Text>
-              Supply Unit:{' '}
-              <Text fw={700} td="underline" component="span" ml={5}>
-                {supplyUnit}
-              </Text>
-            </Text>
-            <Text>
-              Category:{' '}
-              <Text fw={700} td="underline" component="span" ml={5}>
-                {category}
-              </Text>
-            </Text>
-            <Text>
-              Current Stock:{' '}
-              <Text fw={700} td="underline" component="span" ml={5}>
-                {currentStockInStoreRoom}
-              </Text>
-            </Text>
-            <Text>
-              Minimum Purchase Qty:{' '}
-              <Text fw={700} td="underline" component="span" ml={5}>
-                {minPurchaseQty}
-              </Text>
-            </Text>
-            <Text>
-              Minimum Storage Qty:{' '}
-              <Text fw={700} td="underline" component="span" ml={5}>
-                {minStorageQty}
-              </Text>
-            </Text>
-          </SimpleGrid>
-          <Group mt="xl">
-            <Button
-              onClick={() => {
-                handleSubmit();
-                close();
-              }}
-              classNames={{ root: classnames.button }}
-            >
-              Confirm Delete
-            </Button>
-          </Group>
-        </Flex>
-      </Modal>
+    <main className={classnames.rootMain}>
       <Text
         classNames={{
           root: classnames.rootText,
         }}
       >
-        Delete
+        Archive Item
       </Text>
-      <Select
-        label="Search Item"
-        placeholder="Select an item from the list..."
-        data={inventory?.map((item) => ({
-          value: item.itemName,
-          label: item.itemName,
-        }))}
-        allowDeselect
-        searchable
-        value={searchValue || null}
-        onChange={setSearchValue}
+      <Group
         classNames={{
-          root: classnames.selectRoot,
-        }}
-        size="md"
-        withAsterisk
-      />
-      <SimpleGrid
-        cols={2}
-        spacing="xl"
-        verticalSpacing="xl"
-        classNames={{ root: classnames.simpleGridRoot }}
-      >
-        <TextInput
-          label="Item Name"
-          value={itemName}
-          placeholder="Enter Item Name..."
-          classNames={{ input: classnames.disabledText }}
-          size="md"
-          withAsterisk
-          disabled
-        />
-        <TextInput
-          label="Item ID"
-          disabled
-          value={staticItemId}
-          placeholder="Enter Item ID..."
-          classNames={{ input: classnames.disabledText }}
-          size="md"
-        />
-        <TextInput
-          label="Package Unit"
-          value={packageUnit}
-          placeholder="Enter Package Unit..."
-          classNames={{ input: classnames.disabledText }}
-          withAsterisk
-          disabled
-        />
-        <TextInput
-          label="Unit of Measurement"
-          value={supplyUnit}
-          placeholder="pc / kg / pounds / bottle / etc."
-          size="md"
-          classNames={{ input: classnames.disabledText }}
-          withAsterisk
-          disabled
-        />
-        <TextInput
-          label="Current Stock"
-          value={currentStockInStoreRoom}
-          placeholder="Enter quantity in storage..."
-          classNames={{ input: classnames.disabledText }}
-          size="md"
-          type="number"
-          withAsterisk
-          disabled
-        />
-        <TextInput
-          label="Minimum Purchase Quantity"
-          value={minPurchaseQty}
-          placeholder="Enter minimum purchase quantity..."
-          classNames={{ input: classnames.disabledText }}
-          size="md"
-          type="number"
-          withAsterisk
-          disabled
-        />
-        <TextInput
-          label="Minimum Storage Quantity"
-          value={minStorageQty}
-          placeholder="Enter minimum storage quantity..."
-          classNames={{ input: classnames.disabledText }}
-          size="md"
-          type="number"
-          withAsterisk
-          disabled
-        />
-        <Select
-          label="Supplier/Source"
-          placeholder="Select a supplier from the list..."
-          classNames={{ input: classnames.disabledText }}
-          searchable
-          data={supplierList?.map((supplier) => ({
-            value: supplier.supplierId,
-            label: supplier.supplierName,
-          }))}
-          allowDeselect
-          value={supplierId || null}
-          size="md"
-          withAsterisk
-          disabled
-        />
-        <Select
-          label="Category"
-          searchable
-          placeholder="Select a category from the list..."
-          classNames={{ input: classnames.disabledText }}
-          data={categoryList?.map((category) => ({
-            value: category,
-            label: category,
-          }))}
-          allowDeselect
-          value={category || null}
-          size="md"
-          withAsterisk
-          disabled
-        />
-      </SimpleGrid>
-      <Button
-        variant="filled"
-        size="md"
-        mt="xl"
-        classNames={{ root: classnames.button }}
-        onClick={async () => {
-          if (!itemName) {
-            setErrorTitle('No Item Selected');
-            setErrorMessage('Please select an item to delete.');
-            setShowError(true);
-            setTimeout(() => {
-              setShowError(false);
-            }, 3000);
-          } else {
-            open();
-          }
+          root: classnames.rootMainGroup,
         }}
       >
-        Delete
-      </Button>
-      {showError &&
-        CustomNotification(
-          'error',
-          errorTitle,
-          errorMessage,
-          setShowError
+        {inventory ? (
+          <Group
+            classNames={{
+              root: classnames.rootGroup,
+            }}
+          >
+            <Modal
+              centered
+              opened={opened}
+              onClose={close}
+              size="xl"
+              title="Confirmation"
+              classNames={{
+                title: classnames.modalTitle,
+              }}
+            >
+              <Text mb={20}>Are you sure you want to delete item {itemName}?</Text>
+              <Flex justify="center" align="center" direction="column" style={{ height: '100%' }}>
+                <SimpleGrid
+                  cols={2}
+                  spacing="xl"
+                  verticalSpacing="xs"
+                  classNames={{ root: classnames.simpleGridRoot }}
+                >
+                  <Text>
+                    Item Name:{' '}
+                    <Text fw={700} td="underline" component="span" ml={5}>
+                      {itemName}
+                    </Text>
+                  </Text>
+                  <Text>
+                    Supplier:{' '}
+                    <Text fw={700} td="underline" component="span" ml={5}>
+                      {supplierName}
+                    </Text>
+                  </Text>
+                  <Text>
+                    Package Unit:{' '}
+                    <Text fw={700} td="underline" component="span" ml={5}>
+                      {packageUnit}
+                    </Text>
+                  </Text>
+                  <Text>
+                    Supply Unit:{' '}
+                    <Text fw={700} td="underline" component="span" ml={5}>
+                      {supplyUnit}
+                    </Text>
+                  </Text>
+                  <Text>
+                    Category:{' '}
+                    <Text fw={700} td="underline" component="span" ml={5}>
+                      {category}
+                    </Text>
+                  </Text>
+                  <Text>
+                    Current Stock:{' '}
+                    <Text fw={700} td="underline" component="span" ml={5}>
+                      {currentStockInStoreRoom}
+                    </Text>
+                  </Text>
+                  <Text>
+                    Minimum Purchase Qty:{' '}
+                    <Text fw={700} td="underline" component="span" ml={5}>
+                      {minPurchaseQty}
+                    </Text>
+                  </Text>
+                  <Text>
+                    Minimum Storage Qty:{' '}
+                    <Text fw={700} td="underline" component="span" ml={5}>
+                      {minStorageQty}
+                    </Text>
+                  </Text>
+                </SimpleGrid>
+                <Group mt="xl">
+                  <Button
+                    onClick={() => {
+                      handleSubmit();
+                      close();
+                    }}
+                    classNames={{ root: classnames.button }}
+                  >
+                    Archive
+                  </Button>
+                </Group>
+              </Flex>
+            </Modal>
+            <Select
+              label="Search Item"
+              placeholder="Select an item from the list..."
+              data={inventory?.map((item) => ({
+                value: item.itemName,
+                label: item.itemName,
+              }))}
+              allowDeselect
+              searchable
+              value={searchValue || null}
+              onChange={setSearchValue}
+              classNames={{
+                root: classnames.selectRoot,
+              }}
+              size="md"
+              withAsterisk
+            />
+            <SimpleGrid
+              cols={2}
+              spacing="xl"
+              verticalSpacing="xl"
+              classNames={{ root: classnames.simpleGridRoot }}
+            >
+              <TextInput
+                label="Item Name"
+                value={itemName}
+                placeholder="Enter Item Name..."
+                classNames={{ input: classnames.disabledText }}
+                size="md"
+                withAsterisk
+                disabled
+              />
+              <TextInput
+                label="Item ID"
+                disabled
+                value={staticItemId}
+                placeholder="Enter Item ID..."
+                classNames={{ input: classnames.disabledText }}
+                size="md"
+              />
+              <TextInput
+                label="Package Unit"
+                value={packageUnit}
+                placeholder="Enter Package Unit..."
+                classNames={{ input: classnames.disabledText }}
+                withAsterisk
+                disabled
+              />
+              <TextInput
+                label="Unit of Measurement"
+                value={supplyUnit}
+                placeholder="pc / kg / pounds / bottle / etc."
+                size="md"
+                classNames={{ input: classnames.disabledText }}
+                withAsterisk
+                disabled
+              />
+              <TextInput
+                label="Current Stock"
+                value={currentStockInStoreRoom}
+                placeholder="Enter quantity in storage..."
+                classNames={{ input: classnames.disabledText }}
+                size="md"
+                type="number"
+                withAsterisk
+                disabled
+              />
+              <TextInput
+                label="Minimum Purchase Quantity"
+                value={minPurchaseQty}
+                placeholder="Enter minimum purchase quantity..."
+                classNames={{ input: classnames.disabledText }}
+                size="md"
+                type="number"
+                withAsterisk
+                disabled
+              />
+              <TextInput
+                label="Minimum Storage Quantity"
+                value={minStorageQty}
+                placeholder="Enter minimum storage quantity..."
+                classNames={{ input: classnames.disabledText }}
+                size="md"
+                type="number"
+                withAsterisk
+                disabled
+              />
+              <Select
+                label="Supplier/Source"
+                placeholder="Select a supplier from the list..."
+                classNames={{ input: classnames.disabledText }}
+                searchable
+                data={supplierList?.map((supplier) => ({
+                  value: supplier.supplierId,
+                  label: supplier.supplierName,
+                }))}
+                allowDeselect
+                value={supplierId || null}
+                size="md"
+                withAsterisk
+                disabled
+              />
+              <Select
+                label="Category"
+                searchable
+                placeholder="Select a category from the list..."
+                classNames={{ input: classnames.disabledText }}
+                data={categoryList?.map((category) => ({
+                  value: category,
+                  label: category,
+                }))}
+                allowDeselect
+                value={category || null}
+                size="md"
+                withAsterisk
+                disabled
+              />
+            </SimpleGrid>
+            <Button
+              variant="filled"
+              size="md"
+              mt="xl"
+              classNames={{ root: classnames.button }}
+              onClick={async () => {
+                if (!itemName) {
+                  setErrorTitle('No Item Selected');
+                  setErrorMessage('Please select an item to delete.');
+                  setShowError(true);
+                  setTimeout(() => {
+                    setShowError(false);
+                  }, 3000);
+                } else {
+                  open();
+                }
+              }}
+            >
+              Archive
+            </Button>
+          </Group>
+        ) : (
+          <Group classNames={{ root: classnames.loadingContainer }}>
+            <img src="/assets/loading/Spin@1x-1.0s-200px-200px.gif" alt="Loading..." />
+          </Group>
         )}
-      {showSuccess &&
-        CustomNotification(
-          'success',
-          'Item Deleted',
-          successMessage,
-          setShowSuccess
-        )}
-    </Group>
+        {showError && CustomNotification('error', errorTitle, errorMessage, setShowError)}
+        {showSuccess &&
+          CustomNotification('success', 'Item Deleted', successMessage, setShowSuccess)}
+      </Group>
+    </main>
   );
 }
