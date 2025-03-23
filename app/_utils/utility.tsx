@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import { getAuth } from 'firebase/auth';
 import { marked } from 'marked';
+import { SendEmailODOR, SendEmailROR } from '../_services/email-service';
 import { dbResetEmpPass } from '../_services/employees-service';
 import {
   Chat,
@@ -8,7 +9,9 @@ import {
   EmployeeToEdit,
   EmployeeUpdate,
   Item,
+  ItemOrder,
   ItemToEdit,
+  NewItemOrder,
   OnDemandOrder,
   OnDemandOrderToEdit,
   OrderRequisition,
@@ -21,10 +24,7 @@ import {
   StockInOrder,
   StockOutOrder,
   Supplier,
-  ItemOrder,
-  NewItemOrder
 } from './schema';
-import { SendEmailODOR, SendEmailROR } from '../_services/email-service';
 
 const auth = getAuth();
 
@@ -806,21 +806,31 @@ export const patchCloseTicket = async (requisitionId: string) => {
   }
 };
 
-
-export async function sendPOMsgRor (reqid:string, itemList: ItemOrder[], inventory: Item[], employeename:string) {
+export async function sendPOMsgRor(
+  reqid: string,
+  itemList: ItemOrder[],
+  inventory: Item[],
+  employeename: string
+) {
   try {
-    const returnmsg = await SendEmailROR(reqid,itemList,inventory,employeename);
+    const returnmsg = await SendEmailROR(reqid, itemList, inventory, employeename);
     return returnmsg;
-  }catch(error){
+  } catch (error) {
     throw error;
   }
 }
 
-export async function sendPOMsgOdor (reqid:string, itemList: ItemOrder[], inventory: Item[], employeename:string, newItemOrder: NewItemOrder[]) {
+export async function sendPOMsgOdor(
+  reqid: string,
+  itemList: ItemOrder[],
+  inventory: Item[],
+  employeename: string,
+  newItemOrder: NewItemOrder[]
+) {
   try {
-    const returnmsg = await SendEmailODOR(reqid,itemList,inventory, employeename, newItemOrder);
+    const returnmsg = await SendEmailODOR(reqid, itemList, inventory, employeename, newItemOrder);
     return returnmsg;
-  }catch(error){
+  } catch (error) {
     throw error;
   }
 }

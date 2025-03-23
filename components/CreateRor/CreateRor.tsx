@@ -15,7 +15,7 @@ import {
   patchOrderRequisition,
   postOrderRequisition,
   postRecurringOrderRequisition,
-  sendPOMsgRor
+  sendPOMsgRor,
 } from '@/app/_utils/utility';
 import CustomNotification from '../CustomNotification/CustomNotification';
 import OrderRor from '../OrderRor/OrderRor';
@@ -23,14 +23,8 @@ import SelectRorTemplate from '../SelectRorTemplate/SelectRorTemplate';
 import WizardProgress from '../WizardProgress/WizardProgress';
 import classnames from './CreateRor.module.css';
 
-
-
-
-
-
-
 export default function CreateRor() {
-  const { inventory,currentEmployee } = useInventory();
+  const { inventory, currentEmployee } = useInventory();
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [currentContent, setCurrentContent] = useState(<div />);
   const [recurringOrder, setrecurringOrder] = useState<RecurringOrderToEdit | null>(null);
@@ -75,11 +69,11 @@ export default function CreateRor() {
     setrecurringOrder(orderObj);
   };
 
-    const handleSetRor = (paramRecurringOrder: RecurringOrderToEdit) => {
-        setrecurringOrder(paramRecurringOrder);
-        //Email notification code
-        setItemListEmail(paramRecurringOrder.itemOrders);
-    }
+  const handleSetRor = (paramRecurringOrder: RecurringOrderToEdit) => {
+    setrecurringOrder(paramRecurringOrder);
+    //Email notification code
+    setItemListEmail(paramRecurringOrder.itemOrders);
+  };
 
   // This is an array of content to display based on the current index
   const stepContent: JSX.Element[] = [
@@ -160,42 +154,39 @@ export default function CreateRor() {
       // Only change the page if it was successful
       setCurrentStep(currentStep + 1);
 
-            setNotificationMessage(
-                CustomNotification(
-                    'success',
-                    'ROR Submitted!',
-                    `Recurring Order Requisition successfully added.`,
-                    closeNotification
-                )
-            );
+      setNotificationMessage(
+        CustomNotification(
+          'success',
+          'ROR Submitted!',
+          `Recurring Order Requisition successfully added.`,
+          closeNotification
+        )
+      );
 
-            //Email notification code
-            let empfullname = currentEmployee?.firstName + " " + currentEmployee?.lastName
-            if (itemListEmail && inventory){
-                // rememeber to use await for async functions always!!!
-                //await sendPOMsgRor(newOrdReqId,itemListEmail,inventory,empfullname);
-                
-            }
-            
-
-        } catch (error) {
-            console.log(error);
-            setNotificationMessage(
-                CustomNotification(
-                    'error',
-                    'Error Encountered',
-                    'Unexpected Error encountered. Please try again.',
-                    closeNotification
-                )
-            );
-        }
-        // Display notification for 3 seconds.
-        setShowNotification(true);
-        setTimeout(() => {
-            setShowNotification(false);
-        }, 3000);
-        setShowButton(true);
+      //Email notification code
+      let empfullname = currentEmployee?.firstName + ' ' + currentEmployee?.lastName;
+      if (itemListEmail && inventory) {
+        // rememeber to use await for async functions always!!!
+        //await sendPOMsgRor(newOrdReqId,itemListEmail,inventory,empfullname);
+      }
+    } catch (error) {
+      console.log(error);
+      setNotificationMessage(
+        CustomNotification(
+          'error',
+          'Error Encountered',
+          'Unexpected Error encountered. Please try again.',
+          closeNotification
+        )
+      );
     }
+    // Display notification for 3 seconds.
+    setShowNotification(true);
+    setTimeout(() => {
+      setShowNotification(false);
+    }, 3000);
+    setShowButton(true);
+  };
 
   const closeNotification = () => {
     setShowNotification(false);

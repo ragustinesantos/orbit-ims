@@ -23,7 +23,7 @@ export default function DashBoard() {
           background: '#fafbfd',
         }}
       >
-          <DashboardTitle />
+        <DashboardTitle />
         <Group classNames={{ root: classnames.responsiveLayout }}>
           <div className={classnames.sectionContainer}>
             <InventoryOverview />

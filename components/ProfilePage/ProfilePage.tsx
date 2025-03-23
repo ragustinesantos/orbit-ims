@@ -8,16 +8,8 @@ import { useInventory } from '@/app/_utils/inventory-context';
 import { sendResetEmail } from '@/app/_utils/utility';
 import CustomNotification from '../CustomNotification/CustomNotification';
 import classnames from './ProfilePage.module.css';
-import FormData from 'form-data';
-import Mailgun from 'mailgun.js';
-import { ItemOrder } from '@/app/_utils/schema';
-
-const { inventory } = useInventory();
 
 export default function ProfilePage() {
-
-    const reqid = "439n&*hbdw78923*^&^%98dH&*A!WHBdvg9"
-
   // Use the useUserAuth hook to get the user object and the login and logout functions
   const { currentEmployee } = useInventory();
   const [modalshow, setModalshow] = useState<boolean>(false);
