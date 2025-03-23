@@ -11,6 +11,7 @@ const customJestConfig = {
     '^@/pages/(.*)$': '<rootDir>/pages/$1',
   },
   testEnvironment: 'jest-environment-jsdom',
+  testPathIgnorePatterns: ['<rootDir>/playwright-tests/'],
 };
 
 module.exports = createJestConfig(customJestConfig);
