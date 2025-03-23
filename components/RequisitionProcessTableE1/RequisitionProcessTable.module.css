@@ -4,7 +4,7 @@
   align-items: flex-start;
   width: 100%;
   gap: 1rem;
-  background-color: #ffffff;
+  background-color: #fff;
   height: 42vh;
 }
 
@@ -39,6 +39,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

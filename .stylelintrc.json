@@ -1,5 +1,7 @@
 {
-  "extends": ["stylelint-config-standard-scss"],
+  "extends": [
+    "stylelint-config-standard-scss"
+  ],
   "rules": {
     "custom-property-pattern": null,
     "selector-class-pattern": null,
@@ -17,11 +19,14 @@
     "scss/at-mixin-pattern": null,
     "scss/at-rule-no-unknown": null,
     "value-keyword-case": null,
+    "keyframes-name-pattern": null,
     "media-feature-range-notation": null,
     "selector-pseudo-class-no-unknown": [
       true,
       {
-        "ignorePseudoClasses": ["global"]
+        "ignorePseudoClasses": [
+          "global"
+        ]
       }
     ]
   }

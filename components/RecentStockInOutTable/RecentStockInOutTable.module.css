@@ -4,7 +4,7 @@
   align-items: flex-start;
   width: 100%;
   height: 42vh;
-  background-color: #ffffff;
+  background-color: #fff;
 }
 
 .heading {
@@ -73,6 +73,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -118,6 +119,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

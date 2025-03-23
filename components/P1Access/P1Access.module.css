@@ -34,7 +34,7 @@
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
-  background-color: #ffffff;
+  background-color: #fff;
   padding: 1.2rem;
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -49,6 +49,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -197,16 +198,6 @@
 
 .generateSoButton:hover {
   box-shadow: 0 4px 8px rgba(109, 104, 117, 0.3);
-  transform: translateY(-1px);
-}
-
-.closeTicketButton {
-  background: #e89726;
-  color: white;
-}
-
-.closeTicketButton:hover {
-  box-shadow: 0 4px 8px rgba(255, 166, 43, 0.3);
   transform: translateY(-1px);
 }
 
