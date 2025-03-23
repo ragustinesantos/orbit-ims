@@ -15,32 +15,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install Yarn
-        run: npm install -g yarn
-
-      - name: Fix Yarn Registry
-        run: yarn config set registry https://registry.yarnpkg.com
-
-      - name: Create NPM cache directory
-        run: mkdir -p ~/.npm
-
-      - name: Cache dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
       - uses: actions/setup-node@v3
         with:
           node-version-file: '.nvmrc'
-          cache: 'yarn'
-          cache-dependency-path: 'yarn.lock'
+          cache: 'npm'
+          
       - name: Install dependencies
         run: npm install
-        env:
-          YARN_ENABLE_HARDENED_MODE: false
+        
       - name: Run build
         run: npm run build
         env:
@@ -51,6 +33,7 @@ jobs:
           NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{ secrets.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET }}
           NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID }}
           NEXT_PUBLIC_FIREBASE_APP_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }}
+          
       - name: Run Tests
         run: npm run test
         env:
