@@ -24,6 +24,7 @@ import {
   postOrderRequisition,
 } from '../_utils/utility';
 import classnames from './odorpage.module.css';
+import { sendPOMsgOdor } from '../_utils/utility';
 
 export default function OdorPage() {
   const [itemOrders, setitemOrders] = useState<ItemOrder[]>([]);
@@ -39,7 +40,7 @@ export default function OdorPage() {
   const [remarks, setRemarks] = useState('');
   const stepList = ['Inventory Items', 'Non-Inventory Items', 'Order Review'];
 
-  const { currentEmployee } = useInventory();
+  const {inventory, currentEmployee } = useInventory();
 
   const handleAddItem = async () => {
     if (recipientName === '' || recipientLocation === '') {
@@ -94,6 +95,15 @@ export default function OdorPage() {
           )
         );
         revealNotification();
+
+        //Email notification code
+        let empfullname = currentEmployee?.firstName + " " + currentEmployee?.lastName
+        if (itemOrders && inventory){
+            // rememeber to use await for async functions always!!!
+            console.log (newItemOrders)
+            await sendPOMsgOdor(newOrId,itemOrders,inventory,empfullname,newItemOrders);
+            
+        }
 
         //Reset Fields
         setRecipientName('');

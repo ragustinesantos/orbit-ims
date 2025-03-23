@@ -38,7 +38,7 @@ export default function CreateRor() {
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState(<div />);
   const [showButton, setShowButton] = useState(true);
-    const [itemListEmail, setItemListEmail] = useState<ItemOrder[]>();
+  const [itemListEmail, setItemListEmail] = useState<ItemOrder[]>();
 
   // Confirmation Modal State
   const [opened, { close, open }] = useDisclosure(false);
