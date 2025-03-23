@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Group, Text, Title } from '@mantine/core';
 import { useInventory } from '@/app/_utils/inventory-context';
 import classnames from './DashboardTitle.module.css';
+import Bell from '../NotificationBell/Bell';
 
 export default function DashboardTitle() {
   const { currentEmployee } = useInventory();
@@ -53,9 +54,14 @@ export default function DashboardTitle() {
         </Title>
         <Text className={classnames.subText}>Welcome back! Here's what's happening today.</Text>
       </div>
-      <Title order={5} className={classnames.date}>
-        {formattedDate} | {formattedTime}
-      </Title>
+      <div className={classnames.endofbar}>
+        <Title order={5} className={classnames.date}>
+          {formattedDate} | {formattedTime}
+        </Title>
+          <div className={classnames.bellspace}>
+          <Bell></Bell>
+          </div>
+      </div>
     </Group>
   );
 }

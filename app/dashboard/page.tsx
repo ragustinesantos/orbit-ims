@@ -23,10 +23,7 @@ export default function DashBoard() {
           background: '#fafbfd',
         }}
       >
-        <div className={classnames.div1}>
           <DashboardTitle />
-          <Bell />
-        </div>
         <Group classNames={{ root: classnames.responsiveLayout }}>
           <div className={classnames.sectionContainer}>
             <InventoryOverview />
