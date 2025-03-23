@@ -94,7 +94,7 @@ export async function SendEmailODOR (reqid:string, itemList:ItemOrder[], invento
         //If we Paid for the service we would place all P1 emails, Or a specific P1 email in this to:[] array.
         to: ["orbit.imsystem@gmail.com"],
         subject: "New Requisition Approval",
-        text: `Requisisitons ID# "${reqid}" has been submitted by employee: ${employeename} and is ready for P1 Approval! \n\n The items in this ODOR requisition:\n ${formattedString}\n ${newItemsString} \n Thank you.`,
+        text: `Requisisitons ID# "${reqid}" has been submitted by employee: ${employeename} and is ready for P1 Approval! \n\n The items in this ODOR requisition:\n ${formattedString}\n ${newItemsString} \nThank you.`,
       });
       console.log(data); // logs response data
       return true;
