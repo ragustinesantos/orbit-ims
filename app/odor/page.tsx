@@ -100,8 +100,7 @@ export default function OdorPage() {
         let empfullname = currentEmployee?.firstName + " " + currentEmployee?.lastName
         if (itemOrders && inventory){
             // rememeber to use await for async functions always!!!
-            console.log (newItemOrders)
-            await sendPOMsgOdor(newOrId,itemOrders,inventory,empfullname,newItemOrders);
+           // await sendPOMsgOdor(newOrId,itemOrders,inventory,empfullname,newItemOrders);
             
         }
 

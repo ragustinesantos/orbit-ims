@@ -173,7 +173,7 @@ export default function CreateRor() {
             let empfullname = currentEmployee?.firstName + " " + currentEmployee?.lastName
             if (itemListEmail && inventory){
                 // rememeber to use await for async functions always!!!
-                await sendPOMsgRor(newOrdReqId,itemListEmail,inventory,empfullname);
+                //await sendPOMsgRor(newOrdReqId,itemListEmail,inventory,empfullname);
                 
             }
             
