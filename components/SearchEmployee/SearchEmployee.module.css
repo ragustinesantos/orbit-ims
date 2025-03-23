@@ -62,10 +62,6 @@
   width: 100%;
 }
 
-.thead {
-  background-color: transparent;
-}
-
 .rootTable {
   overflow-y: scroll;
   scrollbar-width: none;
