@@ -1,20 +1,20 @@
 .button {
-    background-color: #228BE6;
-    color: white;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  background-color: #228be6;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .buttonIncrement {
-    margin-left: 0.5vw;
+  margin-left: 0.5vw;
 }
 
 .buttonDecrement {
-    margin-right: 0.5vw;
+  margin-right: 0.5vw;
 }
 
-.imgModalID:hover{
-    text-decoration: underline;
-    cursor:pointer;
-  }
+.imgModalID:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}

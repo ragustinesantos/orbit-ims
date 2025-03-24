@@ -51,9 +51,9 @@
   justify-content: center;
 }
 
-.imgModalID:hover{
+.imgModalID:hover {
   text-decoration: underline;
-  cursor:pointer;
+  cursor: pointer;
 }
 
 .approvalCardContainer {
@@ -106,14 +106,14 @@
 
 /* Confirm Button */
 .confirmButton {
-  background-color: #1B4965;
+  background-color: #1b4965;
   color: white;
   font-weight: bold;
   transition: 0.3s;
 }
 
 .confirmButton:hover {
-  background-color: #0F3A57;
+  background-color: #0f3a57;
 }
 
 /* Cancel Button */
@@ -127,7 +127,3 @@
 .cancelButton:hover {
   background-color: darkred;
 }
-
-
-
-

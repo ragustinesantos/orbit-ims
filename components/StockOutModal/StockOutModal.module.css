@@ -1,15 +1,12 @@
- .selectRoot {
-    width: 100%;
-    margin-bottom: 20px;
-  }
+.selectRoot {
+  width: 100%;
+  margin-bottom: 20px;
+}
 
-  .rootText {
-    font-size: 28px;
-    font-weight: bold;
-    margin-bottom: 24px;
-    margin-top:15px;
-    text-align: center;
-  }
-  
-
-  
+.rootText {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 24px;
+  margin-top: 15px;
+  text-align: center;
+}

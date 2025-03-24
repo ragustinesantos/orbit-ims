@@ -1,101 +1,95 @@
-.externalLayout{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-   /* border: 1px solid purple; */
-    /* width: 75vw; */
-    /* height: 83vh; */
-    width: 100%;
-    min-width: 53vw;
-    height: 100vh;
+.externalLayout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* border: 1px solid purple; */
+  /* width: 75vw; */
+  /* height: 83vh; */
+  width: 100%;
+  min-width: 53vw;
+  height: 100vh;
 }
 
-
 .internalLayoutGroup {
-    display: flex;
-    /* border: 1px solid blue; */
-    width: 50vw;
-    justify-content: center;
-    border-radius: 2%;
-    /* background-color: #F6F5F5; /* Corrected hex color format */
-   /* box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Added drop shadow */
-
+  display: flex;
+  /* border: 1px solid blue; */
+  width: 50vw;
+  justify-content: center;
+  border-radius: 2%;
+  /* background-color: #F6F5F5; /* Corrected hex color format */
+  /* box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Added drop shadow */
 }
 
 .rootText {
-    font-size: 48px;
-    font-weight: bold;
-    text-decoration: underline;
-    text-underline-offset: 8px;
-    margin: 0; /* Removes any default spacing */
-    padding: 0; /* Ensures no additional padding */
-    
+  font-size: 48px;
+  font-weight: bold;
+  text-decoration: underline;
+  text-underline-offset: 8px;
+  margin: 0; /* Removes any default spacing */
+  padding: 0; /* Ensures no additional padding */
 }
 
 .title {
-    font-weight: bold;
+  font-weight: bold;
 }
 
-
 .titleAndPhoto {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: start;
-    margin-right: 30px;
-    /* border: 6px solid red; */
-    
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+  margin-right: 30px;
+  /* border: 6px solid red; */
 }
 
 .photo {
-    border-radius: 50%;
-    width: 200px;
-    height: auto;
-    margin-top: 20px;
+  border-radius: 50%;
+  width: 200px;
+  height: auto;
+  margin-top: 20px;
 }
 
-
 .simplegrid1 {
-    margin-left: 5vh;
-    margin-top: 7.5vh;
-    margin-bottom: 7.5vh;
-    /* border: 6px solid red; */
+  margin-left: 5vh;
+  margin-top: 7.5vh;
+  margin-bottom: 7.5vh;
+  /* border: 6px solid red; */
 }
 
 .button {
-    background-color: #228BE6;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    width: 150px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 2vh;
-    margin-bottom: 2vh;
-    margin-right: 2vh;
-    margin-left: none;
+  background-color: #228be6;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  width: 150px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 2vh;
+  margin-bottom: 2vh;
+  margin-right: 2vh;
+  margin-left: none;
 }
 
 .button:hover {
-    background-color: #1D7ED6;
+  background-color: #1d7ed6;
 }
 
 .rootConfirmationText {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 36px;
-  }
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 36px;
+}
 
-  .rootBtnArea {
-    display: flex;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-    gap: 48px;
-    margin-top: 36px;
-  }
+.rootBtnArea {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  gap: 48px;
+  margin-top: 36px;
+}
 
-  .rootBtn {
-    height: 48px;
-    width: 128px;
-  }
+.rootBtn {
+  height: 48px;
+  width: 128px;
+}

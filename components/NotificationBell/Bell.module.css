@@ -1,28 +1,27 @@
 .Notifications {
-    cursor: pointer;
-  }
+  cursor: pointer;
+}
 
-  .MenuItem:hover {
-    background-color: rgb(227, 227, 227);
-  }
+.MenuItem:hover {
+  background-color: rgb(227, 227, 227);
+}
 
-  .outerNotifyDiv {
-    display: flex;
-  }
+.outerNotifyDiv {
+  display: flex;
+}
 
-  .odorIDDiv{
-    margin-left: 20px;
-  }
+.odorIDDiv {
+  margin-left: 20px;
+}
 
-  .reqIdText {
-    margin-right: 5px;
-  }
+.reqIdText {
+  margin-right: 5px;
+}
 
-  .OdorIndicatorText{
-    font-size: small;
+.OdorIndicatorText {
+  font-size: small;
+}
 
-  }
-
-  .OdorIndicator{
-    margin-left: 10px;
-  }
+.OdorIndicator {
+  margin-left: 10px;
+}

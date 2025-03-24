@@ -36,14 +36,14 @@
 }
 
 .selectRoot {
-  width:50%;
+  width: 50%;
 }
 
 .submitButton {
   align-self: self-end;
 }
 
-.imgModalID:hover{
+.imgModalID:hover {
   text-decoration: underline;
-  cursor:pointer;
+  cursor: pointer;
 }
