@@ -15,7 +15,7 @@ export default function SearchItem() {
   const toggleImgModalState = (itemId: string) => {
     setModalStateTracker((prev) => ({ ...prev, [itemId]: !prev[itemId] }));
   };
-  console.log(searchValue)
+  console.log(searchValue);
 
   const rows = inventory?.map((item) => {
     return item.itemId.includes(searchValue || '') ? (
