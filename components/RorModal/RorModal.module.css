@@ -51,9 +51,9 @@
   justify-content: center;
 }
 
-.imgModalID:hover{
+.imgModalID:hover {
   text-decoration: underline;
-  cursor:pointer;
+  cursor: pointer;
 }
 
 .loadingContainer {

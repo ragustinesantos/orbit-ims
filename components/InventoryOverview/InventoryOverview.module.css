@@ -5,7 +5,7 @@
   width: 100%;
   padding: 20px;
   background-color: #fff;
-  margin:auto;
+  margin: auto;
 }
 
 /* Title Styling */
@@ -33,7 +33,7 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  height: 100px; 
+  height: 100px;
   width: 100%;
   border-radius: 12px;
   background: white;
@@ -76,9 +76,9 @@
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease-in-out;
   text-align: center;
-  overflow-y:scroll;
-  scrollbar-width: none;  
-  scrollbar-color: transparent transparent; 
+  overflow-y: scroll;
+  scrollbar-width: none;
+  scrollbar-color: transparent transparent;
 }
 
 .chartCard:hover {

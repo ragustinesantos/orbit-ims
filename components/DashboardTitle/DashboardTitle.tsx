@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import { Group, Text, Title } from '@mantine/core';
 import { useInventory } from '@/app/_utils/inventory-context';
-import classnames from './DashboardTitle.module.css';
 import Bell from '../NotificationBell/Bell';
+import classnames from './DashboardTitle.module.css';
 
 export default function DashboardTitle() {
   const { currentEmployee } = useInventory();
@@ -58,9 +58,9 @@ export default function DashboardTitle() {
         <Title order={5} className={classnames.date}>
           {formattedDate} | {formattedTime}
         </Title>
-          <div className={classnames.bellspace}>
-          <Bell></Bell>
-          </div>
+        <div className={classnames.bellspace}>
+          <Bell />
+        </div>
       </div>
     </Group>
   );
