@@ -232,14 +232,14 @@ export default function CreateRor() {
         <WizardProgress stepList={steps} currentStep={currentStep + 1} />
       </div>
       <div className={classnames.outerScrollBox}>
+        <Text
+          classNames={{
+            root: classnames.stepHeader,
+          }}
+        >
+          {stepHeaders[currentStep]}
+        </Text>
         <div className={`${classnames.scrollableContainer} scrollableContainer`}>
-          <Text
-            classNames={{
-              root: classnames.stepHeader,
-            }}
-          >
-            {stepHeaders[currentStep]}
-          </Text>
           <div className={classnames.rorTemplateContainer}>{currentContent}</div>
         </div>
       </div>

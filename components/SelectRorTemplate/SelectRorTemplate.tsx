@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button, Radio } from '@mantine/core';
+import { Button, Group, Radio } from '@mantine/core';
 import { useInventory } from '@/app/_utils/inventory-context';
 import { RecurringOrderTemplate, SelectRorTemplateProps } from '@/app/_utils/schema';
 import classnames from './SelectRorTemplate.module.css';
@@ -37,36 +37,45 @@ export default function SelectRorTemplate(props: SelectRorTemplateProps) {
 
   return (
     <div>
-      <Radio.Group value={radioValue} onChange={setRadioValue}>
-        {approvedRorTemplates
-          ? approvedRorTemplates.map((template) => {
-              return (
-                <Radio
-                  key={template.rorTemplateId}
-                  name={template.templateName}
-                  label={template.templateName}
-                  value={template.rorTemplateId}
-                  checked={template.rorTemplateId === radioValue}
-                  classNames={{
-                    root: classnames.rorRadio,
-                    label: classnames.radioLabel,
-                  }}
-                />
-              );
-            })
-          : []}
-      </Radio.Group>
-      <Button
-        variant="filled"
-        color="#1B4965"
-        size="md"
-        radius="md"
-        onClick={() => {
-          push('/ror/create-ror-template');
-        }}
-      >
-        Create Template
-      </Button>
+      {approvedRorTemplates ? (
+        <>
+          <Radio.Group value={radioValue} onChange={setRadioValue}>
+            {approvedRorTemplates
+              ? approvedRorTemplates.map((template) => {
+                  return (
+                    <Radio
+                      key={template.rorTemplateId}
+                      name={template.templateName}
+                      label={template.templateName}
+                      value={template.rorTemplateId}
+                      checked={template.rorTemplateId === radioValue}
+                      classNames={{
+                        root: classnames.rorRadio,
+                        label: classnames.radioLabel,
+                      }}
+                    />
+                  );
+                })
+              : []}
+          </Radio.Group>
+          <Button
+            variant="filled"
+            color="#1B4965"
+            size="md"
+            radius="md"
+            mt="lg"
+            onClick={() => {
+              push('/ror/create-ror-template');
+            }}
+          >
+            Create Template
+          </Button>
+        </>
+      ) : (
+        <Group classNames={{ root: classnames.loadingContainer }}>
+          <img src="/assets/loading/Spin@1x-1.0s-200px-200px.gif" alt="Loading..." />
+        </Group>
+      )}
     </div>
   );
 }

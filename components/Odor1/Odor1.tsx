@@ -165,7 +165,7 @@ export default function OdorComponent({ itemOrders, setitemOrders }: setpropstyp
   });
 
   return (
-    <div className={classnames.outerScrollingBox}>
+    <div className={classnames.outerScrollBox}>
       <div className={`${classnames.scrollableContainer} scrollableContainer`}>
         <div className={classnames.templateTitle}>Inventory Item</div>
         <Group
