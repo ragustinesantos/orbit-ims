@@ -345,7 +345,7 @@ export default function OdorComponent2({
   }
 
   return (
-    <div className={classnames.outerScrollingBox}>
+    <div className={classnames.outerScrollBox}>
       <div className={`${classnames.scrollableContainer} scrollableContainer`}>
         {showTemplate ? (
           template

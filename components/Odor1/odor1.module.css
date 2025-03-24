@@ -12,6 +12,9 @@
 .templateTitle {
   font-size: 32px;
   font-weight: bold;
+  border-bottom: 1px solid #dfd9d9;
+  padding-bottom: 1rem;
+  margin-bottom: 0.5rem
 }
 
 .rootText {
@@ -89,8 +92,8 @@
 .scrollableContainer {
   overflow-y: scroll;
   scrollbar-width: none;
-  min-height: 45vh;
-  max-height: 50vh;
+  min-height: 50vh;
+  max-height: 56vh;
   width: 100%;
 }
 
