@@ -15,9 +15,10 @@ export default function SearchItem() {
   const toggleImgModalState = (itemId: string) => {
     setModalStateTracker((prev) => ({ ...prev, [itemId]: !prev[itemId] }));
   };
+  console.log(searchValue)
 
   const rows = inventory?.map((item) => {
-    return item.itemName.includes(searchValue || '') ? (
+    return item.itemId.includes(searchValue || '') ? (
       <Table.Tr key={item.itemId}>
         <ImgModal
           item={item}
@@ -72,7 +73,7 @@ export default function SearchItem() {
               label="Search Item"
               placeholder="Select an item from the list..."
               data={inventory?.map((item) => ({
-                value: item.itemName,
+                value: item.itemId,
                 label: item.itemName,
               }))}
               allowDeselect
