@@ -59,7 +59,7 @@
 }
 
 .chat:nth-last-child(3) {
-  animation-delay: 1.0s;
+  animation-delay: 1s;
 }
 
 .chat:nth-last-child(2) {
