@@ -15,6 +15,7 @@ import {
   patchOrderRequisition,
   postOrderRequisition,
   postRecurringOrderRequisition,
+  sendPOMsgRor,
 } from '@/app/_utils/utility';
 import CustomNotification from '../CustomNotification/CustomNotification';
 import OrderRor from '../OrderRor/OrderRor';
@@ -23,7 +24,7 @@ import WizardProgress from '../WizardProgress/WizardProgress';
 import classnames from './CreateRor.module.css';
 
 export default function CreateRor() {
-  const { currentEmployee } = useInventory();
+  const { inventory, currentEmployee } = useInventory();
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [currentContent, setCurrentContent] = useState(<div />);
   const [recurringOrder, setrecurringOrder] = useState<RecurringOrderToEdit | null>(null);
@@ -31,6 +32,7 @@ export default function CreateRor() {
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState(<div />);
   const [showButton, setShowButton] = useState(true);
+  const [itemListEmail, setItemListEmail] = useState<ItemOrder[]>();
 
   // Confirmation Modal State
   const [opened, { close, open }] = useDisclosure(false);
@@ -69,6 +71,8 @@ export default function CreateRor() {
 
   const handleSetRor = (paramRecurringOrder: RecurringOrderToEdit) => {
     setrecurringOrder(paramRecurringOrder);
+    //Email notification code
+    setItemListEmail(paramRecurringOrder.itemOrders);
   };
 
   // This is an array of content to display based on the current index
@@ -158,6 +162,13 @@ export default function CreateRor() {
           closeNotification
         )
       );
+
+      //Email notification code
+      let empfullname = currentEmployee?.firstName + ' ' + currentEmployee?.lastName;
+      if (itemListEmail && inventory) {
+        // rememeber to use await for async functions always!!!
+        //await sendPOMsgRor(newOrdReqId,itemListEmail,inventory,empfullname);
+      }
     } catch (error) {
       console.log(error);
       setNotificationMessage(
