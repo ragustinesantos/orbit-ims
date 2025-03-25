@@ -111,7 +111,7 @@ export default function OrderRor(props: OrderRorProps) {
 
   return (
     <div>
-      <Table striped highlightOnHover>
+      <Table striped highlightOnHover classNames={{ thead: classnames.thead, td: classnames.td }}>
         <Table.Thead>
           <Table.Tr>
             <Table.Th>Item</Table.Th>

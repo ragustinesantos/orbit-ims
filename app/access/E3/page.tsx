@@ -15,7 +15,6 @@ export default function E3Access() {
           height: '100vh',
           padding: 32,
           background: '#fafbfd',
-          overflowY: 'scroll',
         }}
       >
         <E3AccessPage />

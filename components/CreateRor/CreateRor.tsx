@@ -226,7 +226,7 @@ export default function CreateRor() {
           root: classnames.rootText,
         }}
       >
-        Recurring Order Requisition
+        Create Recurring Order Requisition
       </Text>
       <div className={classnames.progressBar}>
         <WizardProgress stepList={steps} currentStep={currentStep + 1} />

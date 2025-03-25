@@ -135,7 +135,6 @@ export default function OdorComponent2({
 
   const template = (
     <div>
-      <div className={classnames.templateTitle}>Non-Inventory Item</div>
       <SimpleGrid cols={4} spacing="xs" verticalSpacing="xs">
         <TextInput
           label="Item Name"
@@ -346,6 +345,7 @@ export default function OdorComponent2({
 
   return (
     <div className={classnames.outerScrollBox}>
+      {showTemplate && <div className={classnames.templateTitle}>Non-Inventory Item</div>}
       <div className={`${classnames.scrollableContainer} scrollableContainer`}>
         {showTemplate ? (
           template

@@ -52,6 +52,7 @@
   align-items: end;
   justify-content: flex-start;
   width: 100%;
+  margin-bottom: 20px;
 }
 
 .outerScrollBox {
@@ -92,8 +93,7 @@
 .scrollableContainer {
   overflow-y: scroll;
   scrollbar-width: none;
-  min-height: 50vh;
-  max-height: 56vh;
+  height: 48vh;
   width: 100%;
 }
 
@@ -112,7 +112,44 @@
   border: 0.2rem solid #fff;
 }
 
-.imgModalID:hover {
-  text-decoration: underline;
+.imgModalID {
   cursor: pointer;
+  color: #3c96aa;
+  font-weight: 500;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  max-width: 100%;
+}
+
+.imgModalID:hover {
+  color: #54d0ed;
+  transform: translateY(-1px);
+}
+
+.thead {
+  color: white;
+  background: linear-gradient(135deg, #2c3e50, #4a6572);
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  text-align: left;
+  font-size: 0.875rem;
+  letter-spacing: 0.5px;
+  border: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.td {
+  border-bottom: 1px solid #e9ecef;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
