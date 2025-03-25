@@ -226,20 +226,20 @@ export default function CreateRor() {
           root: classnames.rootText,
         }}
       >
-        Recurring Order Requisition
+        Create Recurring Order Requisition
       </Text>
       <div className={classnames.progressBar}>
         <WizardProgress stepList={steps} currentStep={currentStep + 1} />
       </div>
       <div className={classnames.outerScrollBox}>
+        <Text
+          classNames={{
+            root: classnames.stepHeader,
+          }}
+        >
+          {stepHeaders[currentStep]}
+        </Text>
         <div className={`${classnames.scrollableContainer} scrollableContainer`}>
-          <Text
-            classNames={{
-              root: classnames.stepHeader,
-            }}
-          >
-            {stepHeaders[currentStep]}
-          </Text>
           <div className={classnames.rorTemplateContainer}>{currentContent}</div>
         </div>
       </div>

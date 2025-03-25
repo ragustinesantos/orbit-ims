@@ -12,9 +12,10 @@ export default function CreateRorTemplatePage() {
           display: 'flex',
           flex: 1,
           justifyContent: 'flex-start',
-          alignItems: 'center',
           height: '100vh',
-          padding: 32,
+          width: '100vw',
+          background: '#fafbfd',
+          padding: '1.5rem',
         }}
       >
         <CreateRorTemplate />

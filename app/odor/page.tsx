@@ -189,19 +189,14 @@ export default function OdorPage() {
           flexDirection: 'column',
           justifyContent: 'space-between',
           height: '100vh',
-          padding: 32,
+          width: '100vw',
+          background: '#fafbfd',
+          padding: '1.5rem',
         }}
       >
         <div>
-          <Text classNames={{ root: classnames.odorText }}>On Demand Order Requisition</Text>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              marginTop: '2vh',
-              marginBottom: '2vh',
-            }}
-          >
+          <Text classNames={{ root: classnames.rootText }}>Create On-Demand Order Requisition</Text>
+          <div className={classnames.progressBar}>
             <WizardProgress stepList={stepList} currentStep={pageNumber + 1} />
           </div>
           {nav_array[pageNumber]}

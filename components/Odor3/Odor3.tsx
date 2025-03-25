@@ -144,8 +144,8 @@ export default function OdorComponent3({
   });
 
   return (
-    <div className={classnames.outerScrollingBox}>
-      <div className={`${classnames.scrollableContainer} scrollableContainer`}>
+    <div className={classnames.outerScrollBox}>
+      <div className={`${classnames.scrollableContainer}`}>
         <Text className={classnames.templateHeading}>Order Review</Text>
         <Group>
           <TextInput
@@ -176,7 +176,7 @@ export default function OdorComponent3({
         {itemOrders.length > 0 && (
           <div>
             <Text className={classnames.templateHeading}>Inventory Items</Text>
-            <Table striped>
+            <Table striped classNames={{ thead: classnames.thead, td: classnames.td }}>
               <Table.Thead>
                 <Table.Tr>
                   <Table.Th>Item ID</Table.Th>
@@ -195,7 +195,7 @@ export default function OdorComponent3({
         {newItemOrders.length > 0 && (
           <div>
             <Text className={classnames.templateHeading}>Non-Inventory Items</Text>
-            <Table striped>
+            <Table striped classNames={{ thead: classnames.thead, td: classnames.td }}>
               <Table.Thead>
                 <Table.Tr>
                   <Table.Th>Item Name</Table.Th>

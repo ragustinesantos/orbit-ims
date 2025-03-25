@@ -8,40 +8,78 @@
 .orderTotalLabel {
   font-size: 14px;
   font-weight: 700;
-  margin-top: 0.8vh;
+  margin-top: 0.4rem;
 }
 
 .orderTotalText {
   font-size: 14px;
-  margin-top: 0.3vh;
-}
-
-.templateTitle {
-  font-size: 32px;
-  font-weight: bold;
-  text-align: center;
+  margin-top: 0.2rem;
 }
 
 .templateHeading {
-  font-size: 28px;
+  font-size: 32px;
   font-weight: bold;
+  border-bottom: 1px solid #dfd9d9;
+  padding-bottom: 0.3rem;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+
+.templateHeadingOverride {
+  font-size: 32px;
+  font-weight: bold;
+  border-bottom: 1px solid #dfd9d9;
+  padding-bottom: 0.3rem;
+  margin-bottom: 0.5rem;
 }
 
 .remarksStyle {
   width: 28.5%;
 }
 
-.outerScrollingBox {
+.outerScrollBox {
   border: 2px solid rgb(237, 237, 232);
-  padding: 8px;
-  border-radius: 20px;
+  width: 100%;
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s ease;
+  transform: translateY(20px);
+  opacity: 0;
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.outerScrollBox:nth-child(1) {
+  animation-delay: 0.2s;
+}
+
+.outerScrollBox:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
 /* Kyles Reference for :https://dev.to/sagnik77/custom-scrollbars-with-css-the-easy-way-3ano  */
 /* the custom CSS  */
 .scrollableContainer {
+  display: flex;
+  flex-direction: column;
   overflow-y: scroll;
-  height: 58vh;
+  scrollbar-width: none;
+  min-height: 50vh;
+  max-height: 56vh;
+  width: 100%;
 }
 
 .scrollableContainer::-webkit-scrollbar {
@@ -59,7 +97,44 @@
   border: 0.2rem solid #fff;
 }
 
-.imgModalID:hover {
-  text-decoration: underline;
+.imgModalID {
   cursor: pointer;
+  color: #3c96aa;
+  font-weight: 500;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  max-width: 100%;
+}
+
+.imgModalID:hover {
+  color: #54d0ed;
+  transform: translateY(-1px);
+}
+
+.thead {
+  color: white;
+  background: linear-gradient(135deg, #2c3e50, #4a6572);
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  text-align: left;
+  font-size: 0.875rem;
+  letter-spacing: 0.5px;
+  border: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.td {
+  border-bottom: 1px solid #e9ecef;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

@@ -1,19 +1,67 @@
 .rootMain {
-  flex: 1;
+  width: 100%;
+  height: 100%;
 }
 
-.rootOuterGroup {
-  height: 95vh;
+.rootMainGroup {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: baseline;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 1500px;
+  gap: 1rem;
+  margin: 0 auto;
 }
 
 .rootGroup {
-  width: 100%;
-  align-items: baseline;
+  display: flex;
   flex-direction: column;
+  width: 100%;
+  height: 80vh;
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s ease;
+  transform: translateY(20px);
+  opacity: 0;
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rootGroup:nth-child(1) {
+  animation-delay: 0.2s;
+}
+
+.rootGroup:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.rootContent {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.rootInputSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
 }
 
 .searchGroup {
@@ -24,15 +72,44 @@
 }
 
 .rootText {
-  font-size: 48px;
-  font-weight: bold;
-  text-decoration: underline;
-  text-underline-offset: 8px;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 3px solid #3c96aa;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  width: 100%;
 }
 
 .rootTable {
+  overflow-y: scroll;
+  scrollbar-width: none;
+  max-height: 45vh;
   width: 100%;
-  table-layout: auto;
+}
+
+.thead {
+  color: white;
+  background: linear-gradient(135deg, #2c3e50, #4a6572);
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  text-align: left;
+  font-size: 0.875rem;
+  letter-spacing: 0.5px;
+  border: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.td {
+  border-bottom: 1px solid #e9ecef;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .selectRoot {
@@ -43,7 +120,20 @@
   align-self: self-end;
 }
 
-.imgModalID:hover {
-  text-decoration: underline;
+.imgModalID {
   cursor: pointer;
+  color: #3c96aa;
+  font-weight: 500;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  max-width: 100%;
+}
+
+.imgModalID:hover {
+  color: #54d0ed;
+  transform: translateY(-1px);
 }

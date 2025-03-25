@@ -165,9 +165,9 @@ export default function OdorComponent({ itemOrders, setitemOrders }: setpropstyp
   });
 
   return (
-    <div className={classnames.outerScrollingBox}>
+    <div className={classnames.outerScrollBox}>
+      <div className={classnames.templateTitle}>Inventory Item</div>
       <div className={`${classnames.scrollableContainer} scrollableContainer`}>
-        <div className={classnames.templateTitle}>Inventory Item</div>
         <Group
           classNames={{
             root: classnames.searchGroup,
@@ -202,7 +202,7 @@ export default function OdorComponent({ itemOrders, setitemOrders }: setpropstyp
         </Group>
         <div>
           {itemOrders.length > 0 && (
-            <Table striped>
+            <Table striped classNames={{ thead: classnames.thead, td: classnames.td }}>
               <Table.Thead>
                 <Table.Tr>
                   <Table.Th>Item ID</Table.Th>
