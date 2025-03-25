@@ -163,6 +163,25 @@ export default function RorTemplateModal({
     body: mappedItemList,
   };
 
+  // Using table data to display approval status for E2 and E3
+  const e2ApprovalData: TableData = {
+    head: [
+      recurringOrderTemplate.isTemplateApprovedE2 === null
+        ? 'E2 Approval'
+        : `${recurringOrderTemplate.isTemplateApprovedE2 ? 'Approved' : 'Rejected'} By: ${approvalNameE2}`,
+    ],
+    body: [[<ApprovalBadge key={`approval-e2-${recurringOrderTemplate.rorTemplateId}`} isApproved={recurringOrderTemplate.isTemplateApprovedE2} />]],
+  };
+
+  const e3ApprovalData: TableData = {
+    head: [
+      recurringOrderTemplate.isTemplateApprovedE3 === null
+        ? 'E3 Approval'
+        : `${recurringOrderTemplate.isTemplateApprovedE3 ? 'Approved' : 'Rejected'} By: ${approvalNameE3}`,
+    ],
+    body: [[<ApprovalBadge key={`approval-e3-${recurringOrderTemplate.rorTemplateId}`} isApproved={recurringOrderTemplate.isTemplateApprovedE3} />]],
+  };
+
   return (
     <Modal
       centered
@@ -212,34 +231,22 @@ export default function RorTemplateModal({
           </SimpleGrid>
           <Table striped classNames={{ table: classnames.rootTable }} data={tableData} />
           <Text classNames={{ root: classnames.rootHeaderTxt }}>Approvals:</Text>
-          <div className={classnames.approvalCardContainer}>
-            <div className={classnames.approvalCard}>
-              <Text classNames={{ root: classnames.rootHeaderTxt }}>
-                {recurringOrderTemplate.isTemplateApprovedE2 === null
-                  ? 'E2 Approval'
-                  : recurringOrderTemplate.isTemplateApprovedE2 === true
-                    ? `Approved by ${approvalNameE2}`
-                    : `Rejected by ${approvalNameE2}`}
-              </Text>
-              <ApprovalBadge
-                key={`approval-${recurringOrderTemplate.rorTemplateId}`}
-                isApproved={recurringOrderTemplate.isTemplateApprovedE2}
-              />
-            </div>
-            <div className={classnames.approvalCard}>
-              <Text classNames={{ root: classnames.rootHeaderTxt }}>
-                {recurringOrderTemplate.isTemplateApprovedE3 === null
-                  ? 'E3 Approval'
-                  : recurringOrderTemplate.isTemplateApprovedE3 === true
-                    ? `Approved by ${approvalNameE3}`
-                    : `Rejected by ${approvalNameE3}`}
-              </Text>
-              <ApprovalBadge
-                key={`approval-${recurringOrderTemplate.rorTemplateId}`}
-                isApproved={recurringOrderTemplate.isTemplateApprovedE3}
-              />
-            </div>
-          </div>
+          <Group gap="xl">
+            <Table
+              withTableBorder
+              withColumnBorders
+              withRowBorders
+              classNames={{ table: classnames.rootApprovalTable, td: classnames.tableTd }}
+              data={e2ApprovalData}
+            />
+            <Table
+              withTableBorder
+              withColumnBorders
+              withRowBorders
+              classNames={{ table: classnames.rootApprovalTable, td: classnames.tableTd }}
+              data={e3ApprovalData}
+            />
+          </Group>
         </>
       ) : (
         <Group classNames={{ root: classnames.loadingContainer }}>
