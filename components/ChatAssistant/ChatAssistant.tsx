@@ -37,7 +37,7 @@ export default function ChatAssistant() {
             content: `${defaultMessage} \n ${JSON.stringify(inventory)} \n ${JSON.stringify(supplierList)} \n ${chat}`,
           },
         ],
-        model: 'gpt-4o',
+        model: 'gpt-4o-mini',
         temperature: 0.5,
       };
 
@@ -149,6 +149,7 @@ export default function ChatAssistant() {
         style={{
           flexDirection: 'column',
           height: '85vh',
+          padding: 16,
           marginBottom: 20,
           overflowY: 'scroll',
           scrollbarWidth: 'none',
@@ -163,7 +164,7 @@ export default function ChatAssistant() {
           </section>
         )}
       </section>
-      <section>
+      <section style={{ paddingBottom: 10, paddingRight: 16, paddingLeft: 16 }}>
         <TextInput
           style={{ paddingBottom: 10 }}
           placeholder="Enter message"

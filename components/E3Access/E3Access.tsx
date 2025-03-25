@@ -244,7 +244,7 @@ export default function E3AccessPage() {
       .filter((row) => row.length > 0) || [];
 
   // Size for pagination
-  const pageSize = 5;
+  const pageSize = 4;
 
   // Template Pagination
   const templateTotalPages = Math.ceil(mappedTemplates.length / pageSize);
@@ -263,15 +263,19 @@ export default function E3AccessPage() {
   );
 
   return (
-    <main>
-      <Text className={classnames.rootText}>E3 Access</Text>
+    <main className={classnames.rootMain}>
+      <Text className={classnames.rootText}>Employee Level 3 Access</Text>
       <div className={classnames.rootMainGroup}>
         {loading ? (
           <Group className={classnames.loadingContainer}>
             <img src="/assets/loading/Spin@1x-1.0s-200px-200px.gif" alt="Loading..." />
           </Group>
         ) : (
-          <>
+          <Group
+            classNames={{
+              root: classnames.rootGroup,
+            }}
+          >
             <div className={classnames.rootSectionGroup}>
               <div style={{ width: '100%', marginBottom: '16px' }}>
                 <Text className={classnames.rootSectionText}>ROR Template</Text>
@@ -352,7 +356,7 @@ export default function E3AccessPage() {
                 <Text className={classnames.noTemplatesText}>No ODORs Need to be Approved</Text>
               )}
             </div>
-          </>
+          </Group>
         )}
       </div>
 

@@ -1,3 +1,8 @@
+.rootMain {
+  width: 100%;
+  height: 100%;
+}
+
 .rootText {
   font-size: 2.5rem;
   font-weight: 700;
@@ -7,20 +12,31 @@
   margin-bottom: 1rem;
   width: 100%;
 }
-  
+
 .rootSectionText {
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 16px;
   display: block;
 }
-  
+
 .rootMainGroup {
   display: flex;
   flex-direction: column;
-  width: 80vw;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 1500px;
+  gap: 1rem;
+  margin: 0 auto;
 }
-  
+
+.rootGroup {
+  overflow-y: scroll;
+  scrollbar-width: none;
+  height: 80vh;
+  padding: 16px 0px;
+}
+
 .rootSectionGroup {
   display: flex;
   flex-direction: column;
@@ -28,14 +44,14 @@
   background-color: #fff;
   padding: 16px;
   border-radius: 20px;
-  max-height: 55vh;
+  max-height: 40vh;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   transition: box-shadow 0.3s ease;
   transform: translateY(20px);
   opacity: 0;
   animation: fadeInUp 0.5s ease-out forwards;
 }
-  
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -48,13 +64,25 @@
   }
 }
 
+.rootSectionGroup:nth-child(1) {
+  animation-delay: 0.2s;
+}
+
+.rootSectionGroup:nth-child(2) {
+  animation-delay: 0.4s;
+}
+
+.rootSectionGroup:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
 .rootPaginationGroupRequisition {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
 }
-  
+
 .rootTableGroup {
   display: flex;
   flex: 2;
@@ -65,50 +93,60 @@
   overflow-y: scroll;
   scrollbar-width: none;
 }
-  
+
+.templateTextId:hover {
+  color: #3c96aa;
+  cursor: pointer;
+}
+
+.odorTextId:hover {
+  color: #3c96aa;
+  cursor: pointer;
+}
+
 @media (max-width: 1024px) {
   .rootTableGroup {
     flex-direction: column;
     justify-content: flex-start;
   }
 }
-  
+
 .rootRequisitionTable {
   width: 100%;
   min-width: 800px;
   margin-bottom: 20px;
 }
-  
+
 .rootRequisitionThead {
   color: white;
-  background: linear-gradient(135deg, #2c3e50, #4a6572);    
+  background: linear-gradient(135deg, #2c3e50, #4a6572);
   position: sticky;
   top: 0;
   z-index: 1;
 }
-  
+
 .rootRequisitionTd {
   overflow-x: scroll;
   scrollbar-width: none;
   white-space: nowrap;
 }
-  
+
 .rootTextId {
   cursor: pointer;
 }
-  
+
 .rootTextId:hover {
   color: #3c96aa;
 }
-  
+
 .rootPoId {
   cursor: pointer;
 }
-  
+
 .rootPoId:hover {
   color: #3c96aa;
 }
-  
+
 .rootPoTable {
   height: 30vh;
   width: 100%;
@@ -116,7 +154,7 @@
   scrollbar-width: none;
   gap: 40px;
 }
-  
+
 .loadingContainer {
   display: flex;
   flex: 1;
@@ -125,9 +163,9 @@
   height: 65vh;
   width: 80vw;
 }
-  
+
 .approveButton {
-  background-color: #54D0ED;
+  background-color: #54d0ed;
   color: white;
   border: none;
   padding: 2px 18px;
@@ -137,13 +175,13 @@
   cursor: pointer;
   border-radius: 4px;
 }
-  
+
 .approveButton:hover {
   background-color: #3c96aa;
 }
-  
+
 .rejectButton {
-  background-color: #6D6875;
+  background-color: #6d6875;
   color: white;
   border: none;
   padding: 2px 18px;
@@ -153,13 +191,13 @@
   cursor: pointer;
   border-radius: 4px;
 }
-  
+
 .rejectButton:hover {
   background-color: #5e5a65;
 }
-  
+
 .closeTicketButton {
-  background-color: #FFA62B;
+  background-color: #ffa62b;
   color: white;
   border: none;
   padding: 2px 18px;
@@ -169,25 +207,7 @@
   cursor: pointer;
   border-radius: 4px;
 }
-  
+
 .closeTicketButton:hover {
   background-color: #e89726;
 }
-
-.noTemplatesText {
-  text-align: center;
-  font-size: 18px;
-  font-weight: 500;
-  color: #888;
-  margin-top: 20px;
-  padding: 10px;
-  border: 1px dashed #ccc;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-}
-
-.templateTextId:hover{
-  color: #3c96aa;
-  cursor: pointer;
-}  
-  

@@ -15,7 +15,6 @@ export default function E2Access() {
           height: '100vh',
           padding: 32,
           background: '#fafbfd',
-          overflowY: 'scroll',
         }}
       >
         <E2AccessPage />

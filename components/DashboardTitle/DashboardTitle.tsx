@@ -59,7 +59,7 @@ export default function DashboardTitle() {
           {formattedDate} | {formattedTime}
         </Title>
         <div className={classnames.bellspace}>
-          <Bell></Bell>
+          <Bell />
         </div>
       </div>
     </Group>

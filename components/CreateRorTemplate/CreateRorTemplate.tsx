@@ -10,6 +10,7 @@ import {
   Item,
   RecurringOrderTemplateToEdit,
 } from '@/app/_utils/schema';
+import { createRorTemplate } from '@/app/_utils/utility';
 import CustomNotification from '@/components/CustomNotification/CustomNotification';
 import ImgModal from '../ImgModal/ImgModal';
 import TableDeleteBtn from '../TableDeleteBtn/TableDeleteBtn';
@@ -94,15 +95,9 @@ export default function CreateRorTemplate() {
         itemList,
       };
 
-      // Create a request to add the newRorTemplate
-      const request = new Request('/api/ror-templates', {
-        method: 'POST',
-        body: JSON.stringify(newRorTemplate),
-      });
-
       try {
         // Fetch the request created
-        const response = await fetch(request);
+        const response = await createRorTemplate(newRorTemplate);
 
         // If it is successful provide feedback
         if (response.ok) {
@@ -165,22 +160,24 @@ export default function CreateRorTemplate() {
       (supplier) => supplier.supplierId === currentItem?.supplierId
     );
     return [
-      <Text
-        onClick={() => toggleImgModalState(itemId)}
-        classNames={{ root: classnames.imgModalID }}
-      >
-        {currentItem?.itemName}
-      </Text>,
+      <>
+        <Text
+          onClick={() => toggleImgModalState(itemId)}
+          classNames={{ root: classnames.imgModalID }}
+        >
+          {currentItem?.itemName}
+        </Text>
+        <ImgModal
+          item={currentItem}
+          isOpened={!!modalStateTracker[itemId]}
+          isClosed={() => setModalStateTracker((prev) => ({ ...prev, [itemId]: false }))}
+        />
+      </>,
       currentItem?.category,
       currentItem?.supplyUnit,
       currentItem?.packageUnit,
       currentSupplier?.supplierName,
       <TableDeleteBtn itemId={currentItem?.itemId} handleDelete={handleDeleteFromItemList} />,
-      <ImgModal
-        item={currentItem}
-        isOpened={!!modalStateTracker[itemId]}
-        isClosed={() => setModalStateTracker((prev) => ({ ...prev, [itemId]: false }))}
-      />,
     ];
   });
 
@@ -192,9 +189,16 @@ export default function CreateRorTemplate() {
 
   return (
     <main className={classnames.rootMain}>
+      <Text
+        classNames={{
+          root: classnames.rootText,
+        }}
+      >
+        Create Recurring Order Template
+      </Text>
       <Group
         classNames={{
-          root: classnames.rootOuterGroup,
+          root: classnames.rootMainGroup,
         }}
       >
         <Group
@@ -202,59 +206,74 @@ export default function CreateRorTemplate() {
             root: classnames.rootGroup,
           }}
         >
-          <Text
-            classNames={{
-              root: classnames.rootText,
-            }}
-          >
-            Create ROR Template
-          </Text>
-          <TextInput
-            label="Template Name"
-            withAsterisk
-            placeholder="Enter Template Name..."
-            value={templateName}
-            onChange={handleTemplateNameChange}
-          />
           <Group
             classNames={{
-              root: classnames.searchGroup,
+              root: classnames.rootContent,
             }}
           >
-            <Select
-              label="Add an Item"
-              placeholder="Select an item from the list..."
-              data={inventory?.map((item) => ({
-                value: item.itemId,
-                label: item.itemName,
-              }))}
-              allowDeselect
-              searchable
-              value={searchValue || null}
-              onChange={setSearchValue}
+            <Group
               classNames={{
-                root: classnames.selectRoot,
+                root: classnames.rootInputSection,
               }}
-              size="sm"
-              withAsterisk
-            />
-            <Button variant="filled" color="#1B4965" size="sm" onClick={handleAddToItemList}>
-              +
+            >
+              <TextInput
+                label="Template Name"
+                withAsterisk
+                placeholder="Enter Template Name..."
+                value={templateName}
+                onChange={handleTemplateNameChange}
+              />
+              <Group
+                classNames={{
+                  root: classnames.searchGroup,
+                }}
+              >
+                <Select
+                  label="Add an Item"
+                  placeholder="Select an item from the list..."
+                  data={inventory?.map((item) => ({
+                    value: item.itemId,
+                    label: item.itemName,
+                  }))}
+                  allowDeselect
+                  searchable
+                  value={searchValue || null}
+                  onChange={setSearchValue}
+                  classNames={{
+                    root: classnames.selectRoot,
+                  }}
+                  size="sm"
+                  withAsterisk
+                />
+                <Button variant="filled" color="#1B4965" size="sm" onClick={handleAddToItemList}>
+                  +
+                </Button>
+              </Group>
+              {itemList.length > 0 && (
+                <section className={classnames.rootTable}>
+                  <Table
+                    stickyHeader
+                    striped
+                    horizontalSpacing="sm"
+                    verticalSpacing="sm"
+                    classNames={{ thead: classnames.thead, td: classnames.td }}
+                    data={tableData}
+                  />
+                </section>
+              )}
+            </Group>
+            <Button
+              classNames={{ root: classnames.submitButton }}
+              variant="filled"
+              color="#1B4965"
+              size="md"
+              mt="lg"
+              onClick={handleCreateTemplate}
+            >
+              Create Template
             </Button>
           </Group>
-          {itemList.length > 0 && (
-            <Table striped classNames={{ table: classnames.rootTable }} data={tableData} />
-          )}
         </Group>
-        <Button
-          classNames={{ root: classnames.submitButton }}
-          variant="filled"
-          color="#1B4965"
-          size="md"
-          onClick={handleCreateTemplate}
-        >
-          Create Template
-        </Button>
       </Group>
       {showNotification && notificationMessage}
     </main>

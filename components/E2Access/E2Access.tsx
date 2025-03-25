@@ -278,7 +278,7 @@ export default function E2AccessPage() {
       .filter((row) => row.length > 0) || [];
 
   // Size for pagination
-  const pageSize = 5;
+  const pageSize = 4;
 
   // Template Pagination
   const templateTotalPages = Math.ceil(mappedTemplates.length / pageSize);
@@ -297,15 +297,19 @@ export default function E2AccessPage() {
   );
 
   return (
-    <main>
-      <Text className={classnames.rootText}>E2 Access</Text>
+    <main className={classnames.rootMain}>
+      <Text className={classnames.rootText}>Employee Level 2 Access</Text>
       <div className={classnames.rootMainGroup}>
         {loading ? (
           <Group classNames={{ root: classnames.loadingContainer }}>
             <img src="/assets/loading/Spin@1x-1.0s-200px-200px.gif" alt="Loading..." />
           </Group>
         ) : (
-          <>
+          <Group
+            classNames={{
+              root: classnames.rootGroup,
+            }}
+          >
             <div className={classnames.rootSectionGroup}>
               <div style={{ width: '100%', marginBottom: '16px' }}>
                 <Text className={classnames.rootSectionText}>ROR Template</Text>
@@ -386,7 +390,7 @@ export default function E2AccessPage() {
                 </Group>
               </div>
             </div>
-          </>
+          </Group>
         )}
       </div>
 

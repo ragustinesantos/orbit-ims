@@ -123,7 +123,7 @@ export default function StockIn() {
   };
   // Find item to search in inventory and set as selectedItem
   useEffect(() => {
-    const matchedItem = inventory?.find((item) => item.itemName === searchValue);
+    const matchedItem = inventory?.find((item) => item.itemId === searchValue);
     setSelectedItem(matchedItem || { ...defaultItem });
     setRefresh((prev: number) => prev + 1);
   }, [searchValue]);
@@ -284,7 +284,7 @@ export default function StockIn() {
               label="Search Item"
               placeholder="Select an item from the list..."
               data={inventory?.map((item) => ({
-                value: item.itemName,
+                value: item.itemId,
                 label: item.itemName,
               }))}
               allowDeselect

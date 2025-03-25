@@ -19,10 +19,10 @@ jobs:
         with:
           node-version-file: '.nvmrc'
           cache: 'npm'
-          
+
       - name: Install dependencies
         run: npm install
-        
+
       - name: Run build
         run: npm run build
         env:
@@ -33,7 +33,7 @@ jobs:
           NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{ secrets.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET }}
           NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID }}
           NEXT_PUBLIC_FIREBASE_APP_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }}
-          
+
       - name: Run Tests
         run: npm run test
         env:

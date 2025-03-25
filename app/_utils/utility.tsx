@@ -20,6 +20,7 @@ import {
   PurchaseOrderToEdit,
   RecurringOrder,
   RecurringOrderTemplate,
+  RecurringOrderTemplateToEdit,
   RecurringOrderToEdit,
   StockInOrder,
   StockOutOrder,
@@ -204,6 +205,22 @@ export const fetchRorTemplates = async (
   } catch (error) {
     console.log(error);
   }
+};
+
+// Create ROR template
+export const createRorTemplate = async (newRorTemplate: RecurringOrderTemplateToEdit) => {
+  // Create a request to add the newRorTemplate
+  const request = new Request('/api/ror-templates', {
+    method: 'POST',
+    body: JSON.stringify(newRorTemplate),
+  });
+
+  const response = await fetch(request);
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`HTTP Error: ${response.status} - ${response.statusText}. ${errorText}`);
+  }
+  return response;
 };
 
 export const patchRorTemplateApproval = async (

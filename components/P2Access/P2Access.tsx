@@ -163,7 +163,7 @@ export default function P2AccessPage() {
 
   return (
     <main>
-      <Text classNames={{ root: classnames.rootText }}>P2 Access</Text>
+      <Text classNames={{ root: classnames.rootText }}>Purchasing Level 2 Access</Text>
       <div className={classnames.rootMainGroup}>
         <div className={classnames.rootSectionGroup}>
           <div style={{ width: '100%', marginBottom: '16px' }}>
