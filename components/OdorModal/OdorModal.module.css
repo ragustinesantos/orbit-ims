@@ -1,7 +1,11 @@
 .rootText {
-  font-size: 28px;
-  font-weight: bold;
-  margin-bottom: 24px;
+  font-size: 2rem;
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 3px solid #3c96aa;
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+  width: 100%;
 }
 
 .rootConfirmationText {
@@ -12,8 +16,26 @@
 
 .rootTable {
   width: 100%;
+  overflow-y: scroll;
   table-layout: auto;
   margin-bottom: 36px;
+}
+
+.thead {
+  color: white;
+  background: linear-gradient(135deg, #2c3e50, #4a6572);
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.td {
+  border-bottom: 1px solid #e9ecef;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .rootApprovalTable {
@@ -28,7 +50,10 @@
 
 .rootHeaderTxt {
   margin-bottom: 18px;
-  font-weight: 800;
+  font-weight: 600;
+  border-bottom: 1px solid #dfd9d9;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .rootBtnArea {

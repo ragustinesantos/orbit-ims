@@ -165,23 +165,24 @@ export default function OdorModal({
       (supplier) => supplier.supplierId === currentItem?.supplierId
     );
     return [
-      <Text
-        onClick={() => toggleImgModalState(item.itemId)}
-        classNames={{ root: classnames.imgModalID }}
-      >
-        {' '}
-        {currentItem?.itemName}
-      </Text>,
+      <>
+        <ImgModal
+          item={currentItem}
+          isOpened={!!modalStateTracker[item.itemId]}
+          isClosed={() => setModalStateTracker((prev) => ({ ...prev, [item.itemId]: false }))}
+        />
+        <Text
+          onClick={() => toggleImgModalState(item.itemId)}
+          classNames={{ root: classnames.imgModalID }}
+        >
+          {currentItem?.itemName}
+        </Text>
+      </>,
       currentItem?.category,
       currentItem?.supplyUnit,
       currentItem?.packageUnit,
       currentSupplier?.supplierName,
       item.orderQty,
-      <ImgModal
-        item={currentItem}
-        isOpened={!!modalStateTracker[item.itemId]}
-        isClosed={() => setModalStateTracker((prev) => ({ ...prev, [item.itemId]: false }))}
-      />,
     ];
   });
 
@@ -328,14 +329,34 @@ export default function OdorModal({
             <TextInput disabled label="Date" value={orDate} size="md" />
             <TextInput disabled label="Requisition ID" value={currentOr?.requisitionId} size="md" />
           </SimpleGrid>
-          <Text classNames={{ root: classnames.rootHeaderTxt }}>Inventory Items:</Text>
-          <Table striped classNames={{ table: classnames.rootTable }} data={inventoryTableData} />
-          <Text classNames={{ root: classnames.rootHeaderTxt }}>Non-Inventory Items:</Text>
-          <Table
-            striped
-            classNames={{ table: classnames.rootTable }}
-            data={nonInventoryTableData}
-          />
+          {onDemandOrder && onDemandOrder?.itemOrders.length > 0 && (
+            <>
+              <Text classNames={{ root: classnames.rootHeaderTxt }}>Inventory Items:</Text>
+              <Table
+                striped
+                classNames={{
+                  table: classnames.rootTable,
+                  td: classnames.td,
+                  thead: classnames.thead,
+                }}
+                data={inventoryTableData}
+              />
+            </>
+          )}
+          {onDemandOrder && onDemandOrder?.newItemOrders.length > 0 && (
+            <>
+              <Text classNames={{ root: classnames.rootHeaderTxt }}>Non-Inventory Items:</Text>
+              <Table
+                striped
+                classNames={{
+                  table: classnames.rootTable,
+                  td: classnames.td,
+                  thead: classnames.thead,
+                }}
+                data={nonInventoryTableData}
+              />
+            </>
+          )}
           <Text classNames={{ root: classnames.rootHeaderTxt }}>Order Summary:</Text>
           <Group classNames={{ root: classnames.rootSection }}>
             <div>

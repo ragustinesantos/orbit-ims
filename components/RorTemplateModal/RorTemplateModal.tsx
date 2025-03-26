@@ -140,19 +140,21 @@ export default function RorTemplateModal({
     );
 
     return [
-      <Text key={`item-${itemId}`} onClick={() => toggleImgModalState(itemId)}>
-        {currentItem?.itemName ?? 'Unknown Item'}
-      </Text>,
+      <>
+        <ImgModal
+          key={`img-${itemId}`}
+          item={currentItem}
+          isOpened={!!modalStateTracker[itemId]}
+          isClosed={() => setModalStateTracker((prev) => ({ ...prev, [itemId]: false }))}
+        />
+        <Text className={classnames.rootTextItemName} key={`item-${itemId}`} onClick={() => toggleImgModalState(itemId)}>
+          {currentItem?.itemName ?? 'Unknown Item'}
+        </Text>
+      </>,
       currentItem?.category ?? 'N/A',
       currentItem?.supplyUnit ?? 'N/A',
       currentItem?.packageUnit ?? 'N/A',
       currentSupplier?.supplierName ?? 'Unknown Supplier',
-      <ImgModal
-        key={`img-${itemId}`}
-        item={currentItem}
-        isOpened={!!modalStateTracker[itemId]}
-        isClosed={() => setModalStateTracker((prev) => ({ ...prev, [itemId]: false }))}
-      />,
     ];
   });
 
@@ -170,7 +172,14 @@ export default function RorTemplateModal({
         ? 'E2 Approval'
         : `${recurringOrderTemplate.isTemplateApprovedE2 ? 'Approved' : 'Rejected'} By: ${approvalNameE2}`,
     ],
-    body: [[<ApprovalBadge key={`approval-e2-${recurringOrderTemplate.rorTemplateId}`} isApproved={recurringOrderTemplate.isTemplateApprovedE2} />]],
+    body: [
+      [
+        <ApprovalBadge
+          key={`approval-e2-${recurringOrderTemplate.rorTemplateId}`}
+          isApproved={recurringOrderTemplate.isTemplateApprovedE2}
+        />,
+      ],
+    ],
   };
 
   const e3ApprovalData: TableData = {
@@ -179,7 +188,14 @@ export default function RorTemplateModal({
         ? 'E3 Approval'
         : `${recurringOrderTemplate.isTemplateApprovedE3 ? 'Approved' : 'Rejected'} By: ${approvalNameE3}`,
     ],
-    body: [[<ApprovalBadge key={`approval-e3-${recurringOrderTemplate.rorTemplateId}`} isApproved={recurringOrderTemplate.isTemplateApprovedE3} />]],
+    body: [
+      [
+        <ApprovalBadge
+          key={`approval-e3-${recurringOrderTemplate.rorTemplateId}`}
+          isApproved={recurringOrderTemplate.isTemplateApprovedE3}
+        />,
+      ],
+    ],
   };
 
   return (
@@ -229,7 +245,15 @@ export default function RorTemplateModal({
               size="md"
             />
           </SimpleGrid>
-          <Table striped classNames={{ table: classnames.rootTable }} data={tableData} />
+          <Table
+            striped
+            classNames={{
+              table: classnames.rootTable,
+              td: classnames.td,
+              thead: classnames.thead,
+            }}
+            data={tableData}
+          />
           <Text classNames={{ root: classnames.rootHeaderTxt }}>Approvals:</Text>
           <Group gap="xl">
             <Table
