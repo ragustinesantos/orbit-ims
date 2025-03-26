@@ -179,6 +179,46 @@ export default function E2AccessPage() {
     sortOdor();
   }, [allOdor, allOrs]);
 
+  // Sort ROR Templates by date
+  useEffect(() => {
+    const sortRorTemplates = async () => {
+      try {
+        rorTemplates?.sort((a, b) => {
+
+          // If there are no dates present, set them to default
+          if(!a.date) {
+            a.date = "0"
+          }
+
+          if(!b.date) {
+            b.date = "0"
+          }
+
+          // If both exist, compare by requisition date
+          if (a && b) {
+            return new Date(b.date).getTime() - new Date(a.date).getTime();
+          }
+
+          // If only matchingOrA exists, decide its position
+          if (a) {
+            return 1;
+          }
+          // If only matchingOrB exists, decide its position
+          if (b) {
+            return -1;
+          }
+
+          // If neither exist, they are considered equal
+          return 0;
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    sortRorTemplates();
+  }, [rorTemplates]);
+
   // Retrieve employees with active requisitions
   useEffect(() => {
     const retrieveEmployeeWithReq = async () => {
@@ -203,33 +243,47 @@ export default function E2AccessPage() {
   }, [allOrs]);
 
   // Map templates to table rows
-  const mappedTemplates = rorTemplates.map((template) => [
-    <>
-      <RorTemplateModal
-        recurringOrderTemplate={template}
-        isOpened={!!modalStateTracker[template.rorTemplateId]}
-        isClosed={() =>
-          setModalStateTracker((prev) => ({ ...prev, [template.rorTemplateId]: false }))
-        }
-        handleApprovalE2={handleApproval}
-        handleApprovalE3={undefined}
-        isE2Page={isE2PageView}
-      />
-      {/* Open Modal when clicking the Template ID */}
-      <Text
-        key={`temp-${template.rorTemplateId}`}
-        className={classnames.templateTextId}
-        onClick={() => toggleModalState(template.rorTemplateId)}
-      >
-        {template.rorTemplateId}
-      </Text>
-    </>,
-    <Text key={`name-${template.rorTemplateId}`}>{template.templateName}</Text>,
-    <ApprovalBadge
-      key={`approval-${template.rorTemplateId}`}
-      isApproved={template.isTemplateApprovedE2}
-    />,
-  ]);
+  const mappedTemplates = rorTemplates.map((template) => {
+    const matchingEmployee = employeeWithRequisitions.find(
+      (emp) => emp && emp.employeeId === template.employeeId
+    );
+
+    return [
+      <>
+        <RorTemplateModal
+          recurringOrderTemplate={template}
+          isOpened={!!modalStateTracker[template.rorTemplateId]}
+          isClosed={() =>
+            setModalStateTracker((prev) => ({ ...prev, [template.rorTemplateId]: false }))
+          }
+          handleApprovalE2={handleApproval}
+          handleApprovalE3={undefined}
+          isE2Page={isE2PageView}
+        />
+        {/* Open Modal when clicking the Template ID */}
+        <Text
+          key={`temp-${template.rorTemplateId}`}
+          className={classnames.templateTextId}
+          onClick={() => toggleModalState(template.rorTemplateId)}
+        >
+          {template.rorTemplateId}
+        </Text>
+      </>,
+      <Text key={`emp-${template.rorTemplateId}`}>
+        {matchingEmployee
+          ? `${matchingEmployee.firstName} ${matchingEmployee.lastName}`
+          : 'Unknown'}
+      </Text>,
+      <Text key={`date-${template.rorTemplateId}`}>
+        {template ? formatDate(template.date) : 'Unknown'}
+      </Text>,
+      <Text key={`name-${template.rorTemplateId}`}>{template.templateName}</Text>,
+      <ApprovalBadge
+        key={`approval-${template.rorTemplateId}`}
+        isApproved={template.isTemplateApprovedE2}
+      />,
+    ];
+  });
 
   // Map ODOR data to table rows
   const mappedOdors =
@@ -325,6 +379,8 @@ export default function E2AccessPage() {
                     >
                       <Table.Tr>
                         <Table.Th>Template ID</Table.Th>
+                        <Table.Th>Employee</Table.Th>
+                        <Table.Th>Date Submitted</Table.Th>
                         <Table.Th>Template Name</Table.Th>
                         <Table.Th>Approval Status</Table.Th>
                       </Table.Tr>

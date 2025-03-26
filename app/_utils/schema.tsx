@@ -251,6 +251,8 @@ export const defaultRecurringOrderToEdit: RecurringOrderToEdit = {
 export interface RecurringOrderTemplate {
   rorTemplateId: string;
   templateName: string;
+  date: string;
+  employeeId: string;
   itemList: string[];
   approvalE2: string;
   approvalE3: string;
@@ -260,6 +262,8 @@ export interface RecurringOrderTemplate {
 
 export interface RecurringOrderTemplateToEdit {
   templateName: string;
+  date: string;
+  employeeId: string;
   itemList: string[];
   approvalE2: string;
   approvalE3: string;
@@ -270,6 +274,8 @@ export interface RecurringOrderTemplateToEdit {
 
 export const defaultRecurringOrderTemplateToEdit: RecurringOrderTemplateToEdit = {
   templateName: '',
+  date: '',
+  employeeId: '',
   itemList: [],
   approvalE2: '',
   approvalE3: '',

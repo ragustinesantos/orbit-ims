@@ -12,6 +12,7 @@ export default function HomePage() {
   const { user, signInWithEmail } = useUserAuth() || {};
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -19,12 +20,18 @@ export default function HomePage() {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setIsLoading(false);
       if (firebaseUser) {
-        router.push('/dashboard');
+        setIsAuthenticated(true)
       }
     });
 
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/dashboard');
+    }
+  }, [isAuthenticated])
 
   const handleLogin = async (username: string, pass: string, err: (hasError: boolean) => void) => {
     if (signInWithEmail) {

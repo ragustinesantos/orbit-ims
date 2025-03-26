@@ -17,7 +17,7 @@ import TableDeleteBtn from '../TableDeleteBtn/TableDeleteBtn';
 import classnames from './CreateRorTemplate.module.css';
 
 export default function CreateRorTemplate() {
-  const { inventory, supplierList, setRefresh, rorTemplates } = useInventory();
+  const { currentEmployee, inventory, supplierList, setRefresh, rorTemplates } = useInventory();
 
   const [searchValue, setSearchValue] = useState<string | null>('');
   const [templateName, setTemplateName] = useState<string>('');
@@ -89,9 +89,14 @@ export default function CreateRorTemplate() {
       );
     } else {
       // Else proceed with preparing the newTemplate to add
+      const date: Date = new Date();
+      const formattedDate: string = date.toLocaleString();
+
       const newRorTemplate: RecurringOrderTemplateToEdit = {
         ...defaultRecurringOrderTemplateToEdit,
         templateName,
+        employeeId: currentEmployee?.employeeId || '',
+        date: formattedDate,
         itemList,
       };
 
