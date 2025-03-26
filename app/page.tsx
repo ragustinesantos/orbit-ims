@@ -20,7 +20,9 @@ export default function HomePage() {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setIsLoading(false);
       if (firebaseUser) {
-        setIsAuthenticated(true)
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
       }
     });
 
@@ -31,7 +33,7 @@ export default function HomePage() {
     if (isAuthenticated) {
       router.push('/dashboard');
     }
-  }, [isAuthenticated])
+  }, [isAuthenticated]);
 
   const handleLogin = async (username: string, pass: string, err: (hasError: boolean) => void) => {
     if (signInWithEmail) {
