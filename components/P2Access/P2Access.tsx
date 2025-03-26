@@ -75,6 +75,21 @@ export default function P2AccessPage() {
     fetchData();
   }, [refreshTrigger]);
 
+  // Sort purchase orders
+  useEffect(() => {
+    const sortPo = async () => {
+      try {
+        allPo?.sort((a, b) => {
+          return new Date(b.purchaseOrderDate).getTime() - new Date(a.purchaseOrderDate).getTime();
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    sortPo();
+  }, [allPo]);
+
   // Fetch order requisitions for each purchase order
   useEffect(() => {
     const fetchOrderRequisitions = async () => {

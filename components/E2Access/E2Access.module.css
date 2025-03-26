@@ -44,7 +44,7 @@
   background-color: #fff;
   padding: 16px;
   border-radius: 20px;
-  max-height: 40vh;
+  max-height: 50vh;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   transition: box-shadow 0.3s ease;
   transform: translateY(20px);
