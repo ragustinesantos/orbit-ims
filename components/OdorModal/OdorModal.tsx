@@ -172,6 +172,7 @@ export default function OdorModal({
           isClosed={() => setModalStateTracker((prev) => ({ ...prev, [item.itemId]: false }))}
         />
         <Text
+          className={classnames.rootTextItemName}
           onClick={() => toggleImgModalState(item.itemId)}
           classNames={{ root: classnames.imgModalID }}
         >
@@ -293,7 +294,7 @@ export default function OdorModal({
       centered
       opened={isOpened}
       onClose={isClosed}
-      size="xl"
+      size="100%"
       scrollAreaComponent={ScrollArea.Autosize}
     >
       {currentOr ? (

@@ -38,6 +38,24 @@
   text-overflow: ellipsis;
 }
 
+.rootTextItemName {
+  cursor: pointer;
+  color: #3c96aa;
+  font-weight: 500;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  max-width: 100%;
+}
+
+.rootTextItemName:hover {
+  color: #54d0ed;
+  transform: translateY(-1px);
+}
+
 .rootApprovalTable {
   width: 30%;
   table-layout: auto;

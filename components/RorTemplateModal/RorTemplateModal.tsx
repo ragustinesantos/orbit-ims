@@ -147,7 +147,11 @@ export default function RorTemplateModal({
           isOpened={!!modalStateTracker[itemId]}
           isClosed={() => setModalStateTracker((prev) => ({ ...prev, [itemId]: false }))}
         />
-        <Text className={classnames.rootTextItemName} key={`item-${itemId}`} onClick={() => toggleImgModalState(itemId)}>
+        <Text
+          className={classnames.rootTextItemName}
+          key={`item-${itemId}`}
+          onClick={() => toggleImgModalState(itemId)}
+        >
           {currentItem?.itemName ?? 'Unknown Item'}
         </Text>
       </>,
@@ -203,7 +207,7 @@ export default function RorTemplateModal({
       centered
       opened={isOpened}
       onClose={isClosed}
-      size="xl"
+      size="100%"
       scrollAreaComponent={ScrollArea.Autosize}
     >
       {recurringOrderTemplate ? (

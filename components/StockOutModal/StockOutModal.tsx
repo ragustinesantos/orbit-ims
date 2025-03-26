@@ -173,7 +173,7 @@ export default function StockOutModal({
   };
 
   return (
-    <Modal opened={opened} onClose={close} size="xl">
+    <Modal opened={opened} onClose={close} size="100%">
       <Text className={classnames.rootText}>Stock Out Form</Text>
 
       <Select
@@ -235,12 +235,12 @@ export default function StockOutModal({
       <div
         style={{
           display: 'flex',
-          justifyContent: 'flex-end',
+          justifyContent: 'center',
           marginBottom: '30px',
           marginTop: '30px',
         }}
       >
-        <Button variant="filled" color="blue" size="md" onClick={handleSubmit}>
+        <Button variant="filled" color="#1B4965" size="md" onClick={handleSubmit}>
           Generate SO
         </Button>
       </div>
@@ -266,7 +266,7 @@ export default function StockOutModal({
           'Item failed to update due to a server error',
           setShowUpdateError
         )}
-      <hr />
+
       {/*stock out list table */}
 
       <Text className={classnames.rootText}>Stock Out List</Text>
@@ -276,7 +276,11 @@ export default function StockOutModal({
         horizontalSpacing="xl"
         verticalSpacing="lg"
         style={{ width: '100%' }}
-        classNames={{ thead: classnames.thead, td: classnames.td }}
+        classNames={{
+          table: classnames.rootTable,
+          td: classnames.td,
+          thead: classnames.thead,
+        }}
       >
         <Table.Thead>
           <Table.Tr>

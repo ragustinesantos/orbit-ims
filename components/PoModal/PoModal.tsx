@@ -282,7 +282,7 @@ export default function PoModal({
       centered
       opened={isOpened}
       onClose={isClosed}
-      size="xl"
+      size="100%"
       scrollAreaComponent={ScrollArea.Autosize}
       zIndex={400}
     >
@@ -348,7 +348,15 @@ export default function PoModal({
           </SimpleGrid>
 
           <Text classNames={{ root: classnames.rootHeaderTxt }}>Order Items</Text>
-          <Table striped classNames={{ table: classnames.rootTable }} data={orderItemsData} />
+          <Table
+            striped
+            classNames={{
+              table: classnames.rootTable,
+              td: classnames.td,
+              thead: classnames.thead,
+            }}
+            data={orderItemsData}
+          />
 
           <Text classNames={{ root: classnames.rootHeaderTxt }}>Approvals:</Text>
           <Group gap="xl">
