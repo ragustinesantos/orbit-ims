@@ -218,16 +218,23 @@ export default function RorTemplateModal({
             onClose={closeConfirmation}
             title="Confirmation"
             centered
-            classNames={{ root: classnames.confirmationModal }}
           >
-            <Text className={classnames.confirmationText}>
-              Are you sure you want to {approvalSelection ? 'approve' : 'reject'} this request?
+            <Text classNames={{ root: classnames.rootConfirmationText }}>
+              Do you want to proceed with the {approvalSelection ? 'approval' : 'rejection'} of the ROR Template?
             </Text>
-            <Group className={classnames.modalButton}>
-              <Button onClick={confirmApproval} className={classnames.confirmButton}>
-                Confirm
+            <Group classNames={{ root: classnames.rootBtnArea }}>
+              <Button
+                classNames={{ root: classnames.rootBtn }}
+                onClick={confirmApproval}
+                color="#1B4965"
+              >
+                Proceed
               </Button>
-              <Button onClick={closeConfirmation} className={classnames.cancelButton}>
+              <Button
+                classNames={{ root: classnames.rootBtn }}
+                onClick={closeConfirmation}
+                color="red"
+              >
                 Cancel
               </Button>
             </Group>
