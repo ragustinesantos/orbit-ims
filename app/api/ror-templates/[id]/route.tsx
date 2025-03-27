@@ -26,6 +26,8 @@ export async function PUT(request: Request, { params }: { params: any }) {
     const rorTemplateSchema = z.object({
       rorTemplateId: z.string(),
       templateName: z.string(),
+      date: z.string(),
+      employeeId: z.string(),
       itemList: z.array(z.string()),
       approvalE2: z.string(),
       approvalE3: z.string(),
@@ -51,6 +53,8 @@ export async function PATCH(request: Request, { params }: { params: any }) {
       .object({
         rorTemplateId: z.string().optional(),
         templateName: z.string().optional(),
+        date: z.string().optional(),
+        employeeId: z.string().optional(),
         itemList: z.array(z.string()).optional(),
         approvalE2: z.string().optional(),
         approvalE3: z.string().optional(),

@@ -119,22 +119,24 @@ export default function RorModal({
       (supplier) => supplier.supplierId === currentItem?.supplierId
     );
     return [
-      <Text
-        onClick={() => toggleImgModalState(item.itemId)}
-        classNames={{ root: classnames.imgModalID }}
-      >
-        {currentItem?.itemName}
-      </Text>,
+      <>
+        <ImgModal
+          item={currentItem}
+          isOpened={!!modalStateTracker[item.itemId]}
+          isClosed={() => setModalStateTracker((prev) => ({ ...prev, [item.itemId]: false }))}
+        />
+        <Text
+          onClick={() => toggleImgModalState(item.itemId)}
+          className={classnames.rootTextItemName}
+        >
+          {currentItem?.itemName}
+        </Text>
+      </>,
       currentItem?.category,
       currentItem?.supplyUnit,
       currentItem?.packageUnit,
       currentSupplier?.supplierName,
       item.orderQty,
-      <ImgModal
-        item={currentItem}
-        isOpened={!!modalStateTracker[item.itemId]}
-        isClosed={() => setModalStateTracker((prev) => ({ ...prev, [item.itemId]: false }))}
-      />,
     ];
   });
 
@@ -159,7 +161,7 @@ export default function RorModal({
       centered
       opened={isOpened}
       onClose={isClosed}
-      size="xl"
+      size="100%"
       scrollAreaComponent={ScrollArea.Autosize}
     >
       {currentOr ? (
@@ -204,7 +206,11 @@ export default function RorModal({
             <TextInput disabled label="Date" value={orDate} size="md" />
             <TextInput disabled label="Requisition ID" value={currentOr?.requisitionId} size="md" />
           </SimpleGrid>
-          <Table striped classNames={{ table: classnames.rootTable }} data={tableData} />
+          <Table
+            striped
+            classNames={{ table: classnames.rootTable, td: classnames.td, thead: classnames.thead }}
+            data={tableData}
+          />
 
           <Text classNames={{ root: classnames.rootHeaderTxt }}>Approvals:</Text>
           <Table

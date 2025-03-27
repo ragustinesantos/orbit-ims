@@ -1,10 +1,10 @@
 .rootText {
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 700;
   text-decoration: none;
   border-bottom: 3px solid #3c96aa;
   padding-bottom: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
   width: 100%;
 }
 
@@ -19,25 +19,35 @@
 }
 
 .rootHeaderTxt {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
+  font-weight: 600;
+  border-bottom: 1px solid #dfd9d9;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .rootTable {
   width: 100%;
+  overflow-y: scroll;
   table-layout: auto;
   margin-bottom: 36px;
 }
 
-.rootTable td {
-  padding: 12px;
+.thead {
+  color: white;
+  background: linear-gradient(135deg, #2c3e50, #4a6572);
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
-.rootTable th {
-  padding: 12px;
-  background-color: #f1f3f5;
-  font-weight: bold;
+.td {
+  border-bottom: 1px solid #e9ecef;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .rootApprovalTable {

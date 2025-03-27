@@ -75,6 +75,81 @@ export default function E3AccessPage() {
     retrieveEmployeeWithReq();
   }, [allOrs]);
 
+  // Sort ODOR by date
+  useEffect(() => {
+    const sortOdor = async () => {
+      try {
+        allOdor?.sort((a, b) => {
+          const matchingOrA = allOrs?.find((or) => or.requisitionTypeId === a.odorId);
+          const matchingOrB = allOrs?.find((or) => or.requisitionTypeId === b.odorId);
+
+          // If both exist, compare by requisition date
+          if (matchingOrA && matchingOrB) {
+            return (
+              new Date(matchingOrB.requisitionDate).getTime() -
+              new Date(matchingOrA.requisitionDate).getTime()
+            );
+          }
+
+          // If only matchingOrA exists, decide its position
+          if (matchingOrA) {
+            return 1;
+          }
+          // If only matchingOrB exists, decide its position
+          if (matchingOrB) {
+            return -1;
+          }
+
+          // If neither exist, they are considered equal
+          return 0;
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    sortOdor();
+  }, [allOdor, allOrs]);
+
+  // Sort ROR Templates by date
+  useEffect(() => {
+    const sortRorTemplates = async () => {
+      try {
+        rorTemplates?.sort((a, b) => {
+          // If there are no dates present, set them to default
+          if (!a.date) {
+            a.date = '0';
+          }
+
+          if (!b.date) {
+            b.date = '0';
+          }
+
+          // If both exist, compare by requisition date
+          if (a && b) {
+            return new Date(b.date).getTime() - new Date(a.date).getTime();
+          }
+
+          // If only matchingOrA exists, decide its position
+          if (a) {
+            return 1;
+          }
+          // If only matchingOrB exists, decide its position
+          if (b) {
+            return -1;
+          }
+
+          // If neither exist, they are considered equal
+          return 0;
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    sortRorTemplates();
+  }, [rorTemplates]);
+
   // Function to show notifications
   const revealNotification = () => {
     setShowNotification(true);
@@ -171,33 +246,47 @@ export default function E3AccessPage() {
   );
 
   // Map templates to table rows
-  const mappedTemplates = filteredTemplates.map((template) => [
-    <>
-      <RorTemplateModal
-        recurringOrderTemplate={template}
-        isOpened={!!modalStateTracker[template.rorTemplateId]}
-        isClosed={() =>
-          setModalStateTracker((prev) => ({ ...prev, [template.rorTemplateId]: false }))
-        }
-        handleApprovalE2={undefined}
-        handleApprovalE3={handleApprovalE3}
-        isE3Page={isE3PageView}
-      />
-      {/* Open Modal when clicking the Template ID */}
-      <Text
-        key={`temp-${template.rorTemplateId}`}
-        className={classnames.templateTextId}
-        onClick={() => toggleModalState(template.rorTemplateId)}
-      >
-        {template.rorTemplateId}
-      </Text>
-    </>,
-    <Text key={`name-${template.rorTemplateId}`}>{template.templateName}</Text>,
-    <ApprovalBadge
-      key={`approval-${template.rorTemplateId}`}
-      isApproved={template.isTemplateApprovedE3}
-    />,
-  ]);
+  const mappedTemplates = filteredTemplates.map((template) => {
+    const matchingEmployee = employeeWithRequisitions.find(
+      (emp) => emp && emp.employeeId === template.employeeId
+    );
+
+    return [
+      <>
+        <RorTemplateModal
+          recurringOrderTemplate={template}
+          isOpened={!!modalStateTracker[template.rorTemplateId]}
+          isClosed={() =>
+            setModalStateTracker((prev) => ({ ...prev, [template.rorTemplateId]: false }))
+          }
+          handleApprovalE2={undefined}
+          handleApprovalE3={handleApprovalE3}
+          isE3Page={isE3PageView}
+        />
+        {/* Open Modal when clicking the Template ID */}
+        <Text
+          key={`temp-${template.rorTemplateId}`}
+          className={classnames.templateTextId}
+          onClick={() => toggleModalState(template.rorTemplateId)}
+        >
+          {template.rorTemplateId}
+        </Text>
+      </>,
+      <Text key={`emp-${template.rorTemplateId}`}>
+        {matchingEmployee
+          ? `${matchingEmployee.firstName} ${matchingEmployee.lastName}`
+          : 'Unknown'}
+      </Text>,
+      <Text key={`date-${template.rorTemplateId}`}>
+        {template ? formatDate(template.date) : 'Unknown'}
+      </Text>,
+      <Text key={`name-${template.rorTemplateId}`}>{template.templateName}</Text>,
+      <ApprovalBadge
+        key={`approval-${template.rorTemplateId}`}
+        isApproved={template.isTemplateApprovedE3}
+      />,
+    ];
+  });
 
   // Map ODOR data to table rows
   const mappedOdors =
@@ -288,6 +377,8 @@ export default function E3AccessPage() {
                       <Table.Thead className={classnames.rootRequisitionThead}>
                         <Table.Tr>
                           <Table.Th>Template ID</Table.Th>
+                          <Table.Th>Employee</Table.Th>
+                          <Table.Th>Date Submitted</Table.Th>
                           <Table.Th>Template Name</Table.Th>
                           <Table.Th>Approval Status</Table.Th>
                         </Table.Tr>

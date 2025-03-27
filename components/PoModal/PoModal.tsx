@@ -282,7 +282,7 @@ export default function PoModal({
       centered
       opened={isOpened}
       onClose={isClosed}
-      size="xl"
+      size="100%"
       scrollAreaComponent={ScrollArea.Autosize}
       zIndex={400}
     >
@@ -348,7 +348,15 @@ export default function PoModal({
           </SimpleGrid>
 
           <Text classNames={{ root: classnames.rootHeaderTxt }}>Order Items</Text>
-          <Table striped classNames={{ table: classnames.rootTable }} data={orderItemsData} />
+          <Table
+            striped
+            classNames={{
+              table: classnames.rootTable,
+              td: classnames.td,
+              thead: classnames.thead,
+            }}
+            data={orderItemsData}
+          />
 
           <Text classNames={{ root: classnames.rootHeaderTxt }}>Approvals:</Text>
           <Group gap="xl">
@@ -369,7 +377,7 @@ export default function PoModal({
             />
           </Group>
 
-          {isP2User ? (
+          {isP2User && purchaseOrder?.isApproved === null ? (
             <Group classNames={{ root: classnames.rootBtnArea }}>
               <Button
                 classNames={{ root: classnames.rootBtn }}
@@ -396,19 +404,21 @@ export default function PoModal({
             </Group>
           ) : (
             <div className={classnames.rootBtnArea}>
-              <Button
-                classNames={{ root: classnames.rootBtn }}
-                onClick={() => {
-                  // Call onSubmit callback if provided
-                  if (onSubmit && purchaseOrder) {
-                    onSubmit(purchaseOrder.purchaseOrderId);
-                  }
-                }}
-                color="#1B4965"
-                disabled={isSubmitting}
-              >
-                Submit
-              </Button>
+              {!purchaseOrder?.isSubmitted && (
+                <Button
+                  classNames={{ root: classnames.rootBtn }}
+                  onClick={() => {
+                    // Call onSubmit callback if provided
+                    if (onSubmit && purchaseOrder) {
+                      onSubmit(purchaseOrder.purchaseOrderId);
+                    }
+                  }}
+                  color="#1B4965"
+                  disabled={isSubmitting}
+                >
+                  Submit
+                </Button>
+              )}
             </div>
           )}
         </>

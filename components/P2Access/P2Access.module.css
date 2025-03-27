@@ -93,20 +93,24 @@
   white-space: nowrap;
 }
 
-.rootTextId {
-  cursor: pointer;
-}
-
-.rootTextId:hover {
-  color: #3c96aa;
-}
-
+.rootTextId,
 .rootPoId {
   cursor: pointer;
+  color: #3c96aa;
+  font-weight: 500;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  max-width: 100%;
 }
 
+.rootTextId:hover,
 .rootPoId:hover {
-  color: #3c96aa;
+  color: #54d0ed;
+  transform: translateY(-1px);
 }
 
 .rootPoTable {

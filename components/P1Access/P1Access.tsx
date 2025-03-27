@@ -261,28 +261,8 @@ export default function P1AccessPage() {
     const sortPo = async () => {
       try {
         allPo?.sort((a, b) => {
-          const matchingOrA = allOrs?.find((or) => or.purchaseOrderId === a.purchaseOrderId);
-          const matchingOrB = allOrs?.find((or) => or.purchaseOrderId === b.purchaseOrderId);
-
-          // If both exist, compare by requisition date
-          if (matchingOrA && matchingOrB) {
-            return (
-              new Date(matchingOrB.requisitionDate).getTime() -
-              new Date(matchingOrA.requisitionDate).getTime()
-            );
-          }
-
-          // If only matchingOrA exists, decide its position
-          if (matchingOrA) {
-            return 1;
-          }
-          // If only matchingOrB exists, decide its position
-          if (matchingOrB) {
-            return -1;
-          }
-
-          // If neither exist, they are considered equal
-          return 0;
+          // Sort by purchase order date
+          return new Date(b.purchaseOrderDate).getTime() - new Date(a.purchaseOrderDate).getTime();
         });
       } catch (error) {
         console.log(error);

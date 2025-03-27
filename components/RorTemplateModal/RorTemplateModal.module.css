@@ -1,7 +1,11 @@
 .rootText {
-  font-size: 28px;
-  font-weight: bold;
-  margin-bottom: 24px;
+  font-size: 2rem;
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 3px solid #3c96aa;
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+  width: 100%;
 }
 
 .rootConfirmationText {
@@ -12,8 +16,44 @@
 
 .rootTable {
   width: 100%;
+  overflow-y: scroll;
   table-layout: auto;
   margin-bottom: 36px;
+}
+
+.thead {
+  color: white;
+  background: linear-gradient(135deg, #2c3e50, #4a6572);
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.td {
+  border-bottom: 1px solid #e9ecef;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rootTextItemName {
+  cursor: pointer;
+  color: #3c96aa;
+  font-weight: 500;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  max-width: 100%;
+}
+
+.rootTextItemName:hover {
+  color: #54d0ed;
+  transform: translateY(-1px);
 }
 
 .rootApprovalTable {
@@ -28,7 +68,10 @@
 
 .rootHeaderTxt {
   margin-bottom: 18px;
-  font-weight: 800;
+  font-weight: 600;
+  border-bottom: 1px solid #dfd9d9;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .rootBtnArea {
@@ -79,15 +122,17 @@
 /* Modal Buttons */
 .modalButton {
   display: flex;
+  width: 100%;
   justify-content: center;
-  margin-top: 20px;
+  align-items: center;
+  gap: 48px;
+  margin-top: 36px;
 }
 
 /* Confirmation Modal */
 .confirmationModal {
-  text-align: center;
-  padding: 20px;
-  border-radius: 10px;
+  padding: 24px;
+  border-radius: 8px;
 }
 
 /* Modal Title */
@@ -99,17 +144,15 @@
 
 /* Modal Text */
 .confirmationText {
-  font-size: 16px;
-  color: #333;
-  margin-bottom: 20px;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 36px;
 }
 
 /* Confirm Button */
 .confirmButton {
-  background-color: #1b4965;
-  color: white;
-  font-weight: bold;
-  transition: 0.3s;
+  height: 48px;
+  width: 128px;
 }
 
 .confirmButton:hover {
@@ -118,10 +161,8 @@
 
 /* Cancel Button */
 .cancelButton {
-  background-color: red;
-  color: white;
-  font-weight: bold;
-  transition: 0.3s;
+  height: 48px;
+  width: 128px;
 }
 
 .cancelButton:hover {

@@ -2,7 +2,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { onAuthStateChanged } from 'firebase/auth';
 import Login from '@/components/Login/Login';
 import { useUserAuth } from './_utils/auth-context';
@@ -12,17 +12,28 @@ export default function HomePage() {
   const { user, signInWithEmail } = useUserAuth() || {};
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+
+  const router = useRouter();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setIsLoading(false);
       if (firebaseUser) {
-        redirect('/dashboard');
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
       }
     });
 
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/dashboard');
+    }
+  }, [isAuthenticated]);
 
   const handleLogin = async (username: string, pass: string, err: (hasError: boolean) => void) => {
     if (signInWithEmail) {

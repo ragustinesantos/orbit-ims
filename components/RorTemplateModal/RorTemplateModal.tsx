@@ -140,19 +140,25 @@ export default function RorTemplateModal({
     );
 
     return [
-      <Text key={`item-${itemId}`} onClick={() => toggleImgModalState(itemId)}>
-        {currentItem?.itemName ?? 'Unknown Item'}
-      </Text>,
+      <>
+        <ImgModal
+          key={`img-${itemId}`}
+          item={currentItem}
+          isOpened={!!modalStateTracker[itemId]}
+          isClosed={() => setModalStateTracker((prev) => ({ ...prev, [itemId]: false }))}
+        />
+        <Text
+          className={classnames.rootTextItemName}
+          key={`item-${itemId}`}
+          onClick={() => toggleImgModalState(itemId)}
+        >
+          {currentItem?.itemName ?? 'Unknown Item'}
+        </Text>
+      </>,
       currentItem?.category ?? 'N/A',
       currentItem?.supplyUnit ?? 'N/A',
       currentItem?.packageUnit ?? 'N/A',
       currentSupplier?.supplierName ?? 'Unknown Supplier',
-      <ImgModal
-        key={`img-${itemId}`}
-        item={currentItem}
-        isOpened={!!modalStateTracker[itemId]}
-        isClosed={() => setModalStateTracker((prev) => ({ ...prev, [itemId]: false }))}
-      />,
     ];
   });
 
@@ -170,7 +176,14 @@ export default function RorTemplateModal({
         ? 'E2 Approval'
         : `${recurringOrderTemplate.isTemplateApprovedE2 ? 'Approved' : 'Rejected'} By: ${approvalNameE2}`,
     ],
-    body: [[<ApprovalBadge key={`approval-e2-${recurringOrderTemplate.rorTemplateId}`} isApproved={recurringOrderTemplate.isTemplateApprovedE2} />]],
+    body: [
+      [
+        <ApprovalBadge
+          key={`approval-e2-${recurringOrderTemplate.rorTemplateId}`}
+          isApproved={recurringOrderTemplate.isTemplateApprovedE2}
+        />,
+      ],
+    ],
   };
 
   const e3ApprovalData: TableData = {
@@ -179,7 +192,14 @@ export default function RorTemplateModal({
         ? 'E3 Approval'
         : `${recurringOrderTemplate.isTemplateApprovedE3 ? 'Approved' : 'Rejected'} By: ${approvalNameE3}`,
     ],
-    body: [[<ApprovalBadge key={`approval-e3-${recurringOrderTemplate.rorTemplateId}`} isApproved={recurringOrderTemplate.isTemplateApprovedE3} />]],
+    body: [
+      [
+        <ApprovalBadge
+          key={`approval-e3-${recurringOrderTemplate.rorTemplateId}`}
+          isApproved={recurringOrderTemplate.isTemplateApprovedE3}
+        />,
+      ],
+    ],
   };
 
   return (
@@ -187,7 +207,7 @@ export default function RorTemplateModal({
       centered
       opened={isOpened}
       onClose={isClosed}
-      size="xl"
+      size="100%"
       scrollAreaComponent={ScrollArea.Autosize}
     >
       {recurringOrderTemplate ? (
@@ -198,16 +218,23 @@ export default function RorTemplateModal({
             onClose={closeConfirmation}
             title="Confirmation"
             centered
-            classNames={{ root: classnames.confirmationModal }}
           >
-            <Text className={classnames.confirmationText}>
-              Are you sure you want to {approvalSelection ? 'approve' : 'reject'} this request?
+            <Text classNames={{ root: classnames.rootConfirmationText }}>
+              Do you want to proceed with the {approvalSelection ? 'approval' : 'rejection'} of the ROR Template?
             </Text>
-            <Group className={classnames.modalButton}>
-              <Button onClick={confirmApproval} className={classnames.confirmButton}>
-                Confirm
+            <Group classNames={{ root: classnames.rootBtnArea }}>
+              <Button
+                classNames={{ root: classnames.rootBtn }}
+                onClick={confirmApproval}
+                color="#1B4965"
+              >
+                Proceed
               </Button>
-              <Button onClick={closeConfirmation} className={classnames.cancelButton}>
+              <Button
+                classNames={{ root: classnames.rootBtn }}
+                onClick={closeConfirmation}
+                color="red"
+              >
                 Cancel
               </Button>
             </Group>
@@ -229,7 +256,15 @@ export default function RorTemplateModal({
               size="md"
             />
           </SimpleGrid>
-          <Table striped classNames={{ table: classnames.rootTable }} data={tableData} />
+          <Table
+            striped
+            classNames={{
+              table: classnames.rootTable,
+              td: classnames.td,
+              thead: classnames.thead,
+            }}
+            data={tableData}
+          />
           <Text classNames={{ root: classnames.rootHeaderTxt }}>Approvals:</Text>
           <Group gap="xl">
             <Table

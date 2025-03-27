@@ -15,8 +15,15 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useInventory } from '@/app/_utils/inventory-context';
-import { defaultEmployee, Employee, odorModalProps, OrderRequisition } from '@/app/_utils/schema';
-import { fetchEmployee, fetchOrderRequisition, patchOdorApproval } from '@/app/_utils/utility';
+import {
+  defaultEmployee,
+  defaultItem,
+  Employee,
+  Item,
+  odorModalProps,
+  OrderRequisition,
+} from '@/app/_utils/schema';
+import { fetchEmployee, fetchOrderRequisition, patchOdorApproval, postItem } from '@/app/_utils/utility';
 import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
 import ImgModal from '../ImgModal/ImgModal';
 import classnames from './OdorModal.module.css';
@@ -126,6 +133,14 @@ export default function OdorModal({
             false,
             false
           );
+          onDemandOrder?.newItemOrders.map(async (newItem) => {
+            const newItemObject: Item = {
+              ...defaultItem,
+              itemName: newItem.itemName,
+              price: newItem.unitPrice,
+            };
+            await postItem(newItemObject);
+          });
           handleApprovalP1('success', currentOr.requisitionTypeId, isApproved);
         }
       } catch (error) {
@@ -165,23 +180,25 @@ export default function OdorModal({
       (supplier) => supplier.supplierId === currentItem?.supplierId
     );
     return [
-      <Text
-        onClick={() => toggleImgModalState(item.itemId)}
-        classNames={{ root: classnames.imgModalID }}
-      >
-        {' '}
-        {currentItem?.itemName}
-      </Text>,
+      <>
+        <ImgModal
+          item={currentItem}
+          isOpened={!!modalStateTracker[item.itemId]}
+          isClosed={() => setModalStateTracker((prev) => ({ ...prev, [item.itemId]: false }))}
+        />
+        <Text
+          className={classnames.rootTextItemName}
+          onClick={() => toggleImgModalState(item.itemId)}
+          classNames={{ root: classnames.imgModalID }}
+        >
+          {currentItem?.itemName}
+        </Text>
+      </>,
       currentItem?.category,
       currentItem?.supplyUnit,
       currentItem?.packageUnit,
       currentSupplier?.supplierName,
       item.orderQty,
-      <ImgModal
-        item={currentItem}
-        isOpened={!!modalStateTracker[item.itemId]}
-        isClosed={() => setModalStateTracker((prev) => ({ ...prev, [item.itemId]: false }))}
-      />,
     ];
   });
 
@@ -292,7 +309,7 @@ export default function OdorModal({
       centered
       opened={isOpened}
       onClose={isClosed}
-      size="xl"
+      size="100%"
       scrollAreaComponent={ScrollArea.Autosize}
     >
       {currentOr ? (
@@ -328,14 +345,34 @@ export default function OdorModal({
             <TextInput disabled label="Date" value={orDate} size="md" />
             <TextInput disabled label="Requisition ID" value={currentOr?.requisitionId} size="md" />
           </SimpleGrid>
-          <Text classNames={{ root: classnames.rootHeaderTxt }}>Inventory Items:</Text>
-          <Table striped classNames={{ table: classnames.rootTable }} data={inventoryTableData} />
-          <Text classNames={{ root: classnames.rootHeaderTxt }}>Non-Inventory Items:</Text>
-          <Table
-            striped
-            classNames={{ table: classnames.rootTable }}
-            data={nonInventoryTableData}
-          />
+          {onDemandOrder && onDemandOrder?.itemOrders.length > 0 && (
+            <>
+              <Text classNames={{ root: classnames.rootHeaderTxt }}>Inventory Items:</Text>
+              <Table
+                striped
+                classNames={{
+                  table: classnames.rootTable,
+                  td: classnames.td,
+                  thead: classnames.thead,
+                }}
+                data={inventoryTableData}
+              />
+            </>
+          )}
+          {onDemandOrder && onDemandOrder?.newItemOrders.length > 0 && (
+            <>
+              <Text classNames={{ root: classnames.rootHeaderTxt }}>Non-Inventory Items:</Text>
+              <Table
+                striped
+                classNames={{
+                  table: classnames.rootTable,
+                  td: classnames.td,
+                  thead: classnames.thead,
+                }}
+                data={nonInventoryTableData}
+              />
+            </>
+          )}
           <Text classNames={{ root: classnames.rootHeaderTxt }}>Order Summary:</Text>
           <Group classNames={{ root: classnames.rootSection }}>
             <div>
