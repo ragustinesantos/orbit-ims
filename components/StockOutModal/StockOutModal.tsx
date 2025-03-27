@@ -67,32 +67,90 @@ export default function StockOutModal({
     const retrieveItemsInRO = async () => {
       try {
         const requisitionData: OrderRequisition = await fetchOrderRequisition(requisitionId);
+  
+        const isOdor = requisitionData.requisitionType === 'odor';
+  
         const [rorData, odorData] = await Promise.all([
           fetchRecurringOrderRequisition(requisitionData.requisitionTypeId),
           fetchOnDemandOrderRequisition(requisitionData.requisitionTypeId),
         ]);
-
-        const selectedOrder = rorData?.itemOrders?.length ? rorData : odorData;
+  
+        let selectedOrder;
+        if (isOdor) {
+          selectedOrder = odorData;
+        } else {
+          selectedOrder = rorData;
+        }
+  
         const orderQtyMapping: Record<string, number> = {};
-        const matchedItems = selectedOrder.itemOrders
-          .map((order: ItemOrder) => {
-            const inventoryItem = inventory?.find((invItem) => invItem.itemId === order.itemId);
-            if (inventoryItem) {
-              orderQtyMapping[order.itemId] = order.orderQty;
-            }
-            return inventoryItem;
-          })
-          .filter(Boolean) as Item[];
-
+        let matchedItems: Item[] = [];
+  
+        if (isOdor && selectedOrder?.newItemOrders?.length) {
+          matchedItems = selectedOrder.newItemOrders
+            .map((newOrder: { itemName: string; purchaseQty: number; }) => {
+              const inventoryItem = inventory?.find(
+                (invItem) => invItem.itemName === newOrder.itemName
+              );
+              if (inventoryItem) {
+                orderQtyMapping[newOrder.itemName] = newOrder.purchaseQty;
+              }
+              return inventoryItem;
+            })
+            .filter(Boolean) as Item[];
+        } else {
+          matchedItems = selectedOrder?.itemOrders
+            .map((order: ItemOrder) => {
+              const inventoryItem = inventory?.find((invItem) => invItem.itemId === order.itemId);
+              if (inventoryItem) {
+                orderQtyMapping[order.itemId] = order.orderQty;
+              }
+              return inventoryItem;
+            })
+            .filter(Boolean) as Item[];
+        }
+  
         setOrderQtyMap(orderQtyMapping);
         setRequisitionItems(matchedItems);
       } catch (error) {
         console.error('Error fetching requisition items:', error);
       }
     };
-
+  
     retrieveItemsInRO();
   }, [requisitionId, inventory]);
+  
+
+  // useEffect(() => {
+  //   const retrieveItemsInRO = async () => {
+  //     try {
+  //       const requisitionData: OrderRequisition = await fetchOrderRequisition(requisitionId);
+  //       const [rorData, odorData] = await Promise.all([
+  //         fetchRecurringOrderRequisition(requisitionData.requisitionTypeId),
+  //         fetchOnDemandOrderRequisition(requisitionData.requisitionTypeId),
+  //       ]);
+
+  //       const selectedOrder = rorData?.itemOrders?.length ? rorData : odorData;
+  //       const orderQtyMapping: Record<string, number> = {};
+  //       const matchedItems = selectedOrder.itemOrders
+  //         .map((order: ItemOrder) => {
+  //           const inventoryItem = inventory?.find((invItem) => invItem.itemName === order.itemId);
+  //           if (inventoryItem) {
+  //             orderQtyMapping[order.itemId] = order.orderQty;
+  //           }
+  //           return inventoryItem;
+  //         })
+  //         .filter(Boolean) as Item[];
+
+  //       setOrderQtyMap(orderQtyMapping);
+  //       setRequisitionItems(matchedItems);
+  //     } catch (error) {
+  //       console.error('Error fetching requisition items:', error);
+  //     }
+  //   };
+
+  //   retrieveItemsInRO();
+  // }, [requisitionId, inventory]);
+
 
   const relatedStockOutOrders = stockOutOrders.filter(
     (order) => order.requisitionId === requisitionId
@@ -176,7 +234,7 @@ export default function StockOutModal({
     <Modal opened={opened} onClose={close} size="100%">
       <Text className={classnames.rootText}>Stock Out Form</Text>
 
-      <Select
+      {/* <Select
         label="Search Item"
         placeholder="Select an item from the list..."
         data={requisitionItems.map((item) => ({
@@ -192,7 +250,31 @@ export default function StockOutModal({
         classNames={{
           root: classnames.selectRoot,
         }}
+      /> */}
+
+      <Select
+        label="Search Item"
+        placeholder="Select an item from the list..."
+        data={requisitionItems.map((item) => {
+          const key = orderQtyMap[item.itemId] !== undefined ? item.itemId : item.itemName;
+          const qty = orderQtyMap[key] || 0;
+
+          return {
+            value: item.itemName,
+            label: `${item.itemName} (Request Qty: ${qty})`,
+          };
+        })}
+        allowDeselect
+        searchable
+        value={searchValue}
+        onChange={setSearchValue}
+        size="md"
+        withAsterisk
+        classNames={{
+          root: classnames.selectRoot,
+        }}
       />
+
 
       <SimpleGrid cols={2} spacing="xl" verticalSpacing="xl">
         <TextInput label="Item ID" disabled value={selectedItem.itemId} size="md" />
