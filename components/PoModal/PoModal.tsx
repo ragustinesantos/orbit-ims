@@ -404,19 +404,21 @@ export default function PoModal({
             </Group>
           ) : (
             <div className={classnames.rootBtnArea}>
-              <Button
-                classNames={{ root: classnames.rootBtn }}
-                onClick={() => {
-                  // Call onSubmit callback if provided
-                  if (onSubmit && purchaseOrder) {
-                    onSubmit(purchaseOrder.purchaseOrderId);
-                  }
-                }}
-                color="#1B4965"
-                disabled={isSubmitting}
-              >
-                Submit
-              </Button>
+              {!purchaseOrder?.isSubmitted && (
+                <Button
+                  classNames={{ root: classnames.rootBtn }}
+                  onClick={() => {
+                    // Call onSubmit callback if provided
+                    if (onSubmit && purchaseOrder) {
+                      onSubmit(purchaseOrder.purchaseOrderId);
+                    }
+                  }}
+                  color="#1B4965"
+                  disabled={isSubmitting}
+                >
+                  Submit
+                </Button>
+              )}
             </div>
           )}
         </>
