@@ -136,6 +136,7 @@ export default function OdorModal({
           onDemandOrder?.newItemOrders.map(async (newItem) => {
             const newItemObject: Item = {
               ...defaultItem,
+              itemName: newItem.itemName,
               price: newItem.unitPrice,
             };
             await postItem(newItemObject);
