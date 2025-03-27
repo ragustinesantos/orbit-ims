@@ -122,15 +122,17 @@
 /* Modal Buttons */
 .modalButton {
   display: flex;
+  width: 100%;
   justify-content: center;
-  margin-top: 20px;
+  align-items: center;
+  gap: 48px;
+  margin-top: 36px;
 }
 
 /* Confirmation Modal */
 .confirmationModal {
-  text-align: center;
-  padding: 20px;
-  border-radius: 10px;
+  padding: 24px;
+  border-radius: 8px;
 }
 
 /* Modal Title */
@@ -142,17 +144,15 @@
 
 /* Modal Text */
 .confirmationText {
-  font-size: 16px;
-  color: #333;
-  margin-bottom: 20px;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 36px;
 }
 
 /* Confirm Button */
 .confirmButton {
-  background-color: #1b4965;
-  color: white;
-  font-weight: bold;
-  transition: 0.3s;
+  height: 48px;
+  width: 128px;
 }
 
 .confirmButton:hover {
@@ -161,10 +161,8 @@
 
 /* Cancel Button */
 .cancelButton {
-  background-color: red;
-  color: white;
-  font-weight: bold;
-  transition: 0.3s;
+  height: 48px;
+  width: 128px;
 }
 
 .cancelButton:hover {
