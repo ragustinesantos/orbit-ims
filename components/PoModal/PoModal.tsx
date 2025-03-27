@@ -377,7 +377,7 @@ export default function PoModal({
             />
           </Group>
 
-          {isP2User ? (
+          {isP2User && purchaseOrder?.isApproved === null ? (
             <Group classNames={{ root: classnames.rootBtnArea }}>
               <Button
                 classNames={{ root: classnames.rootBtn }}
