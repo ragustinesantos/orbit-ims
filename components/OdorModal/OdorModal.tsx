@@ -15,8 +15,15 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useInventory } from '@/app/_utils/inventory-context';
-import { defaultEmployee, Employee, odorModalProps, OrderRequisition } from '@/app/_utils/schema';
-import { fetchEmployee, fetchOrderRequisition, patchOdorApproval } from '@/app/_utils/utility';
+import {
+  defaultEmployee,
+  defaultItem,
+  Employee,
+  Item,
+  odorModalProps,
+  OrderRequisition,
+} from '@/app/_utils/schema';
+import { fetchEmployee, fetchOrderRequisition, patchOdorApproval, postItem } from '@/app/_utils/utility';
 import ApprovalBadge from '../ApprovalBadge/ApprovalBadge';
 import ImgModal from '../ImgModal/ImgModal';
 import classnames from './OdorModal.module.css';
@@ -126,6 +133,13 @@ export default function OdorModal({
             false,
             false
           );
+          onDemandOrder?.newItemOrders.map(async (newItem) => {
+            const newItemObject: Item = {
+              ...defaultItem,
+              price: newItem.unitPrice,
+            };
+            await postItem(newItemObject);
+          });
           handleApprovalP1('success', currentOr.requisitionTypeId, isApproved);
         }
       } catch (error) {
