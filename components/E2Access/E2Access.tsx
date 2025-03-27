@@ -184,14 +184,13 @@ export default function E2AccessPage() {
     const sortRorTemplates = async () => {
       try {
         rorTemplates?.sort((a, b) => {
-
           // If there are no dates present, set them to default
-          if(!a.date) {
-            a.date = "0"
+          if (!a.date) {
+            a.date = '0';
           }
 
-          if(!b.date) {
-            b.date = "0"
+          if (!b.date) {
+            b.date = '0';
           }
 
           // If both exist, compare by requisition date
